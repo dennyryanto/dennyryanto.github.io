@@ -1,0 +1,467 @@
+<title>Portfolio Wireframe v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 1120px column; every section = hero (always visible) + drawer (collapsed). Grey wireframe, blue = design notes. */
+:root {
+  --paper: #f2f3f0;
+  --sheet: #fbfbf9;
+  --ink: #1c1e1b;
+  --ink-2: #5b5f58;
+  --ink-3: #8a8e86;
+  --line: #d3d6cf;
+  --ph: #e5e7e2;
+  --ph-x: #c4c8bf;
+  --note: #2852c9;
+  --note-bg: #e6ecfb;
+  --display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --wrap: 1120px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121311; --sheet: #191b18; --ink: #ebece7; --ink-2: #a5a9a0; --ink-3: #747870;
+    --line: #33362f; --ph: #20221e; --ph-x: #3a3d36; --note: #8eaeff; --note-bg: #1b2440;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #121311; --sheet: #191b18; --ink: #ebece7; --ink-2: #a5a9a0; --ink-3: #747870;
+  --line: #33362f; --ph: #20221e; --ph-x: #3a3d36; --note: #8eaeff; --note-bg: #1b2440;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 15px/1.55 var(--display); padding-inline: 16px; padding-block: 0 96px; }
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--note); outline-offset: 3px; }
+
+.wrap { max-width: var(--wrap); margin-inline: auto; }
+.mono { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.muted { color: var(--ink-2); }
+h1, h2 { font-family: var(--display); font-weight: 800; font-stretch: 115%; letter-spacing: -.02em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(40px, 7vw, 76px); line-height: .98; }
+h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
+
+/* top bar */
+.topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
+.brand { font-weight: 800; font-stretch: 115%; letter-spacing: .02em; text-decoration: none; }
+.topbar nav { display: flex; gap: 22px; }
+.topbar nav a { text-decoration: none; color: var(--ink-2); }
+.topbar nav a:hover { color: var(--ink); }
+@media (max-width: 720px) { .topbar nav .hide-sm { display: none; } .topbar nav { gap: 14px; } }
+
+/* placeholders */
+.ph { position: relative; aspect-ratio: var(--r, 16/9); max-width: 100%; background-color: var(--ph); border: 1px solid var(--line); border-radius: 6px; display: grid; place-items: center; padding: 10px; overflow: hidden;
+  background-image:
+    linear-gradient(to top right, transparent calc(50% - .6px), var(--ph-x) 50%, transparent calc(50% + .6px)),
+    linear-gradient(to bottom right, transparent calc(50% - .6px), var(--ph-x) 50%, transparent calc(50% + .6px)); }
+.ph.phone { border-radius: 18px; }
+.ph.round { border-radius: 50%; }
+.ph > span { position: relative; background: var(--ph); padding: 4px 8px; text-align: center; font: 500 10.5px/1.35 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); max-width: 90%; }
+.lines { display: grid; gap: 10px; }
+.lines .cap { margin-bottom: 4px; }
+.line { display: flex; gap: 12px; align-items: center; }
+.line::before { content: ""; flex: none; width: 12px; height: 2px; background: var(--ink-3); }
+.line i { display: block; height: 10px; border-radius: 3px; background: var(--ph-x); opacity: .7; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+
+/* design notes */
+.note { display: flex; gap: 10px; align-items: flex-start; background: var(--note-bg); color: var(--note); border-left: 2px solid var(--note); padding: 10px 12px; border-radius: 0 6px 6px 0; font: 500 13px/1.45 var(--display); max-width: 62ch; }
+.note b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--note); color: var(--sheet); font: 600 11px/1 var(--mono); }
+body.notes-off .note { display: none; }
+
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; padding-block: 64px 48px; }
+.hero p { max-width: 58ch; font-size: 17px; color: var(--ink-2); margin: 22px 0 0; }
+.avail { display: inline-block; margin-top: 26px; border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; }
+.profile { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 16px; }
+.profile .who { display: flex; gap: 14px; align-items: center; }
+.profile .who .ph { width: 72px; flex: none; --r: 1/1; padding: 0; }
+.profile .who strong { display: block; font-size: 18px; font-stretch: 112%; }
+.prow { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+.prow .mono { color: var(--ink-3); font-size: 10px; padding-top: 3px; }
+.certs { display: grid; gap: 7px; font-size: 13.5px; }
+.certs span { display: flex; align-items: center; gap: 8px; }
+.seal { flex: none; width: 15px; height: 15px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fbe9a8, #dca726 55%, #946507); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35); animation: seal-spin 4.5s cubic-bezier(.6,0,.4,1) infinite; animation-delay: var(--d, 0s); }
+@keyframes seal-spin { 0%, 55% { transform: perspective(60px) rotateY(0); } 100% { transform: perspective(60px) rotateY(360deg); } }
+@media (max-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 40px 32px; } }
+
+/* case index (replaces the stat band) */
+.index { display: block; border-block: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
+.idx { display: grid; gap: 6px; padding: 24px 20px; text-decoration: none; border-right: 1px solid var(--line); transition: background .2s; }
+.idx:last-child { border-right: 0; }
+.idx:hover { background: var(--sheet); }
+.idx .num { font: 800 clamp(30px, 4vw, 44px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.idx .go { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
+.idx .go .ph { width: 22px; --r: 1/1; padding: 0; border-radius: 5px; }
+.idx:hover .go { color: var(--ink); }
+.index-wrap { max-width: var(--wrap); margin-inline: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .index-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .idx:nth-child(2) { border-right: 0; } .idx:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+
+/* sections */
+.group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-block: 56px 8px; }
+.group-head .mono { color: var(--ink-2); }
+.case { border-bottom: 1px solid var(--line); padding-block: 40px; scroll-margin-top: 72px; }
+.case-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; }
+.case-hero > .ph { grid-column: 1 / -1; margin-top: 8px; }
+.close-btn { justify-self: center; background: none; border: 0; padding: 10px 16px; cursor: pointer; color: var(--ink-2); }
+.close-btn:hover { color: var(--ink); }
+.case-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.case-meta .co { font-weight: 600; }
+.case-meta .role { color: var(--ink-3); }
+.case-copy { display: grid; gap: 22px; min-width: 0; }
+.case-copy .sub { color: var(--ink-2); margin: 0; max-width: 52ch; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
+.stat { padding: 14px 12px 0 0; display: grid; gap: 6px; }
+.stat + .stat { padding-left: 14px; border-left: 1px solid var(--line); }
+.stat .n { font: 800 26px/1 var(--display); font-stretch: 118%; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.stat .mono { font-size: 10px; color: var(--ink-2); letter-spacing: .1em; }
+@media (max-width: 860px) { .case-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .stat .n { font-size: 22px; } }
+
+/* timeline (background hero) */
+.timeline { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.tl { border-top: 2px solid var(--ink-3); padding-top: 12px; display: grid; gap: 4px; font-size: 13px; }
+.tl.lead { border-top-color: var(--ink); }
+.tl .mono { font-size: 10px; color: var(--ink-3); }
+.tl strong { font-size: 14px; }
+@media (max-width: 860px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
+
+/* toggle + drawer */
+.toggle { margin-top: 32px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 16px; background: none; border: 0; cursor: pointer; text-align: center; }
+.toggle .t { display: grid; font-weight: 700; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
+.toggle .t > span { grid-area: 1 / 1; transition: opacity .35s ease, transform .35s ease; }
+.toggle .t-open { opacity: 0; transform: translateY(6px); }
+.toggle[aria-expanded="true"] .t-closed { opacity: 0; transform: translateY(-6px); }
+.toggle[aria-expanded="true"] .t-open { opacity: 1; transform: none; }
+.toggle .m { transition: opacity .35s ease; }
+.toggle[aria-expanded="true"] .m { opacity: .45; }
+.toggle .m { color: var(--ink-3); font-size: 10.5px; }
+.toggle .chev { margin-top: 2px; display: grid; place-items: center; color: var(--ink-2); transition: transform .45s cubic-bezier(.5,0,.3,1); }
+.toggle .chev svg { animation: chev-bob 1.8s ease-in-out infinite; }
+.toggle:hover .chev { color: var(--ink); }
+.toggle[aria-expanded="true"] .chev { transform: scaleY(-1); }
+@keyframes chev-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+.drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.3,.7,.2,1); }
+.drawer.open { grid-template-rows: 1fr; }
+.drawer > .inner { overflow: hidden; min-height: 0; }
+.drawer .body { display: grid; gap: 28px; padding-top: 28px; }
+.block { display: grid; gap: 10px; }
+.block > .cap { color: var(--ink-3); }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
+.grid > .span2 { grid-column: span 2; }
+@media (max-width: 860px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
+
+/* footer */
+.footer { padding-block: 72px 24px; display: grid; gap: 22px; }
+.footer .big { font: 800 clamp(40px, 6vw, 60px)/1 var(--display); font-stretch: 118%; letter-spacing: -.02em; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { border: 1px solid var(--line); border-radius: 999px; padding: 12px 18px; background: var(--sheet); }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* wireframe toolbar */
+.tools { position: fixed; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 10; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; width: max-content; max-width: calc(100% - 24px); background: var(--ink); color: var(--paper); border-radius: 14px; padding: 6px; box-shadow: 0 8px 30px rgba(0,0,0,.25); }
+.tools button { background: transparent; border: 0; color: inherit; padding: 8px 10px; border-radius: 9px; cursor: pointer; font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.tools button:hover { background: color-mix(in srgb, var(--paper) 14%, transparent); }
+.tools button[aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+.tools .sep { width: 1px; align-self: stretch; background: color-mix(in srgb, var(--paper) 22%, transparent); margin: 4px 2px; }
+.tools .meter { padding: 8px 10px; font: 500 11px/1 var(--mono); letter-spacing: .06em; white-space: nowrap; }
+.tools .meter b { font-variant-numeric: tabular-nums; }
+.tools .meter s { opacity: .55; }
+.tools .lbl { padding-left: 6px; font: 500 10px/1 var(--mono); letter-spacing: .1em; opacity: .55; }
+
+@media (max-width: 560px) { .tools { gap: 2px; padding: 4px; } .tools .lbl, .tools .sep, .tools .meter s { display: none; } .tools button { padding: 8px 7px; font-size: 10px; } .tools .meter { padding: 8px 6px; font-size: 10px; } }
+@media (prefers-reduced-motion: reduce) { .drawer, .toggle .chev, .toggle .t > span, .toggle .m, .idx { transition: none; } .toggle .chev svg { animation: none; } .seal { animation: none; } html { scroll-behavior: auto !important; } }
+html { scroll-behavior: smooth; }
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">DENNY RYANTO</a>
+    <nav class="mono" aria-label="Sections">
+      <a href="#work">Work</a>
+      <a href="#lab" class="hide-sm">Lab</a>
+      <a href="#background" class="hide-sm">Background</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <span class="mono hide-sm muted" style="white-space:nowrap">Resume ↓</span>
+  </div>
+</header>
+
+<main id="top">
+  <section class="wrap hero">
+    <div>
+      <div class="mono muted" style="margin-bottom:24px">Portfolio 2026 · Head / AVP, Product Design</div>
+      <h1>Design leadership, measured in outcomes.</h1>
+      <p>Design leader across fintech, enterprise and consumer platforms, turning design strategy into P&amp;L results: lower cost to serve, higher conversion, platforms used by tens of millions.</p>
+      <span class="avail mono">Open to Head / AVP roles · Jakarta</span>
+      <div class="note" style="margin-top:24px"><b>1</b><span>The “In short” paragraph is folded into this subhead, and the brand strip moves into the case index below. One opening message instead of three.</span></div>
+    </div>
+    <aside class="profile" aria-label="Profile summary">
+      <div class="who">
+        <div class="ph round"><span>Photo</span></div>
+        <div><strong>Denny Ryanto</strong><span class="mono muted" style="font-size:10px">Head / AVP, Product Design</span></div>
+      </div>
+      <div class="prow"><span class="mono">Experience</span><span>15+ years in digital product</span></div>
+      <div class="prow"><span class="mono">Now</span><span>Product &amp; AI design consultant</span></div>
+      <div class="prow"><span class="mono">Board</span><span>Commissioner, Dash &amp; Lumio</span></div>
+      <div class="prow"><span class="mono">Certified</span><span class="certs"><span><i class="seal" aria-hidden="true"></i>AI-Native SDLC Playbook</span><span><i class="seal" aria-hidden="true" style="--d:.45s"></i>Claude Code 101</span><span><i class="seal" aria-hidden="true" style="--d:.9s"></i>AI Fluency: Framework &amp; Foundations</span></span></div>
+      <div class="note"><b>2</b><span>Trimmed from 7 rows to 4. “Before” is covered by the case index. “Certified” stays here with its spinning gold seals, so the certificates are left out of the AI case numbers.</span></div>
+    </aside>
+  </section>
+
+  <nav class="index" aria-label="Case index">
+    <div class="index-wrap" id="index"></div>
+  </nav>
+  <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span>The stat band becomes the case index. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
+
+  <section class="wrap" id="work" aria-label="Work">
+    <div class="group-head"><span class="mono">Selected work</span><span class="mono" id="order-label">Ordered by impact</span></div>
+    <div id="cases"></div>
+  </section>
+
+  <section class="wrap" id="lab" aria-label="Lab">
+    <div class="group-head"><span class="mono">Lab · built with AI</span><span class="mono">Personal R&amp;D</span></div>
+    <div id="labs"></div>
+  </section>
+
+  <section class="wrap" aria-label="Background">
+    <div id="bg"></div>
+  </section>
+
+  <footer class="wrap footer" id="contact">
+    <div class="mono muted">What I’m looking for</div>
+    <div class="big">Let’s talk.</div>
+    <p class="muted" style="margin:0;max-width:56ch">Open to a Head or AVP of Product Design mandate where design owns outcomes, building and scaling teams, design systems and AI-native practice.</p>
+    <div class="btns mono"><span class="btn primary">Get in touch</span><span class="btn">Connect on LinkedIn</span><span class="btn">Download resume (PDF)</span></div>
+    <div class="mono muted" style="user-select:all">denny.ryanto@gmail.com</div>
+  </footer>
+</main>
+
+<div class="tools" role="toolbar" aria-label="Wireframe controls">
+  <span class="lbl">WIREFRAME</span>
+  <button type="button" id="t-expand">Expand all</button>
+  <button type="button" id="t-collapse">Collapse all</button>
+  <span class="sep"></span>
+  <button type="button" id="t-impact" aria-pressed="true">By impact</button>
+  <button type="button" id="t-date" aria-pressed="false">By date</button>
+  <span class="sep"></span>
+  <button type="button" id="t-notes" aria-pressed="true">Notes</button>
+  <span class="sep"></span>
+  <span class="meter" title="Page height divided by window height">≈ <b id="screens">–</b> screens <s>22 today</s></span>
+</div>
+
+<script>
+(function () {
+  // Hero content is real; drawer content is placeholders only.
+  var P = function (label, r, kind, span) { return { label: label, r: r || '16/9', kind: kind || '', span: span }; };
+  var CASES = [
+    { id: 'linkaja', co: 'LinkAja', role: 'Product Design Lead · Sep 2021 – Jun 2023', start: 2021, impact: 1,
+      title: 'Design that cut OPEX 80% for 70 million users.',
+      sub: 'Self-service flows replaced agent tickets, and a home-screen redesign shipped to 70M+ users.',
+      stats: [['70M+', 'Users'], ['~72%', 'Cases automated'], ['4', 'Ships']],
+      hero: P('Signature visual · OPEX chart with −80% callout', '21/8'),
+      index: { num: '−80%', label: 'CS OPEX' },
+      note: '<b>4</b><span>Every case uses the same hero: headline on the left, one line of context and three numbers on the right, and one signature visual full width underneath. The bullets move into the drawer.</span>',
+      drawer: [
+        { lines: 4, cap: 'Outcome bullets' },
+        { cap: 'Problem and fix', cols: 2, items: [P('Before / after flow', '16/10'), P('Support model redesign', '16/10')] },
+        { cap: 'Intent routing in chat', cols: 4, items: [P('Explainer', '16/10', '', 1), P('Chat · bot', '9/19', 'phone'), P('Chat · agent', '9/19', 'phone')] },
+        { cap: 'MyPaylater shipped flow', cols: 4, items: [P('Onboarding', '9/19', 'phone'), P('Active limit', '9/19', 'phone'), P('Application', '9/19', 'phone'), P('Self-service FAQ', '9/19', 'phone')] }
+      ], toggle: 'Read the case study' },
+    { id: 'komunal', co: 'Komunal Indonesia', role: 'Senior Manager, Product Design · Jun 2024 – Nov 2025', start: 2024, impact: 2,
+      title: 'Rebuilt how a regulated fintech ships design.',
+      sub: 'A first shared design system, a faster web toolchain and a deposit funnel that converts better.',
+      stats: [['+12 pts', 'Deposit funnel'], ['W → D', 'Release cycle'], ['1 system', '3 orgs aligned']],
+      hero: P('Signature visual · deposit funnel chart', '21/8'),
+      index: { num: '+12 pts', label: 'Deposit funnel' },
+      drawer: [
+        { lines: 4, cap: 'Outcome bullets' },
+        { cap: 'Diagrams', cols: 2, items: [P('Tooling migration · Sanity → Framer', '16/10'), P('One design system · three orgs', '16/10')] },
+        { cap: 'DepositoBPR', cols: 4, items: [P('Placement volume chart', '16/10', '', 1), P('Marketplace', '9/19', 'phone'), P('Confirmation', '9/19', 'phone')] }
+      ], toggle: 'Read the case study' },
+    { id: 'board', co: 'Dash · Lumio', role: 'Founder, VP Design, Commissioner · 2016 – present', start: 2016, impact: 3,
+      title: 'Board-level judgment, design-level craft.',
+      sub: 'Founded and led Dash for 8 years, led design at Lumio, and now sits on both boards.',
+      stats: [['30+', 'Restaurant chains'], ['~200K', 'Customers / month'], ['150+', 'Lumio locations']],
+      hero: P('Signature visual · Dash ordering iPad', '21/8'),
+      index: { num: '~200K', label: 'Customers / month' },
+      drawer: [
+        { lines: 4, cap: 'Outcome bullets' },
+        { cap: 'Dash', cols: 2, items: [P('Captain app · iPad', '4/3'), P('Back office · laptop', '16/10')] },
+        { cap: 'Lumio signage network', cols: 4, items: [P('Highways', '16/10'), P('City streets', '16/10'), P('Supermarkets', '16/10'), P('Transit', '16/10')] },
+        { cols: 1, items: [P('Lumio CMS · laptop', '21/9')] },
+        { cap: 'Governance', cols: 2, items: [P('Dash board card', '3/1'), P('Lumio board card', '3/1')] }
+      ], toggle: 'Read the case study' },
+    { id: 'ai', co: 'Independent', role: 'Product & AI Design Consultant · Nov 2025 – present', start: 2025, impact: 4,
+      title: 'Making design teams AI-native.',
+      sub: 'Enterprise AI workflows, multi-agent Claude Code builds, and coaching designers on AI tooling.',
+      stats: [['MCP', 'Agentic workflows'],['0 → 1', 'Prototypes in Claude Code'], ['1:1', 'Designer coaching']],
+      hero: P('Signature visual · Chrona phone', '21/8'),
+      index: { num: '0 → 1', label: 'AI-native builds' },
+      drawer: [
+        { lines: 3, cap: 'Outcome bullets' },
+        { cols: 1, items: [P('Decision-desk demo · enterprise AI', '21/9')] },
+        { cap: 'Chrona · AI-first social planning', cols: 4, items: [P('Chrona app', '9/19', 'phone'), P('How Chrona works · 4 points', '16/10', '', 1)], extra: true },
+        { cols: 2, items: [P('Habit loop diagram', '16/10'), P('Planning engine diagram', '16/10')] }
+      ], toggle: 'Read the case study' }
+  ];
+  var LABS = [
+    { id: 'eink', co: 'E-ink athlete panel', role: 'Python · FastAPI · Docker · GCP',
+      title: 'Shipping real products with AI, end to end.',
+      sub: 'A self-hosted service turns Garmin data into a daily e-ink brief on the nightstand.',
+      stats: [['24/7', 'Live on GCP'], ['800×480', 'E-ink render'], ['$0', 'Subscriptions']],
+      hero: P('Signature visual · panel on nightstand', '21/8'),
+      drawer: [
+        { lines: 2, cap: 'Build summary' },
+        { cols: 2, items: [P('Face 1 · readiness', '4/3'), P('Face 2 · weekly view', '4/3')] },
+        { cols: 2, items: [P('Architecture pipeline', '16/10'), P('Live deployment', '16/10')] },
+        { cap: 'Companion build', cols: 1, items: [P('E-ink shoe tracker', '21/9')] }
+      ], toggle: 'See the build' },
+    { id: 'cockpit', co: 'Garmin Connect concept', role: 'Personal concept · AI-assisted UI',
+      title: 'What if Garmin Connect read like a cockpit?',
+      sub: 'A redesign that reads training data like an instrument panel. Not affiliated with Garmin.',
+      stats: [],
+      hero: P('Signature visual · one still of the cockpit screens', '21/8'),
+      note: '<b>5</b><span>The pinned scroll scene is 5 screens tall today. It now loads only when this drawer opens.</span>',
+      drawer: [
+        { lines: 3, cap: 'The question' },
+        { cols: 1, items: [P('Pinned scroll scene · 4 steps', '16/9')] },
+        { cap: 'Close-ups', cols: 3, items: [P('Readiness strip', '1/1'), P('Training status map', '1/1'), P('Weekly load', '1/1')] }
+      ], toggle: 'Explore the concept' }
+  ];
+  var BG = { id: 'background', co: 'Background', role: '2011 – present',
+    title: 'Fifteen years across four companies.',
+    timeline: [['2011–16', 'Appsindo', 'Lead UI/UX'], ['2016–24', 'Dash · Lumio', 'Founder · VP Design'], ['2021–', 'Dash · Lumio', 'Commissioner'], ['2021–23', 'LinkAja', 'Product Design Lead'], ['2024–25', 'Komunal', 'Senior Manager'], ['2025–', 'Independent', 'AI Design Consultant']],
+    note: '<b>6</b><span>Earlier work, Clients, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click.</span>',
+    drawer: [
+      { cap: 'Earlier work · 2011–2016', cols: 4, items: [P('Genki Sushi', '4/3'), P('Foodhall', '4/3'), P('Summarecon Malls', '4/3'), P('MATA2', '4/3')] },
+      { cap: 'Clients & brands', cols: 6, items: 'Ismaya,SOGO,MAP,Philips,DANA,Tokopedia,Netflix,Jasamarga,Summarecon,Galeries Lafayette,Genki Sushi,Rainbow'.split(',').map(function (n) { return P(n, '3/2'); }) },
+      { lines: 4, cap: 'Capabilities · 4 groups' },
+      { cap: 'Education', chips: ['B.A. Graphic Design · Pelita Harapan University 2004–08'] }
+    ], toggle: 'Show full background' };
+
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function ph(p) {
+    return '<div class="ph ' + (p.kind || '') + (p.span ? ' span2' : '') + '" style="--r:' + p.r + '"><span>' + esc(p.label) + '</span></div>';
+  }
+  function lines(n) {
+    var w = [92, 78, 86, 64, 80];
+    var out = '';
+    for (var i = 0; i < n; i++) out += '<div class="line"><i style="width:' + w[i % w.length] + '%"></i></div>';
+    return out;
+  }
+  function counts(c) {
+    var pts = 0, vis = 0;
+    c.drawer.forEach(function (b) { if (b.lines) pts += b.lines; if (b.items) vis += b.items.length; });
+    var parts = [];
+    if (pts) parts.push(pts + ' points');
+    if (vis) parts.push(vis + ' visuals');
+    return parts.join(' · ');
+  }
+  function drawer(c) {
+    return c.drawer.map(function (b) {
+      var cap = b.cap ? '<div class="cap mono">' + esc(b.cap) + '</div>' : '';
+      if (b.lines) return '<div class="block lines">' + cap + lines(b.lines) + '</div>';
+      if (b.chips) return '<div class="block">' + cap + '<div class="chips mono">' + b.chips.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div></div>';
+      return '<div class="block">' + cap + '<div class="grid' + (b.cols <= 2 ? ' one-sm' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
+    }).join('');
+  }
+  function caseHtml(c, n) {
+    var eyebrow = (n ? '<span class="mono co" data-num>' + String(n).padStart(2, '0') + ' / ' + esc(c.co) + '</span>' : '<span class="mono co">' + esc(c.co) + '</span>');
+    var stats = c.stats && c.stats.length ? '<div class="stats">' + c.stats.map(function (s) { return '<div class="stat"><span class="n">' + esc(s[0]) + '</span><span class="mono">' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' : '';
+    var body = c.timeline
+      ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span></div>'; }).join('') + '</div>'
+      : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p>' + stats + '</div>' + ph(c.hero) + '</div>';
+    var title = c.timeline ? '<h2 style="margin-bottom:28px">' + esc(c.title) + '</h2>' : '';
+    return '<article class="case" id="' + c.id + '">' +
+      '<div class="case-meta">' + eyebrow + '<span class="mono role">' + esc(c.role) + '</span></div>' + title + body +
+      (c.note ? '<div class="note" style="margin-top:20px">' + c.note + '</div>' : '') +
+      '<button type="button" class="toggle" aria-expanded="false" aria-controls="d-' + c.id + '">' +
+        '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
+        '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
+      '</button>' +
+      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span>The toggle is plain centered caps with no box, and a chevron that gently bobs. Opening crossfades the label to “Close” and flips the chevron. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
+      '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
+      '</article>';
+  }
+
+  var casesEl = document.getElementById('cases');
+  casesEl.innerHTML = CASES.map(function (c, i) { return caseHtml(c, i + 1); }).join('');
+  document.getElementById('labs').innerHTML = LABS.map(function (c) { return caseHtml(c); }).join('');
+  document.getElementById('bg').innerHTML = caseHtml(BG);
+  document.getElementById('index').innerHTML = CASES.map(function (c) {
+    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="mono muted" style="font-size:10px">' + esc(c.index.label) + '</span><span class="go mono"><span class="ph"><span></span></span>' + esc(c.co) + ' →</span></a>';
+  }).join('');
+
+  function setOpen(article, open) {
+    var btn = article.querySelector('.toggle');
+    var d = article.querySelector('.drawer');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.querySelector('.t-closed').setAttribute('aria-hidden', open ? 'true' : 'false');
+    btn.querySelector('.t-open').setAttribute('aria-hidden', open ? 'false' : 'true');
+    d.classList.toggle('open', open);
+    var inner = d.querySelector('.inner');
+    if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
+  }
+  document.querySelectorAll('.case').forEach(function (a) {
+    var btn = a.querySelector('.toggle');
+    btn.addEventListener('click', function () { setOpen(a, btn.getAttribute('aria-expanded') !== 'true'); });
+    a.querySelector('.close-btn').addEventListener('click', function () {
+      window.scrollTo({ top: btn.getBoundingClientRect().top + window.scrollY - 160, behavior: 'instant' });
+      setOpen(a, false);
+      btn.focus({ preventScroll: true });
+    });
+  });
+
+  function openFromHash() {
+    var id = location.hash.slice(1);
+    var a = id && document.getElementById(id);
+    if (a && a.classList.contains('case')) { setOpen(a, true); a.scrollIntoView({ block: 'start' }); }
+  }
+  document.querySelectorAll('[data-open]').forEach(function (l) {
+    l.addEventListener('click', function () { var a = document.getElementById(l.dataset.open); if (a) setOpen(a, true); });
+  });
+  window.addEventListener('hashchange', openFromHash);
+  setOpen(document.getElementById('background'), true);
+  openFromHash();
+
+  // toolbar
+  function all(open) { document.querySelectorAll('.case').forEach(function (a) { setOpen(a, open); }); }
+  document.getElementById('t-expand').onclick = function () { all(true); };
+  document.getElementById('t-collapse').onclick = function () { all(false); };
+  function order(by) {
+    var sorted = CASES.slice().sort(function (a, b) { return by === 'date' ? b.start - a.start : a.impact - b.impact; });
+    sorted.forEach(function (c, i) {
+      var el = document.getElementById(c.id);
+      casesEl.appendChild(el);
+      el.querySelector('[data-num]').textContent = String(i + 1).padStart(2, '0') + ' / ' + c.co;
+      document.getElementById('index').appendChild(document.querySelector('[data-open="' + c.id + '"]'));
+    });
+    document.getElementById('order-label').textContent = by === 'date' ? 'Newest first' : 'Ordered by impact';
+    document.getElementById('t-impact').setAttribute('aria-pressed', by !== 'date');
+    document.getElementById('t-date').setAttribute('aria-pressed', by === 'date');
+  }
+  document.getElementById('t-impact').onclick = function () { order('impact'); };
+  document.getElementById('t-date').onclick = function () { order('date'); };
+  var notesBtn = document.getElementById('t-notes');
+  notesBtn.onclick = function () {
+    var on = notesBtn.getAttribute('aria-pressed') !== 'true';
+    notesBtn.setAttribute('aria-pressed', on);
+    document.body.classList.toggle('notes-off', !on);
+  };
+
+  // live page-length meter, in window heights
+  var out = document.getElementById('screens');
+  function measure() { out.textContent = (document.documentElement.scrollHeight / Math.max(1, window.innerHeight)).toFixed(1); }
+  if (window.ResizeObserver) new ResizeObserver(measure).observe(document.body);
+  window.addEventListener('resize', measure);
+  document.addEventListener('transitionend', measure);
+  measure();
+})();
+</script>
