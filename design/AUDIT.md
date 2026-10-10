@@ -80,8 +80,10 @@ behind a toggle.
   - label in spaced all-caps (e.g. "READ THE CASE STUDY"), with a small caps
     meta line under it ("4 POINTS · 9 VISUALS")
   - a plain chevron (not an arrow) that gently bobs on a loop
-  - on open, the label **crossfades** to "CLOSE" and the chevron **flips
-    vertically** (scaleY), it does not rotate; the meta line dims
+  - on open, the chevron **flips vertically** (scaleY over 0.5s), it does
+    not rotate; the label swap is **synced to the flip**: the old label fades
+    out while the chevron folds flat, "CLOSE" fades in as it unfolds (pure
+    opacity, no movement); the meta line dims over the same 0.5s
   - reduced motion: no bob, instant swaps
 - **Deep links**: `#linkaja` (or any case id) opens that case directly.
 - **Stat band → case index**: four cells, each a headline number plus "NN
