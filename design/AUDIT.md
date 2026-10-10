@@ -91,9 +91,11 @@ behind a toggle.
   request); the certificates appear only here, not in the AI case or the
   Background chips.
 - **"In short"** is folded into the hero subhead (first person).
-- **Background section** merges Earlier work, Clients, Career and
-  Capabilities. It **starts expanded** (owner request). The career timeline is
-  its hero.
+- **Background section** merges Earlier work, Career and Capabilities. It
+  **starts expanded** (owner request). The career timeline is its hero.
+- **Clients & brands** (owner request, "don't be modest"): all 12 logos sit in
+  an always-visible strip right under the case index, 6 per row on desktop and
+  3 on phones, with no borders. They are no longer at the bottom of the page.
 - **Type floor (F5)**: nothing smaller than 11px. Number labels under stats
   are sentence case at 13px, not tiny mono caps; mono is kept for dates,
   captions and the toggle. The wireframe meets this (it had 97 text items at
@@ -115,7 +117,8 @@ Section plan:
 | Independent / AI | MCP, 0→1, 1:1; Chrona phone | bullets, decision desk, Chrona features, habit loop, engine |
 | Lab: e-ink | 24/7, 800×480, $0; nightstand photo | faces, architecture, deployment, shoe tracker |
 | Lab: Garmin | the question + the 3D fan (see below) | close-ups, write-up |
-| Background | career timeline | earlier work, clients, capabilities, education (open by default) |
+| Clients & brands | all 12 logos, always visible, under the case index | (no drawer) |
+| Background | career timeline | earlier work, capabilities, education (open by default) |
 
 Estimated length with all sections collapsed: about 9 screens on desktop
 (22 today) and about 10 on mobile (40 today).
