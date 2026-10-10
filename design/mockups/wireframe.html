@@ -176,8 +176,11 @@ body.notes-off .note { display: none; }
 .toggle[aria-expanded="true"] .m { opacity: .45; }
 .toggle .chev { margin-top: 2px; display: grid; place-items: center; color: var(--ink-2); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1); }
 .toggle .chev svg { animation: chev-bob 1.8s ease-in-out infinite; }
+/* idle pulse on the label, on the same 1.8s clock as the chevron bob: dimmest when the chevron dips lowest */
+.toggle .t { animation: label-pulse 1.8s ease-in-out infinite; }
 .toggle:hover .chev { color: var(--ink); }
 .toggle[aria-expanded="true"] .chev { transform: scaleY(-1); }
+@keyframes label-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 @keyframes chev-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 .drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.3,.7,.2,1); }
@@ -223,7 +226,7 @@ body.notes-off .audit { display: none; }
 .tools .lbl { padding-left: 6px; font: 500 10px/1 var(--mono); letter-spacing: .1em; opacity: .55; }
 
 @media (max-width: 560px) { .tools { gap: 2px; padding: 4px; } .tools .lbl, .tools .sep, .tools .meter s { display: none; } .tools button { padding: 8px 7px; font-size: 10px; } .tools .meter { padding: 8px 6px; font-size: 10px; } }
-@media (prefers-reduced-motion: reduce) { .drawer, .toggle .chev, .toggle .m, .idx { transition: none; } .toggle .t > span { transition: none !important; } .toggle .chev svg { animation: none; } .seal { animation: none; } html { scroll-behavior: auto !important; } }
+@media (prefers-reduced-motion: reduce) { .drawer, .toggle .chev, .toggle .m, .idx { transition: none; } .toggle .t > span { transition: none !important; } .toggle .chev svg, .toggle .t { animation: none; } .seal { animation: none; } html { scroll-behavior: auto !important; } }
 html { scroll-behavior: smooth; }
 </style>
 
@@ -452,7 +455,7 @@ html { scroll-behavior: smooth; }
         '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
         '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
       '</button>' +
-      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain centered caps with no box, and a chevron that gently bobs. On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
+      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain centered caps with no box, and a chevron that gently bobs while the label pulses on the same beat. On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
       '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
       '</article>';
   }
