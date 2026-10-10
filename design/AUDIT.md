@@ -94,6 +94,16 @@ behind a toggle.
 - **Background section** merges Earlier work, Clients, Career and
   Capabilities. It **starts expanded** (owner request). The career timeline is
   its hero.
+- **Type floor (F5)**: nothing smaller than 11px. Number labels under stats
+  are sentence case at 13px, not tiny mono caps; mono is kept for dates,
+  captions and the toggle. The wireframe meets this (it had 97 text items at
+  10–10.5px before).
+- **Garmin hero (F4)**: the 3D fan sits in the section hero at a fixed height
+  and runs on a timer and clicks (see below). It is built in the wireframe
+  as grey cards.
+
+The wireframe's notes layer tags each design note with the finding it answers
+(F1–F10) and ends with an "Audit coverage" table showing each finding's status.
 
 Section plan:
 
@@ -127,7 +137,10 @@ pins the page for about 3.7 screens (`.gx-track.is-anim` is 100vh + 2.7×100vh).
 
 Agreed direction for Garmin (**option 2**): keep the fan in the hero at a
 fixed height of about one screen, driven by a timer and clicks instead of
-scroll position. Same 3D look and same screens.
+scroll position. Same 3D look and same screens. In the wireframe (v8) it
+advances every 4.5s, pauses on hover or focus, steps with ticks, arrow keys
+or a swipe, plays only while on screen, and opens the drawer when the front
+screen is clicked.
 
 The owner then asked to apply the fan to **every** section hero instead of
 hiding visuals in drawers. Plan for that:

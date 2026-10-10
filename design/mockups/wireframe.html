@@ -48,7 +48,7 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
 /* top bar */
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
 .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
-.brand { font-weight: 800; font-stretch: 115%; letter-spacing: .02em; text-decoration: none; }
+.brand { white-space: nowrap; font-weight: 800; font-stretch: 115%; letter-spacing: .02em; text-decoration: none; }
 .topbar nav { display: flex; gap: 22px; }
 .topbar nav a { text-decoration: none; color: var(--ink-2); }
 .topbar nav a:hover { color: var(--ink); }
@@ -61,7 +61,7 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
     linear-gradient(to bottom right, transparent calc(50% - .6px), var(--ph-x) 50%, transparent calc(50% + .6px)); }
 .ph.phone { border-radius: 18px; }
 .ph.round { border-radius: 50%; }
-.ph > span { position: relative; background: var(--ph); padding: 4px 8px; text-align: center; font: 500 10.5px/1.35 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); max-width: 90%; }
+.ph > span { position: relative; background: var(--ph); padding: 4px 8px; text-align: center; font: 500 11px/1.35 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); max-width: 90%; }
 .lines { display: grid; gap: 10px; }
 .lines .cap { margin-bottom: 4px; }
 .line { display: flex; gap: 12px; align-items: center; }
@@ -72,6 +72,7 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
 
 /* design notes */
 .note { display: flex; gap: 10px; align-items: flex-start; background: var(--note-bg); color: var(--note); border-left: 2px solid var(--note); padding: 10px 12px; border-radius: 0 6px 6px 0; font: 500 13px/1.45 var(--display); max-width: 62ch; }
+.note .f { display: inline-block; margin-right: 6px; padding: 1px 6px; border: 1px solid var(--note); border-radius: 4px; font: 600 11px/1.3 var(--mono); font-style: normal; letter-spacing: .04em; }
 .note b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--note); color: var(--sheet); font: 600 11px/1 var(--mono); }
 body.notes-off .note { display: none; }
 
@@ -84,7 +85,7 @@ body.notes-off .note { display: none; }
 .profile .who .ph { width: 72px; flex: none; --r: 1/1; padding: 0; }
 .profile .who strong { display: block; font-size: 18px; font-stretch: 112%; }
 .prow { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
-.prow .mono { color: var(--ink-3); font-size: 10px; padding-top: 3px; }
+.prow .mono { color: var(--ink-3); padding-top: 2px; }
 .certs { display: grid; gap: 7px; font-size: 13.5px; }
 .certs span { display: flex; align-items: center; gap: 8px; }
 .seal { flex: none; width: 15px; height: 15px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fbe9a8, #dca726 55%, #946507); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35); animation: seal-spin 4.5s cubic-bezier(.6,0,.4,1) infinite; animation-delay: var(--d, 0s); }
@@ -97,6 +98,7 @@ body.notes-off .note { display: none; }
 .idx:last-child { border-right: 0; }
 .idx:hover { background: var(--sheet); }
 .idx .num { font: 800 clamp(30px, 4vw, 44px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.idx .sl { font-size: 13px; }
 .idx .go { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
 .idx .go .ph { width: 22px; --r: 1/1; padding: 0; border-radius: 5px; }
 .idx:hover .go { color: var(--ink); }
@@ -120,14 +122,34 @@ body.notes-off .note { display: none; }
 .stat { padding: 14px 12px 0 0; display: grid; gap: 6px; }
 .stat + .stat { padding-left: 14px; border-left: 1px solid var(--line); }
 .stat .n { font: 800 26px/1 var(--display); font-stretch: 118%; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.stat .mono { font-size: 10px; color: var(--ink-2); letter-spacing: .1em; }
+.stat .sl { font-size: 13px; line-height: 1.35; color: var(--ink-2); }
 @media (max-width: 860px) { .case-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .stat .n { font-size: 22px; } }
+
+
+/* fan: the cockpit's 3D stack, driven by a timer and clicks */
+.case-hero > .fan { grid-column: 1 / -1; margin-top: 8px; }
+.fan { position: relative; outline: none; }
+.fan:focus-visible .fan-stage { outline: 2px solid var(--note); outline-offset: 4px; }
+.fan-stage { position: relative; height: clamp(260px, 34vw, 430px); perspective: 1600px; perspective-origin: 20% 45%; overflow: hidden; touch-action: pan-y; }
+.fan-card { position: absolute; left: 17%; top: 7%; width: min(50%, 470px); aspect-ratio: 4 / 3; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
+.fan-card .ph { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 10px; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .35); }
+.fan-card.front .ph { border-color: var(--ink-3); }
+.fan-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 14px; }
+.fan-cap { min-width: 0; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.fan-cap .mono { color: var(--ink-3); }
+.fan-cap strong { font-size: 15px; }
+.fan-cap .d { color: var(--ink-2); font-size: 14px; }
+.fan-ticks { display: flex; gap: 4px; flex: none; }
+.fan-ticks button { background: none; border: 0; padding: 10px 2px; cursor: pointer; }
+.fan-ticks i { display: block; width: 22px; height: 2px; background: var(--line); transition: background .3s; }
+.fan-ticks button.on i { background: var(--ink); }
+@media (max-width: 860px) { .fan-card { width: 68%; left: 3%; } .fan-stage { height: clamp(220px, 58vw, 340px); } }
 
 /* timeline (background hero) */
 .timeline { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
 .tl { border-top: 2px solid var(--ink-3); padding-top: 12px; display: grid; gap: 4px; font-size: 13px; }
 .tl.lead { border-top-color: var(--ink); }
-.tl .mono { font-size: 10px; color: var(--ink-3); }
+.tl .mono { color: var(--ink-3); }
 .tl strong { font-size: 14px; }
 @media (max-width: 860px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
 
@@ -140,7 +162,7 @@ body.notes-off .note { display: none; }
 .toggle[aria-expanded="true"] .t-open { opacity: 1; transform: none; }
 .toggle .m { transition: opacity .35s ease; }
 .toggle[aria-expanded="true"] .m { opacity: .45; }
-.toggle .m { color: var(--ink-3); font-size: 10.5px; }
+.toggle .m { color: var(--ink-3); }
 .toggle .chev { margin-top: 2px; display: grid; place-items: center; color: var(--ink-2); transition: transform .45s cubic-bezier(.5,0,.3,1); }
 .toggle .chev svg { animation: chev-bob 1.8s ease-in-out infinite; }
 .toggle:hover .chev { color: var(--ink); }
@@ -156,6 +178,20 @@ body.notes-off .note { display: none; }
 .grid { display: grid; gap: 14px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
 .grid > .span2 { grid-column: span 2; }
 @media (max-width: 860px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
+
+
+/* audit coverage (notes layer) */
+.audit { margin-top: 56px; color: var(--note); }
+body.notes-off .audit { display: none; }
+.ac-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--note); }
+.ac-sub { font-size: 13px; }
+.ac-row { display: grid; grid-template-columns: 44px minmax(0, 1.1fr) 96px minmax(0, 2fr); gap: 12px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid var(--note-bg); font-size: 14px; }
+.ac-id { font: 600 12px/1 var(--mono); }
+.ac-f { color: var(--ink); font-weight: 600; }
+.ac-w { color: var(--ink-2); }
+.ac-s { font: 600 11px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.ac-out, .ac-open { color: var(--ink-3); }
+@media (max-width: 720px) { .ac-row { grid-template-columns: 40px minmax(0, 1fr) auto; } .ac-w { grid-column: 2 / -1; } }
 
 /* footer */
 .footer { padding-block: 72px 24px; display: grid; gap: 22px; }
@@ -200,28 +236,29 @@ html { scroll-behavior: smooth; }
       <h1>Design leadership, measured in outcomes.</h1>
       <p>Design leader across fintech, enterprise and consumer platforms, turning design strategy into P&amp;L results: lower cost to serve, higher conversion, platforms used by tens of millions.</p>
       <span class="avail mono">Open to Head / AVP roles · Jakarta</span>
-      <div class="note" style="margin-top:24px"><b>1</b><span>The “In short” paragraph is folded into this subhead, and the brand strip moves into the case index below. One opening message instead of three.</span></div>
+      <div class="note" style="margin-top:24px"><b>1</b><span><i class="f">F9 · F3</i>The “In short” paragraph is folded into this subhead, and the brand strip moves into the case index below. One opening message instead of three.</span></div>
     </div>
     <aside class="profile" aria-label="Profile summary">
       <div class="who">
         <div class="ph round"><span>Photo</span></div>
-        <div><strong>Denny Ryanto</strong><span class="mono muted" style="font-size:10px">Head / AVP, Product Design</span></div>
+        <div><strong>Denny Ryanto</strong><span class="mono muted">Head / AVP, Product Design</span></div>
       </div>
       <div class="prow"><span class="mono">Experience</span><span>15+ years in digital product</span></div>
       <div class="prow"><span class="mono">Now</span><span>Product &amp; AI design consultant</span></div>
       <div class="prow"><span class="mono">Board</span><span>Commissioner, Dash &amp; Lumio</span></div>
       <div class="prow"><span class="mono">Certified</span><span class="certs"><span><i class="seal" aria-hidden="true"></i>AI-Native SDLC Playbook</span><span><i class="seal" aria-hidden="true" style="--d:.45s"></i>Claude Code 101</span><span><i class="seal" aria-hidden="true" style="--d:.9s"></i>AI Fluency: Framework &amp; Foundations</span></span></div>
-      <div class="note"><b>2</b><span>Trimmed from 7 rows to 4. “Before” is covered by the case index. “Certified” stays here with its spinning gold seals, so the certificates are left out of the AI case numbers.</span></div>
+      <div class="note"><b>2</b><span><i class="f">F3</i>Trimmed from 7 rows to 4. “Before” is covered by the case index. “Certified” stays here with its spinning gold seals, so the certificates are left out of the AI case numbers.</span></div>
     </aside>
   </section>
 
   <nav class="index" aria-label="Case index">
     <div class="index-wrap" id="index"></div>
   </nav>
-  <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span>The stat band becomes the case index. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
+  <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span><i class="f">F3 · F7</i>The stat band becomes the case index. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
 
   <section class="wrap" id="work" aria-label="Work">
     <div class="group-head"><span class="mono">Selected work</span><span class="mono" id="order-label">Ordered by impact</span></div>
+    <div class="note" style="margin-top:12px"><b>9</b><span><i class="f">F6</i>Order is still open. “By impact” in the toolbar puts LinkAja first, which backs the opening’s “measured in outcomes” claim. “By date” starts with the current role.</span></div>
     <div id="cases"></div>
   </section>
 
@@ -234,6 +271,11 @@ html { scroll-behavior: smooth; }
     <div id="bg"></div>
   </section>
 
+
+  <section class="wrap audit" aria-label="Audit coverage">
+    <div class="ac-head"><span class="mono">Audit coverage</span><span class="ac-sub">design/AUDIT.md · findings F1–F10</span></div>
+    <div class="ac-table"><div class="ac-row"><span class="ac-id">F1</span><span class="ac-f">Every case fully expanded</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Hero + drawer on every section (notes 4, 7)</span></div><div class="ac-row"><span class="ac-id">F2</span><span class="ac-f">Bullets repeat the stat tiles</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Bullets live in the drawer; the hero keeps three numbers (note 4)</span></div><div class="ac-row"><span class="ac-id">F3</span><span class="ac-f">Headline numbers repeat</span><span class="ac-s ac-part">Partly</span><span class="ac-w">The case index owns each headline number and the certificates live only in the profile card. Komunal, Dash · Lumio and Independent still repeat their index number in the hero.</span></div><div class="ac-row"><span class="ac-id">F4</span><span class="ac-f">Garmin outweighs the paid work</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">The fan sits in the hero at a fixed height, under 1 screen instead of 5 (note 5)</span></div><div class="ac-row"><span class="ac-id">F5</span><span class="ac-f">Accent and tiny labels everywhere</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">11px minimum, sentence-case number labels (note 8). Accent rules are set in the hi-fi.</span></div><div class="ac-row"><span class="ac-id">F6</span><span class="ac-f">Unclear order</span><span class="ac-s ac-open">Open</span><span class="ac-w">Impact or date, switchable in the toolbar (note 9)</span></div><div class="ac-row"><span class="ac-id">F7</span><span class="ac-f">No way to jump to a case</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Case index plus links like #linkaja (note 3)</span></div><div class="ac-row"><span class="ac-id">F8</span><span class="ac-f">Four thin bands at the end</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">One Background section, open by default (note 6)</span></div><div class="ac-row"><span class="ac-id">F9</span><span class="ac-f">“In short” repeats the subhead</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Folded into the opening subhead (note 1)</span></div><div class="ac-row"><span class="ac-id">F10</span><span class="ac-f">7.9MB bundle, needs JavaScript to render</span><span class="ac-s ac-out">Out of scope</span><span class="ac-w">Engineering task, separate from the layout</span></div></div>
+  </section>
   <footer class="wrap footer" id="contact">
     <div class="mono muted">What I’m looking for</div>
     <div class="big">Let’s talk.</div>
@@ -267,14 +309,14 @@ html { scroll-behavior: smooth; }
       stats: [['70M+', 'Users'], ['~72%', 'Cases automated'], ['4', 'Ships']],
       hero: P('Signature visual · OPEX chart with −80% callout', '21/8'),
       index: { num: '−80%', label: 'CS OPEX' },
-      note: '<b>4</b><span>Every case uses the same hero: headline on the left, one line of context and three numbers on the right, and one signature visual full width underneath. The bullets move into the drawer.</span>',
+      note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same hero: headline on the left, one line of context and three numbers on the right, and one signature visual full width underneath. The bullets move into the drawer.</span>',
       drawer: [
         { lines: 4, cap: 'Outcome bullets' },
         { cap: 'Problem and fix', cols: 2, items: [P('Before / after flow', '16/10'), P('Support model redesign', '16/10')] },
         { cap: 'Intent routing in chat', cols: 4, items: [P('Explainer', '16/10', '', 1), P('Chat · bot', '9/19', 'phone'), P('Chat · agent', '9/19', 'phone')] },
         { cap: 'MyPaylater shipped flow', cols: 4, items: [P('Onboarding', '9/19', 'phone'), P('Active limit', '9/19', 'phone'), P('Application', '9/19', 'phone'), P('Self-service FAQ', '9/19', 'phone')] }
       ], toggle: 'Read the case study' },
-    { id: 'komunal', co: 'Komunal Indonesia', role: 'Senior Manager, Product Design · Jun 2024 – Nov 2025', start: 2024, impact: 2,
+    { id: 'komunal', note: '<b>8</b><span><i class="f">F5</i>Nothing on the page is smaller than 11px. Number labels are sentence case at 13px instead of tiny mono caps; mono is kept for dates, captions and the toggle.</span>', co: 'Komunal Indonesia', role: 'Senior Manager, Product Design · Jun 2024 – Nov 2025', start: 2024, impact: 2,
       title: 'Rebuilt how a regulated fintech ships design.',
       sub: 'A first shared design system, a faster web toolchain and a deposit funnel that converts better.',
       stats: [['+12 pts', 'Deposit funnel'], ['W → D', 'Release cycle'], ['1 system', '3 orgs aligned']],
@@ -327,18 +369,17 @@ html { scroll-behavior: smooth; }
       title: 'What if Garmin Connect read like a cockpit?',
       sub: 'A redesign that reads training data like an instrument panel. Not affiliated with Garmin.',
       stats: [],
-      hero: P('Signature visual · one still of the cockpit screens', '21/8'),
-      note: '<b>5</b><span>The pinned scroll scene is 5 screens tall today. It now loads only when this drawer opens.</span>',
+      fan: [['Home, at a glance', 'Recovery, training and today, grouped by question'], ['Readiness', 'Read off one strip'], ['Training status', 'On one map'], ['Training load', 'Week by week']],
+      note: '<b>5</b><span><i class="f">F4</i>Option 2: the 3D fan moves into the top of this section at a fixed height, instead of 5 screens of pinned scrolling. It plays every 4.5 seconds, pauses on hover, and steps with the ticks, arrow keys or a swipe. Clicking the front screen opens the drawer.</span>',
       drawer: [
         { lines: 3, cap: 'The question' },
-        { cols: 1, items: [P('Pinned scroll scene · 4 steps', '16/9')] },
         { cap: 'Close-ups', cols: 3, items: [P('Readiness strip', '1/1'), P('Training status map', '1/1'), P('Weekly load', '1/1')] }
       ], toggle: 'Explore the concept' }
   ];
   var BG = { id: 'background', co: 'Background', role: '2011 – present',
     title: 'Fifteen years across four companies.',
     timeline: [['2011–16', 'Appsindo', 'Lead UI/UX'], ['2016–24', 'Dash · Lumio', 'Founder · VP Design'], ['2021–', 'Dash · Lumio', 'Commissioner'], ['2021–23', 'LinkAja', 'Product Design Lead'], ['2024–25', 'Komunal', 'Senior Manager'], ['2025–', 'Independent', 'AI Design Consultant']],
-    note: '<b>6</b><span>Earlier work, Clients, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click.</span>',
+    note: '<b>6</b><span><i class="f">F8</i>Earlier work, Clients, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click.</span>',
     drawer: [
       { cap: 'Earlier work · 2011–2016', cols: 4, items: [P('Genki Sushi', '4/3'), P('Foodhall', '4/3'), P('Summarecon Malls', '4/3'), P('MATA2', '4/3')] },
       { cap: 'Clients & brands', cols: 6, items: 'Ismaya,SOGO,MAP,Philips,DANA,Tokopedia,Netflix,Jasamarga,Summarecon,Galeries Lafayette,Genki Sushi,Rainbow'.split(',').map(function (n) { return P(n, '3/2'); }) },
@@ -355,6 +396,15 @@ html { scroll-behavior: smooth; }
     var out = '';
     for (var i = 0; i < n; i++) out += '<div class="line"><i style="width:' + w[i % w.length] + '%"></i></div>';
     return out;
+  }
+  function fanHtml(c) {
+    return '<div class="fan" tabindex="0" role="group" aria-roledescription="carousel" aria-label="' + esc(c.co) + ' screens">' +
+      '<div class="fan-stage">' + c.fan.map(function (f, i) {
+        return '<div class="fan-card" data-i="' + i + '"><div class="ph"><span>Screen ' + (i + 1) + ' · ' + esc(f[0]) + '</span></div></div>';
+      }).join('') + '</div>' +
+      '<div class="fan-foot"><div class="fan-cap" aria-live="polite"></div><div class="fan-ticks">' +
+      c.fan.map(function (f) { return '<button type="button" aria-label="Show ' + esc(f[0]) + '"><i></i></button>'; }).join('') +
+      '</div></div></div>';
   }
   function counts(c) {
     var pts = 0, vis = 0;
@@ -374,10 +424,10 @@ html { scroll-behavior: smooth; }
   }
   function caseHtml(c, n) {
     var eyebrow = (n ? '<span class="mono co" data-num>' + String(n).padStart(2, '0') + ' / ' + esc(c.co) + '</span>' : '<span class="mono co">' + esc(c.co) + '</span>');
-    var stats = c.stats && c.stats.length ? '<div class="stats">' + c.stats.map(function (s) { return '<div class="stat"><span class="n">' + esc(s[0]) + '</span><span class="mono">' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' : '';
+    var stats = c.stats && c.stats.length ? '<div class="stats">' + c.stats.map(function (s) { return '<div class="stat"><span class="n">' + esc(s[0]) + '</span><span class="sl">' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' : '';
     var body = c.timeline
       ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span></div>'; }).join('') + '</div>'
-      : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p>' + stats + '</div>' + ph(c.hero) + '</div>';
+      : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p>' + stats + '</div>' + (c.fan ? fanHtml(c) : ph(c.hero)) + '</div>';
     var title = c.timeline ? '<h2 style="margin-bottom:28px">' + esc(c.title) + '</h2>' : '';
     return '<article class="case" id="' + c.id + '">' +
       '<div class="case-meta">' + eyebrow + '<span class="mono role">' + esc(c.role) + '</span></div>' + title + body +
@@ -386,7 +436,7 @@ html { scroll-behavior: smooth; }
         '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
         '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
       '</button>' +
-      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span>The toggle is plain centered caps with no box, and a chevron that gently bobs. Opening crossfades the label to “Close” and flips the chevron. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
+      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain centered caps with no box, and a chevron that gently bobs. Opening crossfades the label to “Close” and flips the chevron. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
       '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
       '</article>';
   }
@@ -396,7 +446,7 @@ html { scroll-behavior: smooth; }
   document.getElementById('labs').innerHTML = LABS.map(function (c) { return caseHtml(c); }).join('');
   document.getElementById('bg').innerHTML = caseHtml(BG);
   document.getElementById('index').innerHTML = CASES.map(function (c) {
-    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="mono muted" style="font-size:10px">' + esc(c.index.label) + '</span><span class="go mono"><span class="ph"><span></span></span>' + esc(c.co) + ' →</span></a>';
+    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="sl muted">' + esc(c.index.label) + '</span><span class="go mono"><span class="ph"><span></span></span>' + esc(c.co) + ' →</span></a>';
   }).join('');
 
   function setOpen(article, open) {
@@ -430,6 +480,86 @@ html { scroll-behavior: smooth; }
   window.addEventListener('hashchange', openFromHash);
   setOpen(document.getElementById('background'), true);
   openFromHash();
+
+
+  // ---- fans: front card nearly flat, the rest stacked back and turned ----
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('.fan').forEach(function (fan) {
+    var article = fan.closest('.case');
+    var data = CASES.concat(LABS).filter(function (c) { return c.id === article.id; })[0].fan;
+    var cards = Array.prototype.slice.call(fan.querySelectorAll('.fan-card'));
+    var ticks = Array.prototype.slice.call(fan.querySelectorAll('.fan-ticks button'));
+    var cap = fan.querySelector('.fan-cap');
+    var n = cards.length, cur = 0, timer = null, held = false, visible = false;
+    function narrow() { return window.innerWidth <= 860; }
+    function place(card, slot) {
+      var dx = narrow() ? 11 : 17, dz = narrow() ? 90 : 150;
+      card.style.transform = slot === 0
+        ? 'translateX(0) translateZ(0) rotateY(-7deg)'
+        : 'translateX(' + (slot * dx) + '%) translateZ(' + (-slot * dz) + 'px) rotateY(-30deg)';
+      card.style.opacity = String(1 - slot * 0.14);
+      card.style.zIndex = String(n - slot);
+      card.classList.toggle('front', slot === 0);
+    }
+    function label() {
+      ticks.forEach(function (t, i) { t.classList.toggle('on', i === cur); t.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+      cap.innerHTML = '<span class="mono">' + String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0') + '</span><strong>' + esc(data[cur][0]) + '</strong><span class="d">' + esc(data[cur][1]) + '</span>';
+    }
+    function render() { cards.forEach(function (c, i) { place(c, (i - cur + n) % n); }); label(); }
+    function go(i) {
+      i = (i + n) % n;
+      if (i === cur) return;
+      var leaving = cards[cur], forward = i === (cur + 1) % n;
+      cur = i;
+      if (!forward || still) { render(); return; }
+      // the front screen swipes off to the left, then rejoins at the back
+      leaving.style.transform = 'translateX(-75%) translateZ(60px) rotateY(12deg)';
+      leaving.style.opacity = '0';
+      cards.forEach(function (c, k) { if (c !== leaving) place(c, (k - cur + n) % n); });
+      label();
+      setTimeout(function () {
+        leaving.style.transition = 'none';
+        place(leaving, n - 1);
+        leaving.style.opacity = '0';
+        void leaving.offsetWidth;
+        leaving.style.transition = '';
+        leaving.style.opacity = String(1 - (n - 1) * 0.14);
+      }, 600);
+    }
+    function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
+    function start() { if (!still && !timer) timer = setInterval(tick, 4500); }
+    function stop() { clearInterval(timer); timer = null; }
+    if (still) cards.forEach(function (c) { c.style.transition = 'none'; });
+    render();
+    fan.addEventListener('mouseenter', function () { held = true; });
+    fan.addEventListener('mouseleave', function () { held = false; });
+    fan.addEventListener('focusin', function () { held = true; });
+    fan.addEventListener('focusout', function () { held = false; });
+    ticks.forEach(function (t, i) { t.addEventListener('click', function () { go(i); }); });
+    cards.forEach(function (c, i) {
+      c.addEventListener('click', function () {
+        if (i !== cur) { go(i); return; }
+        setOpen(article, true);
+        article.querySelector('.drawer').scrollIntoView({ behavior: still ? 'auto' : 'smooth', block: 'start' });
+      });
+    });
+    fan.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
+    });
+    var stage = fan.querySelector('.fan-stage'), x0 = null;
+    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) {
+      if (x0 === null) return;
+      var dx = e.clientX - x0; x0 = null;
+      if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+    });
+    window.addEventListener('resize', render);
+    // only the fan on screen plays
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); else stop(); }, { threshold: .35 }).observe(fan);
+    } else { visible = true; start(); }
+  });
 
   // toolbar
   function all(open) { document.querySelectorAll('.case').forEach(function (a) { setOpen(a, open); }); }
