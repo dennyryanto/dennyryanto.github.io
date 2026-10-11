@@ -127,6 +127,54 @@ Section plan:
 Estimated length with all sections collapsed: about 9 screens on desktop
 (22 today) and about 10 on mobile (40 today).
 
+## Signature visual language (proposal, 2026-10-11)
+
+Board: https://claude.ai/artifact/NHRRxLpkyrSA2HU9GbQwCB
+(local copy: `design/mockups/signature-visuals.html`)
+
+The six hero visuals come from six different worlds:
+
+| Hero | Stage | View | Accent | Frame |
+|---|---|---|---|---|
+| LinkAja OPEX chart | ink card | flat chart | lime | bordered card |
+| Komunal funnel | navy card | flat chart | blue | bordered card |
+| Dash ordering iPad | black | flat device | yellow | iPad bezel |
+| Chrona phone | white | flat device | coral | iPhone bezel |
+| E-ink panel | lifestyle photo | photograph | warm wood | none |
+| Garmin cockpit | blue glass | 3D perspective | blue pointer | glass slab |
+
+Proposed language, **A · Instrument glass** (recommended), taken from the
+cockpit:
+
+1. **One stage**: page ink with the cockpit's radial glow
+   (`#1c222c → #12151a → #161511`), no cards or borders.
+2. **One material**: bezel-less glass panes, 12–14px radius, 1px cool edge
+   `rgba(190,210,235,.22)`, faint top sheen, long soft shadow. No
+   phone/iPad/laptop frames.
+3. **One camera**: perspective 1400px; front pane −6°; panes behind −24° at
+   z −120 / −230px, brightness .8 / .66.
+4. **One front pane** carries the story; up to two behind it. Only the front
+   pane runs live animation.
+5. **Brand inside, system outside**: LinkAja red, Dash yellow and Chrona coral
+   stay inside their screens; outside them only ink, warm grey, and lime for
+   the outcome.
+6. **One chart grammar**: warm grey for steps or "before", lime for the
+   outcome only, a graduated baseline, one callout number on the right (like
+   LinkAja's −80%). Komunal's blue funnel is redrawn to match on the board.
+7. **Screens, not scenes**: no lifestyle photos in heroes. The e-ink face is
+   shown as a pane; the nightstand photo moves into the drawer.
+
+Alternative **B · Flat specimen**: same stage, panes and rules, laid flat side
+by side with no perspective. Calmer, less character.
+
+Open: A or B; brand color only inside screens; photos out of heroes; still
+panes now, timed fans later (still on hold).
+
+Tooling: `design/tools/capture-signature-visuals.js` and
+`capture-secondary-screens.js` grab the crops from the live site (serve the
+repo on :8765); `build_signature_visuals.py` + `signature_visuals_shell.html`
+build the board.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest

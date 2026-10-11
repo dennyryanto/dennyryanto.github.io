@@ -1,0 +1,224 @@
+<title>Signature Visual Language</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: one 1180px column on the portfolio's own ink. Dark only, on purpose: this is the site's world. */
+:root {
+  --ink: #161511;
+  --ink-2: #100f0c;
+  --fg: #f2efe8;
+  --fg-2: rgba(242, 239, 232, .72);
+  --fg-3: rgba(242, 239, 232, .55);
+  --rule: rgba(242, 239, 232, .14);
+  --lime: oklch(0.9 0.2 122);
+  --glass-edge: rgba(190, 210, 235, .22);
+  --display: 'Archivo', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--ink); color: var(--fg); font: 400 16px/1.6 var(--display); padding-inline: 16px; padding-block: 0 96px; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1180px; margin-inline: auto; }
+.mono { font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+.eyebrow { color: var(--lime); }
+h1, h2, h3 { font-family: var(--display); font-weight: 800; font-stretch: 112%; letter-spacing: -.02em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(38px, 6vw, 64px); line-height: 1; }
+h2 { font-size: clamp(26px, 3.4vw, 36px); line-height: 1.08; }
+p { margin: 0; text-wrap: pretty; }
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+
+header { padding-block: 72px 40px; display: grid; gap: 22px; }
+header p { max-width: 62ch; color: var(--fg-2); font-size: 18px; }
+section { padding-block: 48px; border-top: 1px solid var(--rule); }
+.sec-head { display: grid; gap: 12px; margin-bottom: 28px; max-width: 70ch; }
+.sec-head p { color: var(--fg-2); }
+
+/* inventory */
+.tally { color: var(--fg); }
+.inventory { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 20px; }
+.inv { display: grid; gap: 14px; min-width: 0; }
+.inv-img { aspect-ratio: 16 / 10; background: var(--ink-2); border-radius: 8px; overflow: hidden; display: grid; }
+.inv-img img { width: 100%; height: 100%; display: block; }
+.fit-contain { object-fit: contain; padding: 6%; }
+.fit-cover { object-fit: cover; }
+.inv strong { font-size: 17px; }
+.inv dl { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 12px; margin: 8px 0 0; font-size: 14px; }
+.inv dt { font: 500 11px/1.9 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-3); }
+.inv dd { margin: 0; color: var(--fg-2); }
+@media (max-width: 860px) { .inventory { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .inventory { grid-template-columns: minmax(0, 1fr); } }
+
+/* rules */
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 48px; counter-reset: rule; }
+.rule { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; padding-block: 20px; border-top: 1px solid var(--rule); }
+.rule::before { counter-increment: rule; content: counter(rule, decimal-leading-zero); grid-row: 1 / 3; font: 600 12px/1.6 var(--mono); color: var(--lime); }
+.rule h3 { font-size: 19px; font-stretch: 108%; letter-spacing: -.01em; }
+.rule p { color: var(--fg-2); font-size: 15px; }
+.rule code { font: 500 12px/1.5 var(--mono); color: var(--fg-3); display: block; margin-top: 6px; }
+@media (max-width: 760px) { .rules { grid-template-columns: minmax(0, 1fr); } }
+
+/* compare control */
+.modes { display: inline-flex; gap: 4px; padding: 4px; border-radius: 999px; background: var(--ink-2); margin-bottom: 24px; flex-wrap: wrap; }
+.modes button { border: 0; background: none; color: var(--fg-3); padding: 9px 16px; border-radius: 999px; cursor: pointer; font: 600 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; transition: background .2s, color .2s; }
+.modes button:hover { color: var(--fg); }
+.modes button[aria-pressed="true"] { background: var(--fg); color: var(--ink); }
+.mode-note { color: var(--fg-2); margin: -8px 0 24px; max-width: 70ch; min-height: 3.2em; }
+
+/* hero tiles */
+.heroes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; }
+@media (max-width: 860px) { .heroes { grid-template-columns: minmax(0, 1fr); } }
+.hero { margin: 0; display: grid; gap: 12px; min-width: 0; }
+.hero figcaption { display: flex; gap: 6px 12px; align-items: baseline; flex-wrap: wrap; }
+.hero .num { font: 600 11px/1 var(--mono); letter-spacing: .1em; color: var(--lime); }
+.hero strong { font-size: 16px; }
+.hero .what { color: var(--fg-3); font-size: 14px; flex-basis: 100%; }
+.stage { position: relative; aspect-ratio: 21 / 9; overflow: hidden; border-radius: 10px; background: var(--ink-2); }
+.stage .cur { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
+.panes { position: absolute; inset: 0; transform-style: preserve-3d; display: none; }
+
+/* current */
+[data-mode="cur"] .stage .cur { display: block; }
+
+/* A: instrument glass */
+[data-mode="a"] .stage { background: radial-gradient(120% 90% at 58% 42%, #1c222c 0%, #12151a 55%, #161511 100%); perspective: 1400px; perspective-origin: 30% 45%; }
+[data-mode="a"] .panes { display: block; animation: settle .7s cubic-bezier(.2, .7, .2, 1) both; }
+.pane { overflow: hidden; background: #0c0e12; }
+.pane img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pane .chart { width: 100%; height: 100%; display: grid; align-items: center; padding: 3% 3.5%; background: #100f09; }
+[data-mode="a"] .pane { position: absolute; left: var(--l); top: var(--t); height: var(--h); aspect-ratio: var(--ar); border-radius: 12px; box-shadow: 0 0 0 1px var(--glass-edge), 0 34px 50px -26px rgba(0, 0, 0, .85); transform: rotateY(-6deg); }
+[data-mode="a"] .pane::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: linear-gradient(118deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, 0) 36%); }
+[data-mode="a"] .pane.front { z-index: 3; }
+[data-mode="a"] .pane.b1 { z-index: 2; transform: translateZ(-120px) rotateY(-24deg); filter: brightness(.8); }
+[data-mode="a"] .pane.b2 { z-index: 1; transform: translateZ(-230px) rotateY(-24deg); filter: brightness(.66); }
+
+/* B: flat specimen */
+[data-mode="b"] .stage { background: #12110e; }
+[data-mode="b"] .panes { display: flex; align-items: center; justify-content: center; gap: 2.4%; padding: 0 4%; animation: settle .5s ease both; }
+[data-mode="b"] .pane { position: relative; flex: none; height: var(--hb); aspect-ratio: var(--ar); border-radius: 10px; box-shadow: 0 0 0 1px var(--rule), 0 18px 30px -20px rgba(0, 0, 0, .8); }
+
+@keyframes settle { from { opacity: 0; } to { opacity: 1; } }
+
+/* chart grammar */
+.grammar { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 20px; align-items: start; }
+.grammar figure { margin: 0; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.grammar .frame { border-radius: 10px; overflow: hidden; background: var(--ink-2); display: grid; place-items: center; }
+.grammar .frame img { width: 100%; display: block; }
+.grammar .frame.after { background: radial-gradient(120% 90% at 58% 42%, #1c222c 0%, #12151a 55%, #161511 100%); padding: 5%; }
+.grammar .frame.after .chart-card { width: 100%; background: #100f09; border-radius: 12px; padding: 4% 4.5%; box-shadow: 0 0 0 1px var(--glass-edge); }
+.grammar figcaption { color: var(--fg-3); font-size: 14px; }
+.spec { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 28px; }
+.spec div { border-top: 1px solid var(--rule); padding-top: 12px; display: grid; gap: 6px; }
+.spec .sw { display: inline-block; width: 28px; height: 10px; border-radius: 2px; }
+.spec p { color: var(--fg-2); font-size: 14px; }
+@media (max-width: 860px) { .grammar { grid-template-columns: minmax(0, 1fr); } .spec { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* decisions */
+.decisions { display: grid; gap: 0; counter-reset: q; max-width: 820px; }
+.decisions li { list-style: none; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; padding-block: 16px; border-top: 1px solid var(--rule); }
+.decisions li::before { counter-increment: q; content: "Q" counter(q); grid-row: 1 / 3; font: 600 12px/1.6 var(--mono); color: var(--lime); }
+.decisions strong { font-size: 17px; }
+.decisions p { color: var(--fg-2); font-size: 15px; }
+ol.decisions { padding: 0; margin: 0; }
+
+@media (prefers-reduced-motion: reduce) { .panes { animation: none !important; } .modes button { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="mono eyebrow">Portfolio redesign · Signature visuals</span>
+    <h1>Six heroes, one visual language.</h1>
+    <p>Each section hero gets one signature visual. Today those six visuals come from six different worlds. This board takes stock, proposes one language taken from the Garmin cockpit, and shows it on all six using the real screens.</p>
+  </header>
+
+  <section aria-labelledby="h-inv">
+    <div class="sec-head">
+      <span class="mono eyebrow">1 · What we have</span>
+      <h2 id="h-inv">Six stages, four ways of looking, six accents, five kinds of frame.</h2>
+      <p>Each visual is strong on its own. Side by side they read as six portfolios: a navy dashboard next to an ink chart, a white phone next to a black iPad, a warm lifestyle photo next to cold blue glass.</p>
+    </div>
+    <div class="inventory"><!--INVENTORY--></div>
+  </section>
+
+  <section aria-labelledby="h-lang">
+    <div class="sec-head">
+      <span class="mono eyebrow">2 · The language</span>
+      <h2 id="h-lang">Instrument glass: borrow the cockpit’s camera, keep each product’s own colors.</h2>
+      <p>The cockpit is the most finished piece on the site, so it sets the rules. The frame becomes the system; each brand stays inside its screen.</p>
+    </div>
+    <div class="rules">
+      <div class="rule"><h3>One stage</h3><p>Every visual sits on the page ink with the cockpit’s soft radial glow. No cards and no borders around the stage.</p><code>radial-gradient #1c222c → #12151a → #161511</code></div>
+      <div class="rule"><h3>One material</h3><p>Work appears as bezel-less glass panes: rounded corners, a 1px cool edge, a faint top sheen and a long soft shadow. Phone, iPad and laptop frames go.</p><code>radius 12–14px · edge rgba(190,210,235,.22)</code></div>
+      <div class="rule"><h3>One camera</h3><p>The same perspective for every hero. The front pane turns slightly toward you; panes behind are set back and turned further.</p><code>perspective 1400px · front −6° · behind −24°, z −120 / −230px</code></div>
+      <div class="rule"><h3>One front pane</h3><p>The front pane carries the story and stays legible. Up to two panes behind it add depth and show range. Only the front pane runs live animation.</p><code>front 1 · behind ≤ 2 · brightness .8 / .66</code></div>
+      <div class="rule"><h3>Brand inside, system outside</h3><p>LinkAja red, Dash yellow and Chrona coral stay inside their screens. Outside the screens there is only ink, warm grey, and lime for the outcome.</p><code>lime = the result, nowhere else</code></div>
+      <div class="rule"><h3>One chart grammar</h3><p>Warm grey for the steps or the “before”, lime for the outcome, a graduated baseline and one callout number. Komunal’s blue funnel is redrawn to match LinkAja’s chart.</p><code>see section 4</code></div>
+      <div class="rule"><h3>Screens, not scenes</h3><p>No lifestyle photography in heroes. The e-ink panel is shown by its face, as a pane; the nightstand photo moves into the drawer, where it tells the build story.</p><code>photos → drawer</code></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-app">
+    <div class="sec-head">
+      <span class="mono eyebrow">3 · Applied to all six</span>
+      <h2 id="h-app">The same six heroes, three ways.</h2>
+    </div>
+    <div class="modes" role="group" aria-label="Compare">
+      <button type="button" id="m-cur" data-m="cur" aria-pressed="false">Current</button>
+      <button type="button" id="m-a" data-m="a" aria-pressed="true">A · Instrument glass</button>
+      <button type="button" id="m-b" data-m="b" aria-pressed="false">B · Flat specimen</button>
+    </div>
+    <p class="mode-note" id="mode-note" aria-live="polite"></p>
+    <div class="heroes" id="heroes" data-mode="a"><!--HEROES--></div>
+  </section>
+
+  <section aria-labelledby="h-chart">
+    <div class="sec-head">
+      <span class="mono eyebrow">4 · One chart grammar</span>
+      <h2 id="h-chart">Komunal’s funnel, redrawn in the language LinkAja’s chart already speaks.</h2>
+      <p>Same data: 100, 84, 71, 61 and 55 percent of users at each step, and a 12-point lift in completion after the revamp. The blue dashboard becomes the page’s own chart.</p>
+    </div>
+    <div class="grammar">
+      <figure><div class="frame"><img src="%%KOMUNAL_BEFORE%%" alt="Current Komunal deposit funnel: blue bars on a navy card"></div><figcaption>Before: navy card, blue bars, its own type.</figcaption></figure>
+      <figure><div class="frame after"><div class="chart-card"><!--FUNNEL_AFTER--></div></div><figcaption>After: ink and warm grey, lime only on the outcome, the callout on the right like LinkAja’s −80%.</figcaption></figure>
+    </div>
+    <div class="spec">
+      <div><span class="sw" style="background:rgba(242,239,232,.2)"></span><strong>Steps and “before”</strong><p>Warm grey, getting lighter toward the result.</p></div>
+      <div><span class="sw" style="background:oklch(0.9 0.2 122)"></span><strong>The outcome</strong><p>Lime, on one bar or one line end only.</p></div>
+      <div><span class="sw" style="background:none;border-top:1.5px solid rgba(242,239,232,.4);height:0;margin-top:5px"></span><strong>Baseline</strong><p>One graduated axis with ticks, labels in mono caps.</p></div>
+      <div><span class="sw" style="background:none;font:800 14px/10px var(--display);color:var(--lime)">±%</span><strong>Callout</strong><p>One big number on the right, two lines of caption.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-q">
+    <div class="sec-head">
+      <span class="mono eyebrow">5 · Decisions</span>
+      <h2 id="h-q">What to settle before building it into the hi-fi.</h2>
+    </div>
+    <ol class="decisions">
+      <li><strong>A or B?</strong><p>A (instrument glass) ties every hero to the cockpit and gives depth. B (flat specimen) is calmer and easier to keep consistent, but loses the cockpit’s character. I recommend A.</p></li>
+      <li><strong>Brand color inside screens only?</strong><p>Keeping LinkAja red and Dash yellow inside their screens shows real shipped work. The alternative is tinting screens toward ink, which looks tidier but less real.</p></li>
+      <li><strong>Photos out of the heroes?</strong><p>The e-ink nightstand photo is lovely, but it is the only photograph among six screens. It moves into the drawer.</p></li>
+      <li><strong>Still panes, or fans that move?</strong><p>The panes here are still. The same arrangement can become the timed fan we planned for Garmin; that waits until every section’s visuals are at the cockpit’s level.</p></li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(function () {
+  var grid = document.getElementById('heroes');
+  var note = document.getElementById('mode-note');
+  var notes = {
+    cur: 'As shipped today: each visual keeps its own stage, frame and accent.',
+    a: 'Instrument glass: one stage with the cockpit glow, bezel-less panes, one camera. The front pane faces you; the rest step back.',
+    b: 'Flat specimen: the same panes and stage, laid flat side by side with no perspective.'
+  };
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.modes button'));
+  function set(m) {
+    grid.setAttribute('data-mode', m);
+    buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.m === m ? 'true' : 'false'); });
+    note.textContent = notes[m];
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.m); }); });
+  set('a');
+})();
+</script>
