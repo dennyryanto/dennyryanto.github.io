@@ -61,26 +61,29 @@ spark = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="cu
          'stroke-linejoin="round" style="color:%s"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 '
          '9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44'
          'l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg>') % LIME
+# a quiet index: a small heading, then per case the number, what it measures and one line of context
 INDEX = [
-    ('linkaja', '−80%', 'CS OPEX', str(icons[0]), '01', 'LinkAja', '<img src="%s" alt="" class="mk-app">' % logo['LinkAja']),
-    ('komunal', '+12<span class="mk-unit">PTS</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal', '<img src="%s" alt="" class="mk-app">' % logo['DepositoBPR by Komunal']),
-    ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash · Lumio', '<img src="%s" alt="" class="mk-word">' % logo['Dash']),
-    ('ai', '0→1', 'AI-NATIVE BUILDS', spark, '04', 'Independent', ''),
+    ('linkaja', '−80%', 'CS OPEX', str(icons[0]), '01', 'LinkAja',
+     'Customer-service cost after self-service replaced agent tickets for 70M users.'),
+    ('komunal', '+12<span class="mk-unit">PTS</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal',
+     'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.'),
+    ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash · Lumio',
+     'Diners ordering through Dash each month, across 30+ restaurant chains.'),
+    ('ai', '0→1', 'AI-NATIVE BUILDS', spark, '04', 'Independent',
+     'Products taken from concept to working software with multi-agent Claude Code.'),
 ]
 idx_cells = []
-for i, (cid, num, label, icon, n, co, lg) in enumerate(INDEX):
-    href = '#' + cid
-    pad = '44px 32px 44px 0' if i == 0 else ('44px 0 44px 36px' if i == 3 else '44px 36px')
-    border = 'border-right:1px solid rgba(242,239,232,.14);' if i < 3 else ''
+for i, (cid, num, label, icon, n, co, ctx) in enumerate(INDEX):
     idx_cells.append(
-        f'<a class="mk-idx" href="{href}" data-open="{cid}" style="padding:{pad};{border}">'
-        f'<div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:{LIME};white-space:nowrap">{num}</div>'
-        f'<div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)">{icon}<span>{label}</span></div>'
+        f'<a class="mk-idx" href="#{cid}" data-open="{cid}">'
         f'<div class="mk-dest"><span class="mk-dest-n">{n}</span><span class="mk-dest-co">{co}</span><span class="mk-arrow" aria-hidden="true">↓</span></div>'
+        f'<div data-m="count" class="mk-idx-n">{num}</div>'
+        f'<div class="mk-idx-l">{icon}<span>{label}</span></div>'
+        f'<p class="mk-idx-c">{ctx}</p>'
         f'</a>')
-index_html = ('<nav aria-label="Case index" data-r="stat-outer" style="border-top:1px solid rgba(242,239,232,.14);border-bottom:1px solid rgba(242,239,232,.14)">'
-              '<div data-r="wrap stat-row" class="mk-index" style="max-width:1216px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,283px),1fr))">'
-              + ''.join(idx_cells) + '</div></nav>')
+index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
+              '<div class="mk-index-wrap"><div class="mk-index-head"><span>Selected work · four outcomes</span><span>Each opens its case study</span></div>'
+              '<div class="mk-index">' + ''.join(idx_cells) + '</div></div></nav>')
 
 # ---------- case 01: LinkAja ----------
 la = soup(read('linkaja'))

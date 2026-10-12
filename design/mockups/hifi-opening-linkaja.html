@@ -689,29 +689,41 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--di
 :focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 
 /* case index */
-a.mk-idx { display: block; color: inherit; transition: background-color .25s ease; }
+/* quiet, with context: a small heading, numbers at stat size in off-white, one line of context each; lime only on the case number */
+.mk-index-nav { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.mk-index-wrap { max-width: 1216px; margin: 0 auto; padding: 22px 40px 0; }
+.mk-index-head { display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); }
+.mk-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+a.mk-idx { display: block; color: inherit; padding: 22px 28px 28px; border-left: 1px solid var(--rule); transition: background-color .25s ease; }
+a.mk-idx:first-child { padding-left: 0; border-left: 0; }
+a.mk-idx:last-child { padding-right: 0; }
 a.mk-idx:hover { color: inherit; background: rgba(242, 239, 232, .03); }
-.mk-dest { margin-top: 22px; display: flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+.mk-dest { display: flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
 .mk-dest-n { color: var(--lime); }
 .mk-dest-co { color: rgba(242, 239, 232, .85); }
 .mk-arrow { margin-left: auto; color: var(--fg-3); transition: transform .25s ease, color .25s ease; }
 a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
-
-/* case index, phone and tablet layouts (the site's rules target its own div cells) */
-.mk-unit { font-size: .42em; letter-spacing: .02em; margin-left: .12em; }
-@container statsouter (max-width: 1211.98px) {
-  .mk-index > a.mk-idx:nth-child(odd) { padding: 36px 24px 36px 0 !important; border-right: 1px solid var(--rule) !important; }
-  .mk-index > a.mk-idx:nth-child(even) { padding: 36px 0 36px 28px !important; border-right: 0 !important; }
-  .mk-index > a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
+.mk-idx-n { margin-top: 18px; font: 800 clamp(30px, 3.2vw, 40px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; color: var(--fg); white-space: nowrap; }
+.mk-idx-l { margin-top: 10px; display: flex; align-items: center; gap: 8px; font: 600 11px/1 var(--mono); letter-spacing: .14em; color: rgba(242, 239, 232, .7); }
+.mk-idx-l svg { width: 14px; height: 14px; color: var(--fg-3) !important; }
+.mk-idx-c { margin: 12px 0 0; max-width: 32ch; font: 400 14px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
+.mk-unit { font-size: .5em; letter-spacing: .02em; margin-left: .12em; }
+@media (max-width: 1000px) {
+  .mk-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  a.mk-idx { padding: 20px 20px 24px; }
+  a.mk-idx:nth-child(odd) { padding-left: 0; border-left: 0; }
+  a.mk-idx:nth-child(even) { padding-right: 0; }
+  a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
 }
-@container statsouter (max-width: 613.98px) {
-  [data-r~="stat-row"].mk-index { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-  .mk-index > a.mk-idx:nth-child(odd) { padding: 24px 14px 24px 0 !important; }
-  .mk-index > a.mk-idx:nth-child(even) { padding: 24px 0 24px 16px !important; }
-  .mk-index [data-r="stat-num"] { font-size: clamp(30px, 10.5vw, 46px) !important; line-height: 1 !important; }
-  .mk-index .mk-dest { margin-top: 16px; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 600px) {
+  .mk-index-wrap { padding: 18px 24px 0; }
+  .mk-index-head > span:last-child { display: none; }
+  a.mk-idx { padding: 16px 12px 20px; }
+  .mk-idx-n { font-size: clamp(24px, 7.5vw, 30px); }
+  .mk-idx-c { font-size: 13px; }
   .mk-index .mk-arrow { display: none; }
 }
+@media (max-width: 480px) { .mk-index-wrap { padding-inline: 16px; } }
 @media (max-width: 600px) { .mk-chart > div:first-child > span:last-child { display: none; } }
 
 /* chart callout, shown on phones where the in-chart callout is cropped away */
@@ -851,7 +863,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </aside>
 </div>
-<nav aria-label="Case index" data-r="stat-outer" style="border-top:1px solid rgba(242,239,232,.14);border-bottom:1px solid rgba(242,239,232,.14)"><div data-r="wrap stat-row" class="mk-index" style="max-width:1216px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,283px),1fr))"><a class="mk-idx" href="#linkaja" data-open="linkaja" style="padding:44px 32px 44px 0;border-right:1px solid rgba(242,239,232,.14);"><div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:oklch(0.9 0.2 122);white-space:nowrap">−80%</div><div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg><span>CS OPEX</span></div><div class="mk-dest"><span class="mk-dest-n">01</span><span class="mk-dest-co">LinkAja</span><span class="mk-arrow" aria-hidden="true">↓</span></div></a><a class="mk-idx" href="#komunal" data-open="komunal" style="padding:44px 36px;border-right:1px solid rgba(242,239,232,.14);"><div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:oklch(0.9 0.2 122);white-space:nowrap">+12<span class="mk-unit">PTS</span></div><div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>DEPOSIT FUNNEL</span></div><div class="mk-dest"><span class="mk-dest-n">02</span><span class="mk-dest-co">Komunal</span><span class="mk-arrow" aria-hidden="true">↓</span></div></a><a class="mk-idx" href="#board" data-open="board" style="padding:44px 36px;border-right:1px solid rgba(242,239,232,.14);"><div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:oklch(0.9 0.2 122);white-space:nowrap">~200K</div><div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path><path d="M2 7h20"></path></svg><span>CUSTOMERS / MONTH</span></div><div class="mk-dest"><span class="mk-dest-n">03</span><span class="mk-dest-co">Dash · Lumio</span><span class="mk-arrow" aria-hidden="true">↓</span></div></a><a class="mk-idx" href="#ai" data-open="ai" style="padding:44px 0 44px 36px;"><div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:oklch(0.9 0.2 122);white-space:nowrap">0→1</div><div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 'IBM Plex Mono',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.9 0.2 122)"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg><span>AI-NATIVE BUILDS</span></div><div class="mk-dest"><span class="mk-dest-n">04</span><span class="mk-dest-co">Independent</span><span class="mk-arrow" aria-hidden="true">↓</span></div></a></div></nav>
+<nav aria-label="Case index" class="mk-index-nav"><div class="mk-index-wrap"><div class="mk-index-head"><span>Selected work · four outcomes</span><span>Each opens its case study</span></div><div class="mk-index"><a class="mk-idx" href="#linkaja" data-open="linkaja"><div class="mk-dest"><span class="mk-dest-n">01</span><span class="mk-dest-co">LinkAja</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">−80%</div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg><span>CS OPEX</span></div><p class="mk-idx-c">Customer-service cost after self-service replaced agent tickets for 70M users.</p></a><a class="mk-idx" href="#komunal" data-open="komunal"><div class="mk-dest"><span class="mk-dest-n">02</span><span class="mk-dest-co">Komunal</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">+12<span class="mk-unit">PTS</span></div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>DEPOSIT FUNNEL</span></div><p class="mk-idx-c">Deposit-funnel completion after UX audits and a redesign of DepositoBPR.</p></a><a class="mk-idx" href="#board" data-open="board"><div class="mk-dest"><span class="mk-dest-n">03</span><span class="mk-dest-co">Dash · Lumio</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">~200K</div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path><path d="M2 7h20"></path></svg><span>CUSTOMERS / MONTH</span></div><p class="mk-idx-c">Diners ordering through Dash each month, across 30+ restaurant chains.</p></a><a class="mk-idx" href="#ai" data-open="ai"><div class="mk-dest"><span class="mk-dest-n">04</span><span class="mk-dest-co">Independent</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">0→1</div><div class="mk-idx-l"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.9 0.2 122)"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg><span>AI-NATIVE BUILDS</span></div><p class="mk-idx-c">Products taken from concept to working software with multi-agent Claude Code.</p></a></div></div></nav>
 <main>
 <section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px"><div data-m="reveal" style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 26px; flex-wrap: wrap;">
 <div style='display: flex; align-items: center; gap: 10px; font: 600 12px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.16em; color: oklch(0.9 0.2 122);'><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg><span>01 / LINKAJA</span></div>

@@ -503,6 +503,16 @@ Owner: "get back to the wireframe mockup and implement the changes".
   - The three stats open each drawer under a "Key numbers" eyebrow, and the
     toggle meta counts them.
   - Page size: 266KB → 209KB, since the embedded logo images are gone.
+- **Quieter case index with context** (hi-fi; owner: "too conspicuous, trim
+  it and add more context"). Changes from the old lime-number band:
+  - Numbers drop from 58–84px lime to 30–40px off-white. Lime stays only
+    on the case number ("01").
+  - Each cell leads with "01 LinkAja ↓", then the number, what it
+    measures, and one sentence of context.
+  - A small heading reads "Selected work · four outcomes".
+  - Padding is tighter: the band is about 236px tall at 1440px.
+  - It is two by two below 1000px.
+  - It now uses its own CSS instead of the live site's stat-band rules.
 
 ## Open decisions
 
