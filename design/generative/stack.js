@@ -385,7 +385,8 @@
       window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { R.resize(); R.render(Math.min(t, R.END)); }, 120); });
       if (opts.interactive !== false) turnable();
     }
-    // a reader can turn it: drag (or arrow keys) moves it left/right and up/down within limits; let go and it settles back
+    // a reader can turn it: drag (or arrow keys) moves it left/right and up/down within limits; let go and it settles back.
+    // the near edge follows the pointer (yaw grows as the near edge swings left, hence the minus)
     function turnable() {
       var drag = null, back = 0, redraw = function () { R.render(Math.min(t, R.END)); };
       canvas.style.cursor = 'grab'; canvas.style.touchAction = 'pan-y'; canvas.tabIndex = 0;
@@ -406,12 +407,12 @@
       });
       canvas.addEventListener('pointermove', function (e) {
         if (!drag || e.pointerId !== drag.id) return;
-        R.view(drag.yaw + (e.clientX - drag.x) * 0.22, drag.elev + (e.clientY - drag.y) * 0.14); redraw();
+        R.view(drag.yaw - (e.clientX - drag.x) * 0.22, drag.elev + (e.clientY - drag.y) * 0.14); redraw();
       });
       var release = function (e) { if (!drag || e.pointerId !== drag.id) return; drag = null; canvas.style.cursor = 'grab'; settle(); };
       canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
       canvas.addEventListener('keydown', function (e) {
-        var d = { ArrowLeft: [-4, 0], ArrowRight: [4, 0], ArrowUp: [0, 3], ArrowDown: [0, -3] }[e.key];
+        var d = { ArrowLeft: [4, 0], ArrowRight: [-4, 0], ArrowUp: [0, -3], ArrowDown: [0, 3] }[e.key];
         if (!d) return;
         e.preventDefault(); cancelAnimationFrame(back); R.view(R.yaw + d[0], R.elev + d[1]); redraw();
       });

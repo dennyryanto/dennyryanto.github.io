@@ -582,6 +582,9 @@ Owner: "get back to the wireframe mockup and implement the changes".
   - Dragging turns it up to ±18° left/right and tilts it 10° down to 16°
     up, clamped in `Renderer.view()`. Arrow keys do the same when the
     canvas has focus.
+  - The stack follows the pointer, not a mirror of it (owner: "don't
+    mirror/reverse the user's dragging gesture"): dragging right swings
+    the near edge right, dragging down brings it down. Arrow keys match.
   - Letting go eases it back to rest over 0.7s; with reduced motion it
     stays where it was left.
   - The frame is fitted over the whole allowed range, so turning never
