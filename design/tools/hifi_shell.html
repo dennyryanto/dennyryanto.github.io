@@ -1,0 +1,501 @@
+<title>Portfolio Hi-Fi v1</title>
+<style>
+/* fonts: the live site's own files (build_hifi.py inlines them; build_site.py moves them to assets/fonts and preloads the latin ones) */
+/*__FONTS__*/
+
+/* Live site styles, reused as-is */
+/*__SITE_CSS__*/
+</style>
+<style>
+/* Layout: the live site's 1216px column and dark palette. New pieces: case index, case hero, toggle, drawer. */
+:root {
+  --bg: #161511;
+  --card: rgb(16, 15, 9);
+  --fg: #f2efe8;
+  --fg-2: rgba(242, 239, 232, .72);
+  --fg-3: rgba(242, 239, 232, .55);
+  --rule: rgba(242, 239, 232, .14);
+  --lime: oklch(0.9 0.2 122);
+  --display: 'Archivo', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  color-scheme: dark;
+}
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--display); -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+
+/* case index */
+/* quiet, with context: a small heading, numbers at stat size in off-white, one line of context each; lime only on the case number */
+.mk-index-nav { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.mk-index-wrap { max-width: 1216px; margin: 0 auto; padding: 0 40px; }
+.mk-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+a.mk-idx { display: block; color: inherit; padding: 22px 28px 28px; border-left: 1px solid var(--rule); transition: background-color .25s ease; }
+a.mk-idx:first-child { padding-left: 0; border-left: 0; }
+a.mk-idx:last-child { padding-right: 0; }
+a.mk-idx:hover { color: inherit; background: rgba(242, 239, 232, .03); }
+.mk-dest { display: flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+.mk-dest-n { color: var(--lime); }
+.mk-dest-co { color: rgba(242, 239, 232, .85); }
+.mk-arrow { margin-left: auto; color: var(--fg-3); transition: transform .25s ease, color .25s ease; }
+a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
+.mk-idx-n { margin-top: 18px; font: 800 clamp(30px, 3.2vw, 40px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; color: var(--fg); white-space: nowrap; }
+.mk-idx-l { margin-top: 10px; display: flex; align-items: center; gap: 8px; font: 600 11px/1 var(--mono); letter-spacing: .14em; color: rgba(242, 239, 232, .7); }
+.mk-idx-l svg { width: 14px; height: 14px; color: var(--fg-3) !important; }
+.mk-idx-c { margin: 12px 0 0; max-width: 32ch; font: 400 14px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
+.mk-unit { font-size: .5em; letter-spacing: .02em; margin-left: .12em; }
+@media (max-width: 1000px) {
+  .mk-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  a.mk-idx { padding: 20px 20px 24px; }
+  a.mk-idx:nth-child(odd) { padding-left: 0; border-left: 0; }
+  a.mk-idx:nth-child(even) { padding-right: 0; }
+  a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
+}
+@media (max-width: 600px) {
+  .mk-index-wrap { padding: 0 24px; }
+  a.mk-idx { padding: 16px 12px 20px; }
+  .mk-idx-n { font-size: clamp(24px, 7.5vw, 30px); }
+  .mk-idx-c { font-size: 13px; }
+  .mk-index .mk-arrow { display: none; }
+}
+@media (max-width: 480px) { .mk-index-wrap { padding-inline: 16px; } }
+@media (max-width: 600px) { .mk-chart > div:first-child > span:last-child { display: none; } }
+
+/* chart callout, shown on phones where the in-chart callout is cropped away */
+.mk-chart-callout { display: none; }
+@media (max-width: 600px) {
+  .mk-chart-callout { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 14px; }
+  .mk-cc-n { font: 800 52px/1 var(--display); font-stretch: 118%; letter-spacing: -.03em; color: var(--lime); }
+  .mk-cc-l { font: 500 10px/1.5 var(--mono); letter-spacing: .12em; color: var(--fg-3); }
+}
+
+/* case hero */
+.mk-case { scroll-margin-top: 64px; }
+.mk-case-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 32px 56px; align-items: end; margin-bottom: 36px; }
+.mk-case-hero h2 { margin: 0 !important; }
+.mk-sub { margin: 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+/* who the company is: a quieter line under the description, set off by a short rule */
+.mk-abouts { display: grid; gap: 8px; max-width: 54ch; padding-top: 16px; border-top: 1px solid var(--rule); }
+.mk-about { margin: 0; font: 400 14px/1.55 var(--display); color: var(--fg-3); text-wrap: pretty; }
+.mk-about b { font-weight: 600; color: var(--fg-2); }
+/* key numbers: a centred, full-width band of three equal columns */
+.mk-keys-block > .mk-eyebrow { text-align: center; }
+.mk-keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
+.mk-key { padding: 40px 28px 36px; min-width: 0; }
+.mk-key + .mk-key { border-left: 1px solid var(--rule); }
+.mk-key-n { font: 800 clamp(44px, 5vw, 68px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; white-space: nowrap; }
+.mk-key-l { margin-top: 14px; font: 500 11px/1.45 var(--mono); letter-spacing: .14em; color: var(--fg-3); }
+.mk-key-c { margin: 10px auto 0; max-width: 30ch; font: 400 15px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
+@media (max-width: 700px) {
+  .mk-keys { grid-template-columns: minmax(0, 1fr); }
+  .mk-key { padding: 28px 8px; }
+  .mk-key + .mk-key { border-left: 0; border-top: 1px solid var(--rule); }
+  .mk-key-n { font-size: clamp(40px, 12vw, 52px); }
+}
+.mk-stats { max-width: 760px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+.mk-stat { padding: 18px 16px 0 0; min-width: 0; }
+.mk-stat + .mk-stat { padding-left: 18px; border-left: 1px solid var(--rule); }
+.mk-stat-n { font: 800 34px/1 var(--display); font-stretch: 120%; letter-spacing: -.01em; white-space: nowrap; }
+.mk-stat-l { margin-top: 9px; font: 500 10px/1.45 var(--mono); letter-spacing: .12em; color: var(--fg-3); }
+@media (max-width: 480px) { .mk-stat-n { font-size: 26px; } .mk-stat + .mk-stat { padding-left: 12px; } .mk-stat { padding-right: 10px; } }
+
+/* signature visual: exploded layers drawn live in code (stack.js), built once when in view */
+.mk-sv { margin: 4px 0 0; }
+.mk-sv-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; margin-top: 4px; }
+.mk-sv-pair .mk-sv canvas { aspect-ratio: 21 / 18; }
+.mk-sv-cap { margin-top: 4px; text-align: center; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; color: var(--fg-3); }
+@media (max-width: 600px) { .mk-sv-pair { grid-template-columns: 1fr; gap: 24px; } .mk-sv-pair .mk-sv canvas { aspect-ratio: 4 / 3; } }
+.mk-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px 48px; color: var(--fg-2); font: 400 16px/1.6 var(--display); }
+.mk-list li { position: relative; padding-left: 26px; }
+.mk-list li::before { content: ''; position: absolute; left: 0; top: .8em; width: 14px; height: 2px; background: var(--fg-3); }
+.mk-sv canvas { display: block; width: 100%; aspect-ratio: 21 / 9; }
+@media (max-width: 600px) {
+  /* phones: the whole drawing re-fits a 4:3 frame instead of being cropped */
+  .mk-sv { margin-inline: -24px; }
+  .mk-sv canvas { aspect-ratio: 4 / 3; }
+}
+@media (max-width: 480px) { .mk-sv { margin-inline: -16px; } }
+
+/* clients & brands: right under the case index, always visible, no tile borders */
+.mk-clients { border-bottom: 1px solid var(--rule); }
+.mk-clients-wrap { max-width: 1216px; margin: 0 auto; padding: 40px 40px 48px; }
+.mk-clients-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; margin-bottom: 20px; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); }
+.mk-clients-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.mk-client { height: 84px; display: grid; place-items: center; padding: 16px 20px; border-radius: 10px; background: rgba(242, 239, 232, .035); }
+/* every logo becomes one light mark, so dark and light originals read the same on the ink */
+.mk-client img { max-width: 100%; max-height: 40px; width: auto; height: auto; display: block; filter: brightness(0) invert(1); opacity: .62; transition: opacity .25s; }
+.mk-client:hover img { opacity: .95; }
+@media (max-width: 1000px) { .mk-clients-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .mk-clients-wrap { padding: 32px 24px 36px; } .mk-clients-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .mk-client { height: 64px; padding: 12px; } .mk-client img { max-height: 30px; } }
+@media (max-width: 480px) { .mk-clients-wrap { padding-inline: 16px; } }
+
+/* the Garmin glass cockpit fan: real screens stacked in depth; the front one swipes away every 4.5s while on screen */
+.mk-fan { position: relative; outline: none; }
+.mk-fan:focus-visible .mk-fan-stage { outline: 2px solid var(--lime); outline-offset: 4px; }
+.mk-fan-stage { position: relative; height: clamp(440px, 46vw, 620px); perspective: 1800px; perspective-origin: 25% 40%; overflow: hidden; touch-action: pan-y; }
+.mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(220px, 23vw, 330px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
+.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
+.mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
+.mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
+.mk-fan-cap .n { font: 500 11px/1 var(--mono); letter-spacing: .14em; color: var(--lime); }
+.mk-fan-cap strong { font: 800 22px/1.15 var(--display); font-stretch: 112%; color: var(--fg); }
+.mk-fan-cap .d { font: 400 15px/1.5 var(--display); color: var(--fg-2); }
+.mk-fan-ticks { display: flex; gap: 4px; flex: none; }
+.mk-fan-ticks button { background: none; border: 0; padding: 12px 2px; cursor: pointer; }
+.mk-fan-ticks i { display: block; width: 24px; height: 2px; background: var(--rule); transition: background .3s; }
+.mk-fan-ticks button.on i { background: var(--lime); }
+@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 56vw; } .mk-fan-cap strong { font-size: 19px; } }
+/* compact split hero: title + description + toggle on one side, the diagram on the other; .flip swaps the sides */
+.mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig"; column-gap: 56px; align-items: center; }
+.mk-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text"; }
+.mk-split-text { grid-area: text; display: grid; gap: 18px; }
+.mk-split-text h2 { margin: 0 !important; font-size: clamp(32px, 3.4vw, 44px) !important; }
+.mk-split > .mk-sv { grid-area: fig; margin: 0; }
+.mk-split .mk-sv canvas { aspect-ratio: 5 / 4; }
+/* the stacks can be turned by dragging or with the arrow keys */
+.mk-sv canvas:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; border-radius: 6px; }
+/* the toggle stays at the bottom of the section, centred; its meta line is only the read time */
+@media (max-width: 900px) {
+  .mk-split, .mk-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig"; row-gap: 8px; }
+  .mk-split .mk-sv canvas { aspect-ratio: 4 / 3; }
+}
+
+/* toggle: no box, centred caps, chevron bobs; open = label crossfade synced to the chevron flip */
+.mk-toggle { --flip: .5s; --half: .25s; margin-top: 24px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 16px; background: none; border: 0; color: var(--fg); cursor: pointer; font: inherit; }
+.mk-t-label { display: grid; font: 600 13px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--lime); transition: color .25s; }
+.mk-t-label > span { grid-area: 1 / 1; }
+.mk-t-closed { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
+.mk-t-open { opacity: 0; transition: opacity var(--half) ease-in 0s; }
+.mk-toggle[aria-expanded="true"] .mk-t-closed { opacity: 0; transition: opacity var(--half) ease-in 0s; }
+.mk-toggle[aria-expanded="true"] .mk-t-open { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
+.mk-t-meta { font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); transition: opacity var(--flip) cubic-bezier(.65, 0, .35, 1); }
+.mk-toggle[aria-expanded="true"] .mk-t-meta { opacity: .45; }
+.mk-t-icon { margin-top: 2px; display: grid; place-items: center; color: var(--lime); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1), color .25s; }
+.mk-t-icon svg { animation: mk-bob 1.8s ease-in-out infinite; }
+/* the whole control is lime; hover lifts it to off-white */
+.mk-toggle:hover .mk-t-icon, .mk-toggle:hover .mk-t-label { color: var(--fg); }
+.mk-toggle[aria-expanded="true"] .mk-t-icon { transform: scaleY(-1); }
+@keyframes mk-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+/* drawer */
+.mk-drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.3,.7,.2,1); }
+.mk-drawer.open { grid-template-rows: 1fr; }
+.mk-drawer-inner { overflow: hidden; min-height: 0; }
+.mk-drawer.open .mk-drawer-inner.settled { overflow: visible; }
+.mk-drawer-body { display: grid; gap: 24px; padding-top: 44px; }
+.mk-block { min-width: 0; }
+.mk-eyebrow { margin-bottom: 20px; font: 600 11px/1 var(--mono); letter-spacing: .16em; color: var(--lime); }
+.mk-close { justify-self: center; margin-top: 12px; background: none; border: 0; border-radius: 100px; padding: 12px 18px; color: var(--fg-3); font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: border-color .25s, color .25s; }
+.mk-close:hover { color: var(--lime); }
+
+/* the Dash table app bleeds past the page edge on the live site; inside a drawer it sits in the column */
+.mk-drawer [data-r="bleed-col"] { width: 100%; max-width: 1040px; margin-inline: auto; }
+.mk-drawer [data-r="bleed-stage"] { width: 100% !important; }
+/* the cockpit close-ups keep the live isometric tiles, with more room between them */
+.mk-drawer .gx-grid { gap: 40px; }
+/* contact: on phones the sign-off wraps under the buttons, so it lines up left with them */
+@media (max-width: 600px) { #contact > div > div:last-child { text-align: left !important; } }
+/* background: what each company is, under the role; the agency context above the earlier work */
+.mk-co-about { margin-top: 4px; font: 400 12px/1.45 var(--display); color: rgba(242, 239, 232, .5); }
+.mk-context { margin: -6px 0 22px; max-width: 64ch; font: 400 15px/1.55 var(--display); color: var(--fg-2); }
+/* held back until the motion script takes over (see the script before the page) */
+.mk-pending [data-r="hero-h1"], .mk-pending [data-r="hero-h1"] + *, .mk-pending [data-r="profile-card"],
+.mk-pending .mk-split-text, .mk-pending .mk-case-hero > div, .mk-pending .mk-index [data-m~="count"] { opacity: 0; }
+/* background: the degree as one quiet line */
+.mk-edu { font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
+
+/* next */
+.mk-next { display: grid; border-top: 1px solid var(--rule); }
+.mk-next-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--rule); font: 800 20px/1.2 var(--display); font-stretch: 112%; }
+.mk-next-row .mk-dest-n { font: 500 11px/1 var(--mono); letter-spacing: .12em; }
+.mk-next-s { font: 500 10.5px/1.3 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); text-align: right; }
+@media (max-width: 560px) { .mk-next-row { grid-template-columns: 32px minmax(0, 1fr); } .mk-next-s { grid-column: 2; text-align: left; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .mk-drawer, .mk-toggle, .mk-t-icon, .mk-t-meta, .mk-arrow, a.mk-idx, .mk-t-label > span { transition: none !important; }
+  .mk-t-icon svg { animation: none !important; }
+}
+</style>
+
+<script>
+/* the opening and each case header rise in; hide them before the first paint so they never show, vanish and then rise
+   (the motion script releases them as soon as GSAP has taken over, and a timer releases them regardless) */
+(function (h) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  h.classList.add('mk-pending');
+  setTimeout(function () { h.classList.remove('mk-pending'); }, 3000);
+})(document.documentElement);
+</script>
+<noscript><style>.mk-drawer { grid-template-rows: 1fr; } .mk-drawer-inner { overflow: visible; } .mk-toggle, .mk-close { display: none; }</style></noscript>
+<div data-r="page" id="top" style="background:#161511;color:#f2efe8;overflow-x:clip">
+<!--__TOPBAR__-->
+<!--__HERO__-->
+<!--__INDEX__-->
+<main>
+<!--__CASE__-->
+<!--__MORE__-->
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/*STACK*/
+</script>
+<script>
+(function () {
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var G = !reduce && window.gsap && window.ScrollTrigger;
+  if (G) gsap.registerPlugin(ScrollTrigger);
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  // ---- toggle + drawer, per case ----
+  var opener = {};
+  $$('.mk-case').forEach(function (cs) {
+    var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false, moved = false;
+    if (!btn || !drawer) return;
+    var blocks = $$('.mk-block', cs);
+    // closed drawers ship un-inert, so the content is reachable without JavaScript; with it, closed means inert
+    if (!drawer.classList.contains('open')) inner.setAttribute('inert', '');
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      $('.mk-t-closed', btn).setAttribute('aria-hidden', open ? 'true' : 'false');
+      $('.mk-t-open', btn).setAttribute('aria-hidden', open ? 'false' : 'true');
+      inner.classList.remove('settled');
+      if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
+      // the blocks rise in as the drawer grows past them, not after it has finished opening
+      if (open && G && !revealed) { revealed = true; gsap.set(blocks, { opacity: 0, y: 28 }); buildReveal(blocks); }
+      drawer.classList.toggle('open', open);
+      if (reduce || !G) settle();
+    }
+    function settle() {
+      if (drawer.classList.contains('open')) inner.classList.add('settled');
+      if (G) ScrollTrigger.refresh();
+      // scroll-linked motion measures the final layout, so it waits for the drawer to settle
+      if (drawer.classList.contains('open') && G && !moved) { moved = true; liveMotion(drawer, false); }
+    }
+    drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
+    btn.addEventListener('click', function () {
+      var opening = btn.getAttribute('aria-expanded') !== 'true';
+      setOpen(opening);
+      // opening carries the reader into the case study: the toggle glides up under the top bar, so the drawer fills the view
+      if (opening) {
+        var bar = $('[data-r~="topbar"]') || document.querySelector('header'), offset = (bar ? bar.getBoundingClientRect().height : 64) + 24;
+        window.scrollTo({ top: btn.getBoundingClientRect().top + window.scrollY - offset, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
+    $('.mk-close', cs).addEventListener('click', function () {
+      var y = btn.getBoundingClientRect().top + window.scrollY - 140;
+      window.scrollTo({ top: y, behavior: 'instant' });
+      setOpen(false);
+      btn.focus({ preventScroll: true });
+    });
+    opener[cs.id] = setOpen;
+    // a drawer that starts open (Background) gets its scroll motion straight away
+    if (drawer.classList.contains('open') && G) { revealed = moved = true; liveMotion(drawer, true); }
+  });
+  $$('[data-open]').forEach(function (a) {
+    a.addEventListener('click', function () { if (opener[a.dataset.open]) opener[a.dataset.open](true); });
+  });
+  if (opener[location.hash.slice(1)]) opener[location.hash.slice(1)](true);
+  if (G) liveMotion(document, true);
+
+  // ---- drawer reveal: blocks rise in as they enter the view ----
+  function buildReveal(blocks) {
+    // IntersectionObserver rather than ScrollTrigger: the drawer's height keeps
+    // changing while it opens, so cached trigger positions go stale.
+    var seen = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        seen.unobserve(e.target);
+        gsap.to(e.target, { opacity: 1, y: 0, duration: .7, ease: 'power2.out', clearProps: 'transform,opacity' });
+        inside(e.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px' });
+    blocks.forEach(function (b) { seen.observe(b); });
+  }
+  // ---- the live site's motion (its motion.js and the cockpit script), each effect with one owner ----
+  // entrances play once: by scroll position on the page and in a drawer that starts open, or together with
+  // their block's rise-in in a drawer the reader opens (so nothing already on screen hides and replays)
+  function entrances(pick, when) {
+    var EASE = 'power2.out';
+    // pick(selector) lists the elements this call owns; when(el) gives the options that schedule a tween: a scroll trigger, or a short delay
+    pick('[data-m~="count"]').forEach(function (el) {
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), node;
+      while ((node = w.nextNode()) && !/[0-9]/.test(node.nodeValue)) {}
+      if (!node) return;
+      var m = /^([^0-9]*)([0-9]+)(.*)$/.exec(node.nodeValue);
+      if (!m || +m[2] === 0) return;
+      var final = node.nodeValue, obj = { n: 0 }, r = el.getBoundingClientRect();
+      // a number already on screen starts from zero rather than flashing its final value first
+      if (r.top < innerHeight && r.bottom > 0) { el.style.minWidth = r.width + 'px'; node.nodeValue = m[1] + '0' + m[3]; }
+      gsap.to(obj, Object.assign({ n: +m[2], duration: .9, ease: 'power1.out',
+        onStart: function () { node.nodeValue = final; el.style.minWidth = el.getBoundingClientRect().width + 'px'; node.nodeValue = m[1] + '0' + m[3]; },
+        onUpdate: function () { node.nodeValue = m[1] + Math.round(obj.n) + m[3]; },
+        onComplete: function () { node.nodeValue = final; el.style.minWidth = ''; } }, when(el, 'top bottom')));
+    });
+    pick('[data-m~="draw"]').forEach(function (svg) {
+      var tl = gsap.timeline(when(svg));
+      $$('rect', svg).forEach(function (r, i) { tl.from(r, { scaleY: 0, transformOrigin: '50% 100%', duration: .6, ease: EASE }, i * .04); });
+      $$('path, polyline, line', svg).forEach(function (el) {
+        var fill = el.getAttribute('fill');
+        if (el.getAttribute('stroke') && (!fill || fill === 'none') && el.getTotalLength) {
+          var len = el.getTotalLength();
+          tl.fromTo(el, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: .8, ease: EASE, clearProps: 'strokeDasharray,strokeDashoffset' }, 0);
+        } else tl.from(el, { opacity: 0, duration: .6, ease: EASE }, .1);
+      });
+      $$('text, circle', svg).forEach(function (el) { tl.from(el, { opacity: 0, duration: .5 }, .3); });
+    });
+    pick('[data-m~="scrub"]').forEach(function (svg) { gsap.timeline(when(svg))
+      .from($$('[data-mp~="ticket"]', svg), { y: -18, opacity: 0, stagger: .12, duration: .35 })
+      .from($$('[data-mp~="divider"]', svg), { scaleX: 0, transformOrigin: '0% 50%', duration: .35 })
+      .from($$('[data-mp~="check"]', svg), { scale: 0, transformOrigin: '50% 50%', opacity: 0, duration: .35 }); });
+    pick('[data-m~="reveal"], [data-m~="stagger"], [data-m~="ba"]').forEach(function (el) {
+      if (el.children.length) gsap.from(el.children, Object.assign({ y: 20, opacity: 0, duration: .6, ease: EASE,
+        stagger: /\bba\b/.test(el.getAttribute('data-m')) ? .25 : .08, clearProps: 'transform,opacity' }, when(el)));
+    });
+    pick('[data-m~="bar"]').forEach(function (bar) {
+      if (bar.children.length) gsap.from(bar.children, Object.assign({ scaleX: 0, transformOrigin: '0% 50%', duration: .8, ease: EASE, stagger: .15, clearProps: 'transform' }, when(bar)));
+    });
+  }
+  function byScroll(el, start) { return { scrollTrigger: { trigger: el, start: start || 'top 80%', once: true } }; }
+  function withBlock() { return { delay: .2 }; }
+
+  // continuous motion follows the scroll and glides to where it should be, so nothing snaps when it is built
+  function follow(el, set, from, to) {
+    var o = { v: 0 };
+    var go = function (st) { gsap.to(o, { v: from + (to - from) * st.progress, duration: .6, ease: 'power3.out', overwrite: true, onUpdate: function () { set(o.v); } }); };
+    ScrollTrigger.create({ trigger: el, start: 'top bottom', end: 'bottom top', onUpdate: go, onRefresh: go });
+  }
+  function liveMotion(scope, withEntrances) {
+    // on the page itself (scope = document) only what sits outside the drawers; each drawer runs its own
+    var only = function (sel) { return $$(sel, scope).filter(function (e) { return scope !== document || !e.closest('.mk-drawer'); }); };
+    if (withEntrances) entrances(only, byScroll);
+    // desktop: marked pieces drift against the scroll
+    if (matchMedia('(min-width: 1024px)').matches) only('[data-m~="parallax"]').forEach(function (el) {
+      follow(el, function (v) { gsap.set(el, { y: v }); }, 24, -24);
+    });
+    // the cockpit close-ups: each slab drifts slightly inside its frame as it crosses the view
+    only('.gx-slab').forEach(function (slab) {
+      follow(slab.parentNode, function (v) { slab.style.setProperty('--drift', v + '%'); }, 5, -5);
+    });
+    ScrollTrigger.refresh();
+  }
+  function inside(b) { entrances(function (sel) { return $$(sel, b); }, withBlock); }
+
+
+  // ---- the cockpit fan: front screen nearly flat, the rest stacked back and turned; plays only while on screen ----
+  $$('.mk-fan').forEach(function (fan) {
+    var data = JSON.parse($('.mk-fan-data', fan).textContent);
+    var cards = $$('.mk-fan-card', fan), ticks = $$('.mk-fan-ticks button', fan), cap = $('.mk-fan-cap', fan);
+    var n = cards.length, cur = 0, timer = null, held = false, visible = false;
+    function narrow() { return window.innerWidth <= 600; }
+    function place(card, slot) {
+      var dx = narrow() ? 26 : 62, dz = narrow() ? 110 : 170;
+      card.style.transform = slot === 0 ? 'translateX(0) translateZ(0) rotateY(-8deg)' : 'translateX(' + (slot * dx) + '%) translateZ(' + (-slot * dz) + 'px) rotateY(-32deg)';
+      card.style.opacity = String(1 - slot * 0.2);
+      card.style.zIndex = String(n - slot);
+    }
+    function label() {
+      ticks.forEach(function (t, i) { t.classList.toggle('on', i === cur); t.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+      cap.innerHTML = '<span class="n">' + String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0') + '</span><strong>' + data[cur][0] + '</strong><span class="d">' + data[cur][1] + '</span>';
+    }
+    function render() { cards.forEach(function (c, i) { place(c, (i - cur + n) % n); }); label(); }
+    // centre the whole fan, not the front card: lay it out at rest, measure it, then shift the cards and the
+    // perspective origin together (the origin stays at the same spot on the front card, so the fan keeps its shape)
+    function centre() {
+      var cw = cards[0].offsetWidth, sw = stage.clientWidth, sr = stage.getBoundingClientRect(), l = 1e9, r = -1e9;
+      cards.forEach(function (c) { c.style.transition = 'none'; c.style.left = '0px'; });
+      stage.style.perspectiveOrigin = (cw * 0.6) + 'px 40%';
+      render();
+      cards.forEach(function (c) { var b = c.getBoundingClientRect(); l = Math.min(l, b.left - sr.left); r = Math.max(r, b.right - sr.left); });
+      var x = Math.round((sw - (r - l)) / 2 - l);
+      cards.forEach(function (c) { c.style.left = x + 'px'; void c.offsetWidth; c.style.transition = reduce ? 'none' : ''; });
+      stage.style.perspectiveOrigin = (x + cw * 0.6) + 'px 40%';
+    }
+    function go(i) {
+      i = (i + n) % n; if (i === cur) return;
+      var leaving = cards[cur], forward = i === (cur + 1) % n;
+      cur = i;
+      if (!forward || reduce) { render(); return; }
+      // the front screen swipes off to the left, then rejoins at the back
+      leaving.style.transform = 'translateX(-80%) translateZ(80px) rotateY(14deg)';
+      leaving.style.opacity = '0';
+      cards.forEach(function (c, k) { if (c !== leaving) place(c, (k - cur + n) % n); });
+      label();
+      setTimeout(function () {
+        leaving.style.transition = 'none'; place(leaving, n - 1); leaving.style.opacity = '0';
+        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = String(1 - (n - 1) * 0.2);
+      }, 600);
+    }
+    function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
+    var stage = $('.mk-fan-stage', fan);
+    if (reduce) cards.forEach(function (c) { c.style.transition = 'none'; });
+    centre();
+    fan.addEventListener('mouseenter', function () { held = true; });
+    fan.addEventListener('mouseleave', function () { held = false; });
+    fan.addEventListener('focusin', function () { held = true; });
+    fan.addEventListener('focusout', function () { held = false; });
+    ticks.forEach(function (t, i) { t.addEventListener('click', function () { go(i); }); });
+    cards.forEach(function (c, i) { c.addEventListener('click', function () { go(i === cur ? cur + 1 : i); }); });
+    fan.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
+    });
+    var x0 = null;
+    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); });
+    window.addEventListener('resize', centre);
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && !reduce && !timer) timer = setInterval(tick, 4500);
+      if (!visible) { clearInterval(timer); timer = null; }
+    }, { threshold: .35 }).observe(stage);
+  });
+
+  // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
+  $$('canvas[data-stack]').forEach(function (c) {
+    var phone = window.matchMedia('(max-width: 600px)').matches;
+    window.STACK && STACK.mount(c, { pad: phone ? [0.05, 0.03] : [0.06, 0.12] });
+  });
+
+  // ---- chart: bars grow and the trend line draws once on screen ----
+  var chart = $('.mk-chart');
+  if (chart) {
+    var svgEl = $('svg', chart), fullVB = svgEl.getAttribute('viewBox');
+    var phone = matchMedia('(max-width: 600px)');
+    var crop = function () { svgEl.setAttribute('viewBox', phone.matches ? '20 20 704 230' : fullVB); };
+    crop(); phone.addEventListener('change', crop);
+    var line = $('polyline', chart), dots = $$('svg g[fill] circle', chart);
+    if (G && line) {
+      var len = line.getTotalLength();
+      gsap.set(line, { strokeDasharray: len, strokeDashoffset: len });
+      gsap.set(dots, { opacity: 0 });
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        chart.classList.add('mk-inview');
+        if (G && line) {
+          gsap.to(line, { strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', delay: .3 });
+          gsap.to(dots, { opacity: 1, duration: .4, delay: 1.5, stagger: .2 });
+        }
+        io.disconnect();
+      });
+    }, { threshold: .35 });
+    io.observe(chart);
+  }
+
+  // ---- the opening and the case heroes rise in once (numbers count up in liveMotion) ----
+  if (G) {
+    // hero copy and case header rise in once
+    gsap.from([$('[data-r="hero-h1"]'), $('[data-r="hero-h1"]').nextElementSibling, $('[data-r="profile-card"]')],
+      { y: 24, opacity: 0, duration: .8, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity' });
+    $$('.mk-case').forEach(function (cs) {
+      gsap.from($$('.mk-case-hero > div, .mk-split-text', cs), { y: 24, opacity: 0, duration: .7, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
+    });
+  }
+  // GSAP now holds the opening, the case headers and the index numbers in their start state: let the page show
+  document.documentElement.classList.remove('mk-pending');
+})();
+</script>

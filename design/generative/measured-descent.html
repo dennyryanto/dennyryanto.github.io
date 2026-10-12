@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<!--
+    Measured Descent: generative signature visuals for the portfolio.
+    Built from the algorithmic-art viewer template (structure, branding, seed controls kept).
+-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Measured Descent</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --anthropic-dark: #141413;
+            --anthropic-light: #faf9f5;
+            --anthropic-mid-gray: #b0aea5;
+            --anthropic-light-gray: #e8e6dc;
+            --anthropic-orange: #d97757;
+            --anthropic-blue: #6a9bcc;
+            --anthropic-green: #788c5d;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, var(--anthropic-light) 0%, #f5f3ee 100%); min-height: 100vh; color: var(--anthropic-dark); }
+        .container { display: flex; min-height: 100vh; padding: 20px; gap: 20px; }
+        .sidebar { width: 320px; flex-shrink: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 24px; border-radius: 12px; box-shadow: 0 10px 30px rgba(20, 20, 19, 0.1); overflow-y: auto; overflow-x: hidden; }
+        .sidebar h1 { font-family: 'Lora', serif; font-size: 24px; font-weight: 500; color: var(--anthropic-dark); margin-bottom: 8px; }
+        .sidebar .subtitle { color: var(--anthropic-mid-gray); font-size: 14px; margin-bottom: 32px; line-height: 1.4; }
+        .control-section { margin-bottom: 32px; }
+        .control-section h3 { font-size: 16px; font-weight: 600; color: var(--anthropic-dark); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .control-section h3::before { content: '•'; color: var(--anthropic-orange); font-weight: bold; }
+        .seed-input { width: 100%; background: var(--anthropic-light); padding: 12px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 14px; margin-bottom: 12px; border: 1px solid var(--anthropic-light-gray); text-align: center; }
+        .seed-input:focus { outline: none; border-color: var(--anthropic-orange); box-shadow: 0 0 0 2px rgba(217, 119, 87, 0.1); background: white; }
+        .seed-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+        .regen-button { margin-bottom: 0; }
+        .control-group { margin-bottom: 20px; }
+        .control-group label { display: block; font-size: 14px; font-weight: 500; color: var(--anthropic-dark); margin-bottom: 8px; }
+        .control-group select { width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--anthropic-light-gray); font-family: 'Poppins', sans-serif; font-size: 14px; background: var(--anthropic-light); }
+        .slider-container { display: flex; align-items: center; gap: 12px; }
+        .slider-container input[type="range"] { flex: 1; height: 4px; background: var(--anthropic-light-gray); border-radius: 2px; outline: none; -webkit-appearance: none; }
+        .slider-container input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; background: var(--anthropic-orange); border-radius: 50%; cursor: pointer; transition: all 0.2s ease; }
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.1); background: #c86641; }
+        .slider-container input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; background: var(--anthropic-orange); border-radius: 50%; border: none; cursor: pointer; }
+        .value-display { font-family: 'Courier New', monospace; font-size: 12px; color: var(--anthropic-mid-gray); min-width: 60px; text-align: right; }
+        .readout { font-family: 'Courier New', monospace; font-size: 12px; color: var(--anthropic-mid-gray); line-height: 1.6; }
+        .button { background: var(--anthropic-orange); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; width: 100%; }
+        .button:hover { background: #c86641; transform: translateY(-1px); }
+        .button:active { transform: translateY(0); }
+        .button.secondary { background: var(--anthropic-blue); }
+        .button.secondary:hover { background: #5a8bb8; }
+        .button.tertiary { background: var(--anthropic-green); }
+        .button.tertiary:hover { background: #6b7b52; }
+        .button-row { display: flex; gap: 8px; }
+        .button-row .button { flex: 1; }
+        .canvas-area { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; }
+        #canvas-container { width: 100%; max-width: 1400px; border-radius: 12px; overflow: hidden; box-shadow: 0 20px 40px rgba(20, 20, 19, 0.1); background: #161511; }
+        #canvas-container canvas { display: block; width: 100% !important; height: auto !important; }
+        .loading { display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--anthropic-mid-gray); padding: 40px; }
+        @media (max-width: 600px) { .container { flex-direction: column; } .sidebar { width: 100%; } .canvas-area { padding: 20px; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h1>Measured Descent</h1>
+            <div class="subtitle">Isometric terrain where everything flows downhill to one lime outcome. Signature visuals for the portfolio, at 2560×1097.</div>
+
+            <div class="control-section">
+                <h3>Seed</h3>
+                <input type="number" id="seed-input" class="seed-input" value="12345" onchange="updateSeed()">
+                <div class="seed-controls">
+                    <button class="button secondary" onclick="previousSeed()">← Prev</button>
+                    <button class="button secondary" onclick="nextSeed()">Next →</button>
+                </div>
+                <button class="button tertiary regen-button" onclick="randomSeedAndUpdate()">↻ Random</button>
+            </div>
+
+            <div class="control-section">
+                <h3>Parameters</h3>
+                <div class="control-group">
+                    <label>Case</label>
+                    <select id="scene" onchange="updateParam('scene', this.value)">
+                        <option value="dash">Dash · Lumio: spine through a field of stations</option>
+                        <option value="eink">E-ink: data tower settling into one plate</option>
+                        <option value="cockpit">Cockpit: graduated ridge with one pointer</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Height jitter</label>
+                    <div class="slider-container">
+                        <input type="range" id="jitter" min="0" max="0.4" step="0.02" value="0.16" oninput="updateParam('jitter', this.value)">
+                        <span class="value-display" id="jitter-value">0.16</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Channel width</label>
+                    <div class="slider-container">
+                        <input type="range" id="channel" min="0.08" max="0.4" step="0.01" value="0.2" oninput="updateParam('channel', this.value)">
+                        <span class="value-display" id="channel-value">0.2</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Hatch spacing (px)</label>
+                    <div class="slider-container">
+                        <input type="range" id="hatch" min="4" max="14" step="1" value="9" oninput="updateParam('hatch', this.value)">
+                        <span class="value-display" id="hatch-value">9</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Leader lines</label>
+                    <div class="slider-container">
+                        <input type="range" id="leaders" min="0" max="7" step="1" value="5" oninput="updateParam('leaders', this.value)">
+                        <span class="value-display" id="leaders-value">5</span>
+                    </div>
+                </div>
+                <div class="readout" id="readout"></div>
+            </div>
+
+            <div class="control-section">
+                <h3>Actions</h3>
+                <div class="button-row">
+                    <button class="button" onclick="resetParameters()">Reset</button>
+                    <button class="button" onclick="downloadPNG()">Download PNG</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="canvas-area">
+            <div id="canvas-container">
+                <div class="loading">Raising terrain…</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ═══════════════════════════════════════════════════════════════════════
+        // PARAMETERS
+        // ═══════════════════════════════════════════════════════════════════════
+        const SEEDS = { dash: 12345, eink: 12345, cockpit: 12345 };
+        let params = { seed: 12345, scene: 'dash', jitter: 0.16, channel: 0.2, hatch: 9, leaders: 5 };
+        let defaultParams = { ...params };
+
+        // The portfolio's palette, exact
+        const INK = '#161511', LINE = '#d1cec8', LINE2 = '#797772', FAINT = '#4d4c47', LIME = '#c8f23c';
+        const W = 2560, H = 1097;
+        const C = Math.cos(Math.PI / 6), S = 0.43;
+        const L1 = 3, L2 = 1.5, LH = 1.1; // primary, secondary, hatch weights at 2560px
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // TERRAIN: a heightfield of columns, painted back to front
+        // ═══════════════════════════════════════════════════════════════════════
+        let G;          // { nx, ny, h[][], plate[][], marks[][] }
+        let U = 1, OX = 0, OY = 0, measuring = false, bbox;
+
+        function P(x, y, z) {
+            const sx = OX + (x - y) * C * U, sy = OY + (x + y) * S * U - z * U;
+            if (measuring) { bbox.x0 = Math.min(bbox.x0, sx); bbox.x1 = Math.max(bbox.x1, sx); bbox.y0 = Math.min(bbox.y0, sy); bbox.y1 = Math.max(bbox.y1, sy); }
+            return [sx, sy];
+        }
+        function hAt(i, j) { return (i < 0 || j < 0 || i >= G.nx || j >= G.ny) ? 0 : G.h[i][j]; }
+        function grid(nx, ny) {
+            const a = [];
+            for (let i = 0; i < nx; i++) { a.push([]); for (let j = 0; j < ny; j++) a[i].push(0); }
+            return a;
+        }
+        function newTerrain(nx, ny) {
+            return { nx, ny, h: grid(nx, ny), plate: grid(nx, ny), marks: [...Array(nx)].map(() => [...Array(ny)].map(() => [])), channels: [], lime: [], leadersAt: [], scale: null };
+        }
+
+        // a channel is a list of cells moving only +x or +y; each step records the edge it leaves by
+        function route(cells, lime, dashed, limeFrom) {
+            G.channels.push({ cells, lime: !!lime, dashed: !!dashed, limeFrom: limeFrom == null ? null : limeFrom });
+        }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SCENES: each case's facts turned into a heightfield
+        // ═══════════════════════════════════════════════════════════════════════
+        const SCENES = {
+            // a central spine runs through a field of stations; every station taps into it
+            dash() {
+                const nx = 12, ny = 9, spine = 4;
+                G = newTerrain(nx + 2, ny);
+                for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
+                    G.h[i][j] = 0.95 - 0.13 * Math.floor(i / 2) + (j > spine ? -0.05 : 0);
+                    G.plate[i][j] = 1;
+                }
+                // stations, taller toward the back-left
+                const stations = [];
+                for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
+                    if (Math.abs(j - spine) <= 1) continue;
+                    const t = (i / nx) * 0.7 + (j / ny) * 0.3;
+                    if (random() < 0.42 - t * 0.12) {
+                        const lift = lerp(1.7, 0.55, t) * (1 + random(-params.jitter, params.jitter));
+                        G.h[i][j] += lift; G.plate[i][j] = 0; stations.push([i, j]);
+                    }
+                }
+                // taps: short grey grooves from some stations' plate edge toward the spine
+                const taps = shuffle(stations).slice(0, 9);
+                for (const [i, j] of taps) {
+                    const cells = [];
+                    if (j < spine) { for (let y = j + 1; y < spine; y++) if (G.plate[i][y]) cells.push([i, y]); else { cells.length = 0; break; } }
+                    else { for (let y = j - 1; y > spine; y--) if (G.plate[i][y]) cells.push([i, y]); else { cells.length = 0; break; } }
+                    if (cells.length) route(cells.map(c => [c[0], c[1], 'y']), false);
+                }
+                // the spine: lime, running front-right and out over a two-cell trough
+                for (let i = nx; i < nx + 2; i++) { G.h[i][spine] = 0.18; G.plate[i][spine] = 2; }
+                const sp = [];
+                for (let i = 0; i < nx + 2; i++) sp.push([i, spine, 'x']);
+                route(sp, false, false, nx - 4); // only the final stretch and the trough are lime: the outcome is where the spine delivers
+                G.leadersAt = stations.sort((a, b) => (a[0] + a[1]) - (b[0] + b[1])).filter((_, k) => k % 3 === 0);
+                G.scale = { at: [0, ny], to: 2.8 };
+            },
+            // a tall stack of data blocks steps down tier by tier into one thin plate
+            eink() {
+                const nx = 13, ny = 7;
+                G = newTerrain(nx, ny);
+                const tiers = [[0, 3, 2.7, 0, 7], [3, 5, 1.85, 0, 6], [5, 7, 1.2, 1, 6], [7, 9, 0.72, 1, 5], [9, 11, 0.38, 2, 5]];
+                const grp = {};
+                for (const [a, b, ht, j0, j1] of tiers) for (let i = a; i < b; i++) for (let j = j0; j < j1; j++) {
+                    const key = Math.floor(i / 2) + ':' + Math.floor(j / 2);
+                    if (!(key in grp)) grp[key] = random(-params.jitter, params.jitter);
+                    G.h[i][j] = ht * (1 + grp[key] * (ht > 1.5 ? 0.7 : 0.2));
+                }
+                // the plate: thin, small, lime on top
+                for (let i = 11; i < 13; i++) for (let j = 3; j < 5; j++) { G.h[i][j] = 0.1; G.plate[i][j] = 3; }
+                // the scheduled refresh: a dashed channel down the centre line
+                const ch = [];
+                for (let i = 0; i < 11; i++) ch.push([i, 3, 'x']);
+                route(ch, false, true);
+                G.leadersAt = [[1, 0], [3, 0], [5, 1], [7, 1], [9, 2], [11, 2]];
+                G.scale = { at: [0, ny], to: 2.9 };
+            },
+            // a measured ridge narrowing as it descends; one pin stands at "you, now"
+            cockpit() {
+                const nx = 16, ny = 6;
+                G = newTerrain(nx, ny);
+                for (let i = 0; i < nx; i++) {
+                    const step = Math.floor(i / 2), ht = 2.0 - step * 0.22;
+                    const j0 = Math.min(3, Math.floor(i / 5)), j1 = ny - Math.min(1, Math.floor(i / 10));
+                    for (let j = j0; j < j1; j++) G.h[i][j] = Math.max(0.35, ht);
+                    G.marks[i][j1 - 1].push('ticks');
+                }
+                const ch = [];
+                for (let i = 0; i < nx; i++) ch.push([i, 4, 'x']);
+                route(ch, false);
+                G.pin = [11.5, 4.5];
+                G.leadersAt = [[1, 0], [5, 0], [8, 1], [12, 2]];
+                G.scale = { at: [0, ny], to: 2.2 };
+            }
+        };
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // DRAWING
+        // ═══════════════════════════════════════════════════════════════════════
+        function poly(pts, fillC, strokeC, w) {
+            if (fillC) fill(fillC); else noFill();
+            if (strokeC) { stroke(strokeC); strokeWeight(w); } else noStroke();
+            beginShape(); for (const p of pts) vertex(p[0], p[1]); endShape(CLOSE);
+        }
+        function seg(a, b, c, w) { stroke(c); strokeWeight(w); line(a[0], a[1], b[0], b[1]); }
+
+        // channel pieces that sit on a given cell, filled in after that cell's faces
+        function channelPieces(i, j) {
+            const out = [];
+            for (const ch of G.channels) {
+                for (let k = 0; k < ch.cells.length; k++) {
+                    const [ci, cj, dir] = ch.cells[k];
+                    if (ci !== i || cj !== j) continue;
+                    const prev = ch.cells[k - 1], next = ch.cells[k + 1];
+                    out.push({ ch, dir, prev, next, first: k === 0, last: k === ch.cells.length - 1, lime: ch.lime || (ch.limeFrom != null && k >= ch.limeFrom) });
+                }
+            }
+            return out;
+        }
+
+        function drawCell(i, j) {
+            const h = hAt(i, j); if (h <= 0) return;
+            const hx = hAt(i + 1, j), hy = hAt(i, j + 1);
+            const w = params.channel;
+            const plate = G.plate[i][j];
+            // +y face: shadow side, hatched
+            if (h > hy) {
+                const f = [P(i, j + 1, hy), P(i + 1, j + 1, hy), P(i + 1, j + 1, h), P(i, j + 1, h)];
+                poly(f, INK);
+                const a = P(i, j + 1, 0), b = P(i + 1, j + 1, 0);
+                const n = Math.max(1, Math.round(Math.abs(b[0] - a[0]) / params.hatch));
+                for (let k = 1; k < n; k++) { const x = i + k / n; seg(P(x, j + 1, hy), P(x, j + 1, h), LINE2, LH); }
+                seg(f[0], f[1], LINE, L1);
+                const sameL = hAt(i - 1, j) === h && hAt(i - 1, j + 1) === hy, sameR = hAt(i + 1, j) === h && hAt(i + 1, j + 1) === hy;
+                if (!sameL) seg(f[0], f[3], LINE, L1);
+                if (!sameR) seg(f[1], f[2], LINE, L1);
+            }
+            // +x face: lit side, clean
+            if (h > hx) {
+                const f = [P(i + 1, j, hx), P(i + 1, j + 1, hx), P(i + 1, j + 1, h), P(i + 1, j, h)];
+                poly(f, INK);
+                seg(f[0], f[1], LINE, L1);
+                const sameB = hAt(i, j - 1) === h && hAt(i + 1, j - 1) === hx, sameF = hAt(i, j + 1) === h && hAt(i + 1, j + 1) === hx;
+                if (!sameB) seg(f[0], f[3], LINE, L1);
+                if (!sameF) seg(f[1], f[2], LINE, L1);
+            }
+            // top
+            const t = [P(i, j, h), P(i + 1, j, h), P(i + 1, j + 1, h), P(i, j + 1, h)];
+            poly(t, plate === 3 ? LIME : INK);
+            const edge = (a, b, nb) => { if (nb !== h) seg(a, b, plate === 3 ? LIME : LINE, L1); else if (plate === 1 && G.plate[i][j]) seg(a, b, LINE2, L2 * 0.8); };
+            edge(t[0], t[1], hAt(i, j - 1));
+            edge(t[0], t[3], hAt(i - 1, j));
+            edge(t[1], t[2], hx);
+            edge(t[3], t[2], hy);
+            // graduated scale along the ridge's front-left edge
+            if (G.marks[i][j].includes('ticks')) {
+                for (let k = 0; k <= 10; k++) {
+                    const x = i + k / 10, len = k % 5 === 0 ? 0.32 : 0.16;
+                    seg(P(x, j + 1, h), P(x, j + 1 - len, h), LINE2, L2);
+                }
+            }
+            // channels on this cell
+            for (const pc of channelPieces(i, j)) drawChannelPiece(i, j, h, hx, hy, pc, w);
+        }
+
+        function drawChannelPiece(i, j, h, hx, hy, pc, w) {
+            const { ch } = pc;
+            const cx = i + 0.5, cy = j + 0.5;
+            // entry point: from the edge the previous cell sits on (or the cell centre for the first)
+            let ax = cx, ay = cy;
+            if (pc.prev) { if (pc.prev[0] < i) ax = i; else if (pc.prev[0] > i) ax = i + 1; else if (pc.prev[1] < j) ay = j; else ay = j + 1; }
+            else if (pc.dir === 'x') ax = i + 0.15; else ay = j + 0.15;
+            // exit point
+            let bx = cx, by = cy;
+            if (pc.next) { if (pc.next[0] > i) bx = i + 1; else if (pc.next[0] < i) bx = i; else if (pc.next[1] > j) by = j + 1; else by = j; }
+            else if (pc.dir === 'x') bx = i + 0.97; else by = j + 0.97;
+            const parts = [[ax, ay, cx, cy], [cx, cy, bx, by]];
+            const col = pc.lime ? LIME : LINE;
+            if (ch.dashed) drawingContext.setLineDash([10, 9]);
+            for (const [x0, y0, x1, y1] of parts) {
+                if (x0 === x1 && y0 === y1) continue;
+                const horiz = y0 === y1; // runs along x
+                const o = w / 2;
+                const A = horiz ? [[x0, y0 - o], [x1, y1 - o]] : [[x0 - o, y0], [x1 - o, y1]];
+                const B = horiz ? [[x0, y0 + o], [x1, y1 + o]] : [[x0 + o, y0], [x1 + o, y1]];
+                if (pc.lime) poly([P(A[0][0], A[0][1], h), P(A[1][0], A[1][1], h), P(B[1][0], B[1][1], h), P(B[0][0], B[0][1], h)], LIME, LIME, 1.5);
+                else {
+                    seg(P(A[0][0], A[0][1], h), P(A[1][0], A[1][1], h), col, L1);
+                    seg(P(B[0][0], B[0][1], h), P(B[1][0], B[1][1], h), col, L1);
+                }
+            }
+            drawingContext.setLineDash([]);
+            // a drop down the face where the next cell is lower
+            if (pc.next) {
+                const [ni, nj] = pc.next, nh = hAt(ni, nj);
+                if (nh < h) {
+                    const o = w / 2;
+                    let q;
+                    if (ni > i) q = [P(i + 1, cy - o, nh), P(i + 1, cy + o, nh), P(i + 1, cy + o, h), P(i + 1, cy - o, h)];
+                    else q = [P(cx - o, j + 1, nh), P(cx + o, j + 1, nh), P(cx + o, j + 1, h), P(cx - o, j + 1, h)];
+                    if (pc.lime) poly(q, LIME, LIME, 1.5);
+                    else { poly(q, INK); seg(q[0], q[3], col, L1); seg(q[1], q[2], col, L1); }
+                }
+            }
+            // the outflow lip at the very end
+            if (pc.last && pc.lime) {
+                const o = w / 2 + 0.06;
+                poly([P(i + 1, cy - o, h), P(i + 1, cy + o, h), P(i + 1, cy + o, h - 0.14), P(i + 1, cy - o, h - 0.14)], INK, LIME, 1.5);
+            }
+        }
+
+        function arrow(a, b, c, w) {
+            seg(a, b, c, w);
+            const ang = Math.atan2(b[1] - a[1], b[0] - a[0]), L = 12, sp = 0.32;
+            for (const [p, d] of [[a, 0], [b, Math.PI]]) {
+                const t = ang + d;
+                seg(p, [p[0] + Math.cos(t + sp) * L, p[1] + Math.sin(t + sp) * L], c, w);
+                seg(p, [p[0] + Math.cos(t - sp) * L, p[1] + Math.sin(t - sp) * L], c, w);
+            }
+        }
+
+        function furniture() {
+            const nx = G.nx, ny = G.ny;
+            // front-left base: dimension line along x, broken where the front row changes height
+            const off = 1.1, breaks = [0];
+            let last = null;
+            for (let i = 0; i < nx; i++) {
+                let fh = 0; for (let j = ny - 1; j >= 0; j--) if (hAt(i, j) > 0) { fh = hAt(i, j); break; }
+                const lvl = Math.round(fh * 3);
+                if (last !== null && lvl !== last) breaks.push(i);
+                last = lvl;
+            }
+            breaks.push(nx);
+            const bl = breaks.filter((v, k, a) => k === 0 || v - a[k - 1] >= 2);
+            if (bl[bl.length - 1] !== nx) bl.push(nx);
+            for (const x of bl) seg(P(x, ny + 0.2, 0), P(x, ny + off + 0.35, 0), LINE2, L2);
+            for (let k = 1; k < bl.length; k++) arrow(P(bl[k - 1], ny + off, 0), P(bl[k], ny + off, 0), LINE2, L2);
+            arrow(P(0, ny + off + 0.75, 0), P(nx, ny + off + 0.75, 0), LINE2, L2);
+            // front-right base: dimension line along y
+            let jmin = ny, jmax = 0;
+            for (let j = 0; j < ny; j++) if (hAt(nx - 1, j) > 0) { jmin = Math.min(jmin, j); jmax = Math.max(jmax, j + 1); }
+            seg(P(nx + 0.2, jmin, 0), P(nx + off + 0.35, jmin, 0), LINE2, L2);
+            seg(P(nx + 0.2, jmax, 0), P(nx + off + 0.35, jmax, 0), LINE2, L2);
+            arrow(P(nx + off, jmin, 0), P(nx + off, jmax, 0), LINE2, L2);
+            // vertical scale beside the tallest mass
+            if (G.scale) {
+                const [sx, sy] = G.scale.at, top = G.scale.to;
+                const base = P(sx - 0.9, sy, 0), tip = P(sx - 0.9, sy, top);
+                seg(base, tip, LINE2, L2);
+                for (let k = 0; k <= Math.round(top * 10); k++) {
+                    const p = P(sx - 0.9, sy, k / 10), len = k % 5 === 0 ? 16 : 8;
+                    seg(p, [p[0] - len, p[1]], LINE2, L2);
+                }
+                seg(P(sx - 0.5, sy, 0), P(sx - 1.1, sy, 0), LINE2, L2);
+                seg(P(sx - 0.5, sy, top), P(sx - 1.1, sy, top), LINE2, L2);
+            }
+            // leader lines: from summits, up and right, then a short stub, stepping like a staircase
+            const picks = G.leadersAt.slice(0, params.leaders);
+            picks.forEach(([i, j], k) => {
+                const h = hAt(i, j); if (h <= 0) return;
+                const a = P(i + 0.5, j + 0.5, h);
+                const rise = 110 + k * 6;
+                const b = [a[0] + rise * 0.7, a[1] - rise];
+                seg(a, b, LINE2, L2);
+                seg(b, [b[0] + 120, b[1]], LINE2, L2);
+            });
+        }
+
+        function drawPin() {
+            if (!G.pin) return;
+            const [x, y] = G.pin; const i = Math.floor(x), j = Math.floor(y), h = hAt(i, j);
+            let j0 = j, j1 = j; while (hAt(i, j0 - 1) > 0) j0--; while (hAt(i, j1 + 1) > 0) j1++;
+            seg(P(x, j0, h), P(x, j1 + 1, h), LIME, L1 + 2);
+            const base = P(x, y, h), top = P(x, y, h + 1.35);
+            const r = 0.28 * U;
+            // a wedge standing on the scale: the one pointer that means "you, now"
+            poly([[top[0] - r, top[1]], [top[0] + r, top[1]], base], LIME, LIME, 1.5);
+            noStroke(); fill(LIME); circle(top[0], top[1], r * 2);
+            seg(P(x - 0.25, y, h), P(x + 0.25, y, h), LIME, 2);
+        }
+
+        function render() {
+            randomSeed(params.seed); noiseSeed(params.seed);
+            SCENES[params.scene]();
+            // pass 1: measure at unit scale; pass 2: fit to the frame
+            U = 1; OX = 0; OY = 0; bbox = { x0: 1e9, x1: -1e9, y0: 1e9, y1: -1e9 };
+            measuring = true; paint(true); measuring = false;
+            const bw = bbox.x1 - bbox.x0, bh = bbox.y1 - bbox.y0;
+            const targetW = W * 0.64, targetH = H * 0.82;
+            U = Math.min(targetW / bw, targetH / bh);
+            OX = W * 0.5 - (bbox.x0 + bw / 2) * U;
+            OY = H * 0.5 - (bbox.y0 + bh / 2) * U;
+            randomSeed(params.seed); noiseSeed(params.seed);
+            SCENES[params.scene]();
+            paint(false);
+            report();
+        }
+
+        function paint(dry) {
+            background(INK);
+            if (dry) {
+                // geometry only, to size the frame (leaders scale with U, so they are left out)
+                for (let i = 0; i < G.nx; i++) for (let j = 0; j < G.ny; j++) if (hAt(i, j) > 0) { P(i, j, hAt(i, j)); P(i + 1, j + 1, 0); P(i, j + 1, 0); P(i + 1, j, 0); }
+                let jmin = G.ny, jmax = 0; for (let j = 0; j < G.ny; j++) if (hAt(G.nx - 1, j) > 0) { jmin = Math.min(jmin, j); jmax = Math.max(jmax, j + 1); }
+                P(-1.3, G.ny, 0); P(0, G.ny + 1.95, 0); P(G.nx, G.ny + 1.95, 0); P(G.nx + 1.5, jmin, 0); P(G.nx + 1.5, jmax, 0);
+                if (G.scale) P(-1.3, G.ny, G.scale.to);
+                return;
+            }
+            strokeCap(SQUARE); strokeJoin(MITER);
+            for (let d = 0; d <= G.nx + G.ny; d++) for (let i = 0; i < G.nx; i++) { const j = d - i; if (j >= 0 && j < G.ny) drawCell(i, j); }
+            furniture();
+            drawPin();
+        }
+
+        // lime share and the phone-crop centre, measured from the pixels
+        function report() {
+            loadPixels();
+            let n = 0, x0 = 1e9, x1 = -1;
+            const d = pixelDensity();
+            for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) {
+                const k = 4 * ((y * d) * W * d + x * d);
+                const r = pixels[k], g = pixels[k + 1], b = pixels[k + 2];
+                if (g > 150 && r > 120 && b < 130 && g - b > 70) { n++; x0 = Math.min(x0, x); x1 = Math.max(x1, x); }
+            }
+            const share = 100 * n / ((W / 2) * (H / 2));
+            const cw = H * 0.8, c = Math.min(W - cw / 2, Math.max(cw / 2, (x0 + x1) / 2)), fits = (x1 - x0) < cw * 0.92;
+            const el = document.getElementById('readout');
+            window.__report = { lime: +share.toFixed(2), cropCentre: Math.round(100 * c / W), fitsPhone: fits };
+            if (el) el.innerHTML = 'Lime share: ' + share.toFixed(2) + '%<br>Phone crop centre: ' + Math.round(100 * c / W) + '% (' + (fits ? 'lime fits' : 'lime too wide') + ')';
+        }
+
+        function setup() {
+            pixelDensity(1);
+            const canvas = createCanvas(W, H);
+            canvas.parent('canvas-container');
+            noLoop();
+            const q = new URLSearchParams(location.search);
+            if (q.get('scene')) { params.scene = q.get('scene'); document.getElementById('scene').value = params.scene; }
+            if (q.get('seed')) params.seed = parseInt(q.get('seed'), 10);
+            updateSeedDisplay();
+            document.querySelector('.loading').style.display = 'none';
+            render();
+        }
+        function draw() {}
+        function initializeSystem() { render(); }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // UI CONTROL HANDLERS
+        // ═══════════════════════════════════════════════════════════════════════
+        function updateParam(name, value) {
+            params[name] = name === 'scene' ? value : parseFloat(value);
+            const el = document.getElementById(name + '-value'); if (el) el.textContent = value;
+            initializeSystem();
+        }
+        function downloadPNG() { saveCanvas('sv-' + params.scene + '-' + params.seed, 'png'); }
+
+        // ═══════════════════════════════════════════════════════════════════════
+        // SEED CONTROL FUNCTIONS
+        // ═══════════════════════════════════════════════════════════════════════
+        function updateSeedDisplay() { document.getElementById('seed-input').value = params.seed; }
+        function updateSeed() {
+            const input = document.getElementById('seed-input');
+            const newSeed = parseInt(input.value);
+            if (newSeed && newSeed > 0) { params.seed = newSeed; initializeSystem(); } else updateSeedDisplay();
+        }
+        function previousSeed() { params.seed = Math.max(1, params.seed - 1); updateSeedDisplay(); initializeSystem(); }
+        function nextSeed() { params.seed = params.seed + 1; updateSeedDisplay(); initializeSystem(); }
+        function randomSeedAndUpdate() { params.seed = Math.floor(Math.random() * 999999) + 1; updateSeedDisplay(); initializeSystem(); }
+        function resetParameters() {
+            const scene = params.scene;
+            params = { ...defaultParams, scene };
+            for (const k of ['jitter', 'channel', 'hatch', 'leaders']) {
+                document.getElementById(k).value = params[k];
+                document.getElementById(k + '-value').textContent = params[k];
+            }
+            updateSeedDisplay();
+            initializeSystem();
+        }
+        window.addEventListener('load', function () { updateSeedDisplay(); });
+    </script>
+</body>
+</html>
