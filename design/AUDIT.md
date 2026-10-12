@@ -513,6 +513,19 @@ Owner: "get back to the wireframe mockup and implement the changes".
   - Padding is tighter: the band is about 236px tall at 1440px.
   - It is two by two below 1000px.
   - It now uses its own CSS instead of the live site's stat-band rules.
+- **Compact split heroes, alternating sides** (hi-fi; owner: "more compact:
+  description under the title, diagrams inline, the expand button under the
+  description; alternate sides for a more dynamic layout; Independent keeps
+  its layout").
+  - Each hero is a two-column grid (5 : 7). One column holds the title,
+    description and the toggle (left-aligned, chevron beside the label,
+    meta under it). The other holds the stack at 5:4.
+  - The sides alternate: LinkAja text-left, Komunal right, Dash left,
+    e-ink right, cockpit left (`.mk-split` / `.flip`, `split_hero()` in
+    `build_hifi.py`).
+  - Independent keeps its full-width two-stack layout.
+  - A section is about 746px tall at 1440 × 900.
+  - Below 900px it stacks as title, description, stack, then toggle.
 
 ## Open decisions
 

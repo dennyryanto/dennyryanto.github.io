@@ -129,23 +129,28 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" in
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
 
+
+
+def split_hero(h2_html, sub_html, fig_html, toggle_html, flip):
+    # compact hero: title, description and the toggle in one column, the diagram beside them; sides alternate down the page
+    return ('<div class="mk-split' + (' flip' if flip else '') + '">'
+            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p></div>'
+            + fig_html + toggle_html + '</div>')
+
+
 case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
-    + str(meta) +
-    '<div class="mk-case-hero">'
-    '<div>' + str(h2) + '</div>'
-    '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p></div>'
-    '</div>'
-    + '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>'
-    + toggle + drawer +
+    + str(meta)
+    + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False)
+    + drawer +
     '</div></section>')
 
 # ---------- the other cases and the two labs: hero, signature visual and a short drawer ----------
 BRIEF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>'
 FLASK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>'
 CASES = [
-    dict(id='komunal', n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
+    dict(id='komunal', flip=True, n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
          h2='Rebuilt how a regulated fintech ships design.',
          sub='One shared design system for Product, Engineering and Marketing, and a redesigned deposit funnel that now completes about 12 points more often.',
          stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('W→D', 'RELEASE CYCLE', False), ('1', 'SYSTEM · 3 ORGS', False)],
@@ -173,7 +178,7 @@ CASES = [
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
-    dict(id='lab', scene='eink', n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT', icon=FLASK,
+    dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT', icon=FLASK,
          h2='Shipping real products with AI, end to end.',
          sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
@@ -226,10 +231,10 @@ def case_section(c):
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
-            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta +
-            '<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>'
-            + figure(c) +
-            tog + dr + '</div></section>')
+            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta
+            + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
+               if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False)))
+            + dr + '</div></section>')
 
 
 more_html = ''.join(case_section(c) for c in CASES)
