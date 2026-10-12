@@ -175,6 +175,27 @@ Tooling: `design/tools/capture-signature-visuals.js` and
 repo on :8765); `build_signature_visuals.py` + `signature_visuals_shell.html`
 build the board.
 
+## Illustrated signature visuals (route 2, 2026-10-12)
+
+A second route to a shared visual language: replace the hero screenshots with
+illustrated visual analogues made by an image-generation agent. Brief:
+`design/prompts/signature-visuals-agent-brief.md`.
+
+Decisions from the interview:
+- **Explore three directions first**: metaphor object, environment, and
+  sculptural data. The LinkAja test round has 2 variants each, and then the
+  chosen direction is rolled out to all six.
+- **Style**: technical line art (engineering-plate monoline, unlabelled
+  scales and leaders).
+- **Colours**: flat site ink `#161511` background; lines `#d1cec8` /
+  `#797772` / `#4d4c47`; exactly one lime `#c8f23c` element marking the
+  outcome.
+- **Exclusions**: no screens, UI, text or numbers, and no people.
+- **Format**: 21:9 at 2560×1097, with the key subject inside a central 4:5
+  mobile-safe area.
+- **Tool-agnostic**, with notes for Midjourney, GPT image and Gemini.
+- **The agent proposes the LinkAja metaphors itself.**
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
