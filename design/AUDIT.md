@@ -391,8 +391,13 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   - Scenes are data: `w`, `d`, `gap`, `layers` (flat ops, optional blocks)
     and `picks` (`k`, `at`, `h`, `ops` on its own layer, `land` on the top
     layer).
-  - Timeline: a layer every 0.8s (rise 0.45s, decide at +0.4s), threads
-    climb 0.45s, and it is done in 2.4s. Frames are full redraws (about 4ms
+  - Lock flicker (review comment: "flicker effect on locked/finalized
+    decisions"). When a decision locks, and when it lands on the top layer,
+    the lime strikes like a lamp: eight uneven on/off steps over 0.36s,
+    then it holds. The pattern is a fixed table in `stack.js`, so every
+    replay matches. Its thread climbs only once the lock holds.
+  - Timeline: a layer every 0.95s (rise 0.45s, lock at +0.4s, flicker
+    0.36s), threads climb 0.45s, and it is done in about 2.8s. Frames are full redraws (about 4ms
     in the headless test) only while building.
   - Plays once at 45% in view; reduced motion shows the finished stack.
     `mount()` returns `{ replay }`.

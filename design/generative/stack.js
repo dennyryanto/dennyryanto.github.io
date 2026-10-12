@@ -10,7 +10,15 @@
   var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c' };
 
   // ---------- timing (seconds) ----------
-  var STEP = 0.8, RISE = 0.45, DECIDE = 0.4, LIGHT = 0.3, CLIMB = 0.45;
+  var STEP = 0.95, RISE = 0.45, DECIDE = 0.4, LIGHT = 0.42, CLIMB = 0.45;
+
+  // a locked decision strikes like a lamp: a few uneven flickers, then it holds. [until (s after lock), level]; 1 = lime
+  var FLICKER = [[0.04, 1], [0.09, 0.12], [0.12, 0.85], [0.2, 0.08], [0.24, 1], [0.28, 0.3], [0.33, 0.95], [0.36, 0.45]];
+  function flick(u) {
+    if (u < 0) return 0;
+    for (var i = 0; i < FLICKER.length; i++) if (u < FLICKER[i][0]) return FLICKER[i][1];
+    return 1;
+  }
 
   function ease(u) { u = Math.max(0, Math.min(1, u)); return 1 - Math.pow(1 - u, 3); }
   function hex(c) { return [parseInt(c.slice(1, 3), 16), parseInt(c.slice(3, 5), 16), parseInt(c.slice(5, 7), 16)]; }
@@ -71,7 +79,7 @@
     this.yaw = opts.yaw || 40; this.elev = opts.elev || 26;
     this.pad = opts.pad || [0.08, 0.16];
     var n = this.S.layers.length;
-    this.END = (n - 1) * STEP + DECIDE + LIGHT + 0.1;
+    this.END = (n - 1) * STEP + DECIDE + LIGHT + 0.05;
     this.resize();
   }
 
@@ -143,13 +151,13 @@
     });
   };
 
-  // the build at time t: every slab, decision and thread is a pure function of t
+  // the build at time t: every slab, decision and thread is a pure function of t (the flicker too, so replays match)
   Renderer.prototype.render = function (t) {
     var S = this.S, g = this.cx, self = this, dpr = this.cv.width / this.W, L1 = 1.4 * this.lw, L2 = 0.8 * this.lw, n = S.layers.length, T = 0.12;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.globalAlpha = 1; g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
     g.lineCap = 'round'; g.lineJoin = 'round';
-    var lit = function (k) { return ease((t - k * STEP - DECIDE) / LIGHT); };
+    var lit = function (k) { return flick(t - k * STEP - DECIDE); };
     var neutral = { fill: PAL.line2, stroke: PAL.line };
     S.layers.forEach(function (l, k) {
       var t0 = k * STEP; if (t < t0) return;
@@ -168,7 +176,7 @@
       g.globalAlpha = 1;
       // every decision made so far climbs straight up through the gap above this layer
       if (top) return;
-      var climb = ease((t - t0 - DECIDE - LIGHT * 0.5) / CLIMB), zn = (k + 1) * S.gap;
+      var climb = ease((t - t0 - DECIDE - LIGHT) / CLIMB), zn = (k + 1) * S.gap;
       if (climb > 0) S.picks.forEach(function (p) {
         if (p.k > k) return;
         var z0 = zt + (p.k === k ? (p.h || 0) : 0), a = self.P(p.at[0], p.at[1], z0), b = self.P(p.at[0], p.at[1], z0 + (zn - z0) * climb);
