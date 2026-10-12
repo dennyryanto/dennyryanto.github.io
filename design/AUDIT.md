@@ -366,6 +366,44 @@ with GSAP.
   per hero. The agent's images and the PNG generator remain as references
   only.
 
+### Exploded layers: `stack.js` (2026-10-12, chosen direction, iteration 1)
+
+Owner's pick from the alternatives: A · Exploded layers. The terraces
+(`sv3d.js`, the 3D review page) stay as they are.
+
+- **Owner's brief:** no rotation. The build animates from the foundation
+  layer to the final layer. Lime marks the decision made on each layer, and
+  the survived decisions render on the final layer.
+- **Adjustments (proposed in review):**
+  - Each layer lights several candidate decisions, but only survivors
+    continue. When the build ends, dead ends dim to olive (`#4b571e`), so one
+    lime trail remains from foundation to final UI.
+  - Lime below the top stays small (tags, nodes, outlines). The final
+    layer's survivors are solid lime UI, so the outcome still dominates.
+  - The stack fans out: each layer rises 2.1 units and shifts toward the
+    frame's right. A straight tower hid every lower decision under the slab
+    above it, and the fan also fills the 21:9 hero. Threads are slanted lime
+    lines from a decision to where it lands on the next layer.
+- **Renderer:** `design/generative/stack.js`. It is standalone and
+  dependency-free (no GSAP needed), about 19KB raw and 6KB gzipped.
+  - Fixed camera: yaw 42°, elevation 30°.
+  - Slabs are drawn like the terraces' boxes (hatched +y face).
+  - Scenes are data: `layers` (slab, flat ops, optional blocks) plus
+    `items` (decisions: layer, position, ops with `D`/`Ds` lime styles,
+    `up` for a thread, `live` if it survives).
+  - Timeline: a layer every 0.9s (rise 0.5s, decide at +0.45s), threads
+    grow toward the next layer, and survivors settle at about 4.3s. Each
+    frame is a full redraw (about 5ms in the headless test) only while
+    building; after that nothing runs.
+  - Plays once at 45% in view; reduced motion shows the finished stack.
+    `mount()` returns `{ replay }`.
+- **Built:** LinkAja (tickets → intents → flows → chat; survivors: answer
+  bubble and resolve action) and Independent (sources → signals → options →
+  decision card; survivors: confidence bar and approve button).
+- **Review page:** `design/mockups/exploded-layers.html`, built from
+  `design/generative/stack-review.shell.html`. It lists layer stories for
+  Komunal, Dash · Lumio, E-ink and Cockpit, still to be built.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
