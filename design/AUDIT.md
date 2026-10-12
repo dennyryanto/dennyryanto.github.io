@@ -790,6 +790,49 @@ wireframe:
   into phone-only. It was caught before any publish or site build. All style
   blocks now balance.
 
+## Lighthouse round (2026-10-12)
+
+The owner ran PageSpeed Insights (mobile) on the live site. The same audit was
+run locally on the same files, served gzipped like GitHub Pages:
+
+| Mobile | Before | After |
+|---|---|---|
+| Performance | 62 | 96 |
+| Accessibility | 96 | 100 |
+| Best practices | 96 | 100 |
+| SEO | 100 | 100 |
+| FCP / LCP | 2.7s / 3.6s | 1.5s / 2.6s |
+| Total blocking time | 830ms | 80ms |
+| Speed index | 5.1s | 1.5s |
+| Main-thread work | 8.8s | 1.8s |
+
+What fixed it:
+
+- **Shut drawers skip rendering.** Most of the page's 2,793 elements sit in
+  closed drawers, yet they were styled and laid out, and ScrollTrigger
+  re-measured them (one 763ms task). A drawer that has finished collapsing
+  now gets `.mk-shut` (`content-visibility: hidden`). The class ships in the
+  markup and comes off the moment the drawer opens. The no-JS rule overrides
+  it, so every drawer still shows without JavaScript. The cockpit fan now
+  centres itself on `mk-open`, since a shut drawer has no layout to measure.
+- **The opening paints at once.** The opening paragraph is the largest
+  element on first paint, and holding it back for a rise-in made LCP late.
+  The opening no longer animates; the case headers still rise in.
+- **No forced `ScrollTrigger.refresh()` at load.** New triggers measure
+  themselves when they are created.
+- **Contrast.** The meta line under an open toggle no longer dims to .45; it
+  read 2.08:1 under the Background toggle.
+- **Favicon.** `assets/favicon.svg` has three stacked slabs with the top one
+  lime. It also ends the console 404 for `/favicon.ico`.
+- **Lighter images.** PNGs (the client logos, a few screens) are re-encoded
+  as WebP when that is smaller. The headshot ships at 208px (2x its 104px
+  display): 6.9KB instead of 15.9KB.
+
+Not fixable from the repo: GitHub Pages sets `Cache-Control: max-age=600` on
+everything, so "use efficient cache lifetimes" stays flagged. File names are
+content hashes, so a CDN with long caching could be put in front later.
+Minifying `stack.js` would save about 4KB, not worth a build dependency.
+
 ## Open decisions
 
 - **Cockpit fan placement**: top of the drawer (wireframe v2) or back in the

@@ -167,7 +167,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-toggle[aria-expanded="true"] .mk-t-closed { opacity: 0; transition: opacity var(--half) ease-in 0s; }
 .mk-toggle[aria-expanded="true"] .mk-t-open { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
 .mk-t-meta { font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); transition: opacity var(--flip) cubic-bezier(.65, 0, .35, 1); }
-.mk-toggle[aria-expanded="true"] .mk-t-meta { opacity: .45; }
 .mk-t-icon { margin-top: 2px; display: grid; place-items: center; color: var(--lime); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1), color .25s; }
 .mk-t-icon svg { animation: mk-bob 1.8s ease-in-out infinite; }
 /* the whole control is lime; hover lifts it to off-white */
@@ -180,6 +179,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-drawer.open { grid-template-rows: 1fr; }
 .mk-drawer-inner { overflow: hidden; min-height: 0; }
 .mk-drawer.open .mk-drawer-inner.settled { overflow: visible; }
+/* a shut drawer (closed and finished collapsing) is skipped by style, layout and paint: most of the page lives in them */
+.mk-drawer-inner.mk-shut { content-visibility: hidden; }
 .mk-drawer-body { display: grid; gap: 24px; padding-top: 44px; }
 .mk-block { min-width: 0; }
 .mk-eyebrow { margin-bottom: 20px; font: 600 11px/1 var(--mono); letter-spacing: .16em; color: var(--lime); }
@@ -197,7 +198,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-co-about { margin-top: 4px; font: 400 12px/1.45 var(--display); color: rgba(242, 239, 232, .5); }
 .mk-context { margin: -6px 0 22px; max-width: 64ch; font: 400 15px/1.55 var(--display); color: var(--fg-2); }
 /* held back until the motion script takes over (see the script before the page) */
-.mk-pending [data-r="hero-h1"], .mk-pending [data-r="hero-h1"] + *, .mk-pending [data-r="profile-card"],
 .mk-pending .mk-split-text, .mk-pending .mk-case-hero > div, .mk-pending .mk-index [data-m~="count"] { opacity: 0; }
 /* background: the degree as one quiet line */
 .mk-edu { font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
@@ -216,7 +216,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </style>
 
 <script>
-/* the opening and each case header rise in; hide them before the first paint so they never show, vanish and then rise
+/* each case header rises in; hide them before the first paint so they never show, vanish and then rise
    (the motion script releases them as soon as GSAP has taken over, and a timer releases them regardless) */
 (function (h) {
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -224,7 +224,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   setTimeout(function () { h.classList.remove('mk-pending'); }, 3000);
 })(document.documentElement);
 </script>
-<noscript><style>.mk-drawer { grid-template-rows: 1fr; } .mk-drawer-inner { overflow: visible; } .mk-toggle, .mk-close { display: none; }</style></noscript>
+<noscript><style>.mk-drawer { grid-template-rows: 1fr; } .mk-drawer-inner { overflow: visible; content-visibility: visible !important; } .mk-toggle, .mk-close { display: none; }</style></noscript>
 <div data-r="page" id="top" style="background:#161511;color:#f2efe8;overflow-x:clip">
 <!--__TOPBAR__-->
 <!--__HERO__-->
@@ -261,14 +261,15 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       $('.mk-t-closed', btn).setAttribute('aria-hidden', open ? 'true' : 'false');
       $('.mk-t-open', btn).setAttribute('aria-hidden', open ? 'false' : 'true');
       inner.classList.remove('settled');
-      if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
+      if (open) { inner.removeAttribute('inert'); inner.classList.remove('mk-shut'); drawer.dispatchEvent(new Event('mk-open')); }
+      else inner.setAttribute('inert', '');
       // the blocks rise in as the drawer grows past them, not after it has finished opening
       if (open && G && !revealed) { revealed = true; gsap.set(blocks, { opacity: 0, y: 28 }); buildReveal(blocks); }
       drawer.classList.toggle('open', open);
       if (reduce || !G) settle();
     }
     function settle() {
-      if (drawer.classList.contains('open')) inner.classList.add('settled');
+      if (drawer.classList.contains('open')) inner.classList.add('settled'); else inner.classList.add('mk-shut');
       if (G) ScrollTrigger.refresh();
       // scroll-linked motion measures the final layout, so it waits for the drawer to settle
       if (drawer.classList.contains('open') && G && !moved) { moved = true; liveMotion(drawer, false); }
@@ -378,7 +379,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     only('.gx-slab').forEach(function (slab) {
       follow(slab.parentNode, function (v) { slab.style.setProperty('--drift', v + '%'); }, 5, -5);
     });
-    ScrollTrigger.refresh();
   }
   function inside(b) { entrances(function (sel) { return $$(sel, b); }, withBlock); }
 
@@ -445,6 +445,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
     stage.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); });
     window.addEventListener('resize', centre);
+    var host = fan.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', centre);
     new IntersectionObserver(function (es) {
       visible = es[0].isIntersecting;
       if (visible && !reduce && !timer) timer = setInterval(tick, 4500);
@@ -488,8 +489,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   // ---- the opening and the case heroes rise in once (numbers count up in liveMotion) ----
   if (G) {
     // hero copy and case header rise in once
-    gsap.from([$('[data-r="hero-h1"]'), $('[data-r="hero-h1"]').nextElementSibling, $('[data-r="profile-card"]')],
-      { y: 24, opacity: 0, duration: .8, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity' });
     $$('.mk-case').forEach(function (cs) {
       gsap.from($$('.mk-case-hero > div, .mk-split-text', cs), { y: 24, opacity: 0, duration: .7, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity',
         scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
