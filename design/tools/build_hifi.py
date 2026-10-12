@@ -93,8 +93,8 @@ for sp in meta.find_all('span'):
 h2 = intro.find('h2')
 bullets = intro.find('h2').find_next_sibling('div')
 # signature visual: the line-art illustration (style master); the OPEX chart moves into the drawer
-SV_ALT = ('Line drawing in 3D: stepped terrain where four grooves from tall intakes at the back left merge into one '
-          'lime self-service outflow at the front right; it turns slowly as you scroll.')
+SV_ALT = ('Line drawing in 3D: stepped terrain where four grooves from ticket-stacked intakes at the back left merge into one '
+          'lime self-service outflow that runs into a chat screen at the front right; it turns slowly as you scroll.')
 SV3D_JS = open(os.path.join(S, 'sv3d.js'), encoding='utf-8').read()
 
 STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]

@@ -208,7 +208,8 @@ Checks on the master:
   noise); lime covers 0.3% of the image; clean 30° isometric view; no text.
 - **Fails, fixed in round 2:**
   - It's 1584×672 instead of 2560×1097.
-  - The top leader lines come within 5% of the edge instead of 8%.
+  - The top leader lines come within 5% of the edge instead of 8%. (Leader
+    lines were later removed from `sv3d.js` entirely.)
   - The lime sits outside the centred 4:5 area, so the mobile crop is set
     per image instead. The master's crop centre is about 73%.
 
@@ -281,12 +282,32 @@ the signature visuals in code on the page, in 3D, turned gently by scroll
 with GSAP.
 
 - **Renderer:** `design/generative/sv3d.js`. It is a dependency-free canvas
-  renderer, 22KB raw and **7KB gzipped**. Each scene is a heightfield of
+  renderer, 33KB raw and **10KB gzipped**. Each scene is a heightfield of
   columns plus a few loose boxes. A real 3D projection with a yaw camera
   draws them back to front by depth, and faces are filled with the page
   ink so hidden lines disappear. It adds hatched shadow faces, grooves that
-  flow only downhill, one lime outcome, and unlabelled measurement lines.
-  It uses the exact palette, and line weights scale with the canvas width.
+  flow only downhill, one lime outcome, and unlabelled measurement lines
+  (base dimensions and a vertical scale only; leader lines were removed in
+  review as purposeless). It uses the exact palette, and line weights scale
+  with the canvas width.
+- **Each scene carries a piece of its own product** (review comment: the six
+  "look all too similar"). The UI is drawn in neutral cream and grey line;
+  lime stays the one outcome.
+  - `linkaja`: ticket stacks on the intakes; the outflow ends at a standing
+    chat screen.
+  - `komunal`: a design-system sheet (swatches, buttons, toggle, type, cards)
+    lies on the source block.
+  - `dash`: round tables with chairs printed on the floor plate (Dash), and
+    signage screens on the two tallest stations (Lumio).
+  - `independent`: databases among the rough inputs; the lime slot ends at a
+    decision card (confidence bar, approve and review buttons).
+  - `eink`: the e-ink panel stands on the lime plate, with a 1-bit dashboard.
+  - `cockpit`: an instrument face (gauge, scale with pointer, trend line) at
+    the end of the ridge.
+  - Primitives: `T.panel` (a standing or flat UI plate, depth-sorted with
+    the terrain by its nearest edge), `T.decal` (marks printed on a cell top)
+    and `T.cyl` (a database cylinder). They share a small op vocabulary:
+    rect, circ, line, polyline, arc, radial ticks, scale ticks.
 - **Scenes (all six):** `linkaja`, `komunal`, `dash`, `independent`,
   `eink`, `cockpit`.
 - **Motion:** `SV3D.mount(canvas, {range: 10})` sets up a ScrollTrigger from
@@ -298,14 +319,14 @@ with GSAP.
   - Reduced motion draws it once, still.
   - The frame fit is fixed across the whole swing, so the drawing never
     zooms or clips as it turns.
-  - Measured at about 7–8ms per frame on desktop at 2× density, and about
-    3ms on a phone-sized screen.
+  - Measured at about 7ms per frame on desktop at 2× density, and about
+    4ms on a phone-sized screen (with the product UI added).
 - **Phones:** the whole drawing re-fits a 4:3 canvas; nothing is cropped.
 - **Review page:** `design/mockups/signature-visuals-3d.html`
   (https://claude.ai/artifact/6ryNCr4A5hHemwqWdGS4FQ). It is built from
   `design/generative/sv3d-review.shell.html` with `sv3d.js` inlined.
 - **Hi-fi:** the LinkAja hero now uses `<canvas data-sv3d="linkaja">`
-  instead of the image, so the page dropped from 330KB to 243KB.
+  instead of the image, so the page dropped from 330KB to 254KB.
   `build_hifi.py` inlines `sv3d.js` from `<workdir>/sv3d.js`.
 - **For the live site:** load `sv3d.js` once, after GSAP, and add one canvas
   per hero. The agent's images and the PNG generator remain as references
