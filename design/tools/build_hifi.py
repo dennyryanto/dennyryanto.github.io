@@ -175,9 +175,6 @@ CONTEXT = {
     'LIVE ON GCP': 'Self-hosted, fetching fresh data every 30 minutes.',
     '800×480 E-INK RENDER': 'Dithered to one bit, rendered on fetch, not on request.',
     'CLOUD SUBSCRIPTIONS': 'Nothing to pay to keep it running.',
-    'POINTER · YOU, NOW': 'One blue pointer that always means you, now.',
-    'SCREENS DESIGNED': 'From the glance view to the training plan.',
-    'INSTRUMENT CLOSE-UPS': 'Readiness, training status and load, up close.',
 }
 
 
@@ -303,7 +300,6 @@ CASES = [
     dict(id='lab-ui', scene='cockpit', fan=True, n='LAB / AI-ASSISTED UI', role='PERSONAL CONCEPT · GARMIN CONNECT', icon=FLASK,
          h2='What if Garmin Connect read like a cockpit?',
          sub='Dark display glass, fine graduated scales and one pointer that always means you, now. AI widened the exploration; the direction and every call stayed mine.',
-         stats=[('1', 'POINTER · YOU, NOW', True), ('4', 'SCREENS DESIGNED', False), ('3', 'INSTRUMENT CLOSE-UPS', False)],
          alt='Line drawing: three phone-shaped layers (terrain, a wall of instruments, and the app’s glass display as a wireframe). Your lime position and the lime reading that matters land as the lime pointer and value.',
          bullets=['Home, at a glance: grouped by the question you are asking (recovery, training, today).',
                   'Density is a setting: the same screen, dense, where only the size changes.',
@@ -354,7 +350,7 @@ def figure(c):
 
 
 def case_section(c):
-    stats = keys_html(c['stats'])
+    stats = keys_html(c['stats']) if c.get('stats') else ''
     meta = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
             f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
             f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
@@ -368,7 +364,8 @@ def case_section(c):
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner"><div class="mk-drawer-body">'
           + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>' + QUESTION +
               '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + str(lui_note) + '</div>') if c.get('fan') else '') +
-          '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
+          # the cockpit concept has no outcome numbers to report (owner: "we don't need this")
+          ('' if c.get('fan') else '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>') +
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           + LIVE.get(c['id'], '') +
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'

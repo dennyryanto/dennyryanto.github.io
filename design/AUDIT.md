@@ -779,6 +779,9 @@ wireframe:
     `mk-pending`, which hides the pieces that rise in (the opening, the case
     headers, the index numbers) until GSAP holds them. A 3s timer releases
     them regardless, and reduced motion never hides them.
+- **No key numbers for the cockpit** (owner: "we don't need this"). The
+  Garmin concept has no outcomes to count, so its drawer goes straight from
+  the screens, the question and the close-ups to "What I did".
 - **Bug fixed on the way.** Removing the old flat close-up CSS left an
   unclosed `@media (max-width: 600px) {`, which pulled every rule after it
   into phone-only. It was caught before any publish or site build. All style
