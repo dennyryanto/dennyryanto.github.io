@@ -282,7 +282,7 @@ the signature visuals in code on the page, in 3D, turned gently by scroll
 with GSAP.
 
 - **Renderer:** `design/generative/sv3d.js`. It is a dependency-free canvas
-  renderer, 33KB raw and **10KB gzipped**. Each scene is a heightfield of
+  renderer, about 44KB raw and **13KB gzipped**. Each scene is a heightfield of
   columns plus a few loose boxes. A real 3D projection with a yaw camera
   draws them back to front by depth, and faces are filled with the page
   ink so hidden lines disappear. It adds hatched shadow faces, grooves that
@@ -313,20 +313,35 @@ with GSAP.
 - **Motion:** `SV3D.mount(canvas, {range: 10})` sets up a ScrollTrigger from
   `top bottom` to `bottom top` with `scrub: 0.6`. The yaw goes 35°→55°
   across the pass. It redraws only on scroll updates.
+- **Lime motion** (review comment: "animate the lime flow/decision"). While a
+  canvas is on screen, its lime moves continuously, independent of scroll:
+  - Flow scenes (`linkaja`, `komunal`, `dash`, `independent`): lime packets
+    travel down the groove toward the outcome over a dim olive bed.
+  - `eink`: a dark refresh band sweeps the lime plate every 5s.
+  - `cockpit`: the "you, now" pin and needle glide back and forth along
+    their step.
+  - How it stays cheap: on each angle change the full drawing goes straight
+    to the page, and only the small box the lime moves in is cached twice
+    (lit and dimmed; the dim copy redraws only cells inside that box). A
+    frame copies the dimmed box, then the lit box through a clip shaped like
+    the packets, so occlusion stays correct with no per-frame drawing of the
+    terrain. Frames run at up to 30fps and stop when the canvas leaves the
+    screen. Reduced motion shows the still, fully lime drawing.
 - **Loading cost:**
   - The scene initialises only when it comes within 300px of the screen.
   - Density is capped at 2×.
   - Reduced motion draws it once, still.
   - The frame fit is fixed across the whole swing, so the drawing never
     zooms or clips as it turns.
-  - Measured at about 7ms per frame on desktop at 2× density, and about
-    4ms on a phone-sized screen (with the product UI added).
+  - Measured at about 6–9ms per scroll redraw on desktop at 2× density
+    (about 1ms of that is caching the lime box), and about 4ms on a
+    phone-sized screen. An animation frame is two small image copies.
 - **Phones:** the whole drawing re-fits a 4:3 canvas; nothing is cropped.
 - **Review page:** `design/mockups/signature-visuals-3d.html`
   (https://claude.ai/artifact/6ryNCr4A5hHemwqWdGS4FQ). It is built from
   `design/generative/sv3d-review.shell.html` with `sv3d.js` inlined.
 - **Hi-fi:** the LinkAja hero now uses `<canvas data-sv3d="linkaja">`
-  instead of the image, so the page dropped from 330KB to 254KB.
+  instead of the image, so the page dropped from 330KB to 262KB.
   `build_hifi.py` inlines `sv3d.js` from `<workdir>/sv3d.js`.
 - **For the live site:** load `sv3d.js` once, after GSAP, and add one canvas
   per hero. The agent's images and the PNG generator remain as references
