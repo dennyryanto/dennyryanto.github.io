@@ -94,12 +94,15 @@ body.notes-off .note { display: none; }
 
 /* case index (replaces the stat band) */
 .index { display: block; border-block: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
-.idx { display: grid; gap: 6px; padding: 24px 20px; text-decoration: none; border-right: 1px solid var(--line); transition: background .2s; }
+.index-head { max-width: var(--wrap); margin-inline: auto; padding-top: 18px; display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; color: var(--ink-3); }
+.idx { display: grid; gap: 8px; align-content: start; padding: 16px 20px 22px; text-decoration: none; border-right: 1px solid var(--line); transition: background .2s; }
 .idx:last-child { border-right: 0; }
 .idx:hover { background: var(--sheet); }
-.idx .num { font: 800 clamp(30px, 4vw, 44px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.idx .num { margin-top: 6px; font: 800 clamp(26px, 3vw, 34px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .idx .sl { font-size: 13px; }
+.idx .ctx { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); max-width: 32ch; }
 .idx .go { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
+.idx .go .arr { margin-left: auto; }
 .idx:hover .go { color: var(--ink); }
 .index-wrap { max-width: var(--wrap); margin-inline: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media (max-width: 860px) { .index-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .idx:nth-child(2) { border-right: 0; } .idx:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
@@ -133,6 +136,22 @@ body.notes-off .note { display: none; }
 .stat .sl { font-size: 13px; line-height: 1.35; color: var(--ink-2); }
 @media (max-width: 860px) { .case-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .stat .n { font-size: 22px; } }
 
+
+/* compact split hero: title, description and the toggle on one side, the diagram on the other; sides alternate (.flip), the two-diagram Independent hero keeps the stacked layout */
+.case-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig" "tog fig"; column-gap: 48px; align-items: center; }
+.case-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text" "fig tog"; }
+.case-split > .case-text { grid-area: text; align-self: end; display: grid; gap: 14px; }
+.case-split > .case-text .sub { color: var(--ink-2); margin: 0; max-width: 52ch; }
+.case-split > .sv { grid-area: fig; margin: 0; }
+.case-split > .sv canvas { aspect-ratio: 5 / 4; }
+.case-split > .toggle { grid-area: tog; align-self: start; justify-self: start; width: auto; max-width: 100%; margin-top: 22px; padding: 6px 0; flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: 12px; row-gap: 6px; text-align: left; }
+.case-split > .toggle .chev { order: 1; margin-top: 0; }
+.case-split > .toggle .m { order: 2; flex-basis: 100%; }
+@media (max-width: 860px) {
+  .case-split, .case-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig" "tog"; row-gap: 8px; }
+  .case-split > .sv canvas { aspect-ratio: 4 / 3; }
+  .case-split > .toggle { margin-top: 6px; }
+}
 
 /* signature visual: the exploded-layer stack (stack.js), drawn in the wireframe's greys; decisions in solid ink (lime in the hi-fi) */
 .case-hero > .sv, .case-hero > .sv-pair { grid-column: 1 / -1; margin: 8px 0 0; }
@@ -271,6 +290,7 @@ html { scroll-behavior: smooth; }
   </section>
 
   <nav class="index" aria-label="Case index">
+    <div class="index-head mono"><span>Selected work · four outcomes</span><span class="hide-sm">Each opens its case study</span></div>
     <div class="index-wrap" id="index"></div>
   </nav>
   <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span><i class="f">F3 · F7</i>The stat band becomes the case index. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
@@ -719,8 +739,8 @@ html { scroll-behavior: smooth; }
       sub: 'Self-service flows replaced agent tickets, and a home-screen redesign shipped to 70M+ users.',
       stats: [['70M+', 'Users'], ['~72%', 'Cases automated'], ['4', 'Ships']],
       sv: 'linkaja',
-      index: { num: '−80%', label: 'CS OPEX' },
-      note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same clean hero: the headline on the left, one line on what the work is about on the right, and the signature visual full width underneath. The key numbers and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
+      index: { num: '−80%', label: 'CS OPEX', ctx: 'Customer-service cost after self-service replaced agent tickets for 70M users.' },
+      note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same compact hero: the headline, one line on what the work is about and the toggle on one side, the signature visual on the other, alternating sides down the page (Independent shows its two visuals side by side instead). The key numbers and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
       svNote: '<b>11</b><span>The signature visual is drawn live in code: three layers in the shape of the work’s platform (phone, tablet, desktop or e-ink panel), from what it started from to the final screen as a simple wireframe. When it first comes into view it builds once from the bottom; each lower layer locks one decision with a flicker, and its thread rises straight up to land as UI on the top layer. No rotation. Decisions are solid ink here and lime in the hi-fi.</span>',
       drawer: [
         { lines: 4, cap: 'Outcome bullets' },
@@ -734,7 +754,7 @@ html { scroll-behavior: smooth; }
       sub: 'A first shared design system, a faster web toolchain and a deposit funnel that converts better.',
       stats: [['+12 pts', 'Deposit funnel'], ['W → D', 'Release cycle'], ['1 system', '3 orgs aligned']],
       sv: 'komunal',
-      index: { num: '+12 pts', label: 'Deposit funnel' },
+      index: { num: '+12 pts', label: 'Deposit funnel', ctx: 'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.' },
       drawer: [
         { lines: 4, cap: 'Outcome bullets' },
         { cols: 1, items: [P('Deposit funnel chart (moved from the hero)', '21/9')] },
@@ -746,7 +766,7 @@ html { scroll-behavior: smooth; }
       sub: 'Founded and led Dash for 8 years, led design at Lumio, and now sits on both boards.',
       stats: [['30+', 'Restaurant chains'], ['~200K', 'Customers / month'], ['150+', 'Lumio locations']],
       sv: 'dash',
-      index: { num: '~200K', label: 'Customers / month' },
+      index: { num: '~200K', label: 'Customers / month', ctx: 'Diners ordering through Dash each month, across 30+ restaurant chains.' },
       drawer: [
         { lines: 4, cap: 'Outcome bullets' },
         { cap: 'Dash', cols: 2, items: [P('Captain app · iPad', '4/3'), P('Back office · laptop', '16/10')] },
@@ -759,7 +779,7 @@ html { scroll-behavior: smooth; }
       sub: 'Enterprise AI workflows, multi-agent Claude Code builds, and coaching designers on AI tooling.',
       stats: [['MCP', 'Agentic workflows'],['0 → 1', 'Prototypes in Claude Code'], ['1:1', 'Designer coaching']],
       sv: [['independent', 'Enterprise AI · data to decision'], ['chrona', 'Featured · Chrona']],
-      index: { num: '0 → 1', label: 'AI-native builds' },
+      index: { num: '0 → 1', label: 'AI-native builds', ctx: 'Products taken from concept to working software with multi-agent Claude Code.' },
       drawer: [
         { lines: 3, cap: 'Outcome bullets' },
         { cols: 1, items: [P('Decision-desk demo · enterprise AI', '21/9')] },
@@ -851,14 +871,17 @@ html { scroll-behavior: smooth; }
       ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span></div>'; }).join('') + '</div>'
       : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p></div>' + (c.sv ? svHtml(c) : ph(c.hero)) + '</div>' + (c.svNote ? '<div class="note" style="margin-top:12px">' + c.svNote + '</div>' : '');
     var title = c.timeline ? '<h2 style="margin-bottom:28px">' + esc(c.title) + '</h2>' : '';
+    var toggle = '<button type="button" class="toggle" aria-expanded="false" aria-controls="d-' + c.id + '">' +
+        '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
+        '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
+      '</button>';
+    var split = !c.timeline && typeof c.sv === 'string';
+    if (split) body = '<div class="case-split"><div class="case-text"><h2>' + esc(c.title) + '</h2><p class="sub">' + esc(c.sub) + '</p></div>' + svHtml(c) + toggle + '</div>' + (c.svNote ? '<div class="note" style="margin-top:16px">' + c.svNote + '</div>' : '');
     return '<article class="case" id="' + c.id + '">' +
       '<div class="case-meta">' + eyebrow + '<span class="mono role">' + esc(c.role) + '</span></div>' + title + body +
       (c.note ? '<div class="note" style="margin-top:20px">' + c.note + '</div>' : '') +
-      '<button type="button" class="toggle" aria-expanded="false" aria-controls="d-' + c.id + '">' +
-        '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
-        '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
-      '</button>' +
-      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain centered caps with no box, and a chevron that gently bobs. On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
+      (split ? '' : toggle) +
+      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain caps with no box, sitting under the description with a chevron beside it that gently bobs (centered under the visuals where a hero has two). On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
       '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + (stats ? '<div class="block"><div class="cap mono">Key numbers</div>' + stats + '</div>' : '') + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
       '</article>';
   }
@@ -867,8 +890,8 @@ html { scroll-behavior: smooth; }
   casesEl.innerHTML = CASES.map(function (c, i) { return caseHtml(c, i + 1); }).join('');
   document.getElementById('labs').innerHTML = LABS.map(function (c) { return caseHtml(c); }).join('');
   document.getElementById('bg').innerHTML = caseHtml(BG);
-  document.getElementById('index').innerHTML = CASES.map(function (c) {
-    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="sl muted">' + esc(c.index.label) + '</span><span class="go mono">' + esc(c.co) + ' →</span></a>';
+  document.getElementById('index').innerHTML = CASES.map(function (c, i) {
+    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="go mono"><span data-inum>' + String(i + 1).padStart(2, '0') + '</span> ' + esc(c.co) + '<span class="arr">↓</span></span><span class="num">' + c.index.num + '</span><span class="sl">' + esc(c.index.label) + '</span><span class="ctx">' + esc(c.index.ctx) + '</span></a>';
   }).join('');
 
   function setOpen(article, open) {
@@ -983,6 +1006,16 @@ html { scroll-behavior: smooth; }
     } else { visible = true; start(); }
   });
 
+  // ---- split heroes alternate sides in reading order; the two-diagram hero sits outside the alternation, as in the hi-fi ----
+  function alternate() {
+    var k = 0;
+    document.querySelectorAll('.case').forEach(function (a) {
+      var sp = a.querySelector('.case-split');
+      if (sp) sp.classList.toggle('flip', k++ % 2 === 1);
+    });
+  }
+  alternate();
+
   // ---- signature visuals: exploded-layer stacks, greyscale, decisions in ink ----
   var stacks = [];
   function wirePalette() {
@@ -1005,9 +1038,12 @@ html { scroll-behavior: smooth; }
       var el = document.getElementById(c.id);
       casesEl.appendChild(el);
       el.querySelector('[data-num]').textContent = String(i + 1).padStart(2, '0') + ' / ' + c.co;
-      document.getElementById('index').appendChild(document.querySelector('[data-open="' + c.id + '"]'));
+      var link = document.querySelector('[data-open="' + c.id + '"]');
+      link.querySelector('[data-inum]').textContent = String(i + 1).padStart(2, '0');
+      document.getElementById('index').appendChild(link);
     });
     document.getElementById('order-label').textContent = by === 'date' ? 'Newest first' : 'Ordered by impact';
+    alternate();
     document.getElementById('t-impact').setAttribute('aria-pressed', by !== 'date');
     document.getElementById('t-date').setAttribute('aria-pressed', by === 'date');
   }

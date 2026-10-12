@@ -526,6 +526,20 @@ Owner: "get back to the wireframe mockup and implement the changes".
   - Independent keeps its full-width two-stack layout.
   - A section is about 746px tall at 1440 × 900.
   - Below 900px it stacks as title, description, stack, then toggle.
+- **Wireframe synced** (owner: "apply the same changes to the
+  wireframe"). It gets the same quieter case index:
+  - a "Selected work · four outcomes" heading;
+  - each cell reads "01 LinkAja ↓", then the number at 26–34px, its label
+    and one line of context;
+  - the case numbers re-number with the By impact / By date toggle.
+
+  It also gets the same compact split heroes (`.case-split`, `.flip`):
+  - The sides alternate in reading order, recomputed whenever the order
+    changes.
+  - Independent's two-up hero sits outside the alternation, so the
+    sequence matches the hi-fi: L R L (pair) R L.
+  - Notes 4 and 7 are updated.
+  - Collapsed length is about 11.2 screens at 1440 × 900.
 
 ## Open decisions
 
