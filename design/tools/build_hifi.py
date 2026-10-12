@@ -1,5 +1,5 @@
 """Assemble the hi-fi mockup (opening, case 01 LinkAja in full, and the heroes of the other cases and labs) from the live site's rendered pieces."""
-import base64, re, sys, os
+import base64, json, re, sys, os
 from bs4 import BeautifulSoup
 
 S = sys.argv[1]
@@ -84,6 +84,31 @@ for i, (cid, num, label, icon, n, co, ctx) in enumerate(INDEX):
 index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
               '<div class="mk-index-wrap"><div class="mk-index-head"><span>Selected work · four outcomes</span><span>Each opens its case study</span></div>'
               '<div class="mk-index">' + ''.join(idx_cells) + '</div></div></nav>')
+
+# ---------- clients & brands, right under the case index ----------
+clients = soup(read('clients'))
+client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
+clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap">'
+                '<div class="mk-clients-head"><span>Clients &amp; brands</span><span class="mk-clients-sub">12 brands, from payments and e-commerce to retail and streaming</span></div>'
+                '<div class="mk-clients-grid">' + client_logos + '</div></div></section>')
+
+# ---------- the Garmin glass cockpit: four screens for the fan, three close-ups ----------
+labui = soup(read('labui'))
+lab_imgs = labui.find_all('img')
+FAN = [('Home, at a glance', 'Grouped by the question you’re asking: recovery, training, today.'),
+       ('The same screen, dense', 'Density is a setting. Only the size changes.'),
+       ('On a hard day', 'Colour appears only when something departs from normal.'),
+       ('Training, plan first', 'This week’s sessions, then the load behind them.')]
+CLOSEUPS = ['Readiness, read off one strip.', 'Training status, on one map.', 'Training load, week by week.']
+fan_html = ('<div class="mk-fan" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Garmin Connect concept screens">'
+            '<div class="mk-fan-stage">' + ''.join(
+                '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
+            '</div><div class="mk-fan-foot"><div class="mk-fan-cap" aria-live="polite"></div><div class="mk-fan-ticks">' +
+            ''.join('<button type="button" aria-label="Show %s"><i></i></button>' % t for t, _ in FAN) +
+            '</div></div><script type="application/json" class="mk-fan-data">' + json.dumps(FAN) + '</script></div>')
+closeups_html = ('<div class="mk-closeups">' + ''.join(
+    '<figure><img src="%s" alt="%s"><figcaption><span>%02d</span>%s</figcaption></figure>' % (lab_imgs[4 + i]['src'], lab_imgs[4 + i].get('alt', ''), i + 1, t)
+    for i, t in enumerate(CLOSEUPS)) + '</div>')
 
 # ---------- case 01: LinkAja ----------
 la = soup(read('linkaja'))
@@ -187,7 +212,7 @@ CASES = [
                   'FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.',
                   'Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.',
                   'TRMNL DIY kit (ESP32) on the nightstand; everything behind it designed and built with Claude Code.']),
-    dict(id='lab-ui', scene='cockpit', n='LAB / AI-ASSISTED UI', role='PERSONAL CONCEPT · GARMIN CONNECT', icon=FLASK,
+    dict(id='lab-ui', scene='cockpit', fan=True, n='LAB / AI-ASSISTED UI', role='PERSONAL CONCEPT · GARMIN CONNECT', icon=FLASK,
          h2='What if Garmin Connect read like a cockpit?',
          sub='Dark display glass, fine graduated scales and one pointer that always means you, now. AI widened the exploration; the direction and every call stayed mine.',
          stats=[('1', 'POINTER · YOU, NOW', True), ('4', 'SCREENS DESIGNED', False), ('3', 'INSTRUMENT CLOSE-UPS', False)],
@@ -222,10 +247,12 @@ def case_section(c):
     did = '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in c['bullets']) + '</ul>'
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
            '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
-           '<span class="mk-t-meta">3 numbers · ' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet</span>'
+           '<span class="mk-t-meta">' + ('4 screens · 3 close-ups · 3 numbers' if c.get('fan') else '3 numbers · ' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet') + '</span>'
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
+          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>'
+              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + '</div>') if c.get('fan') else '') +
           '<div class="mk-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
@@ -243,7 +270,7 @@ tpl = open(os.path.join(S, 'hifi_shell.html'), encoding='utf-8').read()
 out = (tpl.replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', str(top))
           .replace('<!--__HERO__-->', str(hero))
-          .replace('<!--__INDEX__-->', index_html)
+          .replace('<!--__INDEX__-->', index_html + clients_html)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))

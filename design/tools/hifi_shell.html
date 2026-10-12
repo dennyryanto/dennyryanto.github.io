@@ -96,6 +96,44 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 }
 @media (max-width: 480px) { .mk-sv { margin-inline: -16px; } }
 
+/* clients & brands: right under the case index, always visible, no tile borders */
+.mk-clients { border-bottom: 1px solid var(--rule); }
+.mk-clients-wrap { max-width: 1216px; margin: 0 auto; padding: 40px 40px 48px; }
+.mk-clients-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; margin-bottom: 20px; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); }
+.mk-clients-sub { font: 400 14px/1.4 var(--display); letter-spacing: 0; text-transform: none; color: var(--fg-3); }
+.mk-clients-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.mk-client { height: 84px; display: grid; place-items: center; padding: 16px 20px; border-radius: 10px; background: rgba(242, 239, 232, .035); }
+/* every logo becomes one light mark, so dark and light originals read the same on the ink */
+.mk-client img { max-width: 100%; max-height: 40px; width: auto; height: auto; display: block; filter: brightness(0) invert(1); opacity: .62; transition: opacity .25s; }
+.mk-client:hover img { opacity: .95; }
+@media (max-width: 1000px) { .mk-clients-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .mk-clients-wrap { padding: 32px 24px 36px; } .mk-clients-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .mk-client { height: 64px; padding: 12px; } .mk-client img { max-height: 30px; } }
+@media (max-width: 480px) { .mk-clients-wrap { padding-inline: 16px; } }
+
+/* the Garmin glass cockpit fan: real screens stacked in depth; the front one swipes away every 4.5s while on screen */
+.mk-fan { position: relative; outline: none; }
+.mk-fan:focus-visible .mk-fan-stage { outline: 2px solid var(--lime); outline-offset: 4px; }
+.mk-fan-stage { position: relative; height: clamp(440px, 46vw, 620px); perspective: 1800px; perspective-origin: 25% 40%; overflow: hidden; touch-action: pan-y; }
+.mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(170px, 18vw, 250px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
+.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
+.mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
+.mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
+.mk-fan-cap .n { font: 500 11px/1 var(--mono); letter-spacing: .14em; color: var(--lime); }
+.mk-fan-cap strong { font: 800 22px/1.15 var(--display); font-stretch: 112%; color: var(--fg); }
+.mk-fan-cap .d { font: 400 15px/1.5 var(--display); color: var(--fg-2); }
+.mk-fan-ticks { display: flex; gap: 4px; flex: none; }
+.mk-fan-ticks button { background: none; border: 0; padding: 12px 2px; cursor: pointer; }
+.mk-fan-ticks i { display: block; width: 24px; height: 2px; background: var(--rule); transition: background .3s; }
+.mk-fan-ticks button.on i { background: var(--lime); }
+@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 44vw; } .mk-fan-cap strong { font-size: 19px; } }
+/* close-ups: three instrument details */
+.mk-closeups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.mk-closeups figure { margin: 0; }
+.mk-closeups img { display: block; width: 100%; height: auto; border-radius: 14px; }
+.mk-closeups figcaption { margin-top: 10px; display: flex; gap: 10px; font: 400 15px/1.4 var(--display); color: var(--fg-2); }
+.mk-closeups figcaption span { font: 500 11px/1.9 var(--mono); letter-spacing: .14em; color: var(--lime); }
+@media (max-width: 600px) { .mk-closeups { grid-template-columns: minmax(0, 1fr); } }
+
 /* compact split hero: title + description + toggle on one side, the diagram on the other; .flip swaps the sides */
 .mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig" "tog fig"; column-gap: 56px; align-items: center; }
 .mk-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text" "fig tog"; }
@@ -246,6 +284,62 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       gsap.from(el.children, { y: 24, opacity: 0, duration: .6, ease: 'power2.out', stagger: .08, delay: .15, clearProps: 'transform,opacity' });
     });
   }
+
+  // ---- the cockpit fan: front screen nearly flat, the rest stacked back and turned; plays only while on screen ----
+  $$('.mk-fan').forEach(function (fan) {
+    var data = JSON.parse($('.mk-fan-data', fan).textContent);
+    var cards = $$('.mk-fan-card', fan), ticks = $$('.mk-fan-ticks button', fan), cap = $('.mk-fan-cap', fan);
+    var n = cards.length, cur = 0, timer = null, held = false, visible = false;
+    function narrow() { return window.innerWidth <= 600; }
+    function place(card, slot) {
+      var dx = narrow() ? 26 : 62, dz = narrow() ? 110 : 170;
+      card.style.transform = slot === 0 ? 'translateX(0) translateZ(0) rotateY(-8deg)' : 'translateX(' + (slot * dx) + '%) translateZ(' + (-slot * dz) + 'px) rotateY(-32deg)';
+      card.style.opacity = String(1 - slot * 0.2);
+      card.style.zIndex = String(n - slot);
+    }
+    function label() {
+      ticks.forEach(function (t, i) { t.classList.toggle('on', i === cur); t.setAttribute('aria-current', i === cur ? 'true' : 'false'); });
+      cap.innerHTML = '<span class="n">' + String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0') + '</span><strong>' + data[cur][0] + '</strong><span class="d">' + data[cur][1] + '</span>';
+    }
+    function render() { cards.forEach(function (c, i) { place(c, (i - cur + n) % n); }); label(); }
+    function go(i) {
+      i = (i + n) % n; if (i === cur) return;
+      var leaving = cards[cur], forward = i === (cur + 1) % n;
+      cur = i;
+      if (!forward || reduce) { render(); return; }
+      // the front screen swipes off to the left, then rejoins at the back
+      leaving.style.transform = 'translateX(-80%) translateZ(80px) rotateY(14deg)';
+      leaving.style.opacity = '0';
+      cards.forEach(function (c, k) { if (c !== leaving) place(c, (k - cur + n) % n); });
+      label();
+      setTimeout(function () {
+        leaving.style.transition = 'none'; place(leaving, n - 1); leaving.style.opacity = '0';
+        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = String(1 - (n - 1) * 0.2);
+      }, 600);
+    }
+    function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
+    if (reduce) cards.forEach(function (c) { c.style.transition = 'none'; });
+    render();
+    fan.addEventListener('mouseenter', function () { held = true; });
+    fan.addEventListener('mouseleave', function () { held = false; });
+    fan.addEventListener('focusin', function () { held = true; });
+    fan.addEventListener('focusout', function () { held = false; });
+    ticks.forEach(function (t, i) { t.addEventListener('click', function () { go(i); }); });
+    cards.forEach(function (c, i) { c.addEventListener('click', function () { go(i === cur ? cur + 1 : i); }); });
+    fan.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
+    });
+    var stage = $('.mk-fan-stage', fan), x0 = null;
+    stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
+    stage.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); });
+    window.addEventListener('resize', render);
+    new IntersectionObserver(function (es) {
+      visible = es[0].isIntersecting;
+      if (visible && !reduce && !timer) timer = setInterval(tick, 4500);
+      if (!visible) { clearInterval(timer); timer = null; }
+    }, { threshold: .35 }).observe(stage);
+  });
 
   // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
   $$('canvas[data-stack]').forEach(function (c) {

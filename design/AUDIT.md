@@ -540,6 +540,29 @@ Owner: "get back to the wireframe mockup and implement the changes".
     sequence matches the hi-fi: L R L (pair) R L.
   - Notes 4 and 7 are updated.
   - Collapsed length is about 11.2 screens at 1440 × 900.
+- **Hi-fi: clients strip and the cockpit fan** (owner: "I didn't see the
+  clients & brands section in the hi-fi"; "build the Garmin glass cockpit
+  fan").
+  - Clients & brands sits right under the case index, as in the wireframe.
+    It shows the 12 live-site logos with a heading and a one-line sub, on
+    borderless tiles, 6/4/3 columns. Every logo is rendered as one light
+    mark (`brightness(0) invert(1)`), so dark and light originals read the
+    same. Rainbow's logo carries its own background, so it shows as a light
+    box.
+  - The cockpit drawer opens with "The screens": the fan of the four real
+    concept screens (780×1688), stacked in depth.
+    - The front screen swipes off and rejoins at the back every 4.5s, only
+      while the fan is on screen.
+    - It pauses on hover or focus and steps with the lime ticks, arrow keys,
+      a swipe or a click.
+    - The caption shows "01 / 04", the title and one line.
+    - Reduced motion turns autoplay off.
+  - Below the fan, "The instrument craft, up close" shows the three
+    close-ups with captions. The toggle meta reads "4 screens · 3 close-ups
+    · 3 numbers".
+  - The assets are grabbed from the live site into `hifi/clients.html` and
+    `hifi/labui.html` (data URIs). The page is now about 1MB, mostly those
+    screens and logos.
 
 ## Open decisions
 
