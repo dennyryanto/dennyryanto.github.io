@@ -137,6 +137,16 @@ body.notes-off .note { display: none; }
 @media (max-width: 860px) { .case-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .stat .n { font-size: 22px; } }
 
 
+/* key numbers: a centred, full-width band of three equal columns, each with a line of context */
+.keys-block > .cap { text-align: center; }
+.keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid var(--line); text-align: center; }
+.key { display: grid; gap: 8px; justify-items: center; padding: 32px 24px 28px; min-width: 0; }
+.key + .key { border-left: 1px solid var(--line); }
+.key .n { font: 800 clamp(36px, 4.4vw, 52px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.key .l { color: var(--ink-3); }
+.key .c { max-width: 30ch; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+@media (max-width: 700px) { .keys { grid-template-columns: minmax(0, 1fr); } .key { padding: 22px 8px; } .key + .key { border-left: 0; border-top: 1px solid var(--line); } }
+
 /* compact split hero: title, description and the toggle on one side, the diagram on the other; sides alternate (.flip), the two-diagram Independent hero keeps the stacked layout */
 .case-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig" "tog fig"; column-gap: 48px; align-items: center; }
 .case-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text" "fig tog"; }
@@ -784,7 +794,7 @@ html { scroll-behavior: smooth; }
     { id: 'linkaja', co: 'LinkAja', role: 'Product Design Lead · Sep 2021 – Jun 2023', start: 2021, impact: 1,
       title: 'Design that cut OPEX 80% for 70 million users.',
       sub: 'Self-service flows replaced agent tickets, and a home-screen redesign shipped to 70M+ users.',
-      stats: [['70M+', 'Users'], ['~72%', 'Cases automated'], ['4', 'Ships']],
+      stats: [['70M+', 'Users', 'People reached by the redesigned home screen.'], ['~72%', 'Cases automated', 'Support cases now solved in the app, without an agent.'], ['4', 'Ships', 'Self-service flows, MyPaylater, the chatbot and the home screen.']],
       sv: 'linkaja',
       index: { num: '−80%', label: 'CS OPEX', ctx: 'Customer-service cost after self-service replaced agent tickets for 70M users.' },
       note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same compact hero: the headline, one line on what the work is about and the toggle on one side, the signature visual on the other, alternating sides down the page (Independent shows its two visuals side by side instead). The key numbers and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
@@ -799,7 +809,7 @@ html { scroll-behavior: smooth; }
     { id: 'komunal', note: '<b>8</b><span><i class="f">F5</i>Nothing on the page is smaller than 11px. Number labels are sentence case at 13px instead of tiny mono caps; mono is kept for dates, captions and the toggle.</span>', co: 'Komunal Indonesia', role: 'Senior Manager, Product Design · Jun 2024 – Nov 2025', start: 2024, impact: 2,
       title: 'Rebuilt how a regulated fintech ships design.',
       sub: 'A first shared design system, a faster web toolchain and a deposit funnel that converts better.',
-      stats: [['+12 pts', 'Deposit funnel'], ['W → D', 'Release cycle'], ['1 system', '3 orgs aligned']],
+      stats: [['+12 pts', 'Deposit funnel', 'Deposit-funnel completion after UX audits and a redesign.'], ['W → D', 'Release cycle', 'Web releases went from weeks to days after the move to Framer.'], ['1 system', '3 orgs aligned', 'One design system shared by Product, Engineering and Marketing.']],
       sv: 'komunal',
       index: { num: '+12 pts', label: 'Deposit funnel', ctx: 'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.' },
       drawer: [
@@ -811,7 +821,7 @@ html { scroll-behavior: smooth; }
     { id: 'board', co: 'Dash · Lumio', role: 'Founder, VP Design, Commissioner · 2016 – present', start: 2016, impact: 3,
       title: 'Board-level judgment, design-level craft.',
       sub: 'Founded and led Dash for 8 years, led design at Lumio, and now sits on both boards.',
-      stats: [['30+', 'Restaurant chains'], ['~200K', 'Customers / month'], ['150+', 'Lumio locations']],
+      stats: [['30+', 'Restaurant chains', 'Restaurant chains running on the Dash platform.'], ['~200K', 'Customers / month', 'Diners ordering through Dash every month.'], ['150+', 'Lumio locations', 'Signage locations on the Lumio network, and growing.']],
       sv: 'dash',
       index: { num: '~200K', label: 'Customers / month', ctx: 'Diners ordering through Dash each month, across 30+ restaurant chains.' },
       drawer: [
@@ -824,7 +834,7 @@ html { scroll-behavior: smooth; }
     { id: 'ai', co: 'Independent', role: 'Product & AI Design Consultant · Nov 2025 – present', start: 2025, impact: 4,
       title: 'Making design teams AI-native.',
       sub: 'Enterprise AI workflows, multi-agent Claude Code builds, and coaching designers on AI tooling.',
-      stats: [['MCP', 'Agentic workflows'],['0 → 1', 'Prototypes in Claude Code'], ['1:1', 'Designer coaching']],
+      stats: [['MCP', 'Agentic workflows', 'Multi-agent builds with specialist sub-agents.'], ['0 → 1', 'Prototypes in Claude Code', 'Products taken from concept to working software.'], ['1:1', 'Designer coaching', 'Designers coached on bringing AI into their daily work.']],
       sv: [['independent', 'Enterprise AI · data to decision'], ['chrona', 'Featured · Chrona']],
       index: { num: '0 → 1', label: 'AI-native builds', ctx: 'Products taken from concept to working software with multi-agent Claude Code.' },
       drawer: [
@@ -838,7 +848,7 @@ html { scroll-behavior: smooth; }
     { id: 'eink', co: 'E-ink athlete panel', role: 'Python · FastAPI · Docker · GCP',
       title: 'Shipping real products with AI, end to end.',
       sub: 'A self-hosted service turns Garmin data into a daily e-ink brief on the nightstand.',
-      stats: [['24/7', 'Live on GCP'], ['800×480', 'E-ink render'], ['$0', 'Subscriptions']],
+      stats: [['24/7', 'Live on GCP', 'Self-hosted, fetching fresh data every 30 minutes.'], ['800×480', 'E-ink render', 'Dithered to one bit, rendered on fetch, not on request.'], ['$0', 'Subscriptions', 'Nothing to pay to keep it running.']],
       sv: 'eink',
       drawer: [
         { lines: 2, cap: 'Build summary' },
@@ -913,7 +923,7 @@ html { scroll-behavior: smooth; }
   }
   function caseHtml(c, n) {
     var eyebrow = (n ? '<span class="mono co" data-num>' + String(n).padStart(2, '0') + ' / ' + esc(c.co) + '</span>' : '<span class="mono co">' + esc(c.co) + '</span>');
-    var stats = c.stats && c.stats.length ? '<div class="stats">' + c.stats.map(function (s) { return '<div class="stat"><span class="n">' + esc(s[0]) + '</span><span class="sl">' + esc(s[1]) + '</span></div>'; }).join('') + '</div>' : '';
+    var stats = c.stats && c.stats.length ? '<div class="keys">' + c.stats.map(function (s) { return '<div class="key"><span class="n">' + esc(s[0]) + '</span><span class="l mono">' + esc(s[1]) + '</span><span class="c">' + esc(s[2] || '') + '</span></div>'; }).join('') + '</div>' : '';
     var body = c.timeline
       ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span></div>'; }).join('') + '</div>'
       : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p></div>' + (c.sv ? svHtml(c) : ph(c.hero)) + '</div>' + (c.svNote ? '<div class="note" style="margin-top:12px">' + c.svNote + '</div>' : '');
@@ -929,7 +939,7 @@ html { scroll-behavior: smooth; }
       (c.note ? '<div class="note" style="margin-top:20px">' + c.note + '</div>' : '') +
       (split ? '' : toggle) +
       (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain caps with no box, sitting under the description with a chevron beside it that gently bobs (centered under the visuals where a hero has two). On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
-      '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + (stats ? '<div class="block"><div class="cap mono">Key numbers</div>' + stats + '</div>' : '') + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
+      '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + (stats ? '<div class="block keys-block"><div class="cap mono">Key numbers</div>' + stats + '</div>' : '') + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
       '</article>';
   }
 

@@ -74,6 +74,20 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-case-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 32px 56px; align-items: end; margin-bottom: 36px; }
 .mk-case-hero h2 { margin: 0 !important; }
 .mk-sub { margin: 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+/* key numbers: a centred, full-width band of three equal columns */
+.mk-keys-block > .mk-eyebrow { text-align: center; }
+.mk-keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
+.mk-key { padding: 40px 28px 36px; min-width: 0; }
+.mk-key + .mk-key { border-left: 1px solid var(--rule); }
+.mk-key-n { font: 800 clamp(44px, 5vw, 68px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; white-space: nowrap; }
+.mk-key-l { margin-top: 14px; font: 500 11px/1.45 var(--mono); letter-spacing: .14em; color: var(--fg-3); }
+.mk-key-c { margin: 10px auto 0; max-width: 30ch; font: 400 15px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
+@media (max-width: 700px) {
+  .mk-keys { grid-template-columns: minmax(0, 1fr); }
+  .mk-key { padding: 28px 8px; }
+  .mk-key + .mk-key { border-left: 0; border-top: 1px solid var(--rule); }
+  .mk-key-n { font-size: clamp(40px, 12vw, 52px); }
+}
 .mk-stats { max-width: 760px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
 .mk-stat { padding: 18px 16px 0 0; min-width: 0; }
 .mk-stat + .mk-stat { padding-left: 18px; border-left: 1px solid var(--rule); }

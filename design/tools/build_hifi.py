@@ -125,10 +125,38 @@ SV_ALT = ('Line drawing: three phone-shaped layers (support tickets, intents, an
           'send a thread straight up and land as the lime answer and quick reply in the chat.')
 STACK_JS = open(os.path.join(S, 'stack.js'), encoding='utf-8').read()
 
+# key numbers: a centred band of three, each with the number, what it measures and one line of context
+CONTEXT = {
+    'CS OPEX': 'Customer-service cost after self-service replaced agent tickets.',
+    'USERS · HOME REVAMP': 'People reached by the redesigned home screen.',
+    'CASES AUTOMATED': 'Support cases now solved in the app, without an agent.',
+    'PTS · DEPOSIT FUNNEL': 'Deposit-funnel completion after UX audits and a redesign.',
+    'RELEASE CYCLE': 'Web releases went from weeks to days after the move to Framer.',
+    'SYSTEM · 3 ORGS': 'One design system shared by Product, Engineering and Marketing.',
+    'DASH CUSTOMERS / MO': 'Diners ordering through Dash every month.',
+    'DASH CHAINS': 'Restaurant chains running on the Dash platform.',
+    'LUMIO LOCATIONS': 'Signage locations on the Lumio network, and growing.',
+    'PROTOTYPES W/ CLAUDE CODE': 'Products taken from concept to working software.',
+    'ANTHROPIC CERTIFICATES': 'AI-native development, Claude Code and AI fluency.',
+    'AGENTIC WORKFLOWS': 'Multi-agent builds with specialist sub-agents.',
+    'LIVE ON GCP': 'Self-hosted, fetching fresh data every 30 minutes.',
+    '800×480 E-INK RENDER': 'Dithered to one bit, rendered on fetch, not on request.',
+    'CLOUD SUBSCRIPTIONS': 'Nothing to pay to keep it running.',
+    'POINTER · YOU, NOW': 'One blue pointer that always means you, now.',
+    'SCREENS DESIGNED': 'From the glance view to the training plan.',
+    'INSTRUMENT CLOSE-UPS': 'Readiness, training status and load, up close.',
+}
+
+
+def keys_html(stats):
+    return ('<div class="mk-keys">' + ''.join(
+        f'<div class="mk-key"><div data-m="count" class="mk-key-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div>'
+        f'<div class="mk-key-l">{l}</div><p class="mk-key-c">{CONTEXT[l]}</p></div>'
+        for n, l, hi in stats) + '</div>')
+
+
 STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]
-stats_html = '<div class="mk-stats">' + ''.join(
-    f'<div class="mk-stat"><div data-m="count" class="mk-stat-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div><div class="mk-stat-l">{l}</div></div>'
-    for n, l, hi in STATS) + '</div>'
+stats_html = keys_html(STATS)
 
 sub = ('Security and account issues could only be fixed by an agent, so support cost grew with every new user. '
        'Self-service flows and intent routing broke that link.')
@@ -144,7 +172,7 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
           '</button>')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
-          '<div class="mk-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
+          '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + str(bullets) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
@@ -244,9 +272,7 @@ def figure(c):
 
 
 def case_section(c):
-    stats = '<div class="mk-stats">' + ''.join(
-        f'<div class="mk-stat"><div data-m="count" class="mk-stat-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div><div class="mk-stat-l">{l}</div></div>'
-        for n, l, hi in c['stats']) + '</div>'
+    stats = keys_html(c['stats'])
     meta = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
             f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
             f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
@@ -260,7 +286,7 @@ def case_section(c):
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
           + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>'
               '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + '</div>') if c.get('fan') else '') +
-          '<div class="mk-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
+          '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
