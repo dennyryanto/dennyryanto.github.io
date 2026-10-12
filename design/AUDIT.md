@@ -488,6 +488,13 @@ Owner: "get back to the wireframe mockup and implement the changes".
   Note 5 and the F4 audit row are updated. This reverses where the fan
   sat in v1, so it is up for review.
 - Page length: about 11.5 window heights collapsed at 1440 × 900.
+- **Clean heroes** (owner: "keep the metrics folded inside the case study;
+  make the signature section clean with a brief description of what it's
+  about"). Each hero is now the headline, one line on what the work is about,
+  and the stack. The three key numbers open the drawer as a "Key numbers"
+  block, and the toggle meta counts them. This also settles F3's duplicate
+  numbers: the case index is the only place a headline number shows before
+  a drawer opens.
 
 ## Open decisions
 
@@ -497,9 +504,6 @@ Owner: "get back to the wireframe mockup and implement the changes".
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
   first). The wireframe toolbar switches between them.
 - **Default state**: all cases collapsed (current wireframe) or LinkAja open.
-- **Duplicate numbers**: Komunal, Dash · Lumio and Independent still repeat
-  their case-index number in the hero stats. LinkAja doesn't (its −80% lives in
-  the chart callout). Make these consistent or keep the echo.
 
 ## On hold: why, and what unblocks it
 
