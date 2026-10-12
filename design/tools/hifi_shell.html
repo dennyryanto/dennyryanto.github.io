@@ -26,8 +26,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--di
 /* case index */
 /* quiet, with context: a small heading, numbers at stat size in off-white, one line of context each; lime only on the case number */
 .mk-index-nav { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-.mk-index-wrap { max-width: 1216px; margin: 0 auto; padding: 22px 40px 0; }
-.mk-index-head { display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); }
+.mk-index-wrap { max-width: 1216px; margin: 0 auto; padding: 0 40px; }
 .mk-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 a.mk-idx { display: block; color: inherit; padding: 22px 28px 28px; border-left: 1px solid var(--rule); transition: background-color .25s ease; }
 a.mk-idx:first-child { padding-left: 0; border-left: 0; }
@@ -51,8 +50,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
 }
 @media (max-width: 600px) {
-  .mk-index-wrap { padding: 18px 24px 0; }
-  .mk-index-head > span:last-child { display: none; }
+  .mk-index-wrap { padding: 0 24px; }
   a.mk-idx { padding: 16px 12px 20px; }
   .mk-idx-n { font-size: clamp(24px, 7.5vw, 30px); }
   .mk-idx-c { font-size: 13px; }
@@ -74,6 +72,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-case-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 32px 56px; align-items: end; margin-bottom: 36px; }
 .mk-case-hero h2 { margin: 0 !important; }
 .mk-sub { margin: 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+/* who the company is: a quieter line under the description, set off by a short rule */
+.mk-abouts { display: grid; gap: 8px; max-width: 54ch; padding-top: 16px; border-top: 1px solid var(--rule); }
+.mk-about { margin: 0; font: 400 14px/1.55 var(--display); color: var(--fg-3); text-wrap: pretty; }
+.mk-about b { font-weight: 600; color: var(--fg-2); }
 /* key numbers: a centred, full-width band of three equal columns */
 .mk-keys-block > .mk-eyebrow { text-align: center; }
 .mk-keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
@@ -256,7 +258,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     function settle() {
       if (drawer.classList.contains('open')) inner.classList.add('settled');
       if (G) ScrollTrigger.refresh();
-      if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(blocks); }
+      if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(blocks); liveMotion(drawer); }
     }
     drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
     btn.addEventListener('click', function () {
@@ -275,11 +277,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       btn.focus({ preventScroll: true });
     });
     opener[cs.id] = setOpen;
+    // a drawer that starts open (Background) gets its scroll motion straight away
+    if (drawer.classList.contains('open') && G) { revealed = true; liveMotion(drawer); }
   });
   $$('[data-open]').forEach(function (a) {
     a.addEventListener('click', function () { if (opener[a.dataset.open]) opener[a.dataset.open](true); });
   });
   if (opener[location.hash.slice(1)]) opener[location.hash.slice(1)](true);
+  if (G) liveMotion(document);
 
   // ---- drawer reveal: blocks rise in as they enter the view ----
   function buildReveal(blocks) {
@@ -294,6 +299,52 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       });
     }, { rootMargin: '0px 0px -10% 0px' });
     blocks.forEach(function (b) { seen.observe(b); });
+  }
+  // ---- the live site's scroll motion (its motion.js and the cockpit script), for the content inside a drawer ----
+  // built once the drawer has opened and settled, so every trigger measures the final layout
+  function liveMotion(scope) {
+    var START = 'top 80%', EASE = 'power2.out';
+    // on the page itself (scope = document) only what sits outside the drawers; each drawer runs its own
+    var $$ = function (sel, r) { return Array.prototype.slice.call((r || document).querySelectorAll(sel)).filter(function (e) { return r !== document || !e.closest('.mk-drawer'); }); };
+    $$('[data-m~="draw"]', scope).forEach(function (svg) {
+      var tl = gsap.timeline({ scrollTrigger: { trigger: svg, start: START, once: true } });
+      $$('rect', svg).forEach(function (r, i) { tl.from(r, { scaleY: 0, transformOrigin: '50% 100%', duration: .6, ease: EASE }, i * .04); });
+      $$('path, polyline, line', svg).forEach(function (el) {
+        var fill = el.getAttribute('fill');
+        if (el.getAttribute('stroke') && (!fill || fill === 'none') && el.getTotalLength) {
+          var len = el.getTotalLength();
+          tl.fromTo(el, { strokeDasharray: len, strokeDashoffset: len }, { strokeDashoffset: 0, duration: .8, ease: EASE, clearProps: 'strokeDasharray,strokeDashoffset' }, 0);
+        } else tl.from(el, { opacity: 0, duration: .6, ease: EASE }, .1);
+      });
+      $$('text, circle', svg).forEach(function (el) { tl.from(el, { opacity: 0, duration: .5 }, .3); });
+    });
+    $$('[data-m~="reveal"], [data-m~="stagger"]', scope).forEach(function (el) {
+      if (el.children.length) gsap.from(el.children, { y: 20, opacity: 0, duration: .6, ease: EASE, stagger: .08, clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: el, start: START, once: true } });
+    });
+    var mm = gsap.matchMedia();
+    mm.add('(min-width: 1024px)', function () {
+      // desktop: the routing bar fills as it scrolls in; marked pieces drift against the scroll
+      $$('[data-m~="bar"]', scope).forEach(function (bar) {
+        gsap.from(bar.children, { scaleX: 0, transformOrigin: '0% 50%', stagger: .15, ease: 'none',
+          scrollTrigger: { trigger: bar, start: 'top 85%', end: 'top 45%', scrub: .5 } });
+      });
+      $$('[data-m~="parallax"]', scope).forEach(function (el) {
+        gsap.fromTo(el, { y: 24 }, { y: -24, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
+      });
+    });
+    mm.add('(max-width: 1023.98px)', function () {
+      $$('[data-m~="bar"]', scope).forEach(function (bar) {
+        gsap.from(bar.children, { scaleX: 0, transformOrigin: '0% 50%', duration: .8, ease: EASE, stagger: .15, clearProps: 'transform',
+          scrollTrigger: { trigger: bar, start: START, once: true } });
+      });
+    });
+    // the cockpit close-ups: each slab drifts slightly inside its frame as it crosses the view
+    $$('.gx-slab', scope).forEach(function (slab) {
+      gsap.fromTo(slab, { '--drift': '5%' }, { '--drift': '-5%', ease: 'none',
+        scrollTrigger: { trigger: slab.parentNode, start: 'top bottom', end: 'bottom top', scrub: true } });
+    });
+    ScrollTrigger.refresh();
   }
   function inside(b) {
     var svg = $('[data-m~="scrub"]', b) || $('svg [data-mp]', b) && $('svg [data-mp]', b).ownerSVGElement;

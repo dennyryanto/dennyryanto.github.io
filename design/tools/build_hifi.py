@@ -82,7 +82,7 @@ for i, (cid, num, label, icon, n, co, ctx) in enumerate(INDEX):
         f'<p class="mk-idx-c">{ctx}</p>'
         f'</a>')
 index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
-              '<div class="mk-index-wrap"><div class="mk-index-head"><span>Selected work · four outcomes</span><span>Each opens its case study</span></div>'
+              '<div class="mk-index-wrap">'
               '<div class="mk-index">' + ''.join(idx_cells) + '</div></div></nav>')
 
 # ---------- clients & brands, right under the case index ----------
@@ -187,11 +187,25 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner"><d
 
 
 
-def split_hero(h2_html, sub_html, fig_html, toggle_html, flip):
+# who each company is, in a line under the hero's description (the labs and the independent work need none)
+ABOUT_CO = {
+    'linkaja': [('LinkAja', 'an Indonesian digital payments and e-wallet app used by 70M+ people.')],
+    'komunal': [('Komunal Indonesia', 'a regulated fintech. Its DepositoBPR platform lets people place deposits with rural banks.')],
+    'board': [('Dash', 'a restaurant ordering platform: table, kitchen, captain and back-office apps, live across 30+ chains.'),
+              ('Lumio', 'a cloud platform that gives digital-signage owners business metrics and sells their screen time, across 150+ locations.')],
+}
+
+
+def about_html(cid):
+    return ''.join('<p class="mk-about"><b>' + n + '</b> is ' + t + '</p>' for n, t in ABOUT_CO.get(cid, []))
+
+
+def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
     # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
     # under the hero, at the bottom of the section
     return ('<div class="mk-split' + (' flip' if flip else '') + '">'
-            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p></div>'
+            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>'
+            + (('<div class="mk-abouts">' + about_html(cid) + '</div>') if cid in ABOUT_CO else '') + '</div>'
             + fig_html + '</div>' + toggle_html)
 
 
@@ -205,7 +219,7 @@ case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
     + str(meta)
-    + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False)
+    + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False, 'linkaja')
     + drawer +
     '</div></section>')
 
@@ -224,7 +238,7 @@ CASES = [
                   'Oversaw ISO / OJK compliance workflows without slowing UX delivery; standardised sprint rituals and PRD templates.']),
     dict(id='board', scene='dash', n='03 / EXECUTIVE &amp; BOARD', role='DASH INOVASI ABADI · LUMIO INOVASI TECHNOLOGY · NOV 2016 – PRESENT', icon=BRIEF,
          h2='Board-level judgment, design-level craft.',
-         sub='I founded and ran a B2B product company for eight years: Dash, the restaurant ordering platform behind 30+ chains, and Lumio, which turns signage networks into revenue.',
+         sub='I founded and ran a B2B product company for eight years, and have sat on its board since 2021.',
          stats=[('~200K', 'DASH CUSTOMERS / MO', True), ('30+', 'DASH CHAINS', False), ('150+', 'LUMIO LOCATIONS', False)],
          alt='Line drawing: three tablet-shaped layers (the restaurant floor, the menu, and the ordering screen as a wireframe). A lime table and a lime dish land as the lime send-to-kitchen bar and the added item.',
          bullets=['Founder &amp; Director, Dash Inovasi Abadi (2016–2024): a B2B product company serving SME and enterprise F&amp;B and retail brands.',
@@ -327,7 +341,7 @@ def case_section(c):
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta
             + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
-               if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False)))
+               if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
             + dr + '</div></section>')
 
 

@@ -721,6 +721,27 @@ wireframe:
   - each timeline entry has one line on what the company is;
   - "Earlier work" opens with a sentence saying Appsindo is a software house
     and that the four projects are client work.
+- **The case index heading is gone** (owner: "remove these"). "Selected work
+  · four outcomes / Each opens its case study" is removed from the hi-fi, the
+  site and the wireframe; the four cells stand alone.
+- **The live scroll motion is back** (owner: "the parallax animation is gone
+  when scrolling? check on the live site"). The hi-fi had re-implemented only
+  part of the live `motion.js`. `liveMotion()` in the shell now ports the rest,
+  per drawer once it has opened and settled (and once for the page outside
+  the drawers):
+  - the desktop parallax: `data-m="parallax"` moves from +24 to −24px with
+    scroll, at 1024px and wider;
+  - the cockpit close-up slabs drift from 5% to −5% inside their frames;
+  - the entrances: `draw` (bars grow, lines draw), `reveal` and `stagger`;
+  - the routing bar: scrubbed on desktop, played once on smaller screens.
+  Measured: the parallax runs from +24 to −24px and the slab drift crosses 0
+  mid-view, both still correct after other drawers above have opened.
+- **Who each company is** (owner: "a brief description about the companies
+  such as LinkAja, Komunal, Dash and Lumio"). The LinkAja, Komunal and
+  Dash · Lumio heroes carry a quieter line under the description, after a
+  short rule, saying what the company is. The Board subhead no longer
+  repeats it: "I founded and ran a B2B product company for eight years, and
+  have sat on its board since 2021." The wireframe shows the same lines.
 - **Bug fixed on the way.** Removing the old flat close-up CSS left an
   unclosed `@media (max-width: 600px) {`, which pulled every rule after it
   into phone-only. It was caught before any publish or site build. All style
