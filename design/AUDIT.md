@@ -595,6 +595,14 @@ Owner: "get back to the wireframe mockup and implement the changes".
     builds.
   - Options: `turn: { yaw, up, down }`, or `interactive: false` to switch
     it off.
+- **One "What I did" list** (owner: "audit the what I did section, it
+  seems to have a different approach on the bullets"). LinkAja kept the
+  live site's markup: two columns, lime dashes, 15px. The other cases used
+  a plain one-column disc list at 16px. Every case now renders through
+  `did_html()` in `build_hifi.py` as one `.mk-list`: two columns on wide
+  screens and one on phones, at 16px, with grey dash markers. The dashes
+  are no longer lime, because lime marks outcomes only. The wireframe
+  already used one placeholder for every case.
 - **Key numbers redesigned** (owner: "anemic and left-aligned on desktop;
   center them and come up with another design"). Both mockups now use a
   centred, full-width band with a rule above and below. It has three equal

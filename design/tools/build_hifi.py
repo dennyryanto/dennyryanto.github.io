@@ -161,9 +161,15 @@ stats_html = keys_html(STATS)
 sub = ('Security and account issues could only be fixed by an agent, so support cost grew with every new user. '
        'Self-service flows and intent routing broke that link.')
 
-# bullets as a two-column list inside the drawer
-bullets['class'] = ['mk-bullets']
-bullets['style'] = ''
+
+
+def did_html(items):
+    # "What I did": one list for every case, two columns on wide screens, neutral dash markers (lime stays for outcomes)
+    return '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in items) + '</ul>'
+
+
+# LinkAja's bullets come from the live site's markup; keep only their text so they render like every other case
+la_did = [row.find_all('span')[-1].decode_contents() for row in bullets.find_all('div', recursive=False)]
 
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
@@ -173,7 +179,7 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
-          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + str(bullets) + '</div>'
+          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
           '<div class="mk-block">' + str(support) + '</div>'
@@ -277,7 +283,7 @@ def case_section(c):
             f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
             f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
     h2 = ('<h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">' + c['h2'] + '</h2>')
-    did = '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in c['bullets']) + '</ul>'
+    did = did_html(c['bullets'])
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
            '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
            '<span class="mk-t-meta">%%READ%%</span>'

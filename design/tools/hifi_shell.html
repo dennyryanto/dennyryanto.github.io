@@ -101,7 +101,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-sv-pair .mk-sv canvas { aspect-ratio: 21 / 18; }
 .mk-sv-cap { margin-top: 4px; text-align: center; font: 500 11px/1.4 var(--mono); letter-spacing: .14em; color: var(--fg-3); }
 @media (max-width: 600px) { .mk-sv-pair { grid-template-columns: 1fr; gap: 24px; } .mk-sv-pair .mk-sv canvas { aspect-ratio: 4 / 3; } }
-.mk-list { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 78ch; color: var(--fg-2); font: 400 16px/1.6 var(--display); }
+.mk-list { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px 48px; color: var(--fg-2); font: 400 16px/1.6 var(--display); }
+.mk-list li { position: relative; padding-left: 26px; }
+.mk-list li::before { content: ''; position: absolute; left: 0; top: .8em; width: 14px; height: 2px; background: var(--fg-3); }
 .mk-sv canvas { display: block; width: 100%; aspect-ratio: 21 / 9; }
 @media (max-width: 600px) {
   /* phones: the whole drawing re-fits a 4:3 frame instead of being cropped */
@@ -188,7 +190,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-drawer-body { display: grid; gap: 24px; padding-top: 44px; }
 .mk-block { min-width: 0; }
 .mk-eyebrow { margin-bottom: 20px; font: 600 11px/1 var(--mono); letter-spacing: .16em; color: var(--lime); }
-.mk-bullets { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px 48px; margin-bottom: 20px; }
 .mk-close { justify-self: center; margin-top: 12px; background: none; border: 0; border-radius: 100px; padding: 12px 18px; color: var(--fg-3); font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: border-color .25s, color .25s; }
 .mk-close:hover { color: var(--lime); }
 
