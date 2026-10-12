@@ -125,7 +125,7 @@ index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
 clients = soup(read('clients'))
 client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
 clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap">'
-                '<div class="mk-clients-head"><span>Clients &amp; brands</span><span class="mk-clients-sub">12 brands, from payments and e-commerce to retail and streaming</span></div>'
+                '<div class="mk-clients-head"><span>Clients &amp; brands</span></div>'
                 '<div class="mk-clients-grid">' + client_logos + '</div></div></section>')
 
 # ---------- the Garmin glass cockpit: four screens for the fan, three close-ups ----------

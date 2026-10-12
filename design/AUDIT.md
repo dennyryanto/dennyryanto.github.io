@@ -782,6 +782,9 @@ wireframe:
 - **No key numbers for the cockpit** (owner: "we don't need this"). The
   Garmin concept has no outcomes to count, so its drawer goes straight from
   the screens, the question and the close-ups to "What I did".
+- **Clients strip without its subline** (owner: "remove this"). "12 brands,
+  from payments and e-commerce to retail and streaming" is gone from the
+  hi-fi, the site and the wireframe; the strip has only its label.
 - **Bug fixed on the way.** Removing the old flat close-up CSS left an
   unclosed `@media (max-width: 600px) {`, which pulled every rule after it
   into phone-only. It was caught before any publish or site build. All style
