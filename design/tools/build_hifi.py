@@ -24,6 +24,42 @@ for d in drop:
     css = re.sub(d, '', css, flags=re.M)
 # play the chart bars only once the chart is on screen
 
+# ---------- fonts: the live site's own files, so the page never paints in a fallback and then reflows ----------
+# (Google Fonts with font-display: swap made the headline gain a line ~100ms after load and shifted the page)
+# Two families only: Archivo (one variable file for every weight and width) and IBM Plex Mono, latin subsets only.
+# The live product mock-ups brought their own (Plus Jakarta Sans, Manrope, Sora); they are set in Archivo instead.
+KEEP_FAMILIES, KEEP_SUBSETS = ('Archivo', 'IBM Plex Mono'), ('latin', 'latin-ext')
+DROP_FAMILIES = re.compile(r'\b(Plus Jakarta Sans|Manrope|Sora)\b')
+
+
+def fonts_css():
+    tpl_html = open(os.path.join(S, 'unpacked', 'template.html'), encoding='utf-8').read()
+    faces = {}
+    for sub, body in re.findall(r'/\* ([\w-]+) \*/\s*@font-face \{([^}]*)\}', tpl_html):
+        fam = re.search(r"font-family: '([^']+)'", body).group(1)
+        if fam not in KEEP_FAMILIES or sub not in KEEP_SUBSETS:
+            continue
+        uid = re.search(r'url\("([0-9a-f-]+)"\)', body).group(1)
+        rng = re.search(r'unicode-range: ([^;]+);', body).group(1)
+        w = [int(x) for x in re.search(r'font-weight: ([^;]+);', body).group(1).split()]
+        stretch = re.search(r'font-stretch: ([^;]+);', body)
+        k = (fam, sub, uid)
+        if k in faces:   # the same variable file listed once per weight: one face spanning them all
+            faces[k]['w'] = [min(faces[k]['w'][0], w[0]), max(faces[k]['w'][-1], w[-1])]
+        else:
+            faces[k] = dict(w=[w[0], w[-1]], rng=rng, stretch=stretch.group(1) if stretch else None)
+    out = []
+    for (fam, sub, uid), f in faces.items():
+        data = base64.b64encode(open(os.path.join(S, 'unpacked', 'assets', uid + '.woff2'), 'rb').read()).decode()
+        wt = str(f['w'][0]) if f['w'][0] == f['w'][1] else '%d %d' % tuple(f['w'])
+        out.append("/* %s %s */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s;%s font-display: swap; "
+                   "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }"
+                   % (fam, sub, fam, wt, (' font-stretch: %s;' % f['stretch']) if f['stretch'] else '', data, f['rng']))
+    return '\n'.join(out)
+
+
+FONTS = fonts_css()
+
 # ---------- top bar ----------
 top = soup(read('topbar'))
 for a in top.find_all('a'):
@@ -418,8 +454,19 @@ top_html, lifted3 = floor_type(str(top))
 hero_html, lifted4 = floor_type(str(hero))
 print('type floor: lifted', lifted + lifted2 + lifted3 + lifted4, 'elements to 11px')
 
+# the mock-ups' own font families become Archivo, in the stylesheet and in inline styles alike
+def one_type(html):
+    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Archivo', html)
+    # SVG text names its family in an attribute
+    return re.sub(r'(font-family="[^"]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Archivo', html)
+
+
+css = one_type(css)
+for _ in range(3):   # a declaration can name more than one of them
+    more_html, case_html, top_html, hero_html = one_type(more_html), one_type(case_html), one_type(top_html), one_type(hero_html)
+
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
-out = (tpl.replace('/*__SITE_CSS__*/', css)
+out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', top_html)
           .replace('<!--__HERO__-->', hero_html)
           .replace('<!--__INDEX__-->', index_html + clients_html)

@@ -15,7 +15,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 page = open(os.path.join(W, 'portfolio-hifi.html'), encoding='utf-8').read()
 
 A = os.path.join(R, 'assets')
-for d in ('img', 'js'):
+for d in ('img', 'js', 'fonts'):
     shutil.rmtree(os.path.join(A, d), ignore_errors=True)
     os.makedirs(os.path.join(A, d))
 
@@ -35,7 +35,29 @@ def out(m):
 
 
 page = re.sub(r'data:(image/[a-z+.-]+);base64,([A-Za-z0-9+/=]+)', out, page)
-left = re.findall(r'data:[a-z]+/[a-z+.-]+;base64,', page)
+
+# ---- fonts: out to files too; the latin faces of the two families every screen uses are preloaded ----
+fonts, preload = {}, []
+
+
+def font_out(m):
+    raw = base64.b64decode(m.group(1))
+    name = hashlib.sha1(raw).hexdigest()[:16] + '.woff2'
+    if name not in fonts:
+        open(os.path.join(A, 'fonts', name), 'wb').write(raw)
+        fonts[name] = 1
+    return 'url(assets/fonts/' + name + ')'
+
+
+def face_out(m):
+    face = re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', font_out, m.group(0))
+    if m.group(1) in ('Archivo latin', 'IBM Plex Mono latin'):
+        preload.append(re.search(r'url\((assets/fonts/[^)]+)\)', face).group(1))
+    return face
+
+
+page = re.sub(r'/\* ([A-Za-z ]+? [a-z-]+) \*/\n@font-face \{[^}]*\}', face_out, page)
+left = re.findall(r'data:[a-z0-9]+/[a-z0-9+.-]+;base64,', page)
 assert not left, 'unhandled data URIs: %s' % set(left)
 
 # ---- scripts: GSAP from the site's own copy, stack.js as a file ----
@@ -71,10 +93,13 @@ HEAD = '''<!doctype html>
 <meta property="og:description" content="Design leadership, measured in outcomes. LinkAja, Komunal, Dash, Lumio.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#161511">
+%%PRELOAD%%
 <style>html, body { margin: 0; background: #161511; } html { scroll-padding-top: 72px; }</style>
 '''
+HEAD = HEAD.replace('%%PRELOAD%%', ''.join('<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>\n' % u for u in dict.fromkeys(preload)).rstrip())
 site = HEAD + head.strip() + '\n</head>\n<body>\n<noscript>' + body.rstrip() + '\n</body>\n</html>\n'
 open(os.path.join(R, 'index.html'), 'w', encoding='utf-8').write(site)
 
 size = lambda p: sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(p) for f in fs)
-print('index.html %d KB, %d images %d KB, js %d KB' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024, size(os.path.join(A, 'js')) // 1024))
+print('index.html %d KB, %d images %d KB, %d fonts %d KB (%d preloaded), js %d KB' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024,
+      len(fonts), size(os.path.join(A, 'fonts')) // 1024, len(dict.fromkeys(preload)), size(os.path.join(A, 'js')) // 1024))

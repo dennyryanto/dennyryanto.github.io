@@ -742,6 +742,43 @@ wireframe:
   short rule, saying what the company is. The Board subhead no longer
   repeats it: "I founded and ran a B2B product company for eight years, and
   have sat on its board since 2021." The wireframe shows the same lines.
+- **Animation glitches fixed** (owner: "there are some animation glitches
+  all over the site, check"). Found by a scripted read of the site at 1440px
+  and 390px that records layout shifts, anything kept invisible on screen,
+  and anything that fades after it was shown:
+  - *The page jumped at load.* Fonts came from Google Fonts with
+    `font-display: swap`. About 100ms in, Archivo replaced the fallback,
+    the headline gained a line (+86px) and the index rewrapped. The fonts
+    are now the live site's own files: inlined in the hi-fi, and in
+    `assets/fonts/` on the site with the latin Archivo and Plex Mono
+    preloaded.
+  - *Too many fonts* (owner: "that's way too much fonts used"). The page
+    uses only Archivo (one variable file) and IBM Plex Mono, latin and
+    latin-ext subsets: 8 files, 227KB, of which only the 4 latin ones load.
+    The live mock-ups' Plus Jakarta Sans, Manrope and Sora are set in
+    Archivo, in CSS, inline styles and SVG `font-family` attributes alike.
+    Georgia is kept in the Dash restaurant mock-up as the restaurant's own
+    serif; it's a system font.
+  - *Numbers counted while hidden.* Counts in drawers were measured at load,
+    with the drawer shut, so they ran out of sight. They now count when
+    their block rises in.
+  - *A drawer stayed blank while it opened.* The blocks were hidden at once,
+    but their rise-in only started after the 0.55s expansion. They now rise
+    in as the drawer grows past them.
+  - *Entrances played twice.* The stagger, `ba` and bar animations ran when
+    a block rose in, then again when the drawer settled. Each effect now
+    has one owner:
+    - `entrances()` plays them once: with the block's rise-in in a drawer
+      you open, and by scroll position on the page and in Background;
+    - `liveMotion()` only builds the continuous effects.
+  - *Parallax and slab drift snapped* when they were built. `follow()` now
+    glides them to their scroll position over 0.6s.
+  - *The opening flashed on phones.* The page paints before the
+    end-of-page script runs, so the headline, intro and headshot showed,
+    vanished and rose in. An inline script before the page adds
+    `mk-pending`, which hides the pieces that rise in (the opening, the case
+    headers, the index numbers) until GSAP holds them. A 3s timer releases
+    them regardless, and reduced motion never hides them.
 - **Bug fixed on the way.** Removing the old flat close-up CSS left an
   unclosed `@media (max-width: 600px) {`, which pulled every rule after it
   into phone-only. It was caught before any publish or site build. All style

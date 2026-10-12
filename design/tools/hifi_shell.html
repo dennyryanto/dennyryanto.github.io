@@ -1,8 +1,8 @@
 <title>Portfolio Hi-Fi v1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
+/* fonts: the live site's own files (build_hifi.py inlines them; build_site.py moves them to assets/fonts and preloads the latin ones) */
+/*__FONTS__*/
+
 /* Live site styles, reused as-is */
 /*__SITE_CSS__*/
 </style>
@@ -197,6 +197,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 /* background: what each company is, under the role; the agency context above the earlier work */
 .mk-co-about { margin-top: 4px; font: 400 12px/1.45 var(--display); color: rgba(242, 239, 232, .5); }
 .mk-context { margin: -6px 0 22px; max-width: 64ch; font: 400 15px/1.55 var(--display); color: var(--fg-2); }
+/* held back until the motion script takes over (see the script before the page) */
+.mk-pending [data-r="hero-h1"], .mk-pending [data-r="hero-h1"] + *, .mk-pending [data-r="profile-card"],
+.mk-pending .mk-split-text, .mk-pending .mk-case-hero > div, .mk-pending .mk-index [data-m~="count"] { opacity: 0; }
 /* background: the degree as one quiet line */
 .mk-edu { font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
 
@@ -213,6 +216,15 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 }
 </style>
 
+<script>
+/* the opening and each case header rise in; hide them before the first paint so they never show, vanish and then rise
+   (the motion script releases them as soon as GSAP has taken over, and a timer releases them regardless) */
+(function (h) {
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  h.classList.add('mk-pending');
+  setTimeout(function () { h.classList.remove('mk-pending'); }, 3000);
+})(document.documentElement);
+</script>
 <noscript><style>.mk-drawer { grid-template-rows: 1fr; } .mk-drawer-inner { overflow: visible; } .mk-toggle, .mk-close { display: none; }</style></noscript>
 <div data-r="page" id="top" style="background:#161511;color:#f2efe8;overflow-x:clip">
 <!--__TOPBAR__-->
@@ -240,7 +252,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   // ---- toggle + drawer, per case ----
   var opener = {};
   $$('.mk-case').forEach(function (cs) {
-    var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false;
+    var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false, moved = false;
     if (!btn || !drawer) return;
     var blocks = $$('.mk-block', cs);
     // closed drawers ship un-inert, so the content is reachable without JavaScript; with it, closed means inert
@@ -251,14 +263,16 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       $('.mk-t-open', btn).setAttribute('aria-hidden', open ? 'false' : 'true');
       inner.classList.remove('settled');
       if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
-      if (open && G && !revealed) gsap.set(blocks, { opacity: 0, y: 28 });
+      // the blocks rise in as the drawer grows past them, not after it has finished opening
+      if (open && G && !revealed) { revealed = true; gsap.set(blocks, { opacity: 0, y: 28 }); buildReveal(blocks); }
       drawer.classList.toggle('open', open);
       if (reduce || !G) settle();
     }
     function settle() {
       if (drawer.classList.contains('open')) inner.classList.add('settled');
       if (G) ScrollTrigger.refresh();
-      if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(blocks); liveMotion(drawer); }
+      // scroll-linked motion measures the final layout, so it waits for the drawer to settle
+      if (drawer.classList.contains('open') && G && !moved) { moved = true; liveMotion(drawer, false); }
     }
     drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
     btn.addEventListener('click', function () {
@@ -278,13 +292,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     });
     opener[cs.id] = setOpen;
     // a drawer that starts open (Background) gets its scroll motion straight away
-    if (drawer.classList.contains('open') && G) { revealed = true; liveMotion(drawer); }
+    if (drawer.classList.contains('open') && G) { revealed = moved = true; liveMotion(drawer, true); }
   });
   $$('[data-open]').forEach(function (a) {
     a.addEventListener('click', function () { if (opener[a.dataset.open]) opener[a.dataset.open](true); });
   });
   if (opener[location.hash.slice(1)]) opener[location.hash.slice(1)](true);
-  if (G) liveMotion(document);
+  if (G) liveMotion(document, true);
 
   // ---- drawer reveal: blocks rise in as they enter the view ----
   function buildReveal(blocks) {
@@ -300,14 +314,28 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     }, { rootMargin: '0px 0px -10% 0px' });
     blocks.forEach(function (b) { seen.observe(b); });
   }
-  // ---- the live site's scroll motion (its motion.js and the cockpit script), for the content inside a drawer ----
-  // built once the drawer has opened and settled, so every trigger measures the final layout
-  function liveMotion(scope) {
-    var START = 'top 80%', EASE = 'power2.out';
-    // on the page itself (scope = document) only what sits outside the drawers; each drawer runs its own
-    var $$ = function (sel, r) { return Array.prototype.slice.call((r || document).querySelectorAll(sel)).filter(function (e) { return r !== document || !e.closest('.mk-drawer'); }); };
-    $$('[data-m~="draw"]', scope).forEach(function (svg) {
-      var tl = gsap.timeline({ scrollTrigger: { trigger: svg, start: START, once: true } });
+  // ---- the live site's motion (its motion.js and the cockpit script), each effect with one owner ----
+  // entrances play once: by scroll position on the page and in a drawer that starts open, or together with
+  // their block's rise-in in a drawer the reader opens (so nothing already on screen hides and replays)
+  function entrances(pick, when) {
+    var EASE = 'power2.out';
+    // pick(selector) lists the elements this call owns; when(el) gives the options that schedule a tween: a scroll trigger, or a short delay
+    pick('[data-m~="count"]').forEach(function (el) {
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), node;
+      while ((node = w.nextNode()) && !/[0-9]/.test(node.nodeValue)) {}
+      if (!node) return;
+      var m = /^([^0-9]*)([0-9]+)(.*)$/.exec(node.nodeValue);
+      if (!m || +m[2] === 0) return;
+      var final = node.nodeValue, obj = { n: 0 }, r = el.getBoundingClientRect();
+      // a number already on screen starts from zero rather than flashing its final value first
+      if (r.top < innerHeight && r.bottom > 0) { el.style.minWidth = r.width + 'px'; node.nodeValue = m[1] + '0' + m[3]; }
+      gsap.to(obj, Object.assign({ n: +m[2], duration: .9, ease: 'power1.out',
+        onStart: function () { node.nodeValue = final; el.style.minWidth = el.getBoundingClientRect().width + 'px'; node.nodeValue = m[1] + '0' + m[3]; },
+        onUpdate: function () { node.nodeValue = m[1] + Math.round(obj.n) + m[3]; },
+        onComplete: function () { node.nodeValue = final; el.style.minWidth = ''; } }, when(el, 'top bottom')));
+    });
+    pick('[data-m~="draw"]').forEach(function (svg) {
+      var tl = gsap.timeline(when(svg));
       $$('rect', svg).forEach(function (r, i) { tl.from(r, { scaleY: 0, transformOrigin: '50% 100%', duration: .6, ease: EASE }, i * .04); });
       $$('path, polyline, line', svg).forEach(function (el) {
         var fill = el.getAttribute('fill');
@@ -318,52 +346,43 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       });
       $$('text, circle', svg).forEach(function (el) { tl.from(el, { opacity: 0, duration: .5 }, .3); });
     });
-    $$('[data-m~="reveal"], [data-m~="stagger"]', scope).forEach(function (el) {
-      if (el.children.length) gsap.from(el.children, { y: 20, opacity: 0, duration: .6, ease: EASE, stagger: .08, clearProps: 'transform,opacity',
-        scrollTrigger: { trigger: el, start: START, once: true } });
+    pick('[data-m~="scrub"]').forEach(function (svg) { gsap.timeline(when(svg))
+      .from($$('[data-mp~="ticket"]', svg), { y: -18, opacity: 0, stagger: .12, duration: .35 })
+      .from($$('[data-mp~="divider"]', svg), { scaleX: 0, transformOrigin: '0% 50%', duration: .35 })
+      .from($$('[data-mp~="check"]', svg), { scale: 0, transformOrigin: '50% 50%', opacity: 0, duration: .35 }); });
+    pick('[data-m~="reveal"], [data-m~="stagger"], [data-m~="ba"]').forEach(function (el) {
+      if (el.children.length) gsap.from(el.children, Object.assign({ y: 20, opacity: 0, duration: .6, ease: EASE,
+        stagger: /\bba\b/.test(el.getAttribute('data-m')) ? .25 : .08, clearProps: 'transform,opacity' }, when(el)));
     });
-    var mm = gsap.matchMedia();
-    mm.add('(min-width: 1024px)', function () {
-      // desktop: the routing bar fills as it scrolls in; marked pieces drift against the scroll
-      $$('[data-m~="bar"]', scope).forEach(function (bar) {
-        gsap.from(bar.children, { scaleX: 0, transformOrigin: '0% 50%', stagger: .15, ease: 'none',
-          scrollTrigger: { trigger: bar, start: 'top 85%', end: 'top 45%', scrub: .5 } });
-      });
-      $$('[data-m~="parallax"]', scope).forEach(function (el) {
-        gsap.fromTo(el, { y: 24 }, { y: -24, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true } });
-      });
+    pick('[data-m~="bar"]').forEach(function (bar) {
+      if (bar.children.length) gsap.from(bar.children, Object.assign({ scaleX: 0, transformOrigin: '0% 50%', duration: .8, ease: EASE, stagger: .15, clearProps: 'transform' }, when(bar)));
     });
-    mm.add('(max-width: 1023.98px)', function () {
-      $$('[data-m~="bar"]', scope).forEach(function (bar) {
-        gsap.from(bar.children, { scaleX: 0, transformOrigin: '0% 50%', duration: .8, ease: EASE, stagger: .15, clearProps: 'transform',
-          scrollTrigger: { trigger: bar, start: START, once: true } });
-      });
+  }
+  function byScroll(el, start) { return { scrollTrigger: { trigger: el, start: start || 'top 80%', once: true } }; }
+  function withBlock() { return { delay: .2 }; }
+
+  // continuous motion follows the scroll and glides to where it should be, so nothing snaps when it is built
+  function follow(el, set, from, to) {
+    var o = { v: 0 };
+    var go = function (st) { gsap.to(o, { v: from + (to - from) * st.progress, duration: .6, ease: 'power3.out', overwrite: true, onUpdate: function () { set(o.v); } }); };
+    ScrollTrigger.create({ trigger: el, start: 'top bottom', end: 'bottom top', onUpdate: go, onRefresh: go });
+  }
+  function liveMotion(scope, withEntrances) {
+    // on the page itself (scope = document) only what sits outside the drawers; each drawer runs its own
+    var only = function (sel) { return $$(sel, scope).filter(function (e) { return scope !== document || !e.closest('.mk-drawer'); }); };
+    if (withEntrances) entrances(only, byScroll);
+    // desktop: marked pieces drift against the scroll
+    if (matchMedia('(min-width: 1024px)').matches) only('[data-m~="parallax"]').forEach(function (el) {
+      follow(el, function (v) { gsap.set(el, { y: v }); }, 24, -24);
     });
     // the cockpit close-ups: each slab drifts slightly inside its frame as it crosses the view
-    $$('.gx-slab', scope).forEach(function (slab) {
-      gsap.fromTo(slab, { '--drift': '5%' }, { '--drift': '-5%', ease: 'none',
-        scrollTrigger: { trigger: slab.parentNode, start: 'top bottom', end: 'bottom top', scrub: true } });
+    only('.gx-slab').forEach(function (slab) {
+      follow(slab.parentNode, function (v) { slab.style.setProperty('--drift', v + '%'); }, 5, -5);
     });
     ScrollTrigger.refresh();
   }
-  function inside(b) {
-    var svg = $('[data-m~="scrub"]', b) || $('svg [data-mp]', b) && $('svg [data-mp]', b).ownerSVGElement;
-    if (svg) {
-      gsap.timeline({ delay: .25 })
-        .from($$('[data-mp~="ticket"]', svg), { y: -18, opacity: 0, stagger: .12, duration: .35 })
-        .from($$('[data-mp~="divider"]', svg), { scaleX: 0, transformOrigin: '0% 50%', duration: .35 })
-        .from($$('[data-mp~="check"]', svg), { scale: 0, transformOrigin: '50% 50%', opacity: 0, duration: .35 });
-    }
-    $$('[data-m~="ba"]', b).forEach(function (el) {
-      gsap.from(el.children, { y: 20, opacity: 0, duration: .6, ease: 'power2.out', stagger: .25, delay: .2, clearProps: 'transform,opacity' });
-    });
-    $$('[data-m~="bar"]', b).forEach(function (el) {
-      gsap.from(el.children, { scaleX: 0, transformOrigin: '0% 50%', duration: .8, ease: 'power2.out', stagger: .15, delay: .3, clearProps: 'transform' });
-    });
-    $$('[data-m~="stagger"]', b).forEach(function (el) {
-      gsap.from(el.children, { y: 24, opacity: 0, duration: .6, ease: 'power2.out', stagger: .08, delay: .15, clearProps: 'transform,opacity' });
-    });
-  }
+  function inside(b) { entrances(function (sel) { return $$(sel, b); }, withBlock); }
+
 
   // ---- the cockpit fan: front screen nearly flat, the rest stacked back and turned; plays only while on screen ----
   $$('.mk-fan').forEach(function (fan) {
@@ -467,21 +486,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     io.observe(chart);
   }
 
-  // ---- numbers count up when they enter the view ----
+  // ---- the opening and the case heroes rise in once (numbers count up in liveMotion) ----
   if (G) {
-    $$('[data-m~="count"]').forEach(function (el) {
-      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), node;
-      while ((node = w.nextNode()) && !/[0-9]/.test(node.nodeValue)) {}
-      if (!node) return;
-      var m = /^([^0-9]*)([0-9]+)(.*)$/.exec(node.nodeValue);
-      if (!m || +m[2] === 0) return;
-      var final = node.nodeValue, obj = { n: 0 };
-      gsap.to(obj, { n: +m[2], duration: .9, ease: 'power1.out',
-        scrollTrigger: { trigger: el, start: 'top bottom', once: true },
-        onStart: function () { el.style.minWidth = el.getBoundingClientRect().width + 'px'; },
-        onUpdate: function () { node.nodeValue = m[1] + Math.round(obj.n) + m[3]; },
-        onComplete: function () { node.nodeValue = final; el.style.minWidth = ''; } });
-    });
     // hero copy and case header rise in once
     gsap.from([$('[data-r="hero-h1"]'), $('[data-r="hero-h1"]').nextElementSibling, $('[data-r="profile-card"]')],
       { y: 24, opacity: 0, duration: .8, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity' });
@@ -490,5 +496,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
         scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
     });
   }
+  // GSAP now holds the opening, the case headers and the index numbers in their start state: let the page show
+  document.documentElement.classList.remove('mk-pending');
 })();
 </script>
