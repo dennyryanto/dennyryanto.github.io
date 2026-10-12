@@ -414,7 +414,7 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     (Garmin Connect).
   - Tablet (9.2 × 6.9): Dash ordering.
   - Desktop (10 × 6.25): the decision desk.
-  - E-ink panel (9.5 × 5.7): 800 × 480.
+  - E-ink panel (10.4 × 6.6): the 800 × 480 screen plus its bezel.
 
   The top layer gets the device's chrome (`chrome()`: phone notch, status
   marks and home bar; tablet camera; browser bar with three dots and an
@@ -428,8 +428,16 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     step that leaked) → deposit screen (lime button and progress).
   - `dash`: restaurant floor (a table) → menu (a dish) → order screen (lime
     send-to-kitchen bar and added item).
-  - `eink`: data feeds (readiness) → 1-bit render (the surviving block) →
-    the panel (lime number and suggestion).
+  - `eink`: data feeds (HRV) → the 1-bit layout's regions (today's
+    suggestion) → Face 1 exactly as `garmin-daily-brief` renders it
+    (owner: "doesn't represent how the final e-ink display looks; check the
+    other repo"). That means: the inverted header band (date, weather, AQI,
+    status chip), four metric cards (label, big number, bar, status), Today's
+    suggestion, Recovery rows with pills, and footer stats with the synced
+    chip. It is mapped pixel for pixel from the 800×480 renderer
+    (`e-ink-display/server/renderer.py`, fixture `normal.json`) inside a
+    TRMNL bezel. Lime lands on the HRV "balanced" pill and the suggestion
+    title. `k`/`kb` styles draw ink marks inside the filled header band.
   - `cockpit`: terrain (your position) → instruments (the reading that
     matters) → glass display (lime pointer on the strip and lime value).
 - **Hi-fi now uses this style:** `design/mockups/hifi-opening-linkaja.html`

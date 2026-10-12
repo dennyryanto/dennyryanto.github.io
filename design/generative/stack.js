@@ -31,7 +31,7 @@
   // layers: { ops, blocks: [[x, y, w, d, h], ...] } bottom first. picks: one decision per lower layer
   // { k, at: [x, y], h (thread starts on a block top), ops: its mark, land: what it becomes on the final screen }.
   // Styles: f, f2 fills; s, s2 strokes; D, Ds lime once decided. Ops: rect, circ, line, pl, img (a wireframe image box).
-  var DEVICE = { mobile: [4.6, 9.4], tablet: [9.2, 6.9], desktop: [10, 6.25], panel: [9.5, 5.7] };
+  var DEVICE = { mobile: [4.6, 9.4], tablet: [9.2, 6.9], desktop: [10, 6.25], panel: [10.4, 6.6] };
   function scene(device, layers, picks) { var f = DEVICE[device]; return { device: device, w: f[0], d: f[1], gap: device === 'mobile' ? 3.4 : 2.9, layers: layers, picks: picks }; }
 
   var SCENES = {
@@ -157,24 +157,48 @@
       ]);
     },
 
-    // E-ink · the 800x480 panel: live data feeds → the 1-bit render → the panel on the nightstand
+    // E-ink · the TRMNL panel: live data feeds → the 1-bit layout → Face 1 as the panel renders it (garmin-daily-brief)
     eink: function () {
+      // the panel's 800x480 screen sits inside a bezel; px() maps the renderer's pixel layout onto the slab
+      var K = 0.011875, O = 0.45, X = function (v) { return O + v * K; };
+      function px(ops) {
+        return ops.map(function (op) {
+          var t = op[0];
+          if (t === 'rect' || t === 'line') return [t, X(op[1]), X(op[2]), X(op[3]), X(op[4]), op[5]];
+          if (t === 'circ') return [t, X(op[1]), X(op[2]), op[3] * K, op[4]];
+          return op;
+        });
+      }
       var feeds = [];
-      [0.8, 1.9, 3.2, 4.2, 5.1].forEach(function (y, r) {
-        feeds.push(['circ', 0.85, y, 0.2, 's'], ['line', 1.35, y, 3.0, y, 's2']);
-        if (r !== 2) feeds.push(['pl', [[4.2, y + 0.2], [5.0, y - 0.1], [5.8, y + 0.12], [6.6, y - 0.22], [7.4, y], [8.8, y - 0.2]], 's2']);
+      [1.0, 2.1, 3.2, 4.29, 5.5].forEach(function (y, r) {
+        feeds.push(['circ', 1.1, y, 0.2, 's'], ['line', 1.6, y, 3.4, y, 's2']);
+        if (r !== 3) feeds.push(['pl', [[4.4, y + 0.2], [5.4, y - 0.1], [6.4, y + 0.12], [7.4, y - 0.22], [8.4, y], [9.4, y - 0.2]], 's2']);
       });
-      var dith = [['rect', 0.5, 0.45, 4.5, 2.75, 's'], ['rect', 4.9, 0.45, 9.0, 2.75, 's'], ['rect', 0.5, 3.15, 9.0, 5.3, 's']];
-      for (var a = 0; a < 14; a++) for (var b = 0; b < 4; b++) if ((a + b) % 2 === 0) { var x = 0.85 + a * 0.58, y = 0.75 + b * 0.5; dith.push(['rect', x, y, x + 0.12, y + 0.12, 'f2']); }
-      return scene('panel', [
-        { ops: feeds },
-        { ops: dith },
-        { ops: [['line', 0.9, 0.95, 3.6, 0.95, 's'], ['line', 6.2, 0.95, 8.6, 0.95, 's2'], ['rect', 0.9, 1.35, 2.7, 2.45, 'f2'], ['rect', 6.6, 1.35, 8.6, 2.45, 'f2'], ['line', 0.9, 4.95, 4.6, 4.95, 's2']] }
-      ], [
-        // readiness: the one feed the morning needs → the big number on the panel
-        { k: 0, at: [6.6, 3.2], ops: [['pl', [[-2.4, 0.2], [-1.6, -0.1], [-0.8, 0.12], [0, -0.25], [0.8, 0], [2.2, -0.2]], 'Ds'], ['circ', 2.2, -0.2, 0.12, 'D']], land: [['rect', -3.6, -0.55, -0.9, 0.5, 'D']] },
-        // the block that survives 1-bit → today's suggestion
-        { k: 1, at: [6.8, 4.25], ops: [['rect', -1.7, -0.8, 1.7, 0.8, 'Ds'], ['rect', -1.4, -0.45, 0.6, -0.17, 'D'], ['rect', -1.4, 0.1, 1.2, 0.38, 'D']], land: [['rect', -1.8, -0.3, 1.8, 0.3, 'D']] }
+      // the layout's regions, before anything is drawn in them, with the dither the renderer will apply
+      var layout = px([['rect', 0, 0, 800, 72, 's'], ['rect', 0, 72, 800, 232, 's'], ['line', 200, 72, 200, 232, 's2'], ['line', 400, 72, 400, 232, 's2'], ['line', 600, 72, 600, 232, 's2'],
+        ['rect', 0, 232, 800, 426, 's'], ['line', 440, 232, 440, 426, 's2'], ['rect', 0, 426, 800, 480, 's']]);
+      for (var a = 0; a < 26; a++) for (var b = 0; b < 3; b++) if ((a + b) % 2 === 0 && !(a < 15 && b > 0)) layout.push(['rect', X(30 * a + 18), X(100 + b * 40), X(30 * a + 24), X(106 + b * 40), 'f2']);
+      // Face 1 as the panel shows it: header band, four metric cards, today's suggestion, recovery, footer stats
+      var face = [['rect', 0, 0, 800, 72, 'f2'], ['line', 15, 17, 110, 17, 'k'], ['line', 15, 37, 100, 37, 'kb'], ['line', 15, 60, 130, 60, 'k'],
+        ['line', 163, 10, 163, 62, 'k'], ['circ', 200, 38, 14, 'k'], ['line', 228, 17, 330, 17, 'k'], ['line', 228, 37, 290, 37, 'kb'], ['line', 228, 60, 340, 60, 'k'],
+        ['line', 405, 10, 405, 62, 'k'], ['line', 455, 17, 535, 17, 'k'], ['line', 455, 37, 495, 37, 'kb'], ['rect', 458, 50, 536, 63, 'f'], ['rect', 678, 12, 792, 34, 'f'], ['line', 580, 60, 690, 60, 'k'],
+        ['line', 200, 72, 200, 232, 's2'], ['line', 400, 72, 400, 232, 's2'], ['line', 600, 72, 600, 232, 's2'], ['line', 0, 232, 800, 232, 's'],
+        ['line', 440, 232, 440, 426, 's2'], ['line', 0, 426, 800, 426, 's'],
+        ['line', 15, 252, 168, 252, 's2'], ['line', 15, 309, 108, 309, 's2'], ['rect', 15, 330, 77, 347, 's'], ['line', 15, 388, 248, 388, 's2'],
+        ['line', 455, 252, 540, 252, 's2'], ['rect', 748, 278, 787, 292, 's'],
+        ['line', 115, 434, 115, 474, 's2'], ['line', 222, 434, 222, 474, 's2'], ['line', 335, 434, 335, 474, 's2'], ['rect', 660, 440, 787, 466, 's']];
+      [[65, 0.82], [65, 0.6], [70, 0.86], [140, 0.5]].forEach(function (c, i) {
+        var x0 = 200 * i;
+        face.push(['line', x0 + 15, 94, x0 + 150, 94, 's2'], ['rect', x0 + 15, 116, x0 + 15 + c[0], 160, 'f2'],
+          ['rect', x0 + 15, 172, x0 + 182, 178, 's2'], ['rect', x0 + 15, 172, x0 + 15 + 167 * c[1], 178, 'f2'], ['line', x0 + 15, 192, x0 + 110, 192, 's2']);
+      });
+      [285, 323, 361, 399].forEach(function (y) { face.push(['circ', 461, y, 6, 's2'], ['line', 478, y, 512, y, 's2'], ['rect', 530, y - 8, 598, y + 8, 'f2']); });
+      [20, 132, 240, 352].forEach(function (x) { face.push(['circ', x, 452, 7, 's2'], ['line', x + 20, 441, x + 75, 441, 's2'], ['line', x + 20, 459, x + 70, 459, 's']); });
+      return scene('panel', [{ ops: feeds }, { ops: layout }, { ops: px(face) }], [
+        // HRV, the feed recovery hangs on → the BALANCED pill
+        { k: 0, at: [X(746), X(323.5)], ops: [['pl', [[-4.9, 0.2], [-3.9, -0.1], [-2.9, 0.12], [-1.9, -0.22], [-0.9, 0.05], [0, 0]], 'Ds'], ['circ', 0, 0, 0.12, 'D']], land: [['rect', -41 * K, -7.5 * K, 41 * K, 7.5 * K, 'D']] },
+        // the block that holds up in 1-bit → today's suggestion, the panel's headline
+        { k: 1, at: [X(77.5), X(278)], ops: [['rect', -77.5 * K, -46 * K, 362.5 * K, 148 * K, 'Ds'], ['rect', -62.5 * K, -10 * K, 62.5 * K, 10 * K, 'D']], land: [['rect', -62.5 * K, -10 * K, 62.5 * K, 10 * K, 'D']] }
       ]);
     },
 
@@ -264,6 +288,8 @@
       if (st === 's2') return { stroke: PAL.line2, w: L2 };
       if (st === 'D') return { fill: dc.fill };
       if (st === 'Ds') return { stroke: dc.stroke, w: L2 * 2 };
+      if (st === 'k') return { stroke: PAL.ink, w: L2 * 1.2 }; // marks inside an inverted (filled) band
+      if (st === 'kb') return { stroke: PAL.ink, w: L2 * 3 };
       return { stroke: PAL.line, w: L2 * 1.3 };
     };
     var path = function (pts, closed, sty) {
@@ -286,7 +312,7 @@
     if (device === 'mobile') return [['rect', 0.22, 0.22, w - 0.22, d - 0.22, 's'], ['rect', w / 2 - 0.45, 0.42, w / 2 + 0.45, 0.62, 'f2'], ['line', 0.5, 0.52, 1.0, 0.52, 's2'], ['line', w - 1.0, 0.52, w - 0.5, 0.52, 's2'], ['line', w / 2 - 0.7, d - 0.42, w / 2 + 0.7, d - 0.42, 's']];
     if (device === 'tablet') return [['rect', 0.3, 0.3, w - 0.3, d - 0.3, 's'], ['circ', w / 2, 0.16, 0.05, 'f2']];
     if (device === 'desktop') return [['rect', 0.22, 0.22, w - 0.22, d - 0.22, 's'], ['line', 0.22, 0.75, w - 0.22, 0.75, 's2'], ['circ', 0.5, 0.48, 0.07, 'f2'], ['circ', 0.75, 0.48, 0.07, 'f2'], ['circ', 1.0, 0.48, 0.07, 'f2'], ['rect', 2.6, 0.38, 7.4, 0.58, 's2']];
-    return [['rect', 0.5, 0.5, w - 0.5, d - 0.5, 's'], ['rect', 0.2, 0.2, w - 0.2, d - 0.2, 's2']];
+    return [['rect', 0.45, 0.45, w - 0.45, d - 0.45, 's'], ['rect', 0.2, 0.2, w - 0.2, d - 0.2, 's2']]; // the TRMNL bezel around 800x480
   }
 
   // the build at time t: every slab, decision and thread is a pure function of t (the flicker too, so replays match)

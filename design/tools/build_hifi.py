@@ -173,7 +173,7 @@ CASES = [
          h2='Shipping real products with AI, end to end.',
          sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
-         alt='Line drawing: three panel-shaped layers (live data feeds, the 1-bit render, and the e-ink panel’s screen as a wireframe). The lime readiness feed and the lime surviving block land as the panel’s lime number and suggestion.',
+         alt='Line drawing: three panel-shaped layers (live data feeds, the 1-bit layout, and Face 1 of the e-ink panel as a wireframe: header band, four metric cards, today’s suggestion, recovery and footer stats). The lime HRV feed and the lime suggestion block land as the panel’s lime HRV status and suggestion title.',
          bullets=['Garmin Connect API: live biometrics, races, sleep and readiness, fetched on a schedule.',
                   'FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.',
                   'Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.',
