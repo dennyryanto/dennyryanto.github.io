@@ -592,6 +592,17 @@ Owner: "get back to the wireframe mockup and implement the changes".
     builds.
   - Options: `turn: { yaw, up, down }`, or `interactive: false` to switch
     it off.
+- **Key numbers redesigned** (owner: "anemic and left-aligned on desktop;
+  center them and come up with another design"). Both mockups now use a
+  centred, full-width band with a rule above and below. It has three equal
+  columns divided by vertical rules, and each column has:
+  - the number, large (hi-fi 44–68px, the lead one lime; wireframe
+    36–52px);
+  - its label in mono;
+  - one line of context (`CONTEXT` in `build_hifi.py`; the third stat
+    field in the wireframe).
+
+  The band stacks into rows below 700px.
 
 ## Open decisions
 
