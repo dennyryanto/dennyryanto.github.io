@@ -93,7 +93,7 @@ for sp in meta.find_all('span'):
 h2 = intro.find('h2')
 bullets = intro.find('h2').find_next_sibling('div')
 # signature visual: exploded layers drawn live in code (stack.js); the OPEX chart moves into the drawer
-SV_ALT = ('Line drawing: three stacked layers (support tickets, intents, the chat screen). A lime ticket and a lime intent each '
+SV_ALT = ('Line drawing: three phone-shaped layers (support tickets, intents, and the chat screen as a wireframe). A lime ticket and a lime intent each '
           'send a thread straight up and land as the lime answer and quick reply in the chat.')
 STACK_JS = open(os.path.join(S, 'stack.js'), encoding='utf-8').read()
 
@@ -145,7 +145,7 @@ CASES = [
          h2='Rebuilt how a regulated fintech ships design.',
          sub='One shared design system for Product, Engineering and Marketing, and a redesigned deposit funnel that now completes about 12 points more often.',
          stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('W→D', 'RELEASE CYCLE', False), ('1', 'SYSTEM · 3 ORGS', False)],
-         alt='Line drawing: three stacked layers (the design system, the deposit funnel, the deposit screen). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
+         alt='Line drawing: three phone-shaped layers (the design system, the deposit funnel, and the deposit screen as a wireframe). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
          bullets=['Championed the move from the legacy Sanity platform to Framer for web components, cutting release cycles from weeks to days.',
                   'Created the company’s first shared design system: one source of foundations, components and tokens across Product, Engineering and Marketing.',
                   'Led UX audits and redesigns that lifted DepositoBPR deposit-funnel completion by roughly 12 percentage points.',
@@ -154,7 +154,7 @@ CASES = [
          h2='Board-level judgment, design-level craft.',
          sub='I founded and ran a B2B product company for eight years: Dash, the restaurant ordering platform behind 30+ chains, and Lumio, which turns signage networks into revenue.',
          stats=[('~200K', 'DASH CUSTOMERS / MO', True), ('30+', 'DASH CHAINS', False), ('150+', 'LUMIO LOCATIONS', False)],
-         alt='Line drawing: three stacked layers (the restaurant floor, the menu, the order screen). A lime table and a lime dish land as the lime send-to-kitchen bar and the added item.',
+         alt='Line drawing: three tablet-shaped layers (the restaurant floor, the menu, and the ordering screen as a wireframe). A lime table and a lime dish land as the lime send-to-kitchen bar and the added item.',
          bullets=['Founder &amp; Director, Dash Inovasi Abadi (2016–2024): a B2B product company serving SME and enterprise F&amp;B and retail brands.',
                   'Product vision behind the Dash ordering platform: real-time table, kitchen, captain and back-office modules, live across 30+ chains and ~200,000 customers a month.',
                   'VP of Design, Lumio: a cloud platform that gives digital-signage owners business metrics and maximises content-slot revenue across 150+ locations.',
@@ -163,9 +163,9 @@ CASES = [
          h2='Making design teams AI-native.',
          sub='A data-to-decision workflow that puts live, AI-driven decisions in front of the people running a business, and Chrona, an AI-first social-planning app built with multi-agent Claude Code.',
          stats=[('0→1', 'PROTOTYPES W/ CLAUDE CODE', True), ('3', 'ANTHROPIC CERTIFICATES', False), ('MCP', 'AGENTIC WORKFLOWS', False)],
-         alt='Line drawing: three stacked layers (raw data sources, a grid of signals, a decision card). A lime source and a lime signal land as the lime confidence bar and approve button.',
+         alt='Line drawing: three desktop-shaped layers (raw data sources, a grid of signals, and the decision desk as a browser wireframe). A lime source and a lime signal land as the lime confidence bar and approve button.',
          pair=[('ENTERPRISE AI · DATA TO DECISION', 'independent'),
-               ('FEATURED · CHRONA', 'chrona', 'Line drawing: three stacked layers (your week, your friends’ free time, the drafted plan). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button.')],
+               ('FEATURED · CHRONA', 'chrona', 'Line drawing: three phone-shaped layers (your week, your friends’ free time, and the drafted plan as a wireframe). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button.')],
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
@@ -173,7 +173,7 @@ CASES = [
          h2='Shipping real products with AI, end to end.',
          sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
-         alt='Line drawing: three stacked layers (live data feeds, the 1-bit render, the e-ink panel). The lime readiness feed and the lime surviving block land as the panel’s lime number and suggestion.',
+         alt='Line drawing: three panel-shaped layers (live data feeds, the 1-bit render, and the e-ink panel’s screen as a wireframe). The lime readiness feed and the lime surviving block land as the panel’s lime number and suggestion.',
          bullets=['Garmin Connect API: live biometrics, races, sleep and readiness, fetched on a schedule.',
                   'FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.',
                   'Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.',
@@ -182,7 +182,7 @@ CASES = [
          h2='What if Garmin Connect read like a cockpit?',
          sub='Dark display glass, fine graduated scales and one pointer that always means you, now. AI widened the exploration; the direction and every call stayed mine.',
          stats=[('1', 'POINTER · YOU, NOW', True), ('4', 'SCREENS DESIGNED', False), ('3', 'INSTRUMENT CLOSE-UPS', False)],
-         alt='Line drawing: three stacked layers (terrain, a wall of instruments, the glass display). Your lime position and the lime reading that matters land as the lime pointer and value.',
+         alt='Line drawing: three phone-shaped layers (terrain, a wall of instruments, and the app’s glass display as a wireframe). Your lime position and the lime reading that matters land as the lime pointer and value.',
          bullets=['Home, at a glance: grouped by the question you are asking (recovery, training, today).',
                   'Density is a setting: the same screen, dense, where only the size changes.',
                   'On a hard day, colour appears only when something departs from normal.',

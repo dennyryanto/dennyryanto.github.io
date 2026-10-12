@@ -406,6 +406,21 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     bubble and the quick reply.
   - Independent: sources → signals → decision card. The decisions land as
     the confidence bar and the approve button.
+- **Platform-shaped stacks** (owner: "represent the work's platform: desktop,
+  tablet, mobile"; "the final layer represents the final screen in a simple
+  wireframe way"). Every slab takes the device's footprint (`DEVICE` in
+  `stack.js`):
+  - Mobile (4.6 × 9.4): LinkAja, Komunal (DepositoBPR), Chrona, Cockpit
+    (Garmin Connect).
+  - Tablet (9.2 × 6.9): Dash ordering.
+  - Desktop (10 × 6.25): the decision desk.
+  - E-ink panel (9.5 × 5.7): 800 × 480.
+
+  The top layer gets the device's chrome (`chrome()`: phone notch, status
+  marks and home bar; tablet camera; browser bar with three dots and an
+  address field; double panel bezel). It shows the final screen as a
+  simple wireframe, with image placeholders as crossed boxes (`img` op).
+  Mobile stacks use a taller gap (3.4).
 - **All six built** (owner: "build the other four cases in this style").
   Each is three layers; the two lower ones each lock one lime decision, and
   both land as lime UI on top:
