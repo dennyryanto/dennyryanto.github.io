@@ -94,7 +94,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 
 /* toggle: no box, centred caps, chevron bobs; label pulses on the same beat; open = label crossfade synced to the chevron flip */
 .mk-toggle { --flip: .5s; --half: .25s; margin-top: 24px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 16px; background: none; border: 0; color: var(--fg); cursor: pointer; font: inherit; }
-.mk-t-label { display: grid; font: 600 13px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; animation: mk-pulse 1.8s ease-in-out infinite; }
+.mk-t-label { display: grid; font: 600 13px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--lime); transition: color .25s; animation: mk-pulse 1.8s ease-in-out infinite; }
 .mk-t-label > span { grid-area: 1 / 1; }
 .mk-t-closed { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
 .mk-t-open { opacity: 0; transition: opacity var(--half) ease-in 0s; }
@@ -102,9 +102,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-toggle[aria-expanded="true"] .mk-t-open { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
 .mk-t-meta { font: 500 11px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-3); transition: opacity var(--flip) cubic-bezier(.65, 0, .35, 1); }
 .mk-toggle[aria-expanded="true"] .mk-t-meta { opacity: .45; }
-.mk-t-icon { margin-top: 2px; display: grid; place-items: center; color: var(--fg-2); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1), color .25s; }
+.mk-t-icon { margin-top: 2px; display: grid; place-items: center; color: var(--lime); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1), color .25s; }
 .mk-t-icon svg { animation: mk-bob 1.8s ease-in-out infinite; }
-.mk-toggle:hover .mk-t-icon { color: var(--lime); }
+/* the whole control is lime; hover lifts it to off-white */
+.mk-toggle:hover .mk-t-icon, .mk-toggle:hover .mk-t-label { color: var(--fg); }
 .mk-toggle[aria-expanded="true"] .mk-t-icon { transform: scaleY(-1); }
 @keyframes mk-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 @keyframes mk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }

@@ -79,6 +79,9 @@ behind a toggle.
   - no box, border or fill; centered text only
   - label in spaced all-caps (e.g. "READ THE CASE STUDY"), with a small caps
     meta line under it ("4 POINTS · 9 VISUALS")
+  - in the hi-fi the label and chevron are **lime** (owner request, to make
+    the control more obvious); hover lifts them to off-white; the meta line
+    stays grey
   - a plain chevron (not an arrow) that gently bobs on a 1.8s loop; the
     label pulses (opacity 1 → .45) on the same clock, dimmest when the
     chevron dips lowest
