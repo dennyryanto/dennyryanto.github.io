@@ -757,9 +757,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 }
 @media (max-width: 480px) { .mk-sv { margin-inline: -16px; } }
 
-/* toggle: no box, centred caps, chevron bobs; label pulses on the same beat; open = label crossfade synced to the chevron flip */
+/* toggle: no box, centred caps, chevron bobs; open = label crossfade synced to the chevron flip */
 .mk-toggle { --flip: .5s; --half: .25s; margin-top: 24px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 16px; background: none; border: 0; color: var(--fg); cursor: pointer; font: inherit; }
-.mk-t-label { display: grid; font: 600 13px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--lime); transition: color .25s; animation: mk-pulse 1.8s ease-in-out infinite; }
+.mk-t-label { display: grid; font: 600 13px/1 var(--mono); letter-spacing: .2em; text-transform: uppercase; color: var(--lime); transition: color .25s; }
 .mk-t-label > span { grid-area: 1 / 1; }
 .mk-t-closed { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
 .mk-t-open { opacity: 0; transition: opacity var(--half) ease-in 0s; }
@@ -773,7 +773,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-toggle:hover .mk-t-icon, .mk-toggle:hover .mk-t-label { color: var(--fg); }
 .mk-toggle[aria-expanded="true"] .mk-t-icon { transform: scaleY(-1); }
 @keyframes mk-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
-@keyframes mk-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 
 /* drawer */
 .mk-drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s cubic-bezier(.3,.7,.2,1); }
@@ -796,7 +795,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 
 @media (prefers-reduced-motion: reduce) {
   .mk-drawer, .mk-toggle, .mk-t-icon, .mk-t-meta, .mk-arrow, a.mk-idx, .mk-t-label > span { transition: none !important; }
-  .mk-t-label, .mk-t-icon svg { animation: none !important; }
+  .mk-t-icon svg { animation: none !important; }
 }
 </style>
 
