@@ -207,7 +207,7 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
-drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner"><div class="mk-drawer-body">'
+drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
@@ -361,7 +361,7 @@ def case_section(c):
            '<span class="mk-t-meta">%%READ%%</span>'
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
-    dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner"><div class="mk-drawer-body">'
+    dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>' + QUESTION +
               '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + str(lui_note) + '</div>') if c.get('fan') else '') +
           # the cockpit concept has no outcome numbers to report (owner: "we don't need this")

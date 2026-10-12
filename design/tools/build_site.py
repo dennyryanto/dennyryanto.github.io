@@ -8,7 +8,8 @@ under a content hash, GSAP is served from <repo>/assets/js/ instead of a CDN, an
 becomes its own file. No runtime, no bundle: the page renders without JavaScript (every
 drawer shows open), and JavaScript adds the drawers, the stacks and the motion.
 """
-import base64, hashlib, os, re, shutil, sys
+import base64, hashlib, io, os, re, shutil, sys
+from PIL import Image
 
 W, R = sys.argv[1], sys.argv[2]
 here = os.path.dirname(os.path.abspath(__file__))
@@ -19,15 +20,43 @@ for d in ('img', 'js', 'fonts'):
     shutil.rmtree(os.path.join(A, d), ignore_errors=True)
     os.makedirs(os.path.join(A, d))
 
+# ---- the headshot: shown at 104px, so ship it at 2x (208px) rather than its 360px original ----
+def small_headshot(m):
+    raw = base64.b64decode(m.group(3))
+    im = Image.open(io.BytesIO(raw))
+    if im.width <= 208:
+        return m.group(0)
+    im = im.resize((208, round(im.height * 208 / im.width)), Image.LANCZOS)
+    buf = io.BytesIO(); im.save(buf, 'WEBP', quality=86, method=6)
+    return m.group(1) + 'data:image/webp;base64,' + base64.b64encode(buf.getvalue()).decode() + '"'
+
+
+tag = re.compile(r'(<img(?=[^>]*alt="Denny Ryanto")[^>]*?src=")data:(image/[a-z+.-]+);base64,([A-Za-z0-9+/=]+)"')
+page, n = tag.subn(small_headshot, page, count=1)
+assert n == 1, 'headshot not found'
+
 # ---- images: data URIs out to files, named by content so a rebuild keeps unchanged URLs ----
 EXT = {'image/webp': 'webp', 'image/png': 'png', 'image/jpeg': 'jpg', 'image/svg+xml': 'svg', 'image/gif': 'gif', 'image/avif': 'avif'}
 seen = {}
 
 
+def lighter(raw, mime):
+    # PNGs (the client logos, a few screens) go out as WebP when that is smaller; nothing else is re-encoded
+    if mime != 'image/png':
+        return raw, mime
+    im = Image.open(io.BytesIO(raw))
+    buf = io.BytesIO()
+    im.save(buf, 'WEBP', lossless=True, method=6)
+    if buf.tell() > len(raw) * .9:
+        buf = io.BytesIO()
+        im.save(buf, 'WEBP', quality=90, method=6)
+    return (buf.getvalue(), 'image/webp') if buf.tell() < len(raw) else (raw, mime)
+
+
 def out(m):
     mime, data = m.group(1), m.group(2)
     if data not in seen:
-        raw = base64.b64decode(data)
+        raw, mime = lighter(base64.b64decode(data), mime)
         name = hashlib.sha1(raw).hexdigest()[:16] + '.' + EXT[mime]
         open(os.path.join(A, 'img', name), 'wb').write(raw)
         seen[data] = 'assets/img/' + name
@@ -93,12 +122,19 @@ HEAD = '''<!doctype html>
 <meta property="og:description" content="Design leadership, measured in outcomes. LinkAja, Komunal, Dash, Lumio.">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#161511">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 %%PRELOAD%%
 <style>html, body { margin: 0; background: #161511; } html { scroll-padding-top: 72px; }</style>
 '''
 HEAD = HEAD.replace('%%PRELOAD%%', ''.join('<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>\n' % u for u in dict.fromkeys(preload)).rstrip())
 site = HEAD + head.strip() + '\n</head>\n<body>\n<noscript>' + body.rstrip() + '\n</body>\n</html>\n'
 open(os.path.join(R, 'index.html'), 'w', encoding='utf-8').write(site)
+# the tab icon: three stacked slabs, the top one lime, after the exploded-layer diagrams
+open(os.path.join(A, 'favicon.svg'), 'w').write(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#161511"/>'
+    '<g fill="none" stroke-width="1.6" stroke-linejoin="round"><path d="M6 21l10 5 10-5-10-5z" stroke="#f2efe8" opacity=".5"/>'
+    '<path d="M6 16l10 5 10-5-10-5z" stroke="#f2efe8" opacity=".8"/></g>'
+    '<path d="M6 11l10 5 10-5-10-5z" fill="#c8f135"/></svg>\n')
 
 size = lambda p: sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(p) for f in fs)
 print('index.html %d KB, %d images %d KB, %d fonts %d KB (%d preloaded), js %d KB' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024,
