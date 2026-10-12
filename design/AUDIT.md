@@ -246,6 +246,34 @@ each 1584×672.
 Target lime weight across the set: about 0.2–0.7% of the image. Round 3 fix
 list: `design/prompts/signature-visuals-round-3.md`.
 
+### Fallback: generated visuals (Measured Descent, 2026-10-12)
+
+The owner's rule: if the agent's images are still unsatisfactory, make them
+in code. Generator: `design/generative/measured-descent.html`, a p5.js
+seeded heightfield drawn as a hidden-line isometric, plus its philosophy
+`measured-descent.md`. Published at
+https://claude.ai/artifact/GEK7WCrJjzUxNi2b3LN43S.
+
+- **Cases:** Dash · Lumio, E-ink and Cockpit.
+- **Output:** native 2560×1097 PNGs with the exact palette.
+- **Line weights:** 3px primary, 1.5px secondary, 1.1px hatch.
+- **Camera:** a 2:1-style dimetric, close to the masters.
+- **Checks:** it measures the lime share and the phone crop centre, and
+  reports whether the lime fits one 4:5 window.
+- **Renders** (seed 12345) are in `design/signature-visuals/generated/`:
+
+| Case | Lime | Phone crop centre |
+|---|---|---|
+| Dash · Lumio | 0.18% | 64% |
+| E-ink | 0.64% | 67% |
+| Cockpit | 0.14% | 62% |
+
+- **Headless rendering:** `node design/generative/render.js <html> <local
+  p5.min.js> <outdir> dash:12345 eink:12345 cockpit:12345`.
+- **Style difference:** these are cleaner and sparser than the agent's
+  drawings. If they replace only some images, the set mixes two levels of
+  detail; generating all six would keep it uniform.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
