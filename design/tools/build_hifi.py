@@ -76,7 +76,7 @@ for i, (cid, num, label, icon, n, co, lg) in enumerate(INDEX):
         f'<a class="mk-idx" href="{href}" data-open="{cid}" style="padding:{pad};{border}">'
         f'<div data-r="stat-num" data-m="count" style="font:800 expanded clamp(58px,6.8vw,84px)/.9 Archivo;letter-spacing:-.04em;color:{LIME};white-space:nowrap">{num}</div>'
         f'<div style="margin-top:18px;display:flex;align-items:center;gap:8px;font:600 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.14em;color:rgba(242,239,232,.85)">{icon}<span>{label}</span></div>'
-        f'<div class="mk-dest">{lg}<span class="mk-dest-n">{n}</span><span class="mk-dest-co">{co}</span><span class="mk-arrow" aria-hidden="true">↓</span></div>'
+        f'<div class="mk-dest"><span class="mk-dest-n">{n}</span><span class="mk-dest-co">{co}</span><span class="mk-arrow" aria-hidden="true">↓</span></div>'
         f'</a>')
 index_html = ('<nav aria-label="Case index" data-r="stat-outer" style="border-top:1px solid rgba(242,239,232,.14);border-bottom:1px solid rgba(242,239,232,.14)">'
               '<div data-r="wrap stat-row" class="mk-index" style="max-width:1216px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,283px),1fr))">'
@@ -111,11 +111,12 @@ bullets['style'] = ''
 
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
-          '<span class="mk-t-meta">4 outcomes · 4 diagrams · 6 screens · 3 min read</span>'
+          '<span class="mk-t-meta">3 numbers · 4 outcomes · 4 diagrams · 6 screens · 3 min read</span>'
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
+          '<div class="mk-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + str(bullets) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
@@ -131,7 +132,7 @@ case_html = (
     + str(meta) +
     '<div class="mk-case-hero">'
     '<div>' + str(h2) + '</div>'
-    '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p>' + stats_html + '</div>'
+    '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p></div>'
     '</div>'
     + '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>'
     + toggle + drawer +
@@ -213,16 +214,17 @@ def case_section(c):
     did = '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in c['bullets']) + '</ul>'
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
            '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
-           '<span class="mk-t-meta">' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet</span>'
+           '<span class="mk-t-meta">3 numbers · ' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet</span>'
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
+          '<div class="mk-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta +
-            '<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p>' + stats + '</div></div>'
+            '<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>'
             + figure(c) +
             tog + dr + '</div></section>')
 

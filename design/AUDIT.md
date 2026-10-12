@@ -495,6 +495,14 @@ Owner: "get back to the wireframe mockup and implement the changes".
   block, and the toggle meta counts them. This also settles F3's duplicate
   numbers: the case index is the only place a headline number shows before
   a drawer opens.
+- **Same changes in the hi-fi** (owner: "apply the same changes to the
+  hifi"):
+  - The case index drops its logos (LinkAja, DepositoBPR and Dash marks),
+    keeping the number, its label and the "01 Linkaja ↓" link line.
+  - Every hero is the headline, one line and the stack.
+  - The three stats open each drawer under a "Key numbers" eyebrow, and the
+    toggle meta counts them.
+  - Page size: 266KB → 209KB, since the embedded logo images are gone.
 
 ## Open decisions
 

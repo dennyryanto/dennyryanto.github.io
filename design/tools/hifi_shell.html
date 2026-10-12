@@ -27,8 +27,6 @@ body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--di
 a.mk-idx { display: block; color: inherit; transition: background-color .25s ease; }
 a.mk-idx:hover { color: inherit; background: rgba(242, 239, 232, .03); }
 .mk-dest { margin-top: 22px; display: flex; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
-.mk-app { width: 22px; height: 22px; border-radius: 6px; display: block; }
-.mk-word { height: 12px; width: auto; display: block; }
 .mk-dest-n { color: var(--lime); }
 .mk-dest-co { color: rgba(242, 239, 232, .85); }
 .mk-arrow { margin-left: auto; color: var(--fg-3); transition: transform .25s ease, color .25s ease; }
@@ -47,7 +45,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   .mk-index > a.mk-idx:nth-child(even) { padding: 24px 0 24px 16px !important; }
   .mk-index [data-r="stat-num"] { font-size: clamp(30px, 10.5vw, 46px) !important; line-height: 1 !important; }
   .mk-index .mk-dest { margin-top: 16px; flex-wrap: wrap; gap: 8px; }
-  .mk-index .mk-arrow, .mk-index .mk-app, .mk-index .mk-word { display: none; }
+  .mk-index .mk-arrow { display: none; }
 }
 @media (max-width: 600px) { .mk-chart > div:first-child > span:last-child { display: none; } }
 
@@ -63,8 +61,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-case { scroll-margin-top: 64px; }
 .mk-case-hero { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); gap: 32px 56px; align-items: end; margin-bottom: 36px; }
 .mk-case-hero h2 { margin: 0 !important; }
-.mk-sub { margin: 0 0 26px; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
-.mk-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
+.mk-sub { margin: 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+.mk-stats { max-width: 760px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); }
 .mk-stat { padding: 18px 16px 0 0; min-width: 0; }
 .mk-stat + .mk-stat { padding-left: 18px; border-left: 1px solid var(--rule); }
 .mk-stat-n { font: 800 34px/1 var(--display); font-stretch: 120%; letter-spacing: -.01em; white-space: nowrap; }
