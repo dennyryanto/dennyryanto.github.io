@@ -965,7 +965,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   'use strict';
 
   var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c', flow: '#c8f23c' };
-  // when animated, a second still layer draws every lime area dimmed; each frame copies one layer through a moving clip over the other
+  // when animated, a second still layer draws every lime area dimmed; the reveal copies the lit layer over it through a growing clip
   var DIM = { ink: PAL.ink, line: PAL.line, line2: PAL.line2, lime: '#4b571e', flow: '#4b571e' };
   var C = PAL; // the palette of the pass being drawn
   var DEG = Math.PI / 180;
@@ -980,14 +980,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     this.nx = nx; this.ny = ny;
     this.h = []; this.kind = []; this.props = []; this.ticks = [];
     for (var i = 0; i < nx; i++) { this.h.push(new Array(ny).fill(0)); this.kind.push(new Array(ny).fill(0)); this.props.push([]); this.ticks.push(new Array(ny).fill(false)); for (var j = 0; j < ny; j++) this.props[i].push([]); }
-    this.channels = []; this.leaders = []; this.scale = null; this.pin = null; this.panels = []; this.decals = {}; this.noRightDim = false;
+    this.channels = []; this.leaders = []; this.scale = null; this.pin = null; this.panels = []; this.decals = {}; this.noRightDim = false; this.layers = [];
   }
   Terrain.prototype.at = function (i, j) { return (i < 0 || j < 0 || i >= this.nx || j >= this.ny) ? 0 : this.h[i][j]; };
   Terrain.prototype.set = function (i0, i1, j0, j1, h, kind) {
     for (var i = i0; i < i1; i++) for (var j = j0; j < j1; j++) { this.h[i][j] = typeof h === 'function' ? h(i, j) : h; if (kind != null) this.kind[i][j] = kind; }
   };
   // a channel: list of [i, j]; consecutive cells are neighbours; drops only where it moves +x or +y
-  Terrain.prototype.channel = function (cells, o) { this.channels.push({ cells: cells, limeFrom: o && o.limeFrom != null ? o.limeFrom : (o && o.lime ? 0 : -1), dashed: !!(o && o.dashed) }); };
+  Terrain.prototype.channel = function (cells, o) { this.channels.push({ cells: cells, limeFrom: o && o.limeFrom != null ? o.limeFrom : (o && o.lime ? 0 : -1), dashed: !!(o && o.dashed), thin: !!(o && o.thin) }); };
   // a loose box sitting on a cell: x, y, z are world coordinates of its back-left-bottom corner
   Terrain.prototype.box = function (x, y, z, w, d, h, o) { var i = Math.min(this.nx - 1, Math.floor(x + w / 2)), j = Math.min(this.ny - 1, Math.floor(y + d / 2)); this.props[i][j].push({ x: x, y: y, z: z, w: w, d: d, h: h, lime: !!(o && o.lime) }); };
   // a UI plate: o = top-left corner, u = unit vector across, v = unit vector down the plate, w x h in world units (times k)
@@ -995,6 +995,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   Terrain.prototype.panel = function (spec) { this.panels.push(spec); };
   // flat marks printed on one cell's top, in cell units (0..1)
   Terrain.prototype.decal = function (i, j, ops) { (this.decals[i + ':' + j] = this.decals[i + ':' + j] || []).push.apply(this.decals[i + ':' + j], ops); };
+  // floating slabs drawn above everything, in order: { x, y, z, w, d, t, ops, risers: [[x, y, 'flow' | 'line2'], ...] } (risers climb from the slab below)
+  Terrain.prototype.layer = function (spec) { this.layers.push(spec); };
   Terrain.prototype.cyl = function (x, y, z, r, h) { var i = Math.min(this.nx - 1, Math.floor(x)), j = Math.min(this.ny - 1, Math.floor(y)); this.props[i][j].push({ cyl: true, x: x, y: y, z: z, r: r, h: h }); };
   function walk(path) { // expand corner points into a cell list
     var out = [path[0].slice()];
@@ -1024,7 +1026,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       // the outflow runs into the app: a self-service chat screen
       T.panel({ o: [16.4, 6.2, 3.25], k: 1.3, u: [0, -1, 0], v: [0, 0, -1], w: 2.6, h: 2.5, t: 0.1, ops: [
         ['rect', 0.18, 0.18, 2.42, 0.5, 's'], ['circ', 0.38, 0.34, 0.09, 'f2'], ['line', 0.6, 0.3, 1.4, 0.3, 's2'],
-        ['rect', 0.22, 0.72, 1.6, 1.08, 's'], ['rect', 1.0, 1.22, 2.38, 1.58, 'f2'], ['rect', 0.22, 1.72, 1.4, 2.0, 's'],
+        ['rect', 0.22, 0.72, 1.6, 1.08, 's'], ['rect', 1.0, 1.22, 2.38, 1.58, 'L'], ['rect', 0.22, 1.72, 1.4, 2.0, 's'],
         ['rect', 0.18, 2.12, 2.1, 2.34, 's'], ['circ', 2.26, 2.23, 0.1, 'f']] });
       T.noRightDim = true;
       T.scale = { at: [0, 9], to: 3.8 };
@@ -1047,6 +1049,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
         ['rect', 5.1, 0.3, 6.6, 0.65, 's'], ['rect', 6.9, 0.3, 8.4, 0.65, 'f2'], ['rect', 8.8, 0.35, 9.7, 0.65, 's'], ['circ', 9.5, 0.5, 0.12, 'f'],
         ['line', 0.3, 1.15, 4.6, 1.15, 's'], ['line', 0.3, 1.38, 3.2, 1.38, 's2'], ['line', 0.3, 1.58, 3.8, 1.58, 's2'],
         ['rect', 5.1, 1.0, 6.6, 1.55, 's2'], ['rect', 6.75, 1.0, 8.25, 1.55, 's2'], ['rect', 8.4, 1.0, 9.9, 1.55, 's2']] });
+      // the finish: a deposit-complete screen with a lime check
+      T.panel({ o: [15.4, 6.3, 2.4], u: [0, -1, 0], v: [0, 0, -1], w: 1.6, h: 2.4, t: 0.08, ops: [
+        ['circ', 0.8, 0.78, 0.34, 'Ls'], ['pl', [[0.62, 0.78], [0.75, 0.92], [1.0, 0.64]], 'Ls'],
+        ['line', 0.35, 1.4, 1.25, 1.4, 's'], ['line', 0.5, 1.6, 1.1, 1.6, 's2'], ['rect', 0.3, 1.9, 1.3, 2.15, 'f2']] });
+      T.noRightDim = true;
       T.scale = { at: [0, 11], to: 3.0 };
       return T;
     },
@@ -1080,6 +1087,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
         T.panel({ o: [s[0] - 0.1, s[1] + 0.92, h + 1.45], k: 1.5, u: [1, 0, 0], v: [0, 0, -1], w: 0.8, h: 0.9, t: 0.05, ops: [
           ['rect', 0.07, 0.07, 0.73, 0.83, 's'], ['pl', [[0.12, 0.74], [0.3, 0.47], [0.42, 0.6], [0.56, 0.38], [0.69, 0.56]], 's2'], ['circ', 0.24, 0.26, 0.07, 'f2']] });
       });
+      // the delivery: an order ticket at the end of the spine, its ready bar lime
+      T.panel({ o: [14.4, spine + 1.1, 2.0], u: [0, -1, 0], v: [0, 0, -1], w: 1.3, h: 2.0, t: 0.06, ops: [
+        ['line', 0.2, 0.3, 1.1, 0.3, 's'], ['line', 0.2, 0.55, 0.9, 0.55, 's2'], ['line', 0.2, 0.75, 1.0, 0.75, 's2'], ['line', 0.2, 0.95, 0.8, 0.95, 's2'],
+        ['rect', 0.2, 1.3, 1.1, 1.7, 'L']] });
+      T.noRightDim = true;
       T.scale = { at: [0, 9], to: 2.8 };
       return T;
     },
@@ -1100,7 +1112,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       T.panel({ o: [14.4, 5.2, 2.28], k: 1.2, u: [0, -1, 0], v: [0, 0, -1], w: 2.8, h: 1.9, t: 0.08, ops: [
         ['line', 0.2, 0.3, 1.6, 0.3, 's'], ['line', 0.2, 0.52, 2.4, 0.52, 's2'], ['line', 0.2, 0.7, 2.0, 0.7, 's2'],
         ['rect', 0.2, 0.95, 2.6, 1.1, 's2'], ['rect', 0.2, 0.95, 1.9, 1.1, 'f2'],
-        ['rect', 0.2, 1.35, 1.2, 1.68, 'f'], ['rect', 1.35, 1.35, 2.45, 1.68, 's']] });
+        ['rect', 0.2, 1.35, 1.2, 1.68, 'L'], ['rect', 1.35, 1.35, 2.45, 1.68, 's']] });
       T.noRightDim = true;
       T.scale = { at: [0, 7], to: 3.2 };
       return T;
@@ -1137,8 +1149,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       T.pin = [11, 4.5];
       // the instrument face at the end of the ridge: a gauge, a scale with a pointer, a trend line
       T.panel({ o: [16.4, 5.55, 2.24], k: 1.4, u: [0, -1, 0], v: [0, 0, -1], w: 2.8, h: 1.6, t: 0.08, ops: [
-        ['arc', 0.75, 1.15, 0.55, 0, 180, 's'], ['ticks', 0.75, 1.15, 0.55, 0, 180, 12, 0.1, 's2'], ['line', 0.75, 1.15, 1.08, 0.72, 's'], ['circ', 0.75, 1.15, 0.05, 'f'],
-        ['line', 1.5, 1.15, 2.6, 1.15, 's'], ['ticks-h', 1.5, 2.6, 1.15, 11, 0.08, 's2'], ['pl', [[2.12, 0.98], [2.2, 1.08], [2.28, 0.98], [2.12, 0.98]], 's'],
+        ['arc', 0.75, 1.15, 0.55, 0, 180, 's'], ['ticks', 0.75, 1.15, 0.55, 0, 180, 12, 0.1, 's2'], ['line', 0.75, 1.15, 1.08, 0.72, 'Ls'], ['circ', 0.75, 1.15, 0.05, 'f'],
+        ['line', 1.5, 1.15, 2.6, 1.15, 's'], ['ticks-h', 1.5, 2.6, 1.15, 11, 0.08, 's2'], ['pl', [[2.12, 0.98], [2.2, 1.08], [2.28, 0.98], [2.12, 0.98]], 'Ls'],
         ['pl', [[1.5, 0.6], [1.7, 0.5], [1.9, 0.55], [2.1, 0.35], [2.3, 0.42], [2.6, 0.3]], 's2']] });
       T.noRightDim = true;
       T.scale = { at: [0, 6], to: 2.2 };
@@ -1154,8 +1166,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     this.live = !!opts.live;
     var T = this.T, pl = null;
     for (var i = 0; i < T.nx; i++) for (var j = 0; j < T.ny; j++) if (T.kind[i][j] === 9) pl = pl ? [Math.min(pl[0], i), Math.max(pl[1], i + 1), Math.min(pl[2], j), Math.max(pl[3], j + 1), T.h[i][j]] : [i, i + 1, j, j + 1, T.h[i][j]];
-    this.plate = pl; this.paths = this.flowPaths(); this.mover = !!(pl || this.paths.length);
-    if (T.pin) { var pi = Math.floor(T.pin[0]), lo = pi, hi = pi; while (T.at(lo - 1, Math.floor(T.pin[1])) === T.at(pi, Math.floor(T.pin[1]))) lo--; while (T.at(hi + 1, Math.floor(T.pin[1])) === T.at(pi, Math.floor(T.pin[1]))) hi++; this.pinSpan = Math.max(0, Math.min(T.pin[0] - lo, hi + 1 - T.pin[0]) - 0.3); }
+    this.plate = pl; this.paths = this.flowPaths(); this.mover = !!(pl || this.paths.length || T.panels.some(hasAccent) || T.layers.some(hasAccent));
+    if (T.pin) { var pi = Math.floor(T.pin[0]), lo = pi, hi = pi; while (T.at(lo - 1, Math.floor(T.pin[1])) === T.at(pi, Math.floor(T.pin[1]))) lo--; while (T.at(hi + 1, Math.floor(T.pin[1])) === T.at(pi, Math.floor(T.pin[1]))) hi++; this.pinSpan = Math.max(0, T.pin[0] - lo - 0.3); }
     this.yaw = 45; this.range = opts.range == null ? 10 : opts.range; this.elev = opts.elev || 30;
     this.pad = opts.pad || [0.08, 0.18]; // vertical, horizontal margins as a share of the canvas
     this.resize();
@@ -1178,8 +1190,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       self.cam(self.yaw + d);
       var add = function (x, y, z) { var p = self.P(x, y, z); b[0] = Math.min(b[0], p[0]); b[1] = Math.max(b[1], p[0]); b[2] = Math.min(b[2], p[1]); b[3] = Math.max(b[3], p[1]); };
       for (var i = 0; i < T.nx; i++) for (var j = 0; j < T.ny; j++) { var h = T.h[i][j]; if (h > 0) { add(i, j, h); add(i + 1, j, h); add(i, j + 1, h); add(i + 1, j + 1, 0); add(i + 1, j, 0); add(i, j + 1, 0); } }
-      add(-1.3, T.ny, 0); add(0, T.ny + 1.95, 0); add(T.nx, T.ny + 1.95, 0); add(T.nx + 1.5, 0, 0); add(T.nx + 1.5, T.ny, 0);
+      if (!T.noFurniture) { add(-1.3, T.ny, 0); add(0, T.ny + 1.95, 0); add(T.nx, T.ny + 1.95, 0); add(T.nx + 1.5, 0, 0); add(T.nx + 1.5, T.ny, 0); }
       if (T.scale) add(-1.3, T.ny, T.scale.to);
+      T.layers.forEach(function (ly) { [0, ly.w].forEach(function (a) { [0, ly.d].forEach(function (b) { add(ly.x + a, ly.y + b, ly.z); add(ly.x + a, ly.y + b, ly.z + ly.t); }); }); });
       T.panels.forEach(function (pn) { var k = pn.k || 1; [[0, 0], [pn.w * k, 0], [0, pn.h * k], [pn.w * k, pn.h * k]].forEach(function (q) { add(pn.o[0] + pn.u[0] * q[0] + pn.v[0] * q[1], pn.o[1] + pn.u[1] * q[0] + pn.v[1] * q[1], pn.o[2] + pn.u[2] * q[0] + pn.v[2] * q[1]); }); });
     });
     var aw = this.W * (1 - 2 * this.pad[1]), ah = this.H * (1 - 2 * this.pad[0]);
@@ -1222,12 +1235,17 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     this.frame(this.t || 0);
   };
 
+  function hasAccent(pn) { return (pn.ops || []).some(function (op) { var st = op[op.length - 1]; return st === 'L' || st === 'Ls'; }) || (pn.risers || []).some(function (r) { return r[2] === 'flow'; }); }
+
   // the device-pixel box that the moving lime can touch at this angle; frames repaint only this box
   Renderer.prototype.moving = function () {
     var T = this.T, self = this, b = [1e9, 1e9, -1e9, -1e9], add = function (x, y, z) { var q = self.P(x, y, z); b[0] = Math.min(b[0], q[0]); b[1] = Math.min(b[1], q[1]); b[2] = Math.max(b[2], q[0]); b[3] = Math.max(b[3], q[1]); };
     this.paths.forEach(function (pts) { pts.forEach(function (q) { add(q[0], q[1], q[2]); }); });
     if (this.plate) { var pl = this.plate; add(pl[0], pl[2], pl[4]); add(pl[1], pl[2], pl[4]); add(pl[0], pl[3], pl[4]); add(pl[1], pl[3], pl[4]); }
-    if (T.pin) { var j = Math.floor(T.pin[1]), i = Math.floor(T.pin[0]), h = T.at(i, j); [-1, 1].forEach(function (sg) { var x = T.pin[0] + sg * (self.pinSpan || 0); add(x, 0, h); add(x, T.ny, h); add(x, T.pin[1], h + 1.35); }); }
+    if (T.pin) { var j = Math.floor(T.pin[1]), i = Math.floor(T.pin[0]), h = T.at(i, j); [0, 1].forEach(function (sg) { var x = T.pin[0] - sg * (self.pinSpan || 0); add(x, 0, h); add(x, T.ny, h); add(x, T.pin[1], h + 1.35); }); }
+    var below = 0;
+    T.layers.forEach(function (ly) { if (hasAccent(ly)) [0, ly.w].forEach(function (a) { [0, ly.d].forEach(function (b2) { add(ly.x + a, ly.y + b2, below); add(ly.x + a, ly.y + b2, ly.z + ly.t); }); }); below = ly.z + ly.t; });
+    T.panels.forEach(function (pn) { if (!hasAccent(pn)) return; var k = pn.k || 1; [[0, 0], [pn.w * k, 0], [0, pn.h * k], [pn.w * k, pn.h * k]].forEach(function (q) { add(pn.o[0] + pn.u[0] * q[0] + pn.v[0] * q[1], pn.o[1] + pn.u[1] * q[0] + pn.v[1] * q[1], pn.o[2] + pn.u[2] * q[0] + pn.v[2] * q[1]); }); });
     if (b[0] > b[2]) return null;
     var pad = 0.45 * this.k, d = this.cv.width / this.W;
     var x0 = Math.max(0, Math.floor((b[0] - pad) * d)), y0 = Math.max(0, Math.floor((b[1] - pad) * d)), x1 = Math.min(this.cv.width, Math.ceil((b[2] + pad) * d)), y1 = Math.min(this.cv.height, Math.ceil((b[3] + pad) * d));
@@ -1264,12 +1282,19 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     list.sort(function (a, b) { return a.d - b.d; });
     for (var n = 0; n < list.length; n++) { if (list[n].pn) this.panel(list[n].pn, L1, L2); else if (!misses(list[n].i, list[n].j)) this.cell(list[n].i, list[n].j, L1, L2, LH); }
     T.panels.forEach(function (pn) { if (pn.top) self.panel(pn, L1, L2); });
-    this.furniture(L2);
+    var below = 0;
+    T.layers.forEach(function (ly) {
+      (ly.risers || []).forEach(function (r) { self.seg(self.P(r[0], r[1], below), self.P(r[0], r[1], ly.z), r[2] === 'flow' ? C.flow : C.line2, r[2] === 'flow' ? L1 * 1.6 : L2); });
+      self.box({ x: ly.x, y: ly.y, z: ly.z, w: ly.w, d: ly.d, h: ly.t }, L1, LH);
+      self.ops(function (a, b) { return self.P(ly.x + a, ly.y + b, ly.z + ly.t); }, ly.ops || [], L1, L2);
+      below = ly.z + ly.t;
+    });
+    if (!T.noFurniture) this.furniture(L2);
     if (box) g.restore();
     this.cx = this.main; C = PAL;
   };
 
-  // ---------- motion of the lime: flow down the grooves, a refresh wipe across a lime plate, a gliding pin ----------
+  // ---------- the lime's reveal: the path a fill follows down the grooves ----------
   Renderer.prototype.flowPaths = function () {
     var T = this.T, out = [];
     T.channels.forEach(function (ch) {
@@ -1286,43 +1311,45 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     return out;
   };
 
+  // the reveal plays once: lime fills the groove from source to outcome (or sweeps the plate, or the pin settles),
+  // then the output's lime accent fades in. frame(t) is a pure function of t, so any redraw lands on the same state.
+  var FILL = 1.8, GLOW = 0.5;
+  Renderer.END = FILL + GLOW;
+  function ease(u) { u = Math.max(0, Math.min(1, u)); return 1 - Math.pow(1 - u, 3); }
+
   Renderer.prototype.frame = function (t) {
     var T = this.T, g = this.main, self = this, dpr = this.cv.width / this.W, D = this.dirty, k = this.k;
     this.t = t;
     if (!D) return;
     var copy = function (layer) { g.setTransform(1, 0, 0, 1, 0, 0); g.drawImage(layer.cv, D[0], D[1], D[2], D[3], D[0], D[1], D[2], D[3]); g.setTransform(dpr, 0, 0, dpr, 0, 0); };
     var through = function (layer, shape) { g.save(); g.beginPath(); shape(); g.clip(); copy(layer); g.restore(); };
-    if (this.paths.length) {
-      // packets of lime travel downstream over a dim bed: the lit layer shows through a dashed clip
+    var f = ease(t / FILL), glow = Math.max(0, Math.min(1, (t - FILL) / GLOW));
+    if (!this.mover || glow >= 1) copy(this.lit);
+    else {
       copy(this.dim);
-      var on = 0.75, period = 1.2, shift = (t * 1.1) % period, w = 0.3 * k;
-      through(this.lit, function () {
+      if (this.paths.length) through(this.lit, function () {
+        var w = 0.3 * k;
         self.paths.forEach(function (pts) {
           var sp = pts.map(function (q) { return self.P(q[0], q[1], q[2]); }), wl = [0];
           for (var n = 1; n < pts.length; n++) wl.push(wl[n - 1] + Math.hypot(pts[n][0] - pts[n - 1][0], pts[n][1] - pts[n - 1][1], pts[n][2] - pts[n - 1][2]));
-          for (n = 1; n < pts.length; n++) {
+          var reach = f * wl[wl.length - 1];
+          for (n = 1; n < pts.length && wl[n - 1] < reach; n++) {
             var a = wl[n - 1], b = wl[n]; if (b - a < 1e-6) continue;
-            for (var d0 = Math.floor((a - shift) / period) * period + shift; d0 < b; d0 += period) {
-              var u0 = Math.max(a, d0), u1 = Math.min(b, d0 + on); if (u1 <= u0) continue;
-              var A = sp[n - 1], B = sp[n], f0 = (u0 - a) / (b - a), f1 = (u1 - a) / (b - a);
-              var p0 = [A[0] + (B[0] - A[0]) * f0, A[1] + (B[1] - A[1]) * f0], p1 = [A[0] + (B[0] - A[0]) * f1, A[1] + (B[1] - A[1]) * f1];
-              var dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L * w, ny = dx / L * w, ex = dx / L * w * 0.5, ey = dy / L * w * 0.5;
-              g.moveTo(p0[0] + nx - ex, p0[1] + ny - ey); g.lineTo(p1[0] + nx + ex, p1[1] + ny + ey); g.lineTo(p1[0] - nx + ex, p1[1] - ny + ey); g.lineTo(p0[0] - nx - ex, p0[1] - ny - ey); g.closePath();
-            }
+            var A = sp[n - 1], B = sp[n], f1 = Math.min(1, (reach - a) / (b - a)), p1 = [A[0] + (B[0] - A[0]) * f1, A[1] + (B[1] - A[1]) * f1];
+            var dx = B[0] - A[0], dy = B[1] - A[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L * w, ny = dx / L * w, ex = dx / L * w, ey = dy / L * w;
+            g.moveTo(A[0] + nx - ex, A[1] + ny - ey); g.lineTo(p1[0] + nx, p1[1] + ny); g.lineTo(p1[0] - nx, p1[1] - ny); g.lineTo(A[0] - nx - ex, A[1] - ny - ey); g.closePath();
           }
         });
       });
-    } else copy(this.lit);
-    if (this.plate) {
-      // an e-ink refresh: a dark band sweeps the plate, then it rests
-      var pl = this.plate, u = (t % 5) / 1.5;
-      if (u < 1) {
-        var x0 = pl[0] - 0.5 + u * (pl[1] - pl[0] + 0.5), z = pl[4], Q = function (x, y) { return self.P(Math.max(pl[0], Math.min(pl[1], x)), y, z); };
-        through(this.dim, function () { [Q(x0, pl[2]), Q(x0 + 0.5, pl[2]), Q(x0 + 0.5, pl[3]), Q(x0, pl[3])].forEach(function (q, n) { if (n) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.closePath(); });
+      if (this.plate) {
+        // the plate turns lime in one sweep, like a panel refresh
+        var pl = this.plate, x1 = pl[0] + f * (pl[1] - pl[0]), Q = function (x, y) { return self.P(x, y, pl[4]); };
+        if (f > 0) through(this.lit, function () { [Q(pl[0] - 0.05, pl[2] - 0.05), Q(x1, pl[2] - 0.05), Q(x1, pl[3] + 0.05), Q(pl[0] - 0.05, pl[3] + 0.05)].forEach(function (q, n) { if (n) g.lineTo(q[0], q[1]); else g.moveTo(q[0], q[1]); }); g.closePath(); });
       }
+      if (glow > 0) { g.save(); g.globalAlpha = glow; copy(this.lit); g.restore(); }
     }
-    // "you, now" glides back and forth along its step
-    if (T.pin) this.drawPin(T.pin[0] + (this.pinSpan || 0) * Math.sin(t * Math.PI * 2 / 7));
+    // "you, now" slides in along its step and settles
+    if (T.pin) this.drawPin(T.pin[0] - (this.pinSpan || 0) * (1 - f));
   };
 
   Renderer.prototype.cell = function (i, j, L1, L2, LH) {
@@ -1394,6 +1421,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     var style = function (st) {
       if (st === 'f') return { fill: C.line };
       if (st === 'f2') return { fill: C.line2 };
+      if (st === 'L') return { fill: C.flow }; // the output's lime accent
+      if (st === 'Ls') return { stroke: C.flow, w: L2 * 2 };
       if (st === 's2') return { stroke: C.line2, w: L2 };
       return { stroke: C.line, w: L2 * 1.3 };
     };
@@ -1447,6 +1476,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     var next = ch.cells[p + 1], lime = ch.limeFrom >= 0 && p >= ch.limeFrom, w = 0.2, o = w / 2;
     var cx = i + 0.5, cy = j + 0.5, e4 = grooveEnds(ch, p), ax = e4[0], ay = e4[1], bx = e4[2], by = e4[3];
     var g = this.cx;
+    if (ch.thin) { // a trace: one line on the surface instead of a groove
+      var col = lime ? C.flow : C.line, tw = lime ? L1 * 2.2 : L1 * 0.7, nx2 = next && T.at(next[0], next[1]);
+      this.seg(P(ax, ay, h), P(cx, cy, h), col, tw); this.seg(P(cx, cy, h), P(bx, by, h), col, tw);
+      if (next && nx2 < h) this.seg(P(bx, by, h), P(bx, by, nx2), col, tw);
+      return;
+    }
     if (ch.dashed) g.setLineDash([7 * this.lw, 6 * this.lw]);
     [[ax, ay, cx, cy], [cx, cy, bx, by]].forEach(function (s) {
       if (s[0] === s[2] && s[1] === s[3]) return;
@@ -1512,12 +1547,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   function mount(canvas, opts) {
     opts = opts || {};
     var scene = canvas.getAttribute('data-sv3d'), R = null, st = null, reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var raf = 0, last = 0, t = 0, onScreen = false;
-    // the lime moves only while the canvas is on screen, at up to 30 frames a second, compositing two cached layers per frame
+    var raf = 0, last = 0, t = 0;
+    // the reveal plays once, the first time the drawing is well in view, then the loop ends for good
     function tick(now) {
-      raf = 0; if (!onScreen) return;
-      if (now - last >= 32) { t += Math.min(0.1, (now - last) / 1000) || 0; last = now; R.frame(t); }
-      raf = requestAnimationFrame(tick);
+      raf = 0;
+      t += Math.min(0.05, (now - last) / 1000) || 0; last = now;
+      R.frame(Math.min(t, Renderer.END));
+      if (t < Renderer.END) raf = requestAnimationFrame(tick);
     }
     function start() {
       R = new Renderer(canvas, scene, { range: opts.range, pad: opts.pad, seed: opts.seed, elev: opts.elev, live: !reduce });
@@ -1529,11 +1565,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
           onUpdate: function (self) { R.render(R.yaw + (self.progress - 0.5) * 2 * R.range); } });
         R.render(R.yaw + (st.progress - 0.5) * 2 * R.range);
       }
-      if (R.live && (R.mover || R.T.pin) && 'IntersectionObserver' in window) {
-        new IntersectionObserver(function (es) {
-          onScreen = es[0].isIntersecting;
-          if (onScreen && !raf) { last = performance.now(); raf = requestAnimationFrame(tick); }
-        }).observe(canvas);
+      if (R.live) {
+        if (!(R.mover || R.T.pin) || !('IntersectionObserver' in window)) R.frame(Renderer.END);
+        else { var seen = new IntersectionObserver(function (es) {
+          if (!es[0].isIntersecting) return;
+          seen.disconnect(); last = performance.now(); raf = requestAnimationFrame(tick);
+        }, { threshold: 0.45 }); seen.observe(canvas); }
       }
       var rt = null;
       window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { R.resize(); R.render(st ? R.yaw + (st.progress - 0.5) * 2 * R.range : R.yaw); }, 120); });
@@ -1544,7 +1581,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     } else start();
   }
 
-  root.SV3D = { mount: mount, Renderer: Renderer, scenes: Object.keys(SCENES) };
+  root.SV3D = { mount: mount, Renderer: Renderer, scenes: Object.keys(SCENES), Terrain: Terrain, walk: walk, define: function (name, fn) { SCENES[name] = fn; } };
 })(window);
 
 </script>
