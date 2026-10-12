@@ -67,6 +67,9 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
 .line { display: flex; gap: 12px; align-items: center; }
 .line::before { content: ""; flex: none; width: 12px; height: 2px; background: var(--ink-3); }
 .line i { display: block; height: 10px; border-radius: 3px; background: var(--ph-x); opacity: .7; }
+/* "What I did": the same two-column dash list in every case (one column on phones) */
+.lines.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); column-gap: 48px; row-gap: 14px; }
+.lines.two > .cap { grid-column: 1 / -1; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
 
@@ -226,6 +229,10 @@ body.notes-off .note { display: none; }
 .grid { display: grid; gap: 14px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
 .grid > .span2 { grid-column: span 2; }
 @media (max-width: 860px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
+/* the cockpit close-ups: zoomed out, centred in their columns, with room between them */
+.grid.closeups { gap: 40px 56px; justify-items: center; }
+.grid.closeups > .ph { width: min(100%, 300px); }
+@media (max-width: 860px) { .grid.closeups > .ph { width: min(100%, 280px); } }
 
 
 /* audit coverage (notes layer) */
@@ -801,7 +808,7 @@ html { scroll-behavior: smooth; }
       note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same compact hero: the headline, one line on what the work is about and the toggle on one side, the signature visual on the other, alternating sides down the page (Independent shows its two visuals side by side instead). The key numbers and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
       svNote: '<b>11</b><span>The signature visual is drawn live in code: three layers in the shape of the work’s platform (phone, tablet, desktop or e-ink panel), from what it started from to the final screen as a simple wireframe. When it first comes into view it builds once from the bottom; each lower layer locks one decision with a flicker, and its thread rises straight up to land as UI on the top layer. No rotation. Decisions are solid ink here and lime in the hi-fi.</span>',
       drawer: [
-        { lines: 4, cap: 'Outcome bullets' },
+        { lines: 4, two: true, cap: 'What I did' },
         { cols: 1, items: [P('OPEX chart · −80% callout (moved from the hero)', '21/9')] },
         { cap: 'Problem and fix', cols: 2, items: [P('Before / after flow', '16/10'), P('Support model redesign', '16/10')] },
         { cap: 'Intent routing in chat', cols: 4, items: [P('Explainer', '16/10', '', 1), P('Chat · bot', '9/19', 'phone'), P('Chat · agent', '9/19', 'phone')] },
@@ -814,7 +821,7 @@ html { scroll-behavior: smooth; }
       sv: 'komunal',
       index: { num: '+12 pts', label: 'Deposit funnel', ctx: 'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.' },
       drawer: [
-        { lines: 4, cap: 'Outcome bullets' },
+        { lines: 4, two: true, cap: 'What I did' },
         { cols: 1, items: [P('Deposit funnel chart (moved from the hero)', '21/9')] },
         { cap: 'Diagrams', cols: 2, items: [P('Tooling migration · Sanity → Framer', '16/10'), P('One design system · three orgs', '16/10')] },
         { cap: 'DepositoBPR', cols: 4, items: [P('Placement volume chart', '16/10', '', 1), P('Marketplace', '9/19', 'phone'), P('Confirmation', '9/19', 'phone')] }
@@ -826,7 +833,7 @@ html { scroll-behavior: smooth; }
       sv: 'dash',
       index: { num: '~200K', label: 'Customers / month', ctx: 'Diners ordering through Dash each month, across 30+ restaurant chains.' },
       drawer: [
-        { lines: 4, cap: 'Outcome bullets' },
+        { lines: 4, two: true, cap: 'What I did' },
         { cap: 'Dash', cols: 2, items: [P('Captain app · iPad', '4/3'), P('Back office · laptop', '16/10')] },
         { cap: 'Lumio signage network', cols: 4, items: [P('Highways', '16/10'), P('City streets', '16/10'), P('Supermarkets', '16/10'), P('Transit', '16/10')] },
         { cols: 1, items: [P('Lumio CMS · laptop', '21/9')] },
@@ -839,7 +846,7 @@ html { scroll-behavior: smooth; }
       sv: [['independent', 'Enterprise AI · data to decision'], ['chrona', 'Featured · Chrona']],
       index: { num: '0 → 1', label: 'AI-native builds', ctx: 'Products taken from concept to working software with multi-agent Claude Code.' },
       drawer: [
-        { lines: 3, cap: 'Outcome bullets' },
+        { lines: 3, two: true, cap: 'What I did' },
         { cols: 1, items: [P('Decision-desk demo · enterprise AI', '21/9')] },
         { cap: 'Chrona · AI-first social planning', cols: 4, items: [P('Chrona app', '9/19', 'phone'), P('How Chrona works · 4 points', '16/10', '', 1)], extra: true },
         { cols: 2, items: [P('Habit loop diagram', '16/10'), P('Planning engine diagram', '16/10')] }
@@ -868,7 +875,7 @@ html { scroll-behavior: smooth; }
       drawer: [
         { fan: true, cap: 'The screens' },
         { lines: 3, cap: 'The question' },
-        { cap: 'Close-ups', cols: 3, items: [P('Readiness strip', '1/1'), P('Training status map', '1/1'), P('Weekly load', '1/1')] }
+        { cap: 'Close-ups', cols: 3, closeups: true, items: [P('Readiness strip', '13/20', 'phone'), P('Training status map', '13/20', 'phone'), P('Weekly load', '13/20', 'phone')] }
       ], toggle: 'Explore the concept' }
   ];
   var BG = { id: 'background', co: 'Background', role: '2011 – present',
@@ -917,9 +924,9 @@ html { scroll-behavior: smooth; }
     return c.drawer.map(function (b) {
       var cap = b.cap ? '<div class="cap mono">' + esc(b.cap) + '</div>' : '';
       if (b.fan) return '<div class="block">' + cap + fanHtml(c) + '</div>';
-      if (b.lines) return '<div class="block lines">' + cap + lines(b.lines) + '</div>';
+      if (b.lines) return '<div class="block lines' + (b.two ? ' two' : '') + '">' + cap + lines(b.lines) + '</div>';
       if (b.chips) return '<div class="block">' + cap + '<div class="chips mono">' + b.chips.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div></div>';
-      return '<div class="block">' + cap + '<div class="grid' + (b.cols <= 2 ? ' one-sm' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
+      return '<div class="block">' + cap + '<div class="grid' + (b.cols <= 2 || b.closeups ? ' one-sm' : '') + (b.closeups ? ' closeups' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
     }).join('');
   }
   function caseHtml(c, n) {
@@ -1014,6 +1021,18 @@ html { scroll-behavior: smooth; }
       cap.innerHTML = '<span class="mono">' + String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0') + '</span><strong>' + esc(data[cur][0]) + '</strong><span class="d">' + esc(data[cur][1]) + '</span>';
     }
     function render() { cards.forEach(function (c, i) { place(c, (i - cur + n) % n); }); label(); }
+    // centre the whole fan, not the front card: lay it out at rest, measure it, then shift the cards and the
+    // perspective origin together (the origin stays at the same spot on the front card, so the fan keeps its shape)
+    function centre() {
+      var cw = cards[0].offsetWidth, sw = stage.clientWidth, sr = stage.getBoundingClientRect(), l = 1e9, r = -1e9;
+      cards.forEach(function (c) { c.style.transition = 'none'; c.style.left = '0px'; });
+      stage.style.perspectiveOrigin = (cw * 0.15) + 'px 45%';
+      render();
+      cards.forEach(function (c) { var b = c.getBoundingClientRect(); l = Math.min(l, b.left - sr.left); r = Math.max(r, b.right - sr.left); });
+      var x = Math.round((sw - (r - l)) / 2 - l);
+      cards.forEach(function (c) { c.style.left = x + 'px'; void c.offsetWidth; c.style.transition = still ? 'none' : ''; });
+      stage.style.perspectiveOrigin = (x + cw * 0.15) + 'px 45%';
+    }
     function go(i) {
       i = (i + n) % n;
       if (i === cur) return;
@@ -1037,8 +1056,9 @@ html { scroll-behavior: smooth; }
     function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
     function start() { if (!still && !timer) timer = setInterval(tick, 4500); }
     function stop() { clearInterval(timer); timer = null; }
+    var stage = fan.querySelector('.fan-stage');
     if (still) cards.forEach(function (c) { c.style.transition = 'none'; });
-    render();
+    centre();
     fan.addEventListener('mouseenter', function () { held = true; });
     fan.addEventListener('mouseleave', function () { held = false; });
     fan.addEventListener('focusin', function () { held = true; });
@@ -1055,14 +1075,14 @@ html { scroll-behavior: smooth; }
       if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
       if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
     });
-    var stage = fan.querySelector('.fan-stage'), x0 = null;
+    var x0 = null;
     stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
     stage.addEventListener('pointerup', function (e) {
       if (x0 === null) return;
       var dx = e.clientX - x0; x0 = null;
       if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
     });
-    window.addEventListener('resize', render);
+    window.addEventListener('resize', centre);
     // only the fan on screen plays
     if (window.IntersectionObserver) {
       new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible) start(); else stop(); }, { threshold: .35 }).observe(fan);

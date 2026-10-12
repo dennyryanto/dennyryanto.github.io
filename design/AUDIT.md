@@ -614,6 +614,12 @@ Owner: "get back to the wireframe mockup and implement the changes".
     front card), so the fan keeps its shape.
   - The three close-ups are capped at 300px wide (280px on phones) and
     centred in their columns, with 56px between them instead of 16px.
+  - The wireframe has the same three changes:
+    - its fan uses the same `centre()`;
+    - the close-up placeholders are portrait, capped at 300px and spaced
+      56px apart;
+    - every case's "Outcome bullets" placeholder is now a two-column
+      "What I did" dash list, like the hi-fi.
 - **Key numbers redesigned** (owner: "anemic and left-aligned on desktop;
   center them and come up with another design"). Both mockups now use a
   centred, full-width band with a rule above and below. It has three equal
