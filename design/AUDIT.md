@@ -387,7 +387,7 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   - Where it meets the top layer, the decision becomes solid lime UI.
   - No dimming, no hatching, no axis.
 - **Renderer:** `design/generative/stack.js`. It is standalone and
-  dependency-free (no GSAP), about 24KB raw and 7KB gzipped with all seven scenes.
+  dependency-free (no GSAP), about 22KB raw and 7KB gzipped with all seven scenes.
   - Scenes are data: `w`, `d`, `gap`, `layers` (flat ops, optional blocks)
     and `picks` (`k`, `at`, `h`, `ops` on its own layer, `land` on the top
     layer).
