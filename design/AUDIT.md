@@ -387,7 +387,7 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   - Where it meets the top layer, the decision becomes solid lime UI.
   - No dimming, no hatching, no axis.
 - **Renderer:** `design/generative/stack.js`. It is standalone and
-  dependency-free (no GSAP), about 13KB raw and 4.6KB gzipped.
+  dependency-free (no GSAP), about 22KB raw and 6KB gzipped with all six scenes.
   - Scenes are data: `w`, `d`, `gap`, `layers` (flat ops, optional blocks)
     and `picks` (`k`, `at`, `h`, `ops` on its own layer, `land` on the top
     layer).
@@ -406,9 +406,31 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     bubble and the quick reply.
   - Independent: sources → signals → decision card. The decisions land as
     the confidence bar and the approve button.
+- **All six built** (owner: "build the other four cases in this style").
+  Each is three layers; the two lower ones each lock one lime decision, and
+  both land as lime UI on top:
+  - `komunal`: design system (a shared component) → deposit funnel (the
+    step that leaked) → deposit screen (lime button and progress).
+  - `dash`: restaurant floor (a table) → menu (a dish) → order screen (lime
+    send-to-kitchen bar and added item).
+  - `eink`: data feeds (readiness) → 1-bit render (the surviving block) →
+    the panel (lime number and suggestion).
+  - `cockpit`: terrain (your position) → instruments (the reading that
+    matters) → glass display (lime pointer on the strip and lime value).
+- **Hi-fi now uses this style:** `design/mockups/hifi-opening-linkaja.html`
+  (artifact DtpefKiKyb54R7UGPayvgr) shows the opening, LinkAja in full and
+  heroes for the other five.
+  - The other five are Komunal, Dash · Lumio (`#board`), Independent
+    (`#ai`), the e-ink lab (`#lab`) and the cockpit lab (`#lab-ui`).
+  - Each hero has its meta line, headline, sub, three stats, a stack canvas,
+    and a toggle with a short "what I did" drawer (full drawers not mocked
+    yet). Copy comes from the live site.
+  - The toggle/drawer script now works per `.mk-case`, and the case index
+    opens the matching section.
+  - `build_hifi.py` inlines `stack.js` (the hi-fi no longer loads
+    `sv3d.js`; the terraces live on their own review page).
 - **Review page:** `design/mockups/exploded-layers.html`, built from
-  `design/generative/stack-review.shell.html`. It lists one-line layer
-  stories for Komunal, Dash · Lumio, E-ink and Cockpit, still to be built.
+  `design/generative/stack-review.shell.html` (LinkAja and Independent).
 
 ## Open decisions
 

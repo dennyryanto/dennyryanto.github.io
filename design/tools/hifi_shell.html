@@ -71,8 +71,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-stat-l { margin-top: 9px; font: 500 10px/1.45 var(--mono); letter-spacing: .12em; color: var(--fg-3); }
 @media (max-width: 480px) { .mk-stat-n { font-size: 26px; } .mk-stat + .mk-stat { padding-left: 12px; } .mk-stat { padding-right: 10px; } }
 
-/* signature visual: drawn live in code (sv3d.js) and turned gently by scroll */
+/* signature visual: exploded layers drawn live in code (stack.js), built once when in view */
 .mk-sv { margin: 4px 0 0; }
+.mk-list { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 78ch; color: var(--fg-2); font: 400 16px/1.6 var(--display); }
 .mk-sv canvas { display: block; width: 100%; aspect-ratio: 21 / 9; }
 @media (max-width: 600px) {
   /* phones: the whole drawing re-fits a 4:3 frame instead of being cropped */
@@ -136,7 +137,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
-/*SV3D*/
+/*STACK*/
 </script>
 <script>
 (function () {
@@ -146,41 +147,44 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
 
-  // ---- toggle + drawer ----
-  var cs = $('#linkaja'), btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs);
-  var label = $('.mk-t-label', btn), revealed = false;
-  function setOpen(open) {
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    $('.mk-t-closed', btn).setAttribute('aria-hidden', open ? 'true' : 'false');
-    $('.mk-t-open', btn).setAttribute('aria-hidden', open ? 'false' : 'true');
-    inner.classList.remove('settled');
-    if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
-    if (open && G && !revealed) prepReveal();
-    drawer.classList.toggle('open', open);
-    if (reduce || !G) settle();
-  }
-  function settle() {
-    if (drawer.classList.contains('open')) inner.classList.add('settled');
-    if (G) ScrollTrigger.refresh();
-    if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(); }
-  }
-  drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
-  btn.addEventListener('click', function () { setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
-  $('.mk-close', cs).addEventListener('click', function () {
-    var y = btn.getBoundingClientRect().top + window.scrollY - 140;
-    window.scrollTo({ top: y, behavior: 'instant' });
-    setOpen(false);
-    btn.focus({ preventScroll: true });
+  // ---- toggle + drawer, per case ----
+  var opener = {};
+  $$('.mk-case').forEach(function (cs) {
+    var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false;
+    if (!btn || !drawer) return;
+    var blocks = $$('.mk-block', cs);
+    function setOpen(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      $('.mk-t-closed', btn).setAttribute('aria-hidden', open ? 'true' : 'false');
+      $('.mk-t-open', btn).setAttribute('aria-hidden', open ? 'false' : 'true');
+      inner.classList.remove('settled');
+      if (open) inner.removeAttribute('inert'); else inner.setAttribute('inert', '');
+      if (open && G && !revealed) gsap.set(blocks, { opacity: 0, y: 28 });
+      drawer.classList.toggle('open', open);
+      if (reduce || !G) settle();
+    }
+    function settle() {
+      if (drawer.classList.contains('open')) inner.classList.add('settled');
+      if (G) ScrollTrigger.refresh();
+      if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(blocks); }
+    }
+    drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
+    btn.addEventListener('click', function () { setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
+    $('.mk-close', cs).addEventListener('click', function () {
+      var y = btn.getBoundingClientRect().top + window.scrollY - 140;
+      window.scrollTo({ top: y, behavior: 'instant' });
+      setOpen(false);
+      btn.focus({ preventScroll: true });
+    });
+    opener[cs.id] = setOpen;
   });
   $$('[data-open]').forEach(function (a) {
-    a.addEventListener('click', function () { if (a.dataset.open === 'linkaja') setOpen(true); });
+    a.addEventListener('click', function () { if (opener[a.dataset.open]) opener[a.dataset.open](true); });
   });
-  if (location.hash === '#linkaja') setOpen(true);
+  if (opener[location.hash.slice(1)]) opener[location.hash.slice(1)](true);
 
   // ---- drawer reveal: blocks rise in as they enter the view ----
-  var blocks = $$('.mk-block', cs);
-  function prepReveal() { gsap.set(blocks, { opacity: 0, y: 28 }); }
-  function buildReveal() {
+  function buildReveal(blocks) {
     // IntersectionObserver rather than ScrollTrigger: the drawer's height keeps
     // changing while it opens, so cached trigger positions go stale.
     var seen = new IntersectionObserver(function (es) {
@@ -212,10 +216,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     });
   }
 
-  // ---- signature visual: live 3D line art, turned by scroll (static with reduced motion) ----
-  $$('canvas[data-sv3d]').forEach(function (c) {
+  // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
+  $$('canvas[data-stack]').forEach(function (c) {
     var phone = window.matchMedia('(max-width: 600px)').matches;
-    window.SV3D && SV3D.mount(c, { range: 10, pad: phone ? [0.05, 0.03] : [0.06, 0.14] });
+    window.STACK && STACK.mount(c, { pad: phone ? [0.05, 0.03] : [0.06, 0.12] });
   });
 
   // ---- chart: bars grow and the trend line draws once on screen ----
@@ -263,8 +267,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     // hero copy and case header rise in once
     gsap.from([$('[data-r="hero-h1"]'), $('[data-r="hero-h1"]').nextElementSibling, $('[data-r="profile-card"]')],
       { y: 24, opacity: 0, duration: .8, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity' });
-    gsap.from($$('.mk-case-hero > div', cs), { y: 24, opacity: 0, duration: .7, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
+    $$('.mk-case').forEach(function (cs) {
+      gsap.from($$('.mk-case-hero > div', cs), { y: 24, opacity: 0, duration: .7, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity',
+        scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
+    });
   }
 })();
 </script>

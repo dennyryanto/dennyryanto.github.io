@@ -1,4 +1,4 @@
-"""Assemble the hi-fi mockup (opening + case 01 LinkAja) from the live site's rendered pieces."""
+"""Assemble the hi-fi mockup (opening, case 01 LinkAja in full, and the heroes of the other cases and labs) from the live site's rendered pieces."""
 import base64, re, sys, os
 from bs4 import BeautifulSoup
 
@@ -69,7 +69,7 @@ INDEX = [
 ]
 idx_cells = []
 for i, (cid, num, label, icon, n, co, lg) in enumerate(INDEX):
-    href = '#linkaja' if cid == 'linkaja' else '#mk-more'
+    href = '#' + cid
     pad = '44px 32px 44px 0' if i == 0 else ('44px 0 44px 36px' if i == 3 else '44px 36px')
     border = 'border-right:1px solid rgba(242,239,232,.14);' if i < 3 else ''
     idx_cells.append(
@@ -92,10 +92,10 @@ for sp in meta.find_all('span'):
         sp.string = '01 / LINKAJA'
 h2 = intro.find('h2')
 bullets = intro.find('h2').find_next_sibling('div')
-# signature visual: the line-art illustration (style master); the OPEX chart moves into the drawer
-SV_ALT = ('Line drawing in 3D: stepped terrain where four grooves from ticket-stacked intakes at the back left merge into one '
-          'lime self-service outflow that runs into a chat screen at the front right; it turns slowly as you scroll.')
-SV3D_JS = open(os.path.join(S, 'sv3d.js'), encoding='utf-8').read()
+# signature visual: exploded layers drawn live in code (stack.js); the OPEX chart moves into the drawer
+SV_ALT = ('Line drawing: three stacked layers (support tickets, intents, the chat screen). A lime ticket and a lime intent each '
+          'send a thread straight up and land as the lime answer and quick reply in the chat.')
+STACK_JS = open(os.path.join(S, 'stack.js'), encoding='utf-8').read()
 
 STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]
 stats_html = '<div class="mk-stats">' + ''.join(
@@ -133,17 +133,87 @@ case_html = (
     '<div>' + str(h2) + '</div>'
     '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p>' + stats_html + '</div>'
     '</div>'
-    + '<figure class="mk-sv"><canvas data-sv3d="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>'
+    + '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>'
     + toggle + drawer +
     '</div></section>')
 
-more_html = ('<section id="mk-more" style="border-top:1px solid rgba(242,239,232,.14)">'
-             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:56px 40px 120px">'
-             '<div class="mk-eyebrow">NEXT IN THE MOCKUP</div>'
-             '<div class="mk-next">'
-             + ''.join(f'<div class="mk-next-row"><span class="mk-dest-n">{n}</span><span>{co}</span><span class="mk-next-s">Same pattern, not mocked yet</span></div>'
-                       for _, _, _, _, n, co, _ in INDEX[1:]) +
-             '</div></div></section>')
+# ---------- the other cases and the two labs: hero, signature visual and a short drawer ----------
+BRIEF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>'
+FLASK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>'
+CASES = [
+    dict(id='komunal', n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
+         h2='Rebuilt how a regulated fintech ships design.',
+         sub='One shared design system for Product, Engineering and Marketing, and a redesigned deposit funnel that now completes about 12 points more often.',
+         stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('W→D', 'RELEASE CYCLE', False), ('1', 'SYSTEM · 3 ORGS', False)],
+         alt='Line drawing: three stacked layers (the design system, the deposit funnel, the deposit screen). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
+         bullets=['Championed the move from the legacy Sanity platform to Framer for web components, cutting release cycles from weeks to days.',
+                  'Created the company’s first shared design system: one source of foundations, components and tokens across Product, Engineering and Marketing.',
+                  'Led UX audits and redesigns that lifted DepositoBPR deposit-funnel completion by roughly 12 percentage points.',
+                  'Oversaw ISO / OJK compliance workflows without slowing UX delivery; standardised sprint rituals and PRD templates.']),
+    dict(id='board', scene='dash', n='03 / EXECUTIVE &amp; BOARD', role='DASH INOVASI ABADI · LUMIO INOVASI TECHNOLOGY · NOV 2016 – PRESENT', icon=BRIEF,
+         h2='Board-level judgment, design-level craft.',
+         sub='I founded and ran a B2B product company for eight years: Dash, the restaurant ordering platform behind 30+ chains, and Lumio, which turns signage networks into revenue.',
+         stats=[('~200K', 'DASH CUSTOMERS / MO', True), ('30+', 'DASH CHAINS', False), ('150+', 'LUMIO LOCATIONS', False)],
+         alt='Line drawing: three stacked layers (the restaurant floor, the menu, the order screen). A lime table and a lime dish land as the lime send-to-kitchen bar and the added item.',
+         bullets=['Founder &amp; Director, Dash Inovasi Abadi (2016–2024): a B2B product company serving SME and enterprise F&amp;B and retail brands.',
+                  'Product vision behind the Dash ordering platform: real-time table, kitchen, captain and back-office modules, live across 30+ chains and ~200,000 customers a month.',
+                  'VP of Design, Lumio: a cloud platform that gives digital-signage owners business metrics and maximises content-slot revenue across 150+ locations.',
+                  'Commissioner at Dash and Lumio since 2021: strategy, governance, financial health and risk; primary representative to investors.']),
+    dict(id='ai', scene='independent', n='04 / INDEPENDENT CONSULTING', role='PRODUCT &amp; AI DESIGN CONSULTANT · NOV 2025 – PRESENT', icon=BRIEF,
+         h2='Making design teams AI-native.',
+         sub='A data-to-decision workflow that cleans siloed legacy data and puts live, AI-driven decisions in front of the people running the business.',
+         stats=[('0→1', 'PROTOTYPES W/ CLAUDE CODE', True), ('3', 'ANTHROPIC CERTIFICATES', False), ('MCP', 'AGENTIC WORKFLOWS', False)],
+         alt='Line drawing: three stacked layers (raw data sources, a grid of signals, a decision card). A lime source and a lime signal land as the lime confidence bar and approve button.',
+         bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
+                  'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
+                  'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
+    dict(id='lab', scene='eink', n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT', icon=FLASK,
+         h2='Shipping real products with AI, end to end.',
+         sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
+         stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
+         alt='Line drawing: three stacked layers (live data feeds, the 1-bit render, the e-ink panel). The lime readiness feed and the lime surviving block land as the panel’s lime number and suggestion.',
+         bullets=['Garmin Connect API: live biometrics, races, sleep and readiness, fetched on a schedule.',
+                  'FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.',
+                  'Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.',
+                  'TRMNL DIY kit (ESP32) on the nightstand; everything behind it designed and built with Claude Code.']),
+    dict(id='lab-ui', scene='cockpit', n='LAB / AI-ASSISTED UI', role='PERSONAL CONCEPT · GARMIN CONNECT', icon=FLASK,
+         h2='What if Garmin Connect read like a cockpit?',
+         sub='Dark display glass, fine graduated scales and one pointer that always means you, now. AI widened the exploration; the direction and every call stayed mine.',
+         stats=[('1', 'POINTER · YOU, NOW', True), ('4', 'SCREENS DESIGNED', False), ('3', 'INSTRUMENT CLOSE-UPS', False)],
+         alt='Line drawing: three stacked layers (terrain, a wall of instruments, the glass display). Your lime position and the lime reading that matters land as the lime pointer and value.',
+         bullets=['Home, at a glance: grouped by the question you are asking (recovery, training, today).',
+                  'Density is a setting: the same screen, dense, where only the size changes.',
+                  'On a hard day, colour appears only when something departs from normal.',
+                  'Training, plan first: this week’s sessions, then the load behind them.']),
+]
+
+
+def case_section(c):
+    stats = '<div class="mk-stats">' + ''.join(
+        f'<div class="mk-stat"><div data-m="count" class="mk-stat-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div><div class="mk-stat-l">{l}</div></div>'
+        for n, l, hi in c['stats']) + '</div>'
+    meta = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
+            f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
+            f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
+    h2 = ('<h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">' + c['h2'] + '</h2>')
+    did = '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in c['bullets']) + '</ul>'
+    tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
+           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
+           '<span class="mk-t-meta">' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet</span>'
+           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
+           '</button>')
+    dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
+          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
+          '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
+          '</div></div></div>')
+    return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
+            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta +
+            '<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p>' + stats + '</div></div>'
+            '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+            + tog + dr + '</div></section>')
+
+
+more_html = ''.join(case_section(c) for c in CASES)
 
 tpl = open(os.path.join(S, 'hifi_shell.html'), encoding='utf-8').read()
 out = (tpl.replace('/*__SITE_CSS__*/', css)
@@ -152,6 +222,6 @@ out = (tpl.replace('/*__SITE_CSS__*/', css)
           .replace('<!--__INDEX__-->', index_html)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
-          .replace('/*SV3D*/', SV3D_JS))
+          .replace('/*STACK*/', STACK_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
 print('bytes', len(out))
