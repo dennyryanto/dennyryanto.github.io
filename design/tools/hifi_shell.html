@@ -141,6 +141,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-split-text h2 { margin: 0 !important; font-size: clamp(32px, 3.4vw, 44px) !important; }
 .mk-split > .mk-sv { grid-area: fig; margin: 0; }
 .mk-split .mk-sv canvas { aspect-ratio: 5 / 4; }
+/* the stacks can be turned by dragging or with the arrow keys */
+.mk-sv canvas:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; border-radius: 6px; }
 /* the toggle stays at the bottom of the section, centred; its meta line is only the read time */
 @media (max-width: 900px) {
   .mk-split, .mk-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig"; row-gap: 8px; }

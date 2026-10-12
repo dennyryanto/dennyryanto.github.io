@@ -567,7 +567,9 @@ html { scroll-behavior: smooth; }
     opts = opts || {};
     this.cv = canvas; this.cx = canvas.getContext('2d');
     this.S = SCENES[scene]();
-    this.yaw = opts.yaw || 40; this.elev = opts.elev || 26;
+    this.yaw = this.yaw0 = opts.yaw || 40; this.elev = this.elev0 = opts.elev || 26;
+    // how far a reader may turn it: left/right in yaw, up/down in elevation
+    this.turn = opts.turn || { yaw: 18, up: 16, down: 10 };
     this.pad = opts.pad || [0.08, 0.16];
     this.palette = opts.palette || null; // optional: function returning { ink, line, line2, lime } as #rrggbb, read on every draw
     var n = this.S.layers.length;
@@ -583,15 +585,27 @@ html { scroll-behavior: smooth; }
     this.fit();
   };
 
+  // the frame is fitted over every angle the reader can turn to, so turning never zooms or clips
   Renderer.prototype.fit = function () {
-    var S = this.S, self = this, b = [1e9, -1e9, 1e9, -1e9], top = (S.layers.length - 1) * S.gap + 0.12;
+    var S = this.S, self = this, b = [1e9, -1e9, 1e9, -1e9], top = (S.layers.length - 1) * S.gap + 0.12, tn = this.turn, keep = [this.yaw, this.elev];
     this.mx = S.w / 2; this.my = S.d / 2;
-    this.c = Math.cos(this.yaw * DEG); this.s = Math.sin(this.yaw * DEG); this.se = Math.sin(this.elev * DEG); this.ce = Math.cos(this.elev * DEG);
     this.k = 1; this.ox = 0; this.oy = 0;
-    [0, S.w].forEach(function (x) { [0, S.d].forEach(function (y) { [0, top].forEach(function (z) { var p = self.P(x, y, z); b[0] = Math.min(b[0], p[0]); b[1] = Math.max(b[1], p[0]); b[2] = Math.min(b[2], p[1]); b[3] = Math.max(b[3], p[1]); }); }); });
+    [-tn.yaw, 0, tn.yaw].forEach(function (dy) { [-tn.down, 0, tn.up].forEach(function (de) {
+      self.view(self.yaw0 + dy, self.elev0 + de);
+      [0, S.w].forEach(function (x) { [0, S.d].forEach(function (y) { [0, top].forEach(function (z) { var p = self.P(x, y, z); b[0] = Math.min(b[0], p[0]); b[1] = Math.max(b[1], p[0]); b[2] = Math.min(b[2], p[1]); b[3] = Math.max(b[3], p[1]); }); }); });
+    }); });
+    this.view(keep[0], keep[1]);
     var aw = this.W * (1 - 2 * this.pad[1]), ah = this.H * (1 - 2 * this.pad[0]);
     this.k = Math.min(aw / (b[1] - b[0]), ah / (b[3] - b[2]));
     this.ox = this.W / 2 - this.k * (b[0] + b[1]) / 2; this.oy = this.H / 2 - this.k * (b[2] + b[3]) / 2;
+  };
+
+  // turn to an angle, kept inside the allowed range
+  Renderer.prototype.view = function (yaw, elev) {
+    var tn = this.turn;
+    this.yaw = Math.max(this.yaw0 - tn.yaw, Math.min(this.yaw0 + tn.yaw, yaw));
+    this.elev = Math.max(this.elev0 - tn.down, Math.min(this.elev0 + tn.up, elev));
+    this.c = Math.cos(this.yaw * DEG); this.s = Math.sin(this.yaw * DEG); this.se = Math.sin(this.elev * DEG); this.ce = Math.cos(this.elev * DEG);
   };
 
   Renderer.prototype.P = function (x, y, z) {
@@ -716,6 +730,39 @@ html { scroll-behavior: smooth; }
       }
       var rt = null;
       window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { R.resize(); R.render(Math.min(t, R.END)); }, 120); });
+      if (opts.interactive !== false) turnable();
+    }
+    // a reader can turn it: drag (or arrow keys) moves it left/right and up/down within limits; let go and it settles back
+    function turnable() {
+      var drag = null, back = 0, redraw = function () { R.render(Math.min(t, R.END)); };
+      canvas.style.cursor = 'grab'; canvas.style.touchAction = 'pan-y'; canvas.tabIndex = 0;
+      function settle() {
+        if (reduce) return;
+        var y0 = R.yaw, e0 = R.elev, s0 = performance.now();
+        cancelAnimationFrame(back);
+        (function step(now) {
+          var u = Math.min(1, (now - s0) / 700), k = 1 - Math.pow(1 - u, 3);
+          R.view(y0 + (R.yaw0 - y0) * k, e0 + (R.elev0 - e0) * k); redraw();
+          if (u < 1) back = requestAnimationFrame(step);
+        })(s0);
+      }
+      canvas.addEventListener('pointerdown', function (e) {
+        cancelAnimationFrame(back);
+        drag = { x: e.clientX, y: e.clientY, yaw: R.yaw, elev: R.elev, id: e.pointerId };
+        canvas.setPointerCapture(e.pointerId); canvas.style.cursor = 'grabbing';
+      });
+      canvas.addEventListener('pointermove', function (e) {
+        if (!drag || e.pointerId !== drag.id) return;
+        R.view(drag.yaw + (e.clientX - drag.x) * 0.22, drag.elev + (e.clientY - drag.y) * 0.14); redraw();
+      });
+      var release = function (e) { if (!drag || e.pointerId !== drag.id) return; drag = null; canvas.style.cursor = 'grab'; settle(); };
+      canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
+      canvas.addEventListener('keydown', function (e) {
+        var d = { ArrowLeft: [-4, 0], ArrowRight: [4, 0], ArrowUp: [0, 3], ArrowDown: [0, -3] }[e.key];
+        if (!d) return;
+        e.preventDefault(); cancelAnimationFrame(back); R.view(R.yaw + d[0], R.elev + d[1]); redraw();
+      });
+      canvas.addEventListener('blur', settle);
     }
     if ('IntersectionObserver' in window) {
       var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '300px 0px' });

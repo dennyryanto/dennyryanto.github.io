@@ -571,6 +571,27 @@ Owner: "get back to the wireframe mockup and implement the changes".
     sections (words at 230 a minute, plus a little per image and diagram):
     LinkAja 3, Komunal 2, Dash · Lumio 4, Independent 2, e-ink 2,
     cockpit 2 min (`READ` in `build_hifi.py`).
+- **Opening scrolls you in** (owner: "clicking read doesn't scroll"). Opening
+  a drawer glides the toggle up under the top bar, so the drawer fills the
+  view; with reduced motion it jumps instead. This applies to the hi-fi and
+  the wireframe.
+- **Turnable stacks** (owner: "let the user interact with the diagrams,
+  limited to a constrained amount of left, right, up, down rotation").
+  `stack.js` adds a `turnable()` behaviour to every mounted stack, in the
+  hi-fi, the wireframe and the review page:
+  - Dragging turns it up to ±18° left/right and tilts it 10° down to 16°
+    up, clamped in `Renderer.view()`. Arrow keys do the same when the
+    canvas has focus.
+  - Letting go eases it back to rest over 0.7s; with reduced motion it
+    stays where it was left.
+  - The frame is fitted over the whole allowed range, so turning never
+    zooms or clips.
+  - Touch keeps vertical page scrolling (`touch-action: pan-y`), so on
+    phones horizontal drags turn it.
+  - The build animation and the turn combine: it can be turned while it
+    builds.
+  - Options: `turn: { yaw, up, down }`, or `interactive: false` to switch
+    it off.
 
 ## Open decisions
 
