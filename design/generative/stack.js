@@ -222,6 +222,7 @@
     this.S = SCENES[scene]();
     this.yaw = opts.yaw || 40; this.elev = opts.elev || 26;
     this.pad = opts.pad || [0.08, 0.16];
+    this.palette = opts.palette || null; // optional: function returning { ink, line, line2, lime } as #rrggbb, read on every draw
     var n = this.S.layers.length;
     this.END = (n - 1) * STEP + DECIDE + LIGHT + 0.05;
     this.resize();
@@ -308,6 +309,11 @@
 
   // the build at time t: every slab, decision and thread is a pure function of t (the flicker too, so replays match)
   Renderer.prototype.render = function (t) {
+    var keep = PAL;
+    if (this.palette) PAL = this.palette();
+    try { this.draw(t); } finally { PAL = keep; }
+  };
+  Renderer.prototype.draw = function (t) {
     var S = this.S, g = this.cx, self = this, dpr = this.cv.width / this.W, L1 = 1.4 * this.lw, L2 = 0.8 * this.lw, n = S.layers.length, T = 0.12;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.globalAlpha = 1; g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
@@ -368,7 +374,7 @@
       var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '300px 0px' });
       io.observe(canvas);
     } else start();
-    return { replay: function () { if (R && !reduce) play(); } };
+    return { replay: function () { if (R && !reduce) play(); }, redraw: function () { if (R) R.render(Math.min(t, R.END)); } };
   }
 
   root.STACK = { mount: mount, Renderer: Renderer, scenes: Object.keys(SCENES), define: function (name, fn) { SCENES[name] = fn; } };

@@ -8,7 +8,7 @@ Live mockups (claude.ai artifacts, private to the owner):
 
 - Wireframe: https://claude.ai/artifact/EHgn5hkwDuf3Y3MRPdvVCB
   (local copy: `design/mockups/wireframe.html`)
-- Hi-fi, opening + case 01 LinkAja: https://claude.ai/artifact/DtpefKiKyb54R7UGPayvgr
+- Hi-fi, opening + LinkAja in full + heroes of every other section: https://claude.ai/artifact/DtpefKiKyb54R7UGPayvgr
   (local copy: `design/mockups/hifi-opening-linkaja.html`)
 
 Both local copies are artifact bodies without a `<!doctype>`/`<head>` wrapper.
@@ -468,7 +468,31 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   `design/generative/stack-review.shell.html` (LinkAja, Independent and
   Chrona).
 
+### Wireframe v2: hi-fi decisions brought back (2026-10-12)
+
+Owner: "get back to the wireframe mockup and implement the changes".
+
+- **Signature visuals.** Every hero placeholder is now the live exploded-layer
+  stack (`stack.js`, inlined between `/*STACK:BEGIN*/` and `/*STACK:END*/`;
+  refresh with `python3 design/tools/inline_stack.py design/mockups/wireframe.html`).
+  - It is drawn in the wireframe's own greys via the new `palette` option
+    (paper, ink-2, ink-3). Decisions are solid ink here, lime in the hi-fi.
+  - It follows light/dark and redraws on a theme change (`redraw()`).
+  - Independent shows the decision-desk and Chrona stacks side by side.
+  - New note 11 explains the system.
+- **What the stacks displaced moves into the drawers.** The LinkAja OPEX
+  chart, the Komunal funnel chart and the e-ink nightstand photo each become
+  a drawer visual.
+- **Cockpit:** its hero is a stack like every other section. The 3D fan of
+  screens moves to the top of its drawer and still autoplays while on screen.
+  Note 5 and the F4 audit row are updated. This reverses where the fan
+  sat in v1, so it is up for review.
+- Page length: about 11.5 window heights collapsed at 1440 × 900.
+
 ## Open decisions
+
+- **Cockpit fan placement**: top of the drawer (wireframe v2) or back in the
+  hero beside or instead of the stack.
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
   first). The wireframe toolbar switches between them.
