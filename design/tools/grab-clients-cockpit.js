@@ -6,7 +6,7 @@ const fs = require('fs');
   const out = process.argv[2];
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
-  await p.goto('http://localhost:8765/index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
+  await p.goto('http://localhost:8765/design/source/legacy-index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
   const r = await p.evaluate(async () => {
     async function toData(url) { const blob = await (await fetch(url)).blob(); return await new Promise(res => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.readAsDataURL(blob); }); }
     const k = [...document.querySelector('[data-r="page"]').children];

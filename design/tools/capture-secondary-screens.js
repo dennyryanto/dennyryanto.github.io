@@ -3,7 +3,7 @@ const { chromium } = require(require('child_process').execSync('npm root -g').to
   const out = process.argv[2];
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, reducedMotion: 'reduce' });
-  await p.goto('http://localhost:8765/index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
+  await p.goto('http://localhost:8765/design/source/legacy-index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
   const H = await p.evaluate(() => document.documentElement.scrollHeight);
   for (let y = 0; y < H; y += 700) { await p.evaluate(v => scrollTo(0, v), y); await p.waitForTimeout(50); }
   const res = await p.evaluate(() => {

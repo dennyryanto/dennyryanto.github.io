@@ -3,7 +3,7 @@ const { chromium } = require(require('child_process').execSync('npm root -g').to
   const b = await chromium.launch();
   for (const [w,h] of [[1440,900],[390,844]]) {
     const p = await b.newPage({ viewport: { width: w, height: h } });
-    await p.goto('http://localhost:8765/index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
+    await p.goto('http://localhost:8765/design/source/legacy-index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
     const r = await p.evaluate((vh) => {
       const page = document.querySelector('[data-r="page"]');
       const out = []; 

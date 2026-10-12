@@ -123,7 +123,8 @@ bullets = intro.find('h2').find_next_sibling('div')
 # signature visual: exploded layers drawn live in code (stack.js); the OPEX chart moves into the drawer
 SV_ALT = ('Line drawing: three phone-shaped layers (support tickets, intents, and the chat screen as a wireframe). A lime ticket and a lime intent each '
           'send a thread straight up and land as the lime answer and quick reply in the chat.')
-STACK_JS = open(os.path.join(S, 'stack.js'), encoding='utf-8').read()
+HERE = os.path.dirname(os.path.abspath(__file__))
+STACK_JS = open(os.path.join(HERE, '..', 'generative', 'stack.js'), encoding='utf-8').read()
 
 # key numbers: a centred band of three, each with the number, what it measures and one line of context
 CONTEXT = {
@@ -177,7 +178,7 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
-drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
+drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
@@ -265,6 +266,33 @@ CASES = [
 ]
 
 
+# ---------- the live site's own case content, moved into each drawer ----------
+def live_kids(name):
+    # the section's content blocks: descend through single-child wrappers, then take the children
+    node = soup(read(name)).find()
+    while len(node.find_all(recursive=False)) == 1:
+        node = node.find(recursive=False)
+    return node.find_all(recursive=False)
+
+
+def blocks(*els):
+    return ''.join('<div class="mk-block">' + str(e) + '</div>' for e in els)
+
+
+kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
+LIVE = {
+    'komunal': blocks(kom[2], kom[3]),                      # tooling migration, deposit funnel
+    'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
+                    brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
+    'ai': blocks(ai_[2], ai_[3]),                           # decision desk, Chrona
+    'lab': blocks(lab_[2]),                                 # Garmin Daily Brief: faces, architecture, shoe tracker
+}
+# the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
+lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
+lui_note = lui[2].find_all(recursive=False)[2]
+QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + str(lui_intro) + '</div>'
+
+
 def figure(c):
     if 'pair' not in c:
         return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
@@ -289,11 +317,12 @@ def case_section(c):
            '<span class="mk-t-meta">%%READ%%</span>'
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
-    dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
-          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>'
-              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + '</div>') if c.get('fan') else '') +
+    dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner"><div class="mk-drawer-body">'
+          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>' + QUESTION +
+              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + str(lui_note) + '</div>') if c.get('fan') else '') +
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
+          + LIVE.get(c['id'], '') +
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
     tog = tog.replace('%%READ%%', '%d min read' % READ[c['id']])
@@ -306,10 +335,66 @@ def case_section(c):
 
 more_html = ''.join(case_section(c) for c in CASES)
 
-tpl = open(os.path.join(S, 'hifi_shell.html'), encoding='utf-8').read()
+# ---------- background: the career timeline as its hero, earlier work and capabilities in a drawer that starts open ----------
+career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('capabilities')
+edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
+bg_html = (
+    '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
+    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
+    f'<div style="font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">BACKGROUND</div>'
+    '<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">2011 – PRESENT</div></div>'
+    '<h2 style="margin:0 0 36px;font:800 clamp(32px,3.4vw,44px)/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Fifteen years across four companies.</h2>'
+    + str(career[1]) +
+    '<button type="button" class="mk-toggle" aria-expanded="true" aria-controls="d-background">'
+    '<span class="mk-t-label"><span class="mk-t-closed" aria-hidden="true">Show full background</span><span class="mk-t-open">Close</span></span>'
+    '<span class="mk-t-meta">Earlier work · capabilities · education</span>'
+    '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
+    '</button>'
+    '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
+    + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>' + str(earlier[1]) + '</div>' +
+    '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
+    '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
+    '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'
+    '</div></div></div></div></section>')
+contact = soup(read('contact')).find()
+for a in contact.find_all('a'):
+    if a.get('download') is not None:
+        a['href'] = 'https://dennyryanto.github.io/denny-ryanto-resume.pdf'
+more_html += bg_html + str(contact)
+
+# ---------- type floor (audit F5): nothing under 11px, except text drawn inside SVG diagrams, which scales with them ----------
+FONT_PX = re.compile(r'(font(?:-size)?\s*:[^;"]*?)(\d+(?:\.\d+)?)px')
+
+
+def lift(decl):
+    return FONT_PX.sub(lambda m: m.group(1) + ('11' if float(m.group(2)) < 11 else m.group(2)) + 'px', decl)
+
+
+def floor_type(html):
+    sp = BeautifulSoup(html, 'html.parser')
+    n = 0
+    for el in sp.find_all(style=True):
+        if el.name == 'svg' or el.find_parent('svg'):
+            continue
+        new = lift(el['style'])
+        if new != el['style']:
+            el['style'] = new
+            n += 1
+    return str(sp), n
+
+
+css = lift(css)
+more_html, lifted = floor_type(more_html)
+case_html, lifted2 = floor_type(case_html)
+top_html, lifted3 = floor_type(str(top))
+hero_html, lifted4 = floor_type(str(hero))
+print('type floor: lifted', lifted + lifted2 + lifted3 + lifted4, 'elements to 11px')
+
+tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
 out = (tpl.replace('/*__SITE_CSS__*/', css)
-          .replace('<!--__TOPBAR__-->', str(top))
-          .replace('<!--__HERO__-->', str(hero))
+          .replace('<!--__TOPBAR__-->', top_html)
+          .replace('<!--__HERO__-->', hero_html)
           .replace('<!--__INDEX__-->', index_html + clients_html)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)

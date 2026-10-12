@@ -4,7 +4,7 @@ const fs = require('fs');
   const out = process.argv[2];
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
-  await p.goto('http://localhost:8765/index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
+  await p.goto('http://localhost:8765/design/source/legacy-index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(3000);
   // scroll so everything is rendered/booted, then snapshot before motion hides anything
   const r = await p.evaluate(async () => {
     async function toData(url) {

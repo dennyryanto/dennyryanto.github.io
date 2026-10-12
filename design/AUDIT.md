@@ -1,18 +1,20 @@
 # Portfolio design audit and redesign plan
 
-Started 2026-10-09. **Status: on hold.** The structure below is agreed, but the
-work is paused until the other case studies are brought up to the polish level
-of the Garmin "glass cockpit" section (see [On hold](#on-hold-why-and-what-unblocks-it)).
+Started 2026-10-09. **Status: built (2026-10-12), not yet pushed.** The
+redesign is now the real site: `index.html` plus `assets/`, generated from the
+live content (see [The real site](#the-real-site-2026-10-12)). The old bundle
+is kept as `design/source/legacy-index.html`, which the grab tools read.
 
 Live mockups (claude.ai artifacts, private to the owner):
 
 - Wireframe: https://claude.ai/artifact/EHgn5hkwDuf3Y3MRPdvVCB
   (local copy: `design/mockups/wireframe.html`)
-- Hi-fi, opening + LinkAja in full + heroes of every other section: https://claude.ai/artifact/DtpefKiKyb54R7UGPayvgr
-  (local copy: `design/mockups/hifi-opening-linkaja.html`)
+- Hi-fi, now the whole page with every drawer filled: https://claude.ai/artifact/DtpefKiKyb54R7UGPayvgr
+  (no local copy any more: the hi-fi is the same assembly as `index.html`,
+  with its images inlined)
 
-Both local copies are artifact bodies without a `<!doctype>`/`<head>` wrapper.
-They render fine in a browser, in quirks mode.
+The wireframe's local copy is an artifact body without a `<!doctype>`/`<head>`
+wrapper. It renders fine in a browser, in quirks mode.
 
 ## The problem
 
@@ -632,6 +634,66 @@ Owner: "get back to the wireframe mockup and implement the changes".
 
   The band stacks into rows below 700px.
 
+## The real site (2026-10-12)
+
+The owner asked to "build the real thing" once the wireframe and hi-fi were in
+sync. `index.html` is no longer a bundler export. It is a static page
+generated from the live site's own content, laid out as the hi-fi.
+
+What it is:
+
+- **Every drawer is filled with the live case content.** The mockups had stub
+  drawers. Each drawer now has the key numbers, "What I did", and then the
+  live section's own blocks:
+
+  | Case | Live blocks in the drawer |
+  |---|---|
+  | Komunal | tooling migration, design system, deposit funnel and volume, Deposito phones |
+  | Dash · Lumio | the Dash table app, the captain app and back office, the Lumio network and CMS, governance |
+  | Independent | the decision desk, Chrona with its habit loop and engine |
+  | e-ink lab | the faces, architecture, deployment, shoe tracker |
+  | Garmin cockpit | the fan, "The question" write-up, the close-ups and the not-affiliated note |
+
+  - The Dash table app used to bleed past the page edge; inside the drawer it
+    sits in the column.
+- **The Background section.** The career timeline is the hero, and it starts
+  open with:
+  - earlier work;
+  - capabilities;
+  - the degree (the certificates stay in the profile card only).
+
+  "Let's talk" closes the page.
+- **Type floor (F5) enforced in the build.** Any inline or stylesheet font
+  size under 11px is lifted to 11px (161 elements). Text drawn inside SVG
+  diagrams is left alone, since it scales with the drawing. Measured: no
+  visible text under 11px outside SVG.
+- **No runtime (F10).** Plain HTML and CSS, with images as files in
+  `assets/img/` (named by content hash). It uses:
+  - GSAP 3.15 from `assets/js/` (the site's own copy, not a CDN);
+  - `assets/js/stack.js`.
+- **Works without JavaScript.** A `<noscript>` rule shows every drawer open
+  and hides the toggles. With JavaScript, closed drawers are made `inert` at
+  load (not in the markup), so the content is never unreachable.
+- **Lazy images.** Every image except the headshot loads as it nears the view.
+
+Measured against the old bundle:
+
+| | Old `index.html` | New site |
+|---|---|---|
+| First load | 7.9MB, one file | about 586KB |
+| Length, desktop | 22 screens | 9.3 screens, collapsed |
+| Length, phone | 40 screens | 12.5 screens, collapsed |
+
+Checked:
+
+- no console errors and no failed requests;
+- deep links such as `#lab` open their case;
+- the toggles open and scroll;
+- no horizontal overflow at 390px or 1440px.
+
+How to rebuild (see the technical notes): grab, then `build_hifi.py`, then
+`build_site.py`.
+
 ## Open decisions
 
 - **Cockpit fan placement**: top of the drawer (wireframe v2) or back in the
@@ -679,7 +741,23 @@ those before continuing. Resume from here.
 
 ## Technical notes for whoever picks this up
 
-- `index.html` is a bundler export: a JSON `__bundler/template` plus a
+- **Rebuilding the site.**
+  1. Serve the repo: `python3 -m http.server 8765`.
+  2. Grab the live sections from `design/source/legacy-index.html`. For a
+     fresh work directory, unpack the bundle there first (`unpack.py`), since
+     `build_site.py` takes GSAP from `<workdir>/unpacked/assets/`. Then run:
+     - `grab-sections.js`
+     - `grab-clients-cockpit.js`
+     - `grab-site.js <workdir>`
+  3. `python3 design/tools/build_hifi.py <workdir>` assembles the page; it
+     writes `<workdir>/portfolio-hifi.html`, the hi-fi artifact.
+  4. `python3 design/tools/build_site.py <workdir> .` writes `index.html` and
+     `assets/`.
+
+  `build_hifi.py` reads `stack.js` and `hifi_shell.html` from the repo; only
+  the captures come from the work directory. Copy or edit content in the
+  captures or in `build_hifi.py`, never in `index.html`, which is generated.
+- `design/source/legacy-index.html` (the old site) is a bundler export: a JSON `__bundler/template` plus a
   `__bundler/manifest` of gzip+base64 assets keyed by UUID, unpacked at runtime
   by a dc-runtime (React). Motion uses GSAP 3.15 + ScrollTrigger (bundled) and
   `motion.js` (`data-m="count|reveal|stagger|ba|bar|scrub|parallax|draw"`).
@@ -691,8 +769,8 @@ those before continuing. Resume from here.
   no GSAP from-states leak into the markup. It picks sections by child index of
   `[data-r="page"]`; update the indices if sections move.
 - `design/tools/build_hifi.py <workdir>` builds the hi-fi mockup from those
-  captures, using `hifi_shell.html`. It expects `<workdir>/hifi/*.html`,
-  `<workdir>/hifi_shell.html` and `<workdir>/unpacked/assets/`.
+  captures, using `hifi_shell.html`. It expects `<workdir>/hifi/*.html` and
+  `<workdir>/unpacked/assets/`.
 - `design/tools/measure-sections.js` prints per-section heights in screens.
 - Gotchas found while building the mockups:
   - `position: sticky` (the cockpit stage) breaks inside an `overflow: hidden`

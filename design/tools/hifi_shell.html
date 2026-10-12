@@ -193,6 +193,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-close { justify-self: center; margin-top: 12px; background: none; border: 0; border-radius: 100px; padding: 12px 18px; color: var(--fg-3); font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; cursor: pointer; transition: border-color .25s, color .25s; }
 .mk-close:hover { color: var(--lime); }
 
+/* the Dash table app bleeds past the page edge on the live site; inside a drawer it sits in the column */
+.mk-drawer [data-r="bleed-col"] { width: 100%; max-width: 1040px; margin-inline: auto; }
+.mk-drawer [data-r="bleed-stage"] { width: 100% !important; }
+/* contact: on phones the sign-off wraps under the buttons, so it lines up left with them */
+@media (max-width: 600px) { #contact > div > div:last-child { text-align: left !important; } }
+/* background: the degree as one quiet line */
+.mk-edu { font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
+
 /* next */
 .mk-next { display: grid; border-top: 1px solid var(--rule); }
 .mk-next-row { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 16px; align-items: baseline; padding: 18px 0; border-bottom: 1px solid var(--rule); font: 800 20px/1.2 var(--display); font-stretch: 112%; }
@@ -206,6 +214,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 }
 </style>
 
+<noscript><style>.mk-drawer { grid-template-rows: 1fr; } .mk-drawer-inner { overflow: visible; } .mk-toggle, .mk-close { display: none; }</style></noscript>
 <div data-r="page" id="top" style="background:#161511;color:#f2efe8;overflow-x:clip">
 <!--__TOPBAR__-->
 <!--__HERO__-->
@@ -235,6 +244,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false;
     if (!btn || !drawer) return;
     var blocks = $$('.mk-block', cs);
+    // closed drawers ship un-inert, so the content is reachable without JavaScript; with it, closed means inert
+    if (!drawer.classList.contains('open')) inner.setAttribute('inert', '');
     function setOpen(open) {
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
       $('.mk-t-closed', btn).setAttribute('aria-hidden', open ? 'true' : 'false');
