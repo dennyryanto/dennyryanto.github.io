@@ -196,6 +196,21 @@ Decisions from the interview:
 - **Tool-agnostic**, with notes for Midjourney, GPT image and Gemini.
 - **The agent proposes the LinkAja metaphors itself.**
 
+**Round 1 result (2026-10-12):** chosen **Direction C · Sculptural data,
+variant 2**, a stepped flow-density cascade. Saved as
+`design/signature-visuals/sv-linkaja-c-2.jpg`; it is the style master.
+
+Checks on the master:
+- **Passes:** the background is flat and matches `#161511` (within JPEG
+  noise); lime covers 0.3% of the image; clean 30° isometric view; no text.
+- **Fails, fixed in round 2:**
+  - It's 1584×672 instead of 2560×1097.
+  - The top leader lines come within 5% of the edge instead of 8%.
+  - The lime sits outside the centred 4:5 area, so the mobile crop is set
+    per image instead. The master's crop centre is about 73%.
+
+Round 2 instructions: `design/prompts/signature-visuals-round-2.md`.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
