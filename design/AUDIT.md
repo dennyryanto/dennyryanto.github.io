@@ -437,7 +437,12 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     chip. It is mapped pixel for pixel from the 800×480 renderer
     (`e-ink-display/server/renderer.py`, fixture `normal.json`) inside a
     TRMNL bezel. Lime lands on the HRV "balanced" pill and the suggestion
-    title. `k`/`kb` styles draw ink marks inside the filled header band.
+    title. Then simplified (owner: "the final layer looks too detailed
+    compared to the others"): it now keeps only Face 1's skeleton at the
+    density of the other final screens. That is the inverted header band
+    with its two dividers, four cards (big number block + bar), the
+    suggestion title and one line, three recovery lines and the footer
+    rule. The `k` style draws ink marks inside the filled band.
   - `cockpit`: terrain (your position) → instruments (the reading that
     matters) → glass display (lime pointer on the strip and lime value).
 - **Hi-fi now uses this style:** `design/mockups/hifi-opening-linkaja.html`

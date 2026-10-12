@@ -277,22 +277,13 @@ button.replay:focus-visible { outline: 2px solid var(--lime); outline-offset: 2p
       var layout = px([['rect', 0, 0, 800, 72, 's'], ['rect', 0, 72, 800, 232, 's'], ['line', 200, 72, 200, 232, 's2'], ['line', 400, 72, 400, 232, 's2'], ['line', 600, 72, 600, 232, 's2'],
         ['rect', 0, 232, 800, 426, 's'], ['line', 440, 232, 440, 426, 's2'], ['rect', 0, 426, 800, 480, 's']]);
       for (var a = 0; a < 26; a++) for (var b = 0; b < 3; b++) if ((a + b) % 2 === 0 && !(a < 15 && b > 0)) layout.push(['rect', X(30 * a + 18), X(100 + b * 40), X(30 * a + 24), X(106 + b * 40), 'f2']);
-      // Face 1 as the panel shows it: header band, four metric cards, today's suggestion, recovery, footer stats
-      var face = [['rect', 0, 0, 800, 72, 'f2'], ['line', 15, 17, 110, 17, 'k'], ['line', 15, 37, 100, 37, 'kb'], ['line', 15, 60, 130, 60, 'k'],
-        ['line', 163, 10, 163, 62, 'k'], ['circ', 200, 38, 14, 'k'], ['line', 228, 17, 330, 17, 'k'], ['line', 228, 37, 290, 37, 'kb'], ['line', 228, 60, 340, 60, 'k'],
-        ['line', 405, 10, 405, 62, 'k'], ['line', 455, 17, 535, 17, 'k'], ['line', 455, 37, 495, 37, 'kb'], ['rect', 458, 50, 536, 63, 'f'], ['rect', 678, 12, 792, 34, 'f'], ['line', 580, 60, 690, 60, 'k'],
+      // Face 1, reduced to its skeleton so it sits at the same density as the other final screens:
+      // the inverted header band, four metric cards (big number + bar), today's suggestion, recovery, the footer row
+      var face = [['rect', 0, 0, 800, 72, 'f2'], ['line', 163, 14, 163, 58, 'k'], ['line', 405, 14, 405, 58, 'k'],
         ['line', 200, 72, 200, 232, 's2'], ['line', 400, 72, 400, 232, 's2'], ['line', 600, 72, 600, 232, 's2'], ['line', 0, 232, 800, 232, 's'],
         ['line', 440, 232, 440, 426, 's2'], ['line', 0, 426, 800, 426, 's'],
-        ['line', 15, 252, 168, 252, 's2'], ['line', 15, 309, 108, 309, 's2'], ['rect', 15, 330, 77, 347, 's'], ['line', 15, 388, 248, 388, 's2'],
-        ['line', 455, 252, 540, 252, 's2'], ['rect', 748, 278, 787, 292, 's'],
-        ['line', 115, 434, 115, 474, 's2'], ['line', 222, 434, 222, 474, 's2'], ['line', 335, 434, 335, 474, 's2'], ['rect', 660, 440, 787, 466, 's']];
-      [[65, 0.82], [65, 0.6], [70, 0.86], [140, 0.5]].forEach(function (c, i) {
-        var x0 = 200 * i;
-        face.push(['line', x0 + 15, 94, x0 + 150, 94, 's2'], ['rect', x0 + 15, 116, x0 + 15 + c[0], 160, 'f2'],
-          ['rect', x0 + 15, 172, x0 + 182, 178, 's2'], ['rect', x0 + 15, 172, x0 + 15 + 167 * c[1], 178, 'f2'], ['line', x0 + 15, 192, x0 + 110, 192, 's2']);
-      });
-      [285, 323, 361, 399].forEach(function (y) { face.push(['circ', 461, y, 6, 's2'], ['line', 478, y, 512, y, 's2'], ['rect', 530, y - 8, 598, y + 8, 'f2']); });
-      [20, 132, 240, 352].forEach(function (x) { face.push(['circ', x, 452, 7, 's2'], ['line', x + 20, 441, x + 75, 441, 's2'], ['line', x + 20, 459, x + 70, 459, 's']); });
+        ['line', 15, 320, 200, 320, 's2'], ['line', 470, 285, 600, 285, 's2'], ['line', 470, 361, 600, 361, 's2'], ['line', 470, 399, 600, 399, 's2']];
+      [65, 65, 70, 140].forEach(function (wn, i) { var x0 = 200 * i; face.push(['rect', x0 + 15, 110, x0 + 15 + wn, 160, 'f2'], ['line', x0 + 15, 182, x0 + 182, 182, 's2']); });
       return scene('panel', [{ ops: feeds }, { ops: layout }, { ops: px(face) }], [
         // HRV, the feed recovery hangs on → the BALANCED pill
         { k: 0, at: [X(746), X(323.5)], ops: [['pl', [[-4.9, 0.2], [-3.9, -0.1], [-2.9, 0.12], [-1.9, -0.22], [-0.9, 0.05], [0, 0]], 'Ds'], ['circ', 0, 0, 0.12, 'D']], land: [['rect', -41 * K, -7.5 * K, 41 * K, 7.5 * K, 'D']] },
