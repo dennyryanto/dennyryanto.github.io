@@ -139,7 +139,7 @@ bullets['style'] = ''
 
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
-          '<span class="mk-t-meta">3 numbers · 4 outcomes · 4 diagrams · 6 screens · 3 min read</span>'
+          '<span class="mk-t-meta">%%READ%%</span>'
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
@@ -157,12 +157,19 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" in
 
 
 def split_hero(h2_html, sub_html, fig_html, toggle_html, flip):
-    # compact hero: title, description and the toggle in one column, the diagram beside them; sides alternate down the page
+    # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
+    # under the hero, at the bottom of the section
     return ('<div class="mk-split' + (' flip' if flip else '') + '">'
             '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p></div>'
-            + fig_html + toggle_html + '</div>')
+            + fig_html + '</div>' + toggle_html)
 
 
+# what each toggle promises: minutes to read the full case study, measured on the live site's sections
+# (words at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
+READ = {'linkaja': 3, 'komunal': 2, 'board': 4, 'ai': 2, 'lab': 2, 'lab-ui': 2}
+
+
+toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
 case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
@@ -247,7 +254,7 @@ def case_section(c):
     did = '<ul class="mk-list">' + ''.join('<li>' + b + '</li>' for b in c['bullets']) + '</ul>'
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
            '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
-           '<span class="mk-t-meta">' + ('4 screens · 3 close-ups · 3 numbers' if c.get('fan') else '3 numbers · ' + str(len(c['bullets'])) + ' outcomes · full drawer not mocked yet') + '</span>'
+           '<span class="mk-t-meta">%%READ%%</span>'
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
@@ -257,6 +264,7 @@ def case_section(c):
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
+    tog = tog.replace('%%READ%%', '%d min read' % READ[c['id']])
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta
             + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
@@ -275,4 +283,4 @@ out = (tpl.replace('/*__SITE_CSS__*/', css)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
-print('bytes', len(out))
+print('bytes', len(out), 'read times', re.findall(r'(\d+) min read', out))

@@ -563,6 +563,14 @@ Owner: "get back to the wireframe mockup and implement the changes".
   - The assets are grabbed from the live site into `hifi/clients.html` and
     `hifi/labui.html` (data URIs). The page is now about 1MB, mostly those
     screens and logos.
+- **Toggle back at the bottom, read time only** (hi-fi; owner: "put this
+  back at the bottom of each section; just show the read time").
+  - The toggle sits centred under the split hero again; the hero itself is
+    one row (text beside the diagram).
+  - Its meta line is only the read time, measured on the live site's full
+    sections (words at 230 a minute, plus a little per image and diagram):
+    LinkAja 3, Komunal 2, Dash · Lumio 4, Independent 2, e-ink 2,
+    cockpit 2 min (`READ` in `build_hifi.py`).
 
 ## Open decisions
 

@@ -135,20 +135,16 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 @media (max-width: 600px) { .mk-closeups { grid-template-columns: minmax(0, 1fr); } }
 
 /* compact split hero: title + description + toggle on one side, the diagram on the other; .flip swaps the sides */
-.mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig" "tog fig"; column-gap: 56px; align-items: center; }
-.mk-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text" "fig tog"; }
-.mk-split-text { grid-area: text; align-self: end; display: grid; gap: 18px; }
+.mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig"; column-gap: 56px; align-items: center; }
+.mk-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text"; }
+.mk-split-text { grid-area: text; display: grid; gap: 18px; }
 .mk-split-text h2 { margin: 0 !important; font-size: clamp(32px, 3.4vw, 44px) !important; }
 .mk-split > .mk-sv { grid-area: fig; margin: 0; }
 .mk-split .mk-sv canvas { aspect-ratio: 5 / 4; }
-/* the toggle sits under the description, left-aligned: label and chevron on one line, the meta under them */
-.mk-split > .mk-toggle { grid-area: tog; align-self: start; justify-self: start; width: auto; max-width: 100%; margin-top: 26px; padding: 6px 0; display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: 12px; row-gap: 8px; text-align: left; }
-.mk-split > .mk-toggle .mk-t-icon { order: 1; margin-top: 0; }
-.mk-split > .mk-toggle .mk-t-meta { order: 2; flex-basis: 100%; }
+/* the toggle stays at the bottom of the section, centred; its meta line is only the read time */
 @media (max-width: 900px) {
-  .mk-split, .mk-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig" "tog"; row-gap: 8px; }
+  .mk-split, .mk-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig"; row-gap: 8px; }
   .mk-split .mk-sv canvas { aspect-ratio: 4 / 3; }
-  .mk-split > .mk-toggle { margin-top: 8px; }
 }
 
 /* toggle: no box, centred caps, chevron bobs; open = label crossfade synced to the chevron flip */
