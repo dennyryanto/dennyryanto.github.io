@@ -366,43 +366,44 @@ with GSAP.
   per hero. The agent's images and the PNG generator remain as references
   only.
 
-### Exploded layers: `stack.js` (2026-10-12, chosen direction, iteration 1)
+### Exploded layers: `stack.js` (2026-10-12, chosen direction, iteration 2)
 
 Owner's pick from the alternatives: A · Exploded layers. The terraces
 (`sv3d.js`, the 3D review page) stay as they are.
 
 - **Owner's brief:** no rotation. The build animates from the foundation
   layer to the final layer. Lime marks the decision made on each layer, and
-  the survived decisions render on the final layer.
-- **Adjustments (proposed in review):**
-  - Each layer lights several candidate decisions, but only survivors
-    continue. When the build ends, dead ends dim to olive (`#4b571e`), so one
-    lime trail remains from foundation to final UI.
-  - Lime below the top stays small (tags, nodes, outlines). The final
-    layer's survivors are solid lime UI, so the outcome still dominates.
-  - The stack fans out: each layer rises 2.1 units and shifts toward the
-    frame's right. A straight tower hid every lower decision under the slab
-    above it, and the fan also fills the 21:9 hero. Threads are slanted lime
-    lines from a decision to where it lands on the next layer.
+  the decisions render on the final layer.
+- **Iteration 1 (dropped):** four layers fanned up to the right, several
+  candidates per layer, and dead ends dimmed to olive. Owner: it "keeps
+  building to the right"; simplify the approach and the diagram.
+- **Iteration 2 (current), simplified:**
+  - Three identical slabs, stacked straight up and centred: where it
+    started, where it was decided, the product.
+  - Low camera (yaw 40°, elevation 26°) and gaps of 2.9 units, so the lower
+    layers stay readable without any sideways drift.
+  - Each lower layer lights one lime decision among neutral grey content.
+    Its thread rises straight up, piercing the layer above with a lime dot.
+  - Where it meets the top layer, the decision becomes solid lime UI.
+  - No dimming, no hatching, no axis.
 - **Renderer:** `design/generative/stack.js`. It is standalone and
-  dependency-free (no GSAP needed), about 19KB raw and 6KB gzipped.
-  - Fixed camera: yaw 42°, elevation 30°.
-  - Slabs are drawn like the terraces' boxes (hatched +y face).
-  - Scenes are data: `layers` (slab, flat ops, optional blocks) plus
-    `items` (decisions: layer, position, ops with `D`/`Ds` lime styles,
-    `up` for a thread, `live` if it survives).
-  - Timeline: a layer every 0.9s (rise 0.5s, decide at +0.45s), threads
-    grow toward the next layer, and survivors settle at about 4.3s. Each
-    frame is a full redraw (about 5ms in the headless test) only while
-    building; after that nothing runs.
+  dependency-free (no GSAP), about 13KB raw and 4.6KB gzipped.
+  - Scenes are data: `w`, `d`, `gap`, `layers` (flat ops, optional blocks)
+    and `picks` (`k`, `at`, `h`, `ops` on its own layer, `land` on the top
+    layer).
+  - Timeline: a layer every 0.8s (rise 0.45s, decide at +0.4s), threads
+    climb 0.45s, and it is done in 2.4s. Frames are full redraws (about 4ms
+    in the headless test) only while building.
   - Plays once at 45% in view; reduced motion shows the finished stack.
     `mount()` returns `{ replay }`.
-- **Built:** LinkAja (tickets → intents → flows → chat; survivors: answer
-  bubble and resolve action) and Independent (sources → signals → options →
-  decision card; survivors: confidence bar and approve button).
+- **Built:**
+  - LinkAja: tickets → intents → chat. The decisions land as the answer
+    bubble and the quick reply.
+  - Independent: sources → signals → decision card. The decisions land as
+    the confidence bar and the approve button.
 - **Review page:** `design/mockups/exploded-layers.html`, built from
-  `design/generative/stack-review.shell.html`. It lists layer stories for
-  Komunal, Dash · Lumio, E-ink and Cockpit, still to be built.
+  `design/generative/stack-review.shell.html`. It lists one-line layer
+  stories for Komunal, Dash · Lumio, E-ink and Cockpit, still to be built.
 
 ## Open decisions
 
