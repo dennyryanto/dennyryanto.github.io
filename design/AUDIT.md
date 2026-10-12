@@ -229,6 +229,23 @@ signature visual.
 
 `build_hifi.py` expects the master at `<workdir>/sv-master.jpg`.
 
+### Round 2 review (2026-10-12)
+
+All six round 2 images are in `design/signature-visuals/` (`sv-*-c*.jpg`),
+each 1584×672.
+
+| Case | Lime | Margins | Phone crop centre | Verdict |
+|---|---|---|---|---|
+| LinkAja r2 | 0.24% | ✓ | 66% | ✓ new style master |
+| Komunal | 0.41% | bottom ~6% | 68% | ✓ |
+| Dash · Lumio | 0.70%, a line | ✗ fills the frame | none fits | ✗ re-render |
+| Independent | 0.24% | ✓ | 58% | ✓ |
+| E-ink | 2.44% | ✓ | 74% | ⚠ lime too heavy |
+| Cockpit | 0.03% | ✓ | 62% | ⚠ lime too light |
+
+Target lime weight across the set: about 0.2–0.7% of the image. Round 3 fix
+list: `design/prompts/signature-visuals-round-3.md`.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest
