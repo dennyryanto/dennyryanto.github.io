@@ -234,7 +234,15 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       if (drawer.classList.contains('open') && G && !revealed) { revealed = true; buildReveal(blocks); }
     }
     drawer.addEventListener('transitionend', function (e) { if (e.target === drawer) settle(); });
-    btn.addEventListener('click', function () { setOpen(btn.getAttribute('aria-expanded') !== 'true'); });
+    btn.addEventListener('click', function () {
+      var opening = btn.getAttribute('aria-expanded') !== 'true';
+      setOpen(opening);
+      // opening carries the reader into the case study: the toggle glides up under the top bar, so the drawer fills the view
+      if (opening) {
+        var bar = $('[data-r~="topbar"]') || document.querySelector('header'), offset = (bar ? bar.getBoundingClientRect().height : 64) + 24;
+        window.scrollTo({ top: btn.getBoundingClientRect().top + window.scrollY - offset, behavior: reduce ? 'auto' : 'smooth' });
+      }
+    });
     $('.mk-close', cs).addEventListener('click', function () {
       var y = btn.getBoundingClientRect().top + window.scrollY - 140;
       window.scrollTo({ top: y, behavior: 'instant' });

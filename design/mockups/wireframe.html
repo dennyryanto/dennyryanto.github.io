@@ -906,7 +906,12 @@ html { scroll-behavior: smooth; }
   }
   document.querySelectorAll('.case').forEach(function (a) {
     var btn = a.querySelector('.toggle');
-    btn.addEventListener('click', function () { setOpen(a, btn.getAttribute('aria-expanded') !== 'true'); });
+    btn.addEventListener('click', function () {
+      var opening = btn.getAttribute('aria-expanded') !== 'true';
+      setOpen(a, opening);
+      // opening carries the reader into the case study: the toggle glides up under the top bar
+      if (opening) window.scrollTo({ top: btn.getBoundingClientRect().top + window.scrollY - 80, behavior: still ? 'auto' : 'smooth' });
+    });
     a.querySelector('.close-btn').addEventListener('click', function () {
       window.scrollTo({ top: btn.getBoundingClientRect().top + window.scrollY - 160, behavior: 'instant' });
       setOpen(a, false);
