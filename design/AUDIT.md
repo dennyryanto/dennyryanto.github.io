@@ -387,7 +387,7 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   - Where it meets the top layer, the decision becomes solid lime UI.
   - No dimming, no hatching, no axis.
 - **Renderer:** `design/generative/stack.js`. It is standalone and
-  dependency-free (no GSAP), about 22KB raw and 6KB gzipped with all six scenes.
+  dependency-free (no GSAP), about 24KB raw and 7KB gzipped with all seven scenes.
   - Scenes are data: `w`, `d`, `gap`, `layers` (flat ops, optional blocks)
     and `picks` (`k`, `at`, `h`, `ops` on its own layer, `land` on the top
     layer).
@@ -429,8 +429,16 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
     opens the matching section.
   - `build_hifi.py` inlines `stack.js` (the hi-fi no longer loads
     `sv3d.js`; the terraces live on their own review page).
+- **Chrona too** (owner: "also tell the Chrona story"): `chrona` is your week
+  (one free evening) → your circle's free time (where it overlaps) → the
+  drafted plan (lime time and lime send button). In the hi-fi, the
+  Independent section shows two stacks side by side (`.mk-sv-pair`, each
+  21:18 with a mono caption: "Enterprise AI · data to decision" and
+  "Featured · Chrona"); they stack vertically on phones. The sub now names
+  both stories.
 - **Review page:** `design/mockups/exploded-layers.html`, built from
-  `design/generative/stack-review.shell.html` (LinkAja and Independent).
+  `design/generative/stack-review.shell.html` (LinkAja, Independent and
+  Chrona).
 
 ## Open decisions
 

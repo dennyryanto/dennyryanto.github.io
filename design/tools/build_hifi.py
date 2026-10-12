@@ -161,9 +161,11 @@ CASES = [
                   'Commissioner at Dash and Lumio since 2021: strategy, governance, financial health and risk; primary representative to investors.']),
     dict(id='ai', scene='independent', n='04 / INDEPENDENT CONSULTING', role='PRODUCT &amp; AI DESIGN CONSULTANT · NOV 2025 – PRESENT', icon=BRIEF,
          h2='Making design teams AI-native.',
-         sub='A data-to-decision workflow that cleans siloed legacy data and puts live, AI-driven decisions in front of the people running the business.',
+         sub='A data-to-decision workflow that puts live, AI-driven decisions in front of the people running a business, and Chrona, an AI-first social-planning app built with multi-agent Claude Code.',
          stats=[('0→1', 'PROTOTYPES W/ CLAUDE CODE', True), ('3', 'ANTHROPIC CERTIFICATES', False), ('MCP', 'AGENTIC WORKFLOWS', False)],
          alt='Line drawing: three stacked layers (raw data sources, a grid of signals, a decision card). A lime source and a lime signal land as the lime confidence bar and approve button.',
+         pair=[('ENTERPRISE AI · DATA TO DECISION', 'independent'),
+               ('FEATURED · CHRONA', 'chrona', 'Line drawing: three stacked layers (your week, your friends’ free time, the drafted plan). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button.')],
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
@@ -188,6 +190,18 @@ CASES = [
 ]
 
 
+def figure(c):
+    if 'pair' not in c:
+        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+    # two stories in one section: side by side in the wide frame, stacked on phones
+    cells = ''
+    for p in c['pair']:
+        alt = p[2] if len(p) > 2 else c['alt']
+        cells += ('<figure class="mk-sv"><canvas data-stack="' + p[1] + '" role="img" aria-label="' + alt + '"></canvas>'
+                  '<figcaption class="mk-sv-cap">' + p[0] + '</figcaption></figure>')
+    return '<div class="mk-sv-pair">' + cells + '</div>'
+
+
 def case_section(c):
     stats = '<div class="mk-stats">' + ''.join(
         f'<div class="mk-stat"><div data-m="count" class="mk-stat-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div><div class="mk-stat-l">{l}</div></div>'
@@ -209,8 +223,8 @@ def case_section(c):
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta +
             '<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p>' + stats + '</div></div>'
-            '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
-            + tog + dr + '</div></section>')
+            + figure(c) +
+            tog + dr + '</div></section>')
 
 
 more_html = ''.join(case_section(c) for c in CASES)

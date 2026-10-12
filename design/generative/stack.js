@@ -70,6 +70,35 @@
         ] };
     },
 
+    // Chrona: your week → your circle's free time → the plan, drafted in one tap
+    chrona: function () {
+      var week = [];
+      for (var c = 0; c < 7; c++) for (var r = 0; r < 5; r++) {
+        var x = 0.5 + c * 1.15, y = 0.5 + r * 1.05;
+        if (c === 2 && r === 3) continue;
+        week.push(['rect', x, y, x + 1.0, y + 0.85, (c * 3 + r * 5) % 4 === 0 || (c + r) % 5 === 1 ? 'f2' : 's2']);
+      }
+      var free = [];
+      for (c = 0; c < 7; c++) {
+        var cx = 1.0 + c * 1.15;
+        free.push(['line', cx - 0.5, 5.4, cx + 0.5, 5.4, 's2']);
+        [-0.28, 0, 0.28].forEach(function (o, f) { var top = 0.7 + ((c * 7 + f * 3) % 5) * 0.55, bot = top + 1.0 + ((c + f * 2) % 3) * 0.7; if (c === 5) { top = 2.6; bot = 5.0; } free.push(['rect', cx + o - 0.06, top, cx + o + 0.06, bot, 's2']); });
+      }
+      return { w: 9, d: 6, gap: 2.9,
+        layers: [
+          { ops: week },
+          { ops: free },
+          { ops: [['line', 0.6, 0.6, 3.4, 0.6, 's'], ['rect', 0.5, 1.0, 8.5, 4.8, 's'], ['line', 0.9, 1.5, 5.6, 1.5, 's'], ['line', 0.9, 1.95, 4.4, 1.95, 's2'], ['line', 0.9, 2.35, 6.2, 2.35, 's2'],
+            ['rect', 0.5, 5.15, 8.5, 5.6, 's2']] }
+        ],
+        picks: [
+          // the evening that is free in your week → the plan's time
+          { k: 0, at: [3.3, 4.075], ops: [['rect', -0.5, -0.425, 0.5, 0.425, 'Ds'], ['rect', -0.3, -0.1, 0.3, 0.1, 'D']], land: [['rect', -1.0, -0.3, 1.0, 0.3, 'D']] },
+          // where everyone's free time overlaps → send the plan, one tap
+          { k: 1, at: [6.75, 4.2], ops: [['rect', -0.5, -0.3, 0.5, 0.3, 'D']], land: [['rect', -1.4, -0.35, 1.4, 0.35, 'D']] }
+        ] };
+    },
+
     // Komunal: the shared design system → the deposit funnel → the deposit screen
     komunal: function () {
       var ds = [];
