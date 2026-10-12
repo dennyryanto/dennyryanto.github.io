@@ -143,12 +143,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-fan-ticks button.on i { background: var(--lime); }
 @media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 44vw; } .mk-fan-cap strong { font-size: 19px; } }
 /* close-ups: three instrument details */
-.mk-closeups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.mk-closeups figure { margin: 0; }
+.mk-closeups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 56px; justify-items: center; }
+.mk-closeups figure { margin: 0; width: min(100%, 300px); }
 .mk-closeups img { display: block; width: 100%; height: auto; border-radius: 14px; }
 .mk-closeups figcaption { margin-top: 10px; display: flex; gap: 10px; font: 400 15px/1.4 var(--display); color: var(--fg-2); }
 .mk-closeups figcaption span { font: 500 11px/1.9 var(--mono); letter-spacing: .14em; color: var(--lime); }
-@media (max-width: 600px) { .mk-closeups { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 600px) { .mk-closeups { grid-template-columns: minmax(0, 1fr); gap: 40px; } .mk-closeups figure { width: min(100%, 280px); } }
 
 /* compact split hero: title + description + toggle on one side, the diagram on the other; .flip swaps the sides */
 .mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig"; column-gap: 56px; align-items: center; }
@@ -323,6 +323,18 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       cap.innerHTML = '<span class="n">' + String(cur + 1).padStart(2, '0') + ' / ' + String(n).padStart(2, '0') + '</span><strong>' + data[cur][0] + '</strong><span class="d">' + data[cur][1] + '</span>';
     }
     function render() { cards.forEach(function (c, i) { place(c, (i - cur + n) % n); }); label(); }
+    // centre the whole fan, not the front card: lay it out at rest, measure it, then shift the cards and the
+    // perspective origin together (the origin stays at the same spot on the front card, so the fan keeps its shape)
+    function centre() {
+      var cw = cards[0].offsetWidth, sw = stage.clientWidth, sr = stage.getBoundingClientRect(), l = 1e9, r = -1e9;
+      cards.forEach(function (c) { c.style.transition = 'none'; c.style.left = '0px'; });
+      stage.style.perspectiveOrigin = (cw * 0.6) + 'px 40%';
+      render();
+      cards.forEach(function (c) { var b = c.getBoundingClientRect(); l = Math.min(l, b.left - sr.left); r = Math.max(r, b.right - sr.left); });
+      var x = Math.round((sw - (r - l)) / 2 - l);
+      cards.forEach(function (c) { c.style.left = x + 'px'; void c.offsetWidth; c.style.transition = reduce ? 'none' : ''; });
+      stage.style.perspectiveOrigin = (x + cw * 0.6) + 'px 40%';
+    }
     function go(i) {
       i = (i + n) % n; if (i === cur) return;
       var leaving = cards[cur], forward = i === (cur + 1) % n;
@@ -339,8 +351,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       }, 600);
     }
     function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
+    var stage = $('.mk-fan-stage', fan);
     if (reduce) cards.forEach(function (c) { c.style.transition = 'none'; });
-    render();
+    centre();
     fan.addEventListener('mouseenter', function () { held = true; });
     fan.addEventListener('mouseleave', function () { held = false; });
     fan.addEventListener('focusin', function () { held = true; });
@@ -351,10 +364,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       if (e.key === 'ArrowRight') { go(cur + 1); e.preventDefault(); }
       if (e.key === 'ArrowLeft') { go(cur - 1); e.preventDefault(); }
     });
-    var stage = $('.mk-fan-stage', fan), x0 = null;
+    var x0 = null;
     stage.addEventListener('pointerdown', function (e) { x0 = e.clientX; });
     stage.addEventListener('pointerup', function (e) { if (x0 === null) return; var dx = e.clientX - x0; x0 = null; if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1)); });
-    window.addEventListener('resize', render);
+    window.addEventListener('resize', centre);
     new IntersectionObserver(function (es) {
       visible = es[0].isIntersecting;
       if (visible && !reduce && !timer) timer = setInterval(tick, 4500);

@@ -603,6 +603,17 @@ Owner: "get back to the wireframe mockup and implement the changes".
   screens and one on phones, at 16px, with grey dash markers. The dashes
   are no longer lime, because lime marks outcomes only. The wireframe
   already used one placeholder for every case.
+- **Cockpit drawer balanced** (owner: the fan "veered to the left, left
+  heavy"; the close-ups need "more space between the screens, and zoom out
+  a bit").
+  - The fan's cards used a fixed `left: 14%`, so the group sat 173px from
+    the left edge and 461px from the right. `centre()` in the shell now
+    lays the fan out at rest, measures it and shifts the cards so the
+    whole group is centred. It runs on load and on resize. The
+    perspective origin moves with the cards (it stays 60% across the
+    front card), so the fan keeps its shape.
+  - The three close-ups are capped at 300px wide (280px on phones) and
+    centred in their columns, with 56px between them instead of 16px.
 - **Key numbers redesigned** (owner: "anemic and left-aligned on desktop;
   center them and come up with another design"). Both mockups now use a
   centred, full-width band with a rule above and below. It has three equal
