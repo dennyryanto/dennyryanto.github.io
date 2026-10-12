@@ -100,7 +100,6 @@ body.notes-off .note { display: none; }
 .idx .num { font: 800 clamp(30px, 4vw, 44px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .idx .sl { font-size: 13px; }
 .idx .go { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
-.idx .go .ph { width: 22px; --r: 1/1; padding: 0; border-radius: 5px; }
 .idx:hover .go { color: var(--ink); }
 .index-wrap { max-width: var(--wrap); margin-inline: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 @media (max-width: 860px) { .index-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .idx:nth-child(2) { border-right: 0; } .idx:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
@@ -868,7 +867,7 @@ html { scroll-behavior: smooth; }
   document.getElementById('labs').innerHTML = LABS.map(function (c) { return caseHtml(c); }).join('');
   document.getElementById('bg').innerHTML = caseHtml(BG);
   document.getElementById('index').innerHTML = CASES.map(function (c) {
-    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="sl muted">' + esc(c.index.label) + '</span><span class="go mono"><span class="ph"><span></span></span>' + esc(c.co) + ' →</span></a>';
+    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="num">' + c.index.num + '</span><span class="sl muted">' + esc(c.index.label) + '</span><span class="go mono">' + esc(c.co) + ' →</span></a>';
   }).join('');
 
   function setOpen(article, open) {
