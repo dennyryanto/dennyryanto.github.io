@@ -363,22 +363,41 @@
   };
 
   // ---------- mounting: lazy; builds once when well in view; reduced motion shows the finished stack ----------
+  // one build at a time across the page: a stack that arrives while another is building waits its turn
+  var queue = [], busy = false;
+  function enqueue(job) { queue.push(job); next(); }
+  function next() { if (busy || !queue.length) return; busy = true; queue.shift()(); }
+  function release() { busy = false; setTimeout(next, 200); }
+
   function mount(canvas, opts) {
     opts = opts || {};
-    var scene = canvas.getAttribute('data-stack'), R = null, t = 0, raf = 0, last = 0, played = false;
+    var scene = canvas.getAttribute('data-stack'), R = null, t = 0, raf = 0, last = 0, played = false, queued = false, inView = false, onDone = null;
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function state(v) { canvas.setAttribute('data-stack-state', v); }
     function tick(now) {
       raf = 0; t += Math.min(0.05, (now - last) / 1000) || 0; last = now;
       R.render(Math.min(t, R.END));
       if (t < R.END) raf = requestAnimationFrame(tick);
+      else { state('done'); if (onDone) { var d = onDone; onDone = null; d(); } }
     }
-    function play() { if (raf) cancelAnimationFrame(raf); t = 0; played = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+    function play(done) { if (raf) cancelAnimationFrame(raf); t = 0; played = true; onDone = done || null; state('playing'); last = performance.now(); raf = requestAnimationFrame(tick); }
+    // its turn in the queue: build if the reader is still here, otherwise wait until they come back
+    function turn() {
+      if (!inView) { queued = false; release(); return; }
+      play(release);
+    }
     function start() {
       R = new Renderer(canvas, scene, opts);
-      if (reduce || !('IntersectionObserver' in window)) { t = R.END; R.render(t); }
+      if (reduce || !('IntersectionObserver' in window)) { t = R.END; R.render(t); state('done'); }
       else {
-        R.render(0);
-        var seen = new IntersectionObserver(function (es) { if (es[0].isIntersecting && !played) { seen.disconnect(); play(); } }, { threshold: 0.45 });
+        R.render(0); state('waiting');
+        // "arrived" = most of the stack is on screen (or it fills most of a short screen), not its first edge
+        var seen = new IntersectionObserver(function (es) {
+          var e = es[0], view = e.rootBounds ? e.rootBounds.height : window.innerHeight;
+          inView = e.isIntersecting && (e.intersectionRatio >= 0.75 || e.intersectionRect.height >= 0.6 * view);
+          if (inView && !played && !queued) { queued = true; enqueue(turn); }
+          if (played) seen.disconnect();
+        }, { threshold: [0, 0.25, 0.5, 0.6, 0.75, 0.9, 1] });
         seen.observe(canvas);
       }
       var rt = null;

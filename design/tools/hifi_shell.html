@@ -130,7 +130,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-fan { position: relative; outline: none; }
 .mk-fan:focus-visible .mk-fan-stage { outline: 2px solid var(--lime); outline-offset: 4px; }
 .mk-fan-stage { position: relative; height: clamp(440px, 46vw, 620px); perspective: 1800px; perspective-origin: 25% 40%; overflow: hidden; touch-action: pan-y; }
-.mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(170px, 18vw, 250px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
+.mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(220px, 23vw, 330px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
 .mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
 .mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
 .mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
@@ -141,15 +141,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-fan-ticks button { background: none; border: 0; padding: 12px 2px; cursor: pointer; }
 .mk-fan-ticks i { display: block; width: 24px; height: 2px; background: var(--rule); transition: background .3s; }
 .mk-fan-ticks button.on i { background: var(--lime); }
-@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 44vw; } .mk-fan-cap strong { font-size: 19px; } }
-/* close-ups: three instrument details */
-.mk-closeups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 56px; justify-items: center; }
-.mk-closeups figure { margin: 0; width: min(100%, 300px); }
-.mk-closeups img { display: block; width: 100%; height: auto; border-radius: 14px; }
-.mk-closeups figcaption { margin-top: 10px; display: flex; gap: 10px; font: 400 15px/1.4 var(--display); color: var(--fg-2); }
-.mk-closeups figcaption span { font: 500 11px/1.9 var(--mono); letter-spacing: .14em; color: var(--lime); }
-@media (max-width: 600px) { .mk-closeups { grid-template-columns: minmax(0, 1fr); gap: 40px; } .mk-closeups figure { width: min(100%, 280px); } }
-
+@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 56vw; } .mk-fan-cap strong { font-size: 19px; } }
 /* compact split hero: title + description + toggle on one side, the diagram on the other; .flip swaps the sides */
 .mk-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig"; column-gap: 56px; align-items: center; }
 .mk-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text"; }
@@ -196,8 +188,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 /* the Dash table app bleeds past the page edge on the live site; inside a drawer it sits in the column */
 .mk-drawer [data-r="bleed-col"] { width: 100%; max-width: 1040px; margin-inline: auto; }
 .mk-drawer [data-r="bleed-stage"] { width: 100% !important; }
+/* the cockpit close-ups keep the live isometric tiles, with more room between them */
+.mk-drawer .gx-grid { gap: 40px; }
 /* contact: on phones the sign-off wraps under the buttons, so it lines up left with them */
 @media (max-width: 600px) { #contact > div > div:last-child { text-align: left !important; } }
+/* background: what each company is, under the role; the agency context above the earlier work */
+.mk-co-about { margin-top: 4px; font: 400 12px/1.45 var(--display); color: rgba(242, 239, 232, .5); }
+.mk-context { margin: -6px 0 22px; max-width: 64ch; font: 400 15px/1.55 var(--display); color: var(--fg-2); }
 /* background: the degree as one quiet line */
 .mk-edu { font: 500 12px/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
 

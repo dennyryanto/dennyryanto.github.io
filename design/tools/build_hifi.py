@@ -99,16 +99,12 @@ FAN = [('Home, at a glance', 'Grouped by the question you’re asking: recovery,
        ('The same screen, dense', 'Density is a setting. Only the size changes.'),
        ('On a hard day', 'Colour appears only when something departs from normal.'),
        ('Training, plan first', 'This week’s sessions, then the load behind them.')]
-CLOSEUPS = ['Readiness, read off one strip.', 'Training status, on one map.', 'Training load, week by week.']
 fan_html = ('<div class="mk-fan" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Garmin Connect concept screens">'
             '<div class="mk-fan-stage">' + ''.join(
                 '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
             '</div><div class="mk-fan-foot"><div class="mk-fan-cap" aria-live="polite"></div><div class="mk-fan-ticks">' +
             ''.join('<button type="button" aria-label="Show %s"><i></i></button>' % t for t, _ in FAN) +
             '</div></div><script type="application/json" class="mk-fan-data">' + json.dumps(FAN) + '</script></div>')
-closeups_html = ('<div class="mk-closeups">' + ''.join(
-    '<figure><img src="%s" alt="%s"><figcaption><span>%02d</span>%s</figcaption></figure>' % (lab_imgs[4 + i]['src'], lab_imgs[4 + i].get('alt', ''), i + 1, t)
-    for i, t in enumerate(CLOSEUPS)) + '</div>')
 
 # ---------- case 01: LinkAja ----------
 la = soup(read('linkaja'))
@@ -290,6 +286,8 @@ LIVE = {
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
 lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
 lui_note = lui[2].find_all(recursive=False)[2]
+# the close-ups keep the live site's isometric tiles: each screen tilted as a slab and cropped in its frame
+closeups_html = str(lui[2].find_all(recursive=False)[1])
 QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + str(lui_intro) + '</div>'
 
 
@@ -338,6 +336,19 @@ more_html = ''.join(case_section(c) for c in CASES)
 # ---------- background: the career timeline as its hero, earlier work and capabilities in a drawer that starts open ----------
 career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('capabilities')
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
+# one line on what each company is, under the role in the timeline
+ABOUT = {
+    ('2011–16', 'Appsindo Technology'): 'A software house: an agency designing and building apps for retail, F&amp;B and entertainment brands.',
+    ('2016–24', 'Dash · Lumio'): 'My B2B product company: Dash for restaurant ordering, Lumio for revenue from signage networks.',
+    ('2021–', 'Dash · Lumio'): 'A board seat: strategy, governance, financial health and risk.',
+    ('2021–23', 'LinkAja'): 'An Indonesian digital payments app used by 70M+ people.',
+    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech behind DepositoBPR, for placing deposits with rural banks.',
+    ('2025–', 'Independent'): 'Product and AI design consulting for businesses and design teams.',
+}
+for row in career[1].find_all(recursive=False):
+    sp = row.find_all('span')
+    key = (sp[0].get_text(strip=True), sp[1].get_text(strip=True))
+    row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
@@ -352,7 +363,9 @@ bg_html = (
     '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
     '</button>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
-    + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>' + str(earlier[1]) + '</div>' +
+    + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
+    '<p class="mk-context">Appsindo Technology is a software house, an agency that designs and builds apps for its clients. '
+    'Four of the client products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
     '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'

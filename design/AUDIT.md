@@ -694,6 +694,38 @@ Checked:
 How to rebuild (see the technical notes): grab, then `build_hifi.py`, then
 `build_site.py`.
 
+Review round on the full hi-fi (2026-10-12), applied to the site and the
+wireframe:
+
+- **Stacks build one at a time, on arrival** (owner: "start playing when the
+  user arrives at the section, don't execute the animation simultaneously").
+  - A stack starts once 75% of it is on screen, or once it fills 60% of a
+    short screen. Before, it started at 45%.
+  - A page-wide queue in `stack.js` lets only one stack build at a time.
+  - A queued stack the reader has scrolled away from gives up its turn and
+    builds when they come back.
+  - The Independent pair builds left, then right.
+  - The canvas exposes `data-stack-state` (`waiting`, `playing`, `done`) for
+    tests.
+- **Cockpit close-ups keep the live isometric tiles** (owner: "retain the
+  isometric thumbnails just like on the live site"). The drawer uses the live
+  `gx-grid` markup and CSS: each screen is tilted as a slab and cropped in a
+  4:5 frame. The gaps are 40px, keeping the earlier "more space" request.
+- **The fan is zoomed in** (owner: "zoomed in a bit more, it's okay to have
+  some bleed at the bottom"). The cards are about 30% larger, up to 330px on
+  desktop and 56vw on phones. The stage height is unchanged, so the screens
+  run off its bottom edge.
+- **Background explains the companies** (owner: Appsindo "is basically a
+  software house or an agency; also needs a brief summary about the
+  companies"):
+  - each timeline entry has one line on what the company is;
+  - "Earlier work" opens with a sentence saying Appsindo is a software house
+    and that the four projects are client work.
+- **Bug fixed on the way.** Removing the old flat close-up CSS left an
+  unclosed `@media (max-width: 600px) {`, which pulled every rule after it
+  into phone-only. It was caught before any publish or site build. All style
+  blocks now balance.
+
 ## Open decisions
 
 - **Cockpit fan placement**: top of the drawer (wireframe v2) or back in the

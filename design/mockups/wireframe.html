@@ -180,7 +180,7 @@ body.notes-off .note { display: none; }
 .fan { position: relative; outline: none; }
 .fan:focus-visible .fan-stage { outline: 2px solid var(--note); outline-offset: 4px; }
 .fan-stage { position: relative; height: clamp(260px, 34vw, 430px); perspective: 1600px; perspective-origin: 20% 45%; overflow: hidden; touch-action: pan-y; }
-.fan-card { position: absolute; left: 17%; top: 7%; width: min(50%, 470px); aspect-ratio: 4 / 3; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
+.fan-card { position: absolute; left: 17%; top: 7%; width: min(62%, 590px); aspect-ratio: 4 / 3; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
 .fan-card .ph { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 10px; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .35); }
 .fan-card.front .ph { border-color: var(--ink-3); }
 .fan-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 14px; }
@@ -200,6 +200,9 @@ body.notes-off .note { display: none; }
 .tl.lead { border-top-color: var(--ink); }
 .tl .mono { color: var(--ink-3); }
 .tl strong { font-size: 14px; }
+/* what each company is: two placeholder lines under the role */
+.tl-about { display: grid; gap: 5px; margin-top: 4px; }
+.tl-about i { display: block; height: 7px; border-radius: 3px; background: var(--ph-x); opacity: .6; }
 @media (max-width: 860px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
 
 /* toggle + drawer */
@@ -229,10 +232,8 @@ body.notes-off .note { display: none; }
 .grid { display: grid; gap: 14px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
 .grid > .span2 { grid-column: span 2; }
 @media (max-width: 860px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
-/* the cockpit close-ups: zoomed out, centred in their columns, with room between them */
-.grid.closeups { gap: 40px 56px; justify-items: center; }
-.grid.closeups > .ph { width: min(100%, 300px); }
-@media (max-width: 860px) { .grid.closeups > .ph { width: min(100%, 280px); } }
+/* the cockpit close-ups: the live site's isometric tiles, with room between them */
+.grid.closeups { gap: 40px; }
 
 
 /* audit coverage (notes layer) */
@@ -727,22 +728,41 @@ html { scroll-behavior: smooth; }
   };
 
   // ---------- mounting: lazy; builds once when well in view; reduced motion shows the finished stack ----------
+  // one build at a time across the page: a stack that arrives while another is building waits its turn
+  var queue = [], busy = false;
+  function enqueue(job) { queue.push(job); next(); }
+  function next() { if (busy || !queue.length) return; busy = true; queue.shift()(); }
+  function release() { busy = false; setTimeout(next, 200); }
+
   function mount(canvas, opts) {
     opts = opts || {};
-    var scene = canvas.getAttribute('data-stack'), R = null, t = 0, raf = 0, last = 0, played = false;
+    var scene = canvas.getAttribute('data-stack'), R = null, t = 0, raf = 0, last = 0, played = false, queued = false, inView = false, onDone = null;
     var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function state(v) { canvas.setAttribute('data-stack-state', v); }
     function tick(now) {
       raf = 0; t += Math.min(0.05, (now - last) / 1000) || 0; last = now;
       R.render(Math.min(t, R.END));
       if (t < R.END) raf = requestAnimationFrame(tick);
+      else { state('done'); if (onDone) { var d = onDone; onDone = null; d(); } }
     }
-    function play() { if (raf) cancelAnimationFrame(raf); t = 0; played = true; last = performance.now(); raf = requestAnimationFrame(tick); }
+    function play(done) { if (raf) cancelAnimationFrame(raf); t = 0; played = true; onDone = done || null; state('playing'); last = performance.now(); raf = requestAnimationFrame(tick); }
+    // its turn in the queue: build if the reader is still here, otherwise wait until they come back
+    function turn() {
+      if (!inView) { queued = false; release(); return; }
+      play(release);
+    }
     function start() {
       R = new Renderer(canvas, scene, opts);
-      if (reduce || !('IntersectionObserver' in window)) { t = R.END; R.render(t); }
+      if (reduce || !('IntersectionObserver' in window)) { t = R.END; R.render(t); state('done'); }
       else {
-        R.render(0);
-        var seen = new IntersectionObserver(function (es) { if (es[0].isIntersecting && !played) { seen.disconnect(); play(); } }, { threshold: 0.45 });
+        R.render(0); state('waiting');
+        // "arrived" = most of the stack is on screen (or it fills most of a short screen), not its first edge
+        var seen = new IntersectionObserver(function (es) {
+          var e = es[0], view = e.rootBounds ? e.rootBounds.height : window.innerHeight;
+          inView = e.isIntersecting && (e.intersectionRatio >= 0.75 || e.intersectionRect.height >= 0.6 * view);
+          if (inView && !played && !queued) { queued = true; enqueue(turn); }
+          if (played) seen.disconnect();
+        }, { threshold: [0, 0.25, 0.5, 0.6, 0.75, 0.9, 1] });
         seen.observe(canvas);
       }
       var rt = null;
@@ -875,7 +895,7 @@ html { scroll-behavior: smooth; }
       drawer: [
         { fan: true, cap: 'The screens' },
         { lines: 3, cap: 'The question' },
-        { cap: 'Close-ups', cols: 3, closeups: true, items: [P('Readiness strip', '13/20', 'phone'), P('Training status map', '13/20', 'phone'), P('Weekly load', '13/20', 'phone')] }
+        { cap: 'Close-ups', cols: 3, closeups: true, items: [P('Readiness strip · isometric', '4/5'), P('Training status map · isometric', '4/5'), P('Weekly load · isometric', '4/5')] }
       ], toggle: 'Explore the concept' }
   ];
   var BG = { id: 'background', co: 'Background', role: '2011 – present',
@@ -883,7 +903,7 @@ html { scroll-behavior: smooth; }
     timeline: [['2011–16', 'Appsindo', 'Lead UI/UX'], ['2016–24', 'Dash · Lumio', 'Founder · VP Design'], ['2021–', 'Dash · Lumio', 'Commissioner'], ['2021–23', 'LinkAja', 'Product Design Lead'], ['2024–25', 'Komunal', 'Senior Manager'], ['2025–', 'Independent', 'AI Design Consultant']],
     note: '<b>6</b><span><i class="f">F8</i>Earlier work, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click. Clients moved up the page (note 10).</span>',
     drawer: [
-      { cap: 'Earlier work · 2011–2016', cols: 4, items: [P('Genki Sushi', '4/3'), P('Foodhall', '4/3'), P('Summarecon Malls', '4/3'), P('MATA2', '4/3')] },
+      { cap: 'Earlier work · 2011–2016 · Appsindo, a software house', intro: 1, cols: 4, items: [P('Genki Sushi', '4/3'), P('Foodhall', '4/3'), P('Summarecon Malls', '4/3'), P('MATA2', '4/3')] },
       { lines: 4, cap: 'Capabilities · 4 groups' },
       { cap: 'Education', chips: ['B.A. Graphic Design · Pelita Harapan University 2004–08'] }
     ], toggle: 'Show full background' };
@@ -926,14 +946,14 @@ html { scroll-behavior: smooth; }
       if (b.fan) return '<div class="block">' + cap + fanHtml(c) + '</div>';
       if (b.lines) return '<div class="block lines' + (b.two ? ' two' : '') + '">' + cap + lines(b.lines) + '</div>';
       if (b.chips) return '<div class="block">' + cap + '<div class="chips mono">' + b.chips.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div></div>';
-      return '<div class="block">' + cap + '<div class="grid' + (b.cols <= 2 || b.closeups ? ' one-sm' : '') + (b.closeups ? ' closeups' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
+      return '<div class="block">' + cap + (b.intro ? '<div class="lines">' + lines(b.intro) + '</div>' : '') + '<div class="grid' + (b.cols <= 2 || b.closeups ? ' one-sm' : '') + (b.closeups ? ' closeups' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
     }).join('');
   }
   function caseHtml(c, n) {
     var eyebrow = (n ? '<span class="mono co" data-num>' + String(n).padStart(2, '0') + ' / ' + esc(c.co) + '</span>' : '<span class="mono co">' + esc(c.co) + '</span>');
     var stats = c.stats && c.stats.length ? '<div class="keys">' + c.stats.map(function (s) { return '<div class="key"><span class="n">' + esc(s[0]) + '</span><span class="l mono">' + esc(s[1]) + '</span><span class="c">' + esc(s[2] || '') + '</span></div>'; }).join('') + '</div>' : '';
     var body = c.timeline
-      ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span></div>'; }).join('') + '</div>'
+      ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span><span class="tl-about" aria-hidden="true"><i style="width:92%"></i><i style="width:64%"></i></span></div>'; }).join('') + '</div>'
       : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p></div>' + (c.sv ? svHtml(c) : ph(c.hero)) + '</div>' + (c.svNote ? '<div class="note" style="margin-top:12px">' + c.svNote + '</div>' : '');
     var title = c.timeline ? '<h2 style="margin-bottom:28px">' + esc(c.title) + '</h2>' : '';
     var toggle = '<button type="button" class="toggle" aria-expanded="false" aria-controls="d-' + c.id + '">' +
