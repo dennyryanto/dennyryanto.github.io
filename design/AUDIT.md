@@ -211,6 +211,21 @@ Checks on the master:
 
 Round 2 instructions: `design/prompts/signature-visuals-round-2.md`.
 
+**In the hi-fi (2026-10-12):** the master now sits in the LinkAja hero as the
+signature visual.
+- **Placement and edges:** straight on the page ink with no frame. The
+  JPEG's near-black ground is snapped to `#161511` and the edges are
+  feathered, so no box shows.
+- **Phone crop:** 4:5 at `object-position: 85%`, so the whole lime outflow
+  stays in view.
+- **Motion:** it wipes in left to right, following the flow, on first view.
+- **Moved into the drawer:** the OPEX chart is now the first diagram there.
+- **Hero numbers:** now −80% (lime, the outcome), 70M+ and ~72%.
+- **Toggle:** updated to the agreed style (no box, caps, chevron bob and
+  flip, crossfade, pulse).
+
+`build_hifi.py` expects the master at `<workdir>/sv-master.jpg`.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest

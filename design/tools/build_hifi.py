@@ -92,7 +92,20 @@ for sp in meta.find_all('span'):
         sp.string = '01 / LINKAJA'
 h2 = intro.find('h2')
 bullets = intro.find('h2').find_next_sibling('div')
-# signature visual: the OPEX chart, full width, first in the hero
+# signature visual: the line-art illustration (style master); the OPEX chart moves into the drawer
+import io as _io
+from PIL import Image as _Image
+_sv = _Image.open(os.path.join(S, 'sv-master.jpg')).convert('RGB')
+# snap the JPEG's noisy near-black ground to the exact page ink so no box shows
+import numpy as _np
+_a = _np.asarray(_sv).astype(_np.int16)
+_ground = (_a.max(axis=2) <= 40) & ((_a.max(axis=2) - _a.min(axis=2)) <= 10)
+_a[_ground] = (22, 21, 17)
+_sv = _Image.fromarray(_a.astype(_np.uint8))
+_b = _io.BytesIO(); _sv.save(_b, 'WEBP', quality=92, method=6)
+SV_URI = 'data:image/webp;base64,' + base64.b64encode(_b.getvalue()).decode()
+SV_ALT = ('Line drawing: a stepped isometric cascade. Many intake channels at the back left carry support requests '
+          'down through tiers and splitters; at the front right one lime channel carries the self-service outflow.')
 chart['style'] = re.sub(r'margin-top:\s*24px;?', '', chart['style'])
 chart['class'] = chart.get('class', []) + ['mk-chart']
 callout = BeautifulSoup('<div class="mk-chart-callout"><span data-m="count" class="mk-cc-n">−80%</span><span class="mk-cc-l">CUSTOMER-SERVICE OPEX · TICKETS DEFLECTED TO SELF-SERVICE</span></div>', 'html.parser')
@@ -101,7 +114,7 @@ for el in (problem, support, route):
     el['style'] = re.sub(r'margin-top:\s*(44|24)px;?', '', el['style'])
 shots_head['style'] = re.sub(r'margin-top:\s*40px;?', '', shots_head['style'])
 
-STATS = [('70M+', 'USERS · HOME REVAMP', True), ('~72%', 'CASES AUTOMATED', True), ('4', 'SHIPS · PAYLATER, CHATBOT, LOYALTY, CTP', False)]
+STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]
 stats_html = '<div class="mk-stats">' + ''.join(
     f'<div class="mk-stat"><div data-m="count" class="mk-stat-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div><div class="mk-stat-l">{l}</div></div>'
     for n, l, hi in STATS) + '</div>'
@@ -114,13 +127,14 @@ bullets['class'] = ['mk-bullets']
 bullets['style'] = ''
 
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
-          '<span class="mk-t-copy"><span class="mk-t-label" data-closed="Read the case study" data-open="Close the case study">Read the case study</span>'
-          '<span class="mk-t-meta">4 outcomes · 3 diagrams · 6 screens · 3 min read</span></span>'
-          '<span class="mk-t-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 2v12"/><path d="M2 8h12"/></svg></span>'
+          '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
+          '<span class="mk-t-meta">4 outcomes · 4 diagrams · 6 screens · 3 min read</span>'
+          '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner" inert><div class="mk-drawer-body">'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + str(bullets) + '</div>'
+          '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
           '<div class="mk-block">' + str(support) + '</div>'
           '<div class="mk-block">' + str(route) + '</div>'
@@ -136,7 +150,8 @@ case_html = (
     '<div>' + str(h2) + '</div>'
     '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p>' + stats_html + '</div>'
     '</div>'
-    + str(chart) + toggle + drawer +
+    + '<figure class="mk-sv"><img src="' + SV_URI + '" alt="' + SV_ALT + '" width="1584" height="672"></figure>'
+    + toggle + drawer +
     '</div></section>')
 
 more_html = ('<section id="mk-more" style="border-top:1px solid rgba(242,239,232,.14)">'
