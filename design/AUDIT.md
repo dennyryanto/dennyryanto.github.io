@@ -282,7 +282,7 @@ the signature visuals in code on the page, in 3D, turned gently by scroll
 with GSAP.
 
 - **Renderer:** `design/generative/sv3d.js`. It is a dependency-free canvas
-  renderer, about 47KB raw and **14KB gzipped**. Each scene is a heightfield of
+  renderer, about 45KB raw and **14KB gzipped**. Each scene is a heightfield of
   columns plus a few loose boxes. A real 3D projection with a yaw camera
   draws them back to front by depth, and faces are filled with the page
   ink so hidden lines disappear. It adds hatched shadow faces, grooves that
