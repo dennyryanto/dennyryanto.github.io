@@ -71,24 +71,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-stat-l { margin-top: 9px; font: 500 10px/1.45 var(--mono); letter-spacing: .12em; color: var(--fg-3); }
 @media (max-width: 480px) { .mk-stat-n { font-size: 26px; } .mk-stat + .mk-stat { padding-left: 12px; } .mk-stat { padding-right: 10px; } }
 
-/* signature visual: the line-art illustration, sitting straight on the page ink */
+/* signature visual: drawn live in code (sv3d.js) and turned gently by scroll */
 .mk-sv { margin: 4px 0 0; }
-.mk-sv img { display: block; width: 100%; height: auto; aspect-ratio: 1584 / 672; }
-/* feather the edges so the image's own ground melts into the page ink */
-.mk-sv img {
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent), linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent);
-  mask-composite: intersect;
-}
-.mk-sv.mk-pre img { clip-path: inset(0 100% 0 0); }
-.mk-sv.mk-go img { clip-path: inset(0 0 0 0); transition: clip-path 1.6s cubic-bezier(.45, 0, .2, 1); }
+.mk-sv canvas { display: block; width: 100%; aspect-ratio: 21 / 9; }
 @media (max-width: 600px) {
-  /* phones: art-directed 4:5 crop that keeps the lime outflow in view */
+  /* phones: the whole drawing re-fits a 4:3 frame instead of being cropped */
   .mk-sv { margin-inline: -24px; }
-  .mk-sv img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 85% 50%;
-    -webkit-mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent);
-    mask-image: linear-gradient(to right, transparent, #000 4%, #000 96%, transparent), linear-gradient(to bottom, transparent, #000 6%, #000 94%, transparent); }
+  .mk-sv canvas { aspect-ratio: 4 / 3; }
 }
 @media (max-width: 480px) { .mk-sv { margin-inline: -16px; } }
 
@@ -146,6 +135,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/*SV3D*/
+</script>
 <script>
 (function () {
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -220,17 +212,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     });
   }
 
-  // ---- signature visual: wipe in along the flow, once ----
-  var sv = $('.mk-sv');
-  if (sv && !reduce && window.IntersectionObserver) {
-    sv.classList.add('mk-pre');
-    var svo = new IntersectionObserver(function (es) {
-      if (!es[0].isIntersecting) return;
-      svo.disconnect();
-      requestAnimationFrame(function () { sv.classList.add('mk-go'); sv.classList.remove('mk-pre'); });
-    }, { threshold: .3 });
-    svo.observe(sv);
-  }
+  // ---- signature visual: live 3D line art, turned by scroll (static with reduced motion) ----
+  $$('canvas[data-sv3d]').forEach(function (c) {
+    var phone = window.matchMedia('(max-width: 600px)').matches;
+    window.SV3D && SV3D.mount(c, { range: 10, pad: phone ? [0.05, 0.03] : [0.06, 0.14] });
+  });
 
   // ---- chart: bars grow and the trend line draws once on screen ----
   var chart = $('.mk-chart');

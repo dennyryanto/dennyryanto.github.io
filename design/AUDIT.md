@@ -274,6 +274,43 @@ https://claude.ai/artifact/GEK7WCrJjzUxNi2b3LN43S.
   drawings. If they replace only some images, the set mixes two levels of
   detail; generating all six would keep it uniform.
 
+### Signature visuals as live code: `sv3d.js` (2026-10-12, current direction)
+
+Owner's call: instead of images (from the agent or the PNG generator), draw
+the signature visuals in code on the page, in 3D, turned gently by scroll
+with GSAP.
+
+- **Renderer:** `design/generative/sv3d.js`. It is a dependency-free canvas
+  renderer, 22KB raw and **7KB gzipped**. Each scene is a heightfield of
+  columns plus a few loose boxes. A real 3D projection with a yaw camera
+  draws them back to front by depth, and faces are filled with the page
+  ink so hidden lines disappear. It adds hatched shadow faces, grooves that
+  flow only downhill, one lime outcome, and unlabelled measurement lines.
+  It uses the exact palette, and line weights scale with the canvas width.
+- **Scenes (all six):** `linkaja`, `komunal`, `dash`, `independent`,
+  `eink`, `cockpit`.
+- **Motion:** `SV3D.mount(canvas, {range: 10})` sets up a ScrollTrigger from
+  `top bottom` to `bottom top` with `scrub: 0.6`. The yaw goes 35°→55°
+  across the pass. It redraws only on scroll updates.
+- **Loading cost:**
+  - The scene initialises only when it comes within 300px of the screen.
+  - Density is capped at 2×.
+  - Reduced motion draws it once, still.
+  - The frame fit is fixed across the whole swing, so the drawing never
+    zooms or clips as it turns.
+  - Measured at about 7–8ms per frame on desktop at 2× density, and about
+    3ms on a phone-sized screen.
+- **Phones:** the whole drawing re-fits a 4:3 canvas; nothing is cropped.
+- **Review page:** `design/mockups/signature-visuals-3d.html`
+  (https://claude.ai/artifact/6ryNCr4A5hHemwqWdGS4FQ). It is built from
+  `design/generative/sv3d-review.shell.html` with `sv3d.js` inlined.
+- **Hi-fi:** the LinkAja hero now uses `<canvas data-sv3d="linkaja">`
+  instead of the image, so the page dropped from 330KB to 243KB.
+  `build_hifi.py` inlines `sv3d.js` from `<workdir>/sv3d.js`.
+- **For the live site:** load `sv3d.js` once, after GSAP, and add one canvas
+  per hero. The agent's images and the PNG generator remain as references
+  only.
+
 ## Open decisions
 
 - **Case order**: by impact (LinkAja first; recommended) or by date (newest

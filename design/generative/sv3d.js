@@ -1,0 +1,359 @@
+/* sv3d: live 3D line-art signature visuals, drawn on canvas.
+   No dependencies. Each scene is a heightfield of columns (plus a few loose
+   boxes) drawn back to front with ink-filled faces, so hidden lines vanish.
+   The camera turns about the vertical axis; callers drive the angle (e.g. from
+   a GSAP ScrollTrigger). Rotation stays inside one quadrant (about 30°–60°),
+   so the visible side faces are always +x and +y. */
+(function (root) {
+  'use strict';
+
+  var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c' };
+  var DEG = Math.PI / 180;
+
+  function rng(seed) {
+    var s = (seed >>> 0) || 1;
+    return function () { s ^= s << 13; s ^= s >>> 17; s ^= s << 5; return ((s >>> 0) % 1000003) / 1000003; };
+  }
+
+  // ---------- terrain ----------
+  function Terrain(nx, ny) {
+    this.nx = nx; this.ny = ny;
+    this.h = []; this.kind = []; this.props = []; this.ticks = [];
+    for (var i = 0; i < nx; i++) { this.h.push(new Array(ny).fill(0)); this.kind.push(new Array(ny).fill(0)); this.props.push([]); this.ticks.push(new Array(ny).fill(false)); for (var j = 0; j < ny; j++) this.props[i].push([]); }
+    this.channels = []; this.leaders = []; this.scale = null; this.pin = null;
+  }
+  Terrain.prototype.at = function (i, j) { return (i < 0 || j < 0 || i >= this.nx || j >= this.ny) ? 0 : this.h[i][j]; };
+  Terrain.prototype.set = function (i0, i1, j0, j1, h, kind) {
+    for (var i = i0; i < i1; i++) for (var j = j0; j < j1; j++) { this.h[i][j] = typeof h === 'function' ? h(i, j) : h; if (kind != null) this.kind[i][j] = kind; }
+  };
+  // a channel: list of [i, j]; consecutive cells are neighbours; drops only where it moves +x or +y
+  Terrain.prototype.channel = function (cells, o) { this.channels.push({ cells: cells, limeFrom: o && o.limeFrom != null ? o.limeFrom : (o && o.lime ? 0 : -1), dashed: !!(o && o.dashed) }); };
+  // a loose box sitting on a cell: x, y, z are world coordinates of its back-left-bottom corner
+  Terrain.prototype.box = function (x, y, z, w, d, h, o) { var i = Math.min(this.nx - 1, Math.floor(x + w / 2)), j = Math.min(this.ny - 1, Math.floor(y + d / 2)); this.props[i][j].push({ x: x, y: y, z: z, w: w, d: d, h: h, lime: !!(o && o.lime) }); };
+  function walk(path) { // expand corner points into a cell list
+    var out = [path[0].slice()];
+    for (var k = 1; k < path.length; k++) {
+      var a = out[out.length - 1].slice(), b = path[k];
+      while (a[0] !== b[0] || a[1] !== b[1]) { if (a[0] !== b[0]) a[0] += Math.sign(b[0] - a[0]); else a[1] += Math.sign(b[1] - a[1]); out.push(a.slice()); }
+    }
+    return out;
+  }
+
+  // ---------- scenes: each case's facts as terrain ----------
+  var SCENES = {
+    // LinkAja: many intakes at the back drain down tiers and merge into one self-service outflow
+    linkaja: function (r) {
+      var T = new Terrain(16, 9), tier = [3.1, 3.1, 2.7, 2.3, 2.3, 1.9, 1.6, 1.6, 1.25, 1.0, 0.8, 0.62, 0.46, 0.34];
+      T.set(0, 14, 0, 9, function (i) { return tier[i]; });
+      T.set(8, 14, 0, 9, function (i) { return tier[i]; }, 1);
+      [1, 3, 5, 7].forEach(function (j, k) { T.set(0, 2, j, j + 1, 3.6 + 0.35 * k * r()); });
+      T.set(14, 16, 4, 5, 0.16, 2);
+      T.channel(walk([[0, 1], [4, 1], [4, 4]]));
+      T.channel(walk([[0, 3], [6, 3], [6, 4]]));
+      T.channel(walk([[0, 7], [3, 7], [3, 6], [9, 6], [9, 4]]));
+      T.channel(walk([[0, 5], [7, 5], [7, 4]]));
+      T.channel(walk([[2, 4], [15, 4]]), { limeFrom: 8 });
+      T.leaders = [[0, 1], [0, 5], [3, 0], [6, 0], [9, 0]];
+      T.scale = { at: [0, 9], to: 3.8 };
+      return T;
+    },
+    // Komunal: one shared source feeds three separate terraces; their lanes meet in one completion channel
+    komunal: function (r) {
+      var T = new Terrain(15, 11);
+      T.set(0, 2, 0, 11, 2.9);
+      var bands = [[0, 3, 2.2, 0.17], [4, 7, 2.0, 0.15], [8, 11, 2.35, 0.19]];
+      bands.forEach(function (b) { T.set(2, 10, b[0], b[1], function (i) { return Math.max(0.7, b[2] - b[3] * (i - 2) - (i % 2) * 0.04); }); });
+      T.set(10, 13, 0, 11, 0.5, 1);
+      T.set(13, 15, 5, 6, 0.16, 2);
+      T.channel(walk([[0, 1], [10, 1], [10, 5]]));
+      T.channel(walk([[0, 9], [10, 9], [10, 5]]));
+      T.channel(walk([[0, 5], [14, 5]]), { limeFrom: 11 });
+      T.leaders = [[0, 0], [3, 0], [6, 4], [8, 8], [11, 0]];
+      T.scale = { at: [0, 11], to: 3.0 };
+      return T;
+    },
+    // Dash · Lumio: one spine through a field of many small stations, each tapped into it
+    dash: function (r) {
+      var T = new Terrain(14, 9), spine = 4, st = [];
+      T.set(0, 12, 0, 9, function (i, j) { return 0.95 - 0.13 * Math.floor(i / 2) - (j > spine ? 0.05 : 0); }, 1);
+      for (var i = 0; i < 12; i++) for (var j = 0; j < 9; j++) {
+        if (Math.abs(j - spine) <= 1) continue;
+        var t = (i / 12) * 0.7 + (j / 9) * 0.3;
+        if (r() < 0.42 - t * 0.12) { T.h[i][j] += (1.7 - 1.15 * t) * (0.86 + r() * 0.3); T.kind[i][j] = 0; st.push([i, j]); }
+      }
+      st.forEach(function (s, k) {
+        if (k % 2) return;
+        var j = s[1], dir = j < spine ? 1 : -1, cells = [];
+        for (var y = j + dir; y !== spine; y += dir) { if (T.kind[s[0]][y] !== 1) { cells = []; break; } cells.push([s[0], y]); }
+        if (cells.length) T.channel(cells);
+      });
+      T.set(12, 14, spine, spine + 1, 0.16, 2);
+      var sp = []; for (var x = 0; x < 14; x++) sp.push([x, spine]);
+      T.channel(sp, { limeFrom: 8 });
+      T.leaders = st.filter(function (_, k) { return k % 3 === 0; }).slice(0, 5);
+      T.scale = { at: [0, 9], to: 2.8 };
+      return T;
+    },
+    // Independent: rough, uneven blocks pass through stacked filter stages and leave as one clean slot
+    independent: function (r) {
+      var T = new Terrain(14, 7);
+      T.set(0, 3, 0, 7, 2.4); T.set(3, 6, 0, 7, 1.8, 3); T.set(6, 8, 1, 7, 1.3); T.set(8, 10, 1, 6, 0.9, 3); T.set(10, 13, 2, 6, 0.42, 1);
+      T.set(13, 14, 3, 4, 0.16, 2);
+      for (var k = 0; k < 16; k++) { var w = 0.35 + r() * 0.45, d = 0.35 + r() * 0.45; T.box(0.2 + r() * 2.2, 0.2 + r() * 5.6, 2.4, w, d, 0.3 + r() * 0.55); }
+      for (k = 0; k < 4; k++) T.box(3.4 + r() * 2.0, 0.6 + r() * 5, 1.8, 0.32, 0.32, 0.32);
+      for (var f = 0; f < 18; f++) T.box(6.55, 1.15 + f * 0.32, 1.3, 0.06, 0.16, 0.62);
+      for (k = 0; k < 2; k++) T.box(8.3 + r() * 1.2, 1.6 + r() * 3, 0.9, 0.26, 0.26, 0.26);
+      T.channel(walk([[10, 2], [12, 2]])); T.channel(walk([[10, 4], [12, 4]]));
+      T.channel(walk([[10, 3], [13, 3]]), { limeFrom: 0 });
+      T.leaders = [[1, 0], [4, 0], [6, 1], [9, 1], [11, 2]];
+      T.scale = { at: [0, 7], to: 3.2 };
+      return T;
+    },
+    // E-ink: a tower of data steps down tier by tier and settles into one thin plate
+    eink: function (r) {
+      var T = new Terrain(13, 7), grp = {};
+      [[0, 3, 2.7, 0, 7], [3, 5, 1.85, 0, 6], [5, 7, 1.2, 1, 6], [7, 9, 0.72, 1, 5], [9, 11, 0.38, 2, 5]].forEach(function (t) {
+        T.set(t[0], t[1], t[3], t[4], function (i, j) { var key = (i >> 1) + ':' + (j >> 1); if (!(key in grp)) grp[key] = (r() - 0.5) * 0.32; return t[2] * (1 + grp[key] * (t[2] > 1.5 ? 0.7 : 0.2)); });
+      });
+      T.set(11, 13, 3, 5, 0.1, 9);
+      var ch = []; for (var i = 0; i < 11; i++) ch.push([i, 3]);
+      T.channel(ch, { dashed: true });
+      T.leaders = [[1, 0], [3, 0], [5, 1], [7, 1], [9, 2]];
+      T.scale = { at: [0, 7], to: 2.9 };
+      return T;
+    },
+    // Cockpit: a measured ridge narrows as it descends; one needle and pin stand at "you, now"
+    cockpit: function (r) {
+      var T = new Terrain(16, 6);
+      for (var i = 0; i < 16; i++) {
+        var ht = Math.max(0.35, 2.0 - Math.floor(i / 2) * 0.22), j0 = Math.min(3, Math.floor(i / 5)), j1 = 6 - Math.min(1, Math.floor(i / 10));
+        for (var j = j0; j < j1; j++) T.h[i][j] = ht;
+        T.ticks[i][j1 - 1] = true;
+      }
+      var ch = []; for (i = 0; i < 16; i++) ch.push([i, 4]);
+      T.channel(ch);
+      T.pin = [11.5, 4.5];
+      T.leaders = [[1, 0], [5, 0], [8, 1], [12, 3]];
+      T.scale = { at: [0, 6], to: 2.2 };
+      return T;
+    }
+  };
+
+  // ---------- renderer ----------
+  function Renderer(canvas, scene, opts) {
+    opts = opts || {};
+    this.cv = canvas; this.cx = canvas.getContext('2d');
+    this.T = SCENES[scene](rng(opts.seed || 7));
+    this.yaw = 45; this.range = opts.range == null ? 10 : opts.range; this.elev = opts.elev || 30;
+    this.pad = opts.pad || [0.08, 0.18]; // vertical, horizontal margins as a share of the canvas
+    this.resize();
+  }
+
+  Renderer.prototype.resize = function () {
+    var r = this.cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    this.W = Math.max(1, Math.round(r.width)); this.H = Math.max(1, Math.round(r.height));
+    this.cv.width = Math.round(this.W * dpr); this.cv.height = Math.round(this.H * dpr);
+    this.cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    this.lw = Math.max(0.7, this.W / 1100); // line weight unit, in CSS px
+    this.fit();
+  };
+
+  // one scale and centre for the whole swing, so the drawing never zooms or clips while it turns
+  Renderer.prototype.fit = function () {
+    var T = this.T, b = [1e9, -1e9, 1e9, -1e9], self = this;
+    this.k = 1; this.ox = 0; this.oy = 0;
+    [-this.range, -this.range / 2, 0, this.range / 2, this.range].forEach(function (d) {
+      self.cam(self.yaw + d);
+      var add = function (x, y, z) { var p = self.P(x, y, z); b[0] = Math.min(b[0], p[0]); b[1] = Math.max(b[1], p[0]); b[2] = Math.min(b[2], p[1]); b[3] = Math.max(b[3], p[1]); };
+      for (var i = 0; i < T.nx; i++) for (var j = 0; j < T.ny; j++) { var h = T.h[i][j]; if (h > 0) { add(i, j, h); add(i + 1, j, h); add(i, j + 1, h); add(i + 1, j + 1, 0); add(i + 1, j, 0); add(i, j + 1, 0); } }
+      add(-1.3, T.ny, 0); add(0, T.ny + 1.95, 0); add(T.nx, T.ny + 1.95, 0); add(T.nx + 1.5, 0, 0); add(T.nx + 1.5, T.ny, 0);
+      if (T.scale) add(-1.3, T.ny, T.scale.to);
+    });
+    var aw = this.W * (1 - 2 * this.pad[1]), ah = this.H * (1 - 2 * this.pad[0]);
+    this.k = Math.min(aw / (b[1] - b[0]), ah / (b[3] - b[2]));
+    this.ox = this.W / 2 - this.k * (b[0] + b[1]) / 2;
+    this.oy = this.H / 2 - this.k * (b[2] + b[3]) / 2;
+  };
+
+  Renderer.prototype.cam = function (yaw) {
+    this.c = Math.cos(yaw * DEG); this.s = Math.sin(yaw * DEG);
+    this.se = Math.sin(this.elev * DEG); this.ce = Math.cos(this.elev * DEG);
+    this.mx = this.T.nx / 2; this.my = this.T.ny / 2;
+  };
+  Renderer.prototype.P = function (x, y, z) {
+    var dx = x - this.mx, dy = y - this.my, xr = dx * this.c - dy * this.s, yr = dx * this.s + dy * this.c;
+    return [this.ox + xr * this.k, this.oy + (yr * this.se - z * this.ce) * this.k];
+  };
+  Renderer.prototype.depth = function (x, y) { var dx = x - this.mx, dy = y - this.my; return dx * this.s + dy * this.c; };
+
+  // ---------- drawing primitives ----------
+  Renderer.prototype.poly = function (pts, fill, stroke, w) {
+    var g = this.cx; g.beginPath(); g.moveTo(pts[0][0], pts[0][1]);
+    for (var k = 1; k < pts.length; k++) g.lineTo(pts[k][0], pts[k][1]);
+    g.closePath();
+    if (fill) { g.fillStyle = fill; g.fill(); }
+    if (stroke) { g.strokeStyle = stroke; g.lineWidth = w; g.stroke(); }
+  };
+  Renderer.prototype.seg = function (a, b, col, w) { var g = this.cx; g.beginPath(); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); g.strokeStyle = col; g.lineWidth = w; g.stroke(); };
+
+  Renderer.prototype.render = function (yaw) {
+    var T = this.T, g = this.cx, self = this, L1 = 1.5 * this.lw, L2 = 0.8 * this.lw, LH = 0.6 * this.lw;
+    this.cam(yaw == null ? this.yaw : yaw);
+    g.lineCap = 'square'; g.lineJoin = 'miter';
+    g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
+    var cells = [];
+    for (var i = 0; i < T.nx; i++) for (var j = 0; j < T.ny; j++) if (T.h[i][j] > 0) cells.push([this.depth(i + 0.5, j + 0.5), i, j]);
+    cells.sort(function (a, b) { return a[0] - b[0]; });
+    for (var n = 0; n < cells.length; n++) this.cell(cells[n][1], cells[n][2], L1, L2, LH);
+    this.furniture(L2);
+    this.drawPin(L1);
+  };
+
+  Renderer.prototype.cell = function (i, j, L1, L2, LH) {
+    var T = this.T, h = T.h[i][j], hx = T.at(i + 1, j), hy = T.at(i, j + 1), kind = T.kind[i][j], self = this, P = function (x, y, z) { return self.P(x, y, z); };
+    // +y face: the shadow side, hatched
+    if (h > hy) {
+      var f = [P(i, j + 1, hy), P(i + 1, j + 1, hy), P(i + 1, j + 1, h), P(i, j + 1, h)];
+      this.poly(f, PAL.ink);
+      var n = Math.max(1, Math.round(Math.abs(f[1][0] - f[0][0]) / (5.5 * this.lw)));
+      for (var k = 1; k < n; k++) this.seg(P(i + k / n, j + 1, hy), P(i + k / n, j + 1, h), PAL.line2, LH);
+      this.seg(f[0], f[1], PAL.line, L1);
+      if (!(T.at(i - 1, j) === h && T.at(i - 1, j + 1) === hy)) this.seg(f[0], f[3], PAL.line, L1);
+      if (!(T.at(i + 1, j) === h && T.at(i + 1, j + 1) === hy)) this.seg(f[1], f[2], PAL.line, L1);
+    }
+    // +x face: the lit side, clean
+    if (h > hx) {
+      var g2 = [P(i + 1, j, hx), P(i + 1, j + 1, hx), P(i + 1, j + 1, h), P(i + 1, j, h)];
+      this.poly(g2, PAL.ink);
+      this.seg(g2[0], g2[1], PAL.line, L1);
+      if (!(T.at(i, j - 1) === h && T.at(i + 1, j - 1) === hx)) this.seg(g2[0], g2[3], PAL.line, L1);
+      if (!(T.at(i, j + 1) === h && T.at(i + 1, j + 1) === hx)) this.seg(g2[1], g2[2], PAL.line, L1);
+    }
+    // top
+    var t = [P(i, j, h), P(i + 1, j, h), P(i + 1, j + 1, h), P(i, j + 1, h)], lime = kind === 9;
+    this.poly(t, lime ? PAL.lime : PAL.ink);
+    var edge = function (a, b, nb) { if (nb !== h) self.seg(a, b, lime ? PAL.lime : PAL.line, L1); else if (kind === 1 || kind === 3) self.seg(a, b, PAL.line2, L2); };
+    edge(t[0], t[1], T.at(i, j - 1)); edge(t[0], t[3], T.at(i - 1, j)); edge(t[1], t[2], hx); edge(t[3], t[2], hy);
+    if (kind === 3) for (var q = 1; q < 4; q++) { this.seg(P(i + q / 4, j, h), P(i + q / 4, j + 1, h), PAL.line2, LH); this.seg(P(i, j + q / 4, h), P(i + 1, j + q / 4, h), PAL.line2, LH); }
+    if (T.ticks[i][j]) for (var m = 0; m <= 10; m++) { var len = m % 5 === 0 ? 0.32 : 0.16; this.seg(P(i + m / 10, j + 1, h), P(i + m / 10, j + 1 - len, h), PAL.line2, L2); }
+    // channels on this cell
+    for (var c = 0; c < T.channels.length; c++) {
+      var ch = T.channels[c];
+      for (var p = 0; p < ch.cells.length; p++) if (ch.cells[p][0] === i && ch.cells[p][1] === j) this.groove(i, j, h, ch, p, L1);
+    }
+    // loose boxes on this cell, back to front
+    var props = T.props[i][j].slice().sort(function (a, b) { return self.depth(a.x + a.w / 2, a.y + a.d / 2) - self.depth(b.x + b.w / 2, b.y + b.d / 2); });
+    for (var b = 0; b < props.length; b++) this.box(props[b], L1, LH);
+  };
+
+  Renderer.prototype.box = function (o, L1, LH) {
+    var self = this, P = function (x, y, z) { return self.P(x, y, z); }, x0 = o.x, x1 = o.x + o.w, y0 = o.y, y1 = o.y + o.d, z0 = o.z, z1 = o.z + o.h;
+    var fy = [P(x0, y1, z0), P(x1, y1, z0), P(x1, y1, z1), P(x0, y1, z1)], fx = [P(x1, y0, z0), P(x1, y1, z0), P(x1, y1, z1), P(x1, y0, z1)], ft = [P(x0, y0, z1), P(x1, y0, z1), P(x1, y1, z1), P(x0, y1, z1)];
+    this.poly(fy, PAL.ink, PAL.line, L1 * 0.8);
+    var n = Math.max(1, Math.round(Math.abs(fy[1][0] - fy[0][0]) / (5.5 * this.lw)));
+    for (var k = 1; k < n; k++) this.seg(P(x0 + o.w * k / n, y1, z0), P(x0 + o.w * k / n, y1, z1), PAL.line2, LH);
+    this.poly(fx, PAL.ink, PAL.line, L1 * 0.8);
+    this.poly(ft, o.lime ? PAL.lime : PAL.ink, PAL.line, L1 * 0.8);
+  };
+
+  Renderer.prototype.groove = function (i, j, h, ch, p, L1) {
+    var self = this, P = function (x, y, z) { return self.P(x, y, z); }, T = this.T;
+    var prev = ch.cells[p - 1], next = ch.cells[p + 1], lime = ch.limeFrom >= 0 && p >= ch.limeFrom, w = 0.2, o = w / 2;
+    var cx = i + 0.5, cy = j + 0.5, ax = cx, ay = cy, bx = cx, by = cy;
+    if (prev) { if (prev[0] < i) ax = i; else if (prev[0] > i) ax = i + 1; else if (prev[1] < j) ay = j; else ay = j + 1; }
+    if (next) { if (next[0] > i) bx = i + 1; else if (next[0] < i) bx = i; else if (next[1] > j) by = j + 1; else by = j; }
+    else { if (prev && prev[1] !== j) by = prev[1] < j ? j + 0.97 : j + 0.03; else bx = i + 0.97; }
+    if (!prev) { if (next && next[1] !== j) ay = next[1] > j ? j + 0.15 : j + 0.85; else ax = i + 0.15; }
+    var g = this.cx;
+    if (ch.dashed) g.setLineDash([7 * this.lw, 6 * this.lw]);
+    [[ax, ay, cx, cy], [cx, cy, bx, by]].forEach(function (s) {
+      if (s[0] === s[2] && s[1] === s[3]) return;
+      var horiz = s[1] === s[3];
+      var A = horiz ? [[s[0], s[1] - o], [s[2], s[3] - o]] : [[s[0] - o, s[1]], [s[2] - o, s[3]]];
+      var B = horiz ? [[s[0], s[1] + o], [s[2], s[3] + o]] : [[s[0] + o, s[1]], [s[2] + o, s[3]]];
+      if (lime) self.poly([P(A[0][0], A[0][1], h), P(A[1][0], A[1][1], h), P(B[1][0], B[1][1], h), P(B[0][0], B[0][1], h)], PAL.lime, PAL.lime, 1);
+      else { self.seg(P(A[0][0], A[0][1], h), P(A[1][0], A[1][1], h), PAL.line, L1 * 0.9); self.seg(P(B[0][0], B[0][1], h), P(B[1][0], B[1][1], h), PAL.line, L1 * 0.9); }
+    });
+    g.setLineDash([]);
+    if (next) {
+      var nh = T.at(next[0], next[1]);
+      if (nh < h && (next[0] > i || next[1] > j)) {
+        var q = next[0] > i ? [P(i + 1, cy - o, nh), P(i + 1, cy + o, nh), P(i + 1, cy + o, h), P(i + 1, cy - o, h)] : [P(cx - o, j + 1, nh), P(cx + o, j + 1, nh), P(cx + o, j + 1, h), P(cx - o, j + 1, h)];
+        if (lime) this.poly(q, PAL.lime, PAL.lime, 1);
+        else { this.poly(q, PAL.ink); this.seg(q[0], q[3], PAL.line, L1 * 0.9); this.seg(q[1], q[2], PAL.line, L1 * 0.9); }
+      }
+    } else if (lime) {
+      var e = o + 0.06;
+      this.poly([P(i + 1, cy - e, h), P(i + 1, cy + e, h), P(i + 1, cy + e, h - 0.12), P(i + 1, cy - e, h - 0.12)], PAL.ink, PAL.lime, 1.2 * this.lw);
+    }
+  };
+
+  Renderer.prototype.arrow = function (a, b, w) {
+    this.seg(a, b, PAL.line2, w);
+    var ang = Math.atan2(b[1] - a[1], b[0] - a[0]), L = 7 * this.lw, sp = 0.32, self = this;
+    [[a, 0], [b, Math.PI]].forEach(function (pd) { var t = ang + pd[1], p = pd[0]; self.seg(p, [p[0] + Math.cos(t + sp) * L, p[1] + Math.sin(t + sp) * L], PAL.line2, w); self.seg(p, [p[0] + Math.cos(t - sp) * L, p[1] + Math.sin(t - sp) * L], PAL.line2, w); });
+  };
+
+  // unlabelled measurement: base dimension lines, a vertical scale, leader lines
+  Renderer.prototype.furniture = function (L2) {
+    var T = this.T, nx = T.nx, ny = T.ny, self = this, P = function (x, y, z) { return self.P(x, y, z); }, off = 1.1;
+    var br = [0], last = null;
+    for (var i = 0; i < nx; i++) { var fh = 0; for (var j = ny - 1; j >= 0; j--) if (T.at(i, j) > 0) { fh = T.at(i, j); break; } var lv = Math.round(fh * 3); if (last !== null && lv !== last && i - br[br.length - 1] >= 2) br.push(i); last = lv; }
+    if (nx - br[br.length - 1] < 2) br.pop(); br.push(nx);
+    br.forEach(function (x) { self.seg(P(x, ny + 0.2, 0), P(x, ny + off + 0.35, 0), PAL.line2, L2); });
+    for (var k = 1; k < br.length; k++) this.arrow(P(br[k - 1], ny + off, 0), P(br[k], ny + off, 0), L2);
+    this.arrow(P(0, ny + off + 0.75, 0), P(nx, ny + off + 0.75, 0), L2);
+    var jmin = ny, jmax = 0; for (j = 0; j < ny; j++) if (T.at(nx - 1, j) > 0) { jmin = Math.min(jmin, j); jmax = Math.max(jmax, j + 1); }
+    this.seg(P(nx + 0.2, jmin, 0), P(nx + off + 0.35, jmin, 0), PAL.line2, L2);
+    this.seg(P(nx + 0.2, jmax, 0), P(nx + off + 0.35, jmax, 0), PAL.line2, L2);
+    this.arrow(P(nx + off, jmin, 0), P(nx + off, jmax, 0), L2);
+    if (T.scale) {
+      var sx = T.scale.at[0], sy = T.scale.at[1], top = T.scale.to;
+      this.seg(P(sx - 0.9, sy, 0), P(sx - 0.9, sy, top), PAL.line2, L2);
+      for (k = 0; k <= Math.round(top * 10); k++) { var p = P(sx - 0.9, sy, k / 10), len = (k % 5 === 0 ? 9 : 4.5) * this.lw; this.seg(p, [p[0] - len, p[1]], PAL.line2, L2); }
+    }
+    T.leaders.forEach(function (c, n) {
+      var h = T.at(c[0], c[1]); if (h <= 0) return;
+      var a = P(c[0] + 0.5, c[1] + 0.5, h), rise = Math.min((60 + n * 3) * self.lw, a[1] - 0.05 * self.H), stub = 64 * self.lw;
+      if (rise < 18 * self.lw) return; // no room above this summit: leave it unmarked rather than clip
+      var b = [a[0] + rise * 0.7, a[1] - rise];
+      if (b[0] + stub > self.W - 8) return;
+      self.seg(a, b, PAL.line2, L2); self.seg(b, [b[0] + stub, b[1]], PAL.line2, L2);
+    });
+  };
+
+  Renderer.prototype.drawPin = function (L1) {
+    var T = this.T; if (!T.pin) return;
+    var x = T.pin[0], y = T.pin[1], i = Math.floor(x), j = Math.floor(y), h = T.at(i, j), j0 = j, j1 = j;
+    while (T.at(i, j0 - 1) > 0) j0--; while (T.at(i, j1 + 1) > 0) j1++;
+    this.seg(this.P(x, j0, h), this.P(x, j1 + 1, h), PAL.lime, L1 * 1.6);
+    var base = this.P(x, y, h), top = this.P(x, y, h + 1.35), r = 0.28 * this.k;
+    this.poly([[top[0] - r, top[1]], [top[0] + r, top[1]], base], PAL.lime, PAL.lime, 1);
+    var g = this.cx; g.beginPath(); g.arc(top[0], top[1], r, 0, Math.PI * 2); g.fillStyle = PAL.lime; g.fill();
+  };
+
+  // ---------- mounting: lazy, scroll-scrubbed with GSAP when present ----------
+  function mount(canvas, opts) {
+    opts = opts || {};
+    var scene = canvas.getAttribute('data-sv3d'), R = null, st = null, reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function start() {
+      R = new Renderer(canvas, scene, opts);
+      R.render(R.yaw);
+      var G = window.gsap, S = window.ScrollTrigger;
+      if (!reduce && G && S) {
+        G.registerPlugin(S);
+        st = S.create({ trigger: canvas, start: 'top bottom', end: 'bottom top', scrub: 0.6,
+          onUpdate: function (self) { R.render(R.yaw + (self.progress - 0.5) * 2 * R.range); } });
+        R.render(R.yaw + (st.progress - 0.5) * 2 * R.range);
+      }
+      var t = null;
+      window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(function () { R.resize(); R.render(st ? R.yaw + (st.progress - 0.5) * 2 * R.range : R.yaw); }, 120); });
+    }
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: '300px 0px' });
+      io.observe(canvas);
+    } else start();
+  }
+
+  root.SV3D = { mount: mount, Renderer: Renderer, scenes: Object.keys(SCENES) };
+})(window);

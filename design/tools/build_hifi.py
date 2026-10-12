@@ -93,26 +93,9 @@ for sp in meta.find_all('span'):
 h2 = intro.find('h2')
 bullets = intro.find('h2').find_next_sibling('div')
 # signature visual: the line-art illustration (style master); the OPEX chart moves into the drawer
-import io as _io
-from PIL import Image as _Image
-_sv = _Image.open(os.path.join(S, 'sv-master.jpg')).convert('RGB')
-# snap the JPEG's noisy near-black ground to the exact page ink so no box shows
-import numpy as _np
-_a = _np.asarray(_sv).astype(_np.int16)
-_ground = (_a.max(axis=2) <= 40) & ((_a.max(axis=2) - _a.min(axis=2)) <= 10)
-_a[_ground] = (22, 21, 17)
-_sv = _Image.fromarray(_a.astype(_np.uint8))
-_b = _io.BytesIO(); _sv.save(_b, 'WEBP', quality=92, method=6)
-SV_URI = 'data:image/webp;base64,' + base64.b64encode(_b.getvalue()).decode()
-SV_ALT = ('Line drawing: a stepped isometric cascade. Many intake channels at the back left carry support requests '
-          'down through tiers and splitters; at the front right one lime channel carries the self-service outflow.')
-chart['style'] = re.sub(r'margin-top:\s*24px;?', '', chart['style'])
-chart['class'] = chart.get('class', []) + ['mk-chart']
-callout = BeautifulSoup('<div class="mk-chart-callout"><span data-m="count" class="mk-cc-n">−80%</span><span class="mk-cc-l">CUSTOMER-SERVICE OPEX · TICKETS DEFLECTED TO SELF-SERVICE</span></div>', 'html.parser')
-chart.find('svg').insert_before(callout)
-for el in (problem, support, route):
-    el['style'] = re.sub(r'margin-top:\s*(44|24)px;?', '', el['style'])
-shots_head['style'] = re.sub(r'margin-top:\s*40px;?', '', shots_head['style'])
+SV_ALT = ('Line drawing in 3D: stepped terrain where four grooves from tall intakes at the back left merge into one '
+          'lime self-service outflow at the front right; it turns slowly as you scroll.')
+SV3D_JS = open(os.path.join(S, 'sv3d.js'), encoding='utf-8').read()
 
 STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]
 stats_html = '<div class="mk-stats">' + ''.join(
@@ -150,7 +133,7 @@ case_html = (
     '<div>' + str(h2) + '</div>'
     '<div class="mk-case-side"><p class="mk-sub">' + sub + '</p>' + stats_html + '</div>'
     '</div>'
-    + '<figure class="mk-sv"><img src="' + SV_URI + '" alt="' + SV_ALT + '" width="1584" height="672"></figure>'
+    + '<figure class="mk-sv"><canvas data-sv3d="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>'
     + toggle + drawer +
     '</div></section>')
 
@@ -168,6 +151,7 @@ out = (tpl.replace('/*__SITE_CSS__*/', css)
           .replace('<!--__HERO__-->', str(hero))
           .replace('<!--__INDEX__-->', index_html)
           .replace('<!--__CASE__-->', case_html)
-          .replace('<!--__MORE__-->', more_html))
+          .replace('<!--__MORE__-->', more_html)
+          .replace('/*SV3D*/', SV3D_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
 print('bytes', len(out))
