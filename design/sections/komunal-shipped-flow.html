@@ -87,6 +87,13 @@
 .ksf .mt b { font-size: 22px; font-weight: 800; letter-spacing: -.02em; color: #12924a; }
 .ksf .mn { margin-top: 2px; text-align: right; font-size: 12px; font-weight: 600; color: #3f7a57; }
 
+/* screen 3: funds are matched by webhook, so there is nothing to confirm, only a live wait and a way to switch rails */
+.ksf .auto { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; padding: 13px 16px; border-radius: 14px; background: #fff; border: 1px solid #e7ebf5; }
+.ksf .auto i { flex: none; position: relative; width: 10px; height: 10px; border-radius: 50%; background: #3b5bdb; box-shadow: 0 0 0 4px rgba(59, 91, 219, .16), 0 0 0 9px rgba(59, 91, 219, .07); margin: 0 4px; }
+.ksf .auto b { display: block; font-size: 14px; font-weight: 800; color: #17213b; }
+.ksf .auto small { display: block; margin-top: 2px; font-size: 12px; font-weight: 600; line-height: 1.35; color: #6b7796; }
+.ksf .ghost { text-align: center; font-size: 15px; font-weight: 800; color: #3b5bdb; padding: 15px; border-radius: 14px; border: 1.5px solid #3b5bdb; }
+
 @media (max-width: 760px) {
   .ksf-panel { padding: 16px; }
   .ksf-row { flex-wrap: wrap; gap: 20px 12px; }
@@ -206,7 +213,7 @@
 <div class="st"><i>3</i><span>Tulis kode DEP-7F3K di berita transfer</span></div></div>
 <div class="tip"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span>Cek limit transfer harian Anda minimal Rp750 jt. Jika kurang, naikkan limit di aplikasi bank atau ubah nominal.</span></div>
 </div>
-<div class="foot"><div class="wait"><i></i>Menunggu dana · tidak ada yang dikunci</div><div class="cta">Saya sudah transfer</div><div class="alt">Ganti cara transfer</div></div>
+<div class="foot"><div class="auto"><i></i><span><b>Menunggu dana masuk</b><small>Terdeteksi otomatis · tidak ada yang dikunci</small></span></div><div class="ghost">Ganti cara transfer</div></div>
 </div>
 </div>
 </div><figcaption><b>3</b> One clear step</figcaption></figure>
