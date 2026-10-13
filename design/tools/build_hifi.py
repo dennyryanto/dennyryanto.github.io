@@ -322,8 +322,18 @@ def blocks(*els):
 
 
 kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
+
+
+def without_ds(row):
+    # the live row pairs "Tooling migration" with the old "One design system · three orgs" tree; the tree is replaced
+    for card in row.find_all(recursive=False):
+        if 'ONE DESIGN SYSTEM' in card.get_text(' ', strip=True).upper():
+            card.decompose()
+    return row
 LIVE = {
-    'komunal': blocks(kom[2], kom[3]),                      # tooling migration, deposit funnel
+    # the design system story (design/sections/), then the tooling migration (its old design-system card removed), then the funnel
+    'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
+                      without_ds(kom[2]), kom[3]),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
     # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture

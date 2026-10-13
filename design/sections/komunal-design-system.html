@@ -198,7 +198,8 @@
   function wake() { if (!raf && visible && wrap.classList.contains('live')) raf = requestAnimationFrame(loop); }
   new MutationObserver(function () { if (wrap.classList.contains('live')) { dots.forEach(function (k) { k.c.remove(); }); dots = makeDots(); wake(); } }).observe(wrap, { attributes: true, attributeFilter: ['class'] });
 
-  draw();
+  // a shut drawer has no layout yet: measure when it opens (mk-open) or when the board comes into view, not while the page parses
+  if (!wrap.closest('.mk-drawer:not(.open)')) draw();
   addEventListener('resize', function () { draw(); });
   var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
