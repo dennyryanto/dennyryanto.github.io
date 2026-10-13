@@ -207,14 +207,35 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
+# phone mockups: no Dynamic Island (at this scale it crowded every header), and the chat header gets the same back
+# chevron as the other screens plus an online dot, on the 24px side margin the nav bars use
+ISLAND = re.compile(r'<div style="[^"]*width: 116px; height: 33px[^"]*"></div>')
+LA_BACK = ('<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" '
+           'style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewBox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg>')
+LA_DOT = '<span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>'
+
+
+def polish_phones(html):
+    html, n = ISLAND.subn('', html)
+    head = '<div style="padding: 22px 22px 0px; display: flex; align-items: center; gap: 12px;">'
+    html = html.replace(head, '<div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;">' + LA_BACK)
+    html = re.sub(r'''(opacity: 0\.85; margin-top: 4px;['"]>)Online</div>''', lambda m: m.group(1) + LA_DOT + 'Online</div>', html)
+    return html, n
+
+
+route_html, n_route = polish_phones(str(route))
+shots_html, n_shots = polish_phones(str(shots))
+assert n_route == 2 and n_shots == 4, (n_route, n_shots)
+assert (route_html.count(LA_BACK), route_html.count(LA_DOT)) == (2, 2), (route_html.count(LA_BACK), route_html.count(LA_DOT))
+
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
           '<div class="mk-block">' + str(support) + '</div>'
-          '<div class="mk-block">' + str(route) + '</div>'
-          '<div class="mk-block">' + str(shots_head) + str(shots) + '</div>'
+          '<div class="mk-block">' + route_html + '</div>'
+          '<div class="mk-block">' + str(shots_head) + shots_html + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
 
@@ -330,13 +351,44 @@ def without_ds(row):
         if 'ONE DESIGN SYSTEM' in card.get_text(' ', strip=True).upper():
             card.decompose()
     return row
+
+
+def with_shipped_flow(row):
+    # the funnel row's old two-phone "shipped screen + flow" panel becomes the four-phone flow with the routing (design/sections/)
+    panel = next(d for d in row.find_all('div') if 'SHIPPED SCREEN + FLOW' in d.get_text(' ', strip=True)
+                 and 'min-height: 340px' in (d.get('style') or ''))
+    # four phones need the full width: the flow spans the whole grid row, so the funnel takes the row above to itself
+    cell = soup('<div style="grid-column: 1 / -1; min-width: 0;"></div>').div
+    cell.append(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-shipped-flow.html'), encoding='utf-8').read()))
+    grid = panel.parent
+    panel.replace_with(cell)
+    # one column: the funnel panel takes its own full row, laid out as funnel | volume so its charts keep their scale
+    grid['style'] = re.sub(r'grid-template-columns:[^;]*;', 'grid-template-columns: minmax(0, 1fr);', grid.get('style', ''))
+    fun = next(d for d in grid.find_all('div', recursive=False) if 'Deposit Placement Funnel' in d.get_text())
+    head, chart, vol, spacer, note = fun.find_all(recursive=False)
+    a_col = soup('<div class="kfun-a"></div>').div
+    head.insert_before(a_col); a_col.append(head.extract()); a_col.append(chart.extract())
+    fun['class'] = 'kfun'; vol['class'] = 'kfun-b'; spacer['class'] = 'kfun-sp'; note['class'] = 'kfun-n'
+    grid.insert(0, soup('''<style>
+.kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
+.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; }
+.kfun > .kfun-sp { display: none; }
+.kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
+@media (max-width: 899px) {
+  .kfun { grid-template-columns: minmax(0, 1fr); }
+  .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
+}
+</style>'''))
+    return row
+
+
 LIVE = {
     # the design system story (design/sections/), the tooling migration (its old design-system card removed),
     # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
     'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
                       without_ds(kom[2]),
                       soup(open(os.path.join(HERE, '..', 'sections', 'komunal-placement-routing.html'), encoding='utf-8').read()),
-                      kom[3]),
+                      with_shipped_flow(kom[3])),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
     # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
