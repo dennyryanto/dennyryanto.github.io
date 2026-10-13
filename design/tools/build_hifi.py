@@ -371,12 +371,16 @@ def with_shipped_flow(row):
     fun['class'] = 'kfun'; vol['class'] = 'kfun-b'; spacer['class'] = 'kfun-sp'; note['class'] = 'kfun-n'
     grid.insert(0, soup('''<style>
 .kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
-.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; }
+.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; display: flex; flex-direction: column; }
+/* both charts sit on the row's baseline, whichever column is taller, not floating under their titles */
+.kfun > .kfun-a { align-self: stretch; display: flex; flex-direction: column; }
+.kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: auto; }
 .kfun > .kfun-sp { display: none; }
 .kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
 @media (max-width: 899px) {
   .kfun { grid-template-columns: minmax(0, 1fr); }
   .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
+  .kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: 0; }
 }
 </style>'''))
     return row

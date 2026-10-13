@@ -1565,12 +1565,16 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div><div class="mk-block"><div style="margin-top: 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; align-items: stretch;"><style>
 .kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
-.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; }
+.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; display: flex; flex-direction: column; }
+/* both charts sit on the row's baseline, whichever column is taller, not floating under their titles */
+.kfun > .kfun-a { align-self: stretch; display: flex; flex-direction: column; }
+.kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: auto; }
 .kfun > .kfun-sp { display: none; }
 .kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
 @media (max-width: 899px) {
   .kfun { grid-template-columns: minmax(0, 1fr); }
   .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
+  .kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: 0; }
 }
 </style>
 <div class="kfun" style="min-height: 340px; background: rgb(15, 19, 25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 22px 24px; display: flex; flex-direction: column; font-family: Archivo, sans-serif;">
