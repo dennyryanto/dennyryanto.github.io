@@ -1,0 +1,99 @@
+<!-- LinkAja: the problem and the fix, with a before/after mini diagram.
+     Left, the problem (amber: needs attention) and the fix (lime: the result). Right, a board in the shared diagram
+     language (design/sections/VIZ-STYLE.md): BEFORE is amber, a phone sends a ticket stack down a dashed connector to an
+     agent queue; AFTER is one lit lime connector from the phone to a lime check (the outcome).
+     Markup is the finished state, so the page is complete without JavaScript; the script only starts a lime dot that
+     travels the AFTER path while the board is on screen (reduced motion keeps it still). -->
+<div class="lpf-wrap">
+<style>
+.lpf-wrap {
+  --lpf-panel: #1a1b1f; --lpf-node: #232429; --lpf-tile: #2b2c32; --lpf-line: rgba(255, 255, 255, .08);
+  --lpf-ink: #f2f2f4; --lpf-ink-2: #c2c3cb; --lpf-ink-3: #8b8d98; --lpf-edge: #4a4d57;
+  --lpf-lime: oklch(0.9 0.2 122); --lpf-amber: #fdb022;
+  margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; align-items: center;
+}
+.lpf-text { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.lpf-eyebrow { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--lpf-amber); }
+.lpf-eyebrow.fix { color: var(--lpf-lime); }
+.lpf-text p { margin: 10px 0 0; font: 400 17px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .8); text-wrap: pretty; }
+
+.lpf-board { min-width: 0; border-radius: 14px; background: var(--lpf-panel); box-shadow: 0 0 0 1px var(--lpf-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px 22px; font-family: Archivo, system-ui, sans-serif; color: var(--lpf-ink); }
+.lpf-row + .lpf-row { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--lpf-line); }
+/* status line: dot + label (amber for the problem, lime for the good state) */
+.lpf-st { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font: 500 12px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; }
+.lpf-st i { width: 8px; height: 8px; border-radius: 50%; }
+.lpf-row.before .lpf-st { color: var(--lpf-amber); }
+.lpf-row.before .lpf-st i { background: var(--lpf-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.lpf-row.after .lpf-st { color: var(--lpf-lime); }
+.lpf-row.after .lpf-st i { background: var(--lpf-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+.lpf-flow { display: flex; align-items: center; min-height: 56px; }
+.lpf-tile { flex: none; width: 44px; height: 44px; border-radius: 10px; background: var(--lpf-tile); box-shadow: 0 0 0 1px var(--lpf-line); display: grid; place-items: center; color: var(--lpf-ink-2); }
+.lpf-tile svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.lpf-stack { flex: none; width: 58px; height: 46px; }
+.lpf-stack svg { width: 100%; height: 100%; display: block; }
+.lpf-lbl { flex: none; display: flex; flex-direction: column; gap: 3px; margin-left: 12px; font: 500 11px/1.25 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--lpf-ink-2); white-space: nowrap; }
+.lpf-check { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 0 5px oklch(0.9 0.2 122 / .15); display: grid; place-items: center; }
+.lpf-check svg { width: 24px; height: 24px; fill: none; stroke: #182003; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* connectors: resting = dashed edge, 1.5px; the lit path = lime 2.5px with a soft glow; small arrowheads in the same colour */
+.lpf-c { position: relative; flex: 1 1 0; min-width: 22px; height: 12px; margin: 0 8px; }
+.lpf-c::before { content: ''; position: absolute; left: 0; right: 4px; top: 50%; height: 1.5px; margin-top: -.75px; background: repeating-linear-gradient(90deg, var(--lpf-edge) 0 4px, transparent 4px 10px); }
+.lpf-c::after { content: ''; position: absolute; right: 1px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-top: 1.5px solid var(--lpf-edge); border-right: 1.5px solid var(--lpf-edge); transform: rotate(45deg); transform-origin: center; }
+.lpf-c.lit::before { height: 2.5px; margin-top: -1.25px; border-radius: 2px; background: var(--lpf-lime); box-shadow: 0 0 0 2.5px oklch(0.9 0.2 122 / .13); }
+.lpf-c.lit::after { border-color: var(--lpf-lime); width: 8px; height: 8px; margin-top: -4px; border-width: 2.5px; }
+.lpf-dot { position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); opacity: 0; }
+.lpf-wrap.go .lpf-dot { animation: lpf-run 1.8s linear infinite; }
+@keyframes lpf-run { 0% { left: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 6px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .lpf-wrap .lpf-dot { animation: none !important; display: none; } }
+
+@media (max-width: 480px) {
+  .lpf-board { padding: 16px 14px; }
+  .lpf-lbl { margin-left: 8px; }
+  .lpf-c { min-width: 14px; margin: 0 6px; }
+}
+</style>
+
+<div class="lpf-text">
+  <div><span class="lpf-eyebrow">THE PROBLEM</span><p>Security and account issues could only be resolved by an agent. Each one became a support ticket, so customer-service cost grew with every new user.</p></div>
+  <div><span class="lpf-eyebrow fix">THE FIX</span><p>Self-service security and account flows replaced agent tickets, so most issues are now solved in the app.</p></div>
+</div>
+
+<div class="lpf-board" role="img" aria-label="Before: every issue became a ticket queued for an agent. After: issues solved in the app.">
+  <div class="lpf-row before">
+    <div class="lpf-st"><i></i>BEFORE</div>
+    <div class="lpf-flow">
+      <span class="lpf-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></span>
+      <span class="lpf-c"></span>
+      <span class="lpf-stack"><svg viewBox="0 0 58 46" aria-hidden="true">
+        <rect x="19" y="3" width="36" height="24" rx="4" fill="#232429" stroke="#fdb022" stroke-width="1.5" opacity=".4"/>
+        <rect x="11" y="11" width="36" height="24" rx="4" fill="#232429" stroke="#fdb022" stroke-width="1.5" opacity=".7"/>
+        <rect x="3" y="19" width="36" height="24" rx="4" fill="#232429" stroke="#fdb022" stroke-width="1.5"/>
+        <path d="M10 28h22M10 34h13" stroke="#fdb022" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".8"/></svg></span>
+      <span class="lpf-c"></span>
+      <span class="lpf-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.8"/><path d="M4.5 20.5c0-4.4 3.4-7 7.5-7s7.5 2.6 7.5 7"/></svg></span>
+      <span class="lpf-lbl"><span>TICKET TO</span><span>AGENT QUEUE</span></span>
+    </div>
+  </div>
+  <div class="lpf-row after">
+    <div class="lpf-st"><i></i>AFTER</div>
+    <div class="lpf-flow">
+      <span class="lpf-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></span>
+      <span class="lpf-c lit"><i class="lpf-dot"></i></span>
+      <span class="lpf-check"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 12.5l4.2 4.2L18.5 7.5"/></svg></span>
+      <span class="lpf-lbl"><span>SOLVED IN-APP</span><span>NO AGENT</span></span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.lpf-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var visible = false;
+  function sync() { wrap.classList.toggle('go', visible && !document.hidden); }
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting && es[0].intersectionRatio >= .4; sync(); }, { threshold: [0, .4, .7] }).observe(board);
+  document.addEventListener('visibilitychange', sync);
+})();
+</script>
+</div>

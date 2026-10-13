@@ -1,0 +1,119 @@
+<!-- Chrona: product vision, the habit loop diagram (shared diagram language, design/sections/VIZ-STYLE.md).
+     Three steps (plan, show up, repeat) sit on a dashed ring beside the list of what each one means and its target.
+     Lime marks only what moves the outcome: a dot that travels the loop while the board is in view and lights each node
+     in turn, and the targets' numbers. Markup is the finished state, so the page is complete without JavaScript; the
+     script only moves the dot while the board is on screen (and pauses off screen or in a hidden tab). Reduced motion
+     keeps the still state. Nothing is measured: the ring is a fixed 200px canvas, so a shut drawer is fine.
+     Pairs with ai-chrona-engine.html: same top row, padding and caption row. -->
+<div class="cl-wrap">
+<style>
+.cl-wrap {
+  container-type: inline-size;
+  --cl-panel: #1a1b1f; --cl-node: #232429; --cl-tile: #2b2c32; --cl-line: rgba(255, 255, 255, .08);
+  --cl-ink: #f2f2f4; --cl-ink-2: #c2c3cb; --cl-ink-3: #8b8d98; --cl-edge: #4a4d57;
+  --cl-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%;
+}
+.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); box-shadow: 0 0 0 1px var(--cl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: Archivo, system-ui, sans-serif; color: var(--cl-ink); }
+.cl-top { margin-bottom: 18px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--cl-lime); }
+.cl-body { flex: 1; display: flex; align-items: center; justify-content: center; gap: 36px; min-width: 0; }
+
+/* the ring: a fixed 200px canvas, everything placed inside it */
+.cl-ring { position: relative; flex: none; width: 200px; height: 200px; }
+.cl-ring svg { position: absolute; inset: 0; width: 200px; height: 200px; overflow: visible; }
+.cl-edge { fill: none; stroke: var(--cl-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
+.cl-trail { fill: none; stroke-linecap: round; stroke: var(--cl-lime); }
+.cl-trail.t { stroke-width: 2.5; }
+.cl-trail.g { stroke-width: 7; opacity: .13; }
+.cl-dot { fill: var(--cl-lime); stroke: var(--cl-panel); stroke-width: 2; filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.cl-n { position: absolute; width: 44px; height: 44px; border-radius: 12px; background: var(--cl-node); box-shadow: 0 0 0 1px var(--cl-line); display: grid; place-items: center; color: var(--cl-ink-2); transition: box-shadow .35s, color .35s; }
+.cl-n svg { position: static; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.cl-n.on { color: var(--cl-lime); box-shadow: 0 0 0 1.5px var(--cl-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1); }
+.cl-n:nth-of-type(1) { left: 78px; top: 4px; }
+.cl-n:nth-of-type(2) { left: 142px; top: 115px; }
+.cl-n:nth-of-type(3) { left: 14px; top: 115px; }
+.cl-mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+.cl-mid small { display: block; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--cl-ink-3); }
+.cl-mid b { display: block; margin-top: 6px; font: 700 16px/1.1 Archivo, sans-serif; color: var(--cl-ink); }
+
+/* the steps */
+.cl-steps { flex: 0 1 230px; min-width: 0; list-style: none; margin: 0; padding: 0; }
+.cl-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--cl-line); }
+.cl-step:last-child { border-bottom: 0; }
+.cl-step:first-child { padding-top: 0; }
+.cl-step:last-child { padding-bottom: 0; }
+.cl-step > span { font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--cl-ink-3); transition: color .35s; }
+.cl-step.on > span { color: var(--cl-ink); }
+.cl-step b { display: block; font: 600 15px/1.2 Archivo, sans-serif; color: var(--cl-ink); }
+.cl-step p { margin: 4px 0 0; font: 400 13px/1.4 Archivo, sans-serif; color: var(--cl-ink-3); }
+.cl-step p em { font: 600 12px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--cl-lime); }
+
+.cl-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--cl-line); max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* narrow: the ring above the list */
+@container (max-width: 480px) {
+  .cl-board { padding: 16px; }
+  .cl-body { flex-direction: column; align-items: stretch; gap: 22px; }
+  .cl-ring { align-self: center; }
+  .cl-steps { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { .cl-wrap * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="cl-board" role="img" aria-label="The Chrona habit loop, weekly: 01 Plan, the AI drafts the plan; 02 Show up, target above 60% completion; 03 Repeat, target above 40% retention. Every loop drives the North Star, the share of invites sent through Chrona.">
+  <div class="cl-top">PRODUCT VISION · THE HABIT LOOP</div>
+  <div class="cl-body">
+    <div class="cl-ring" aria-hidden="true">
+      <svg viewBox="0 0 200 200">
+        <circle class="cl-edge" cx="100" cy="100" r="74"/>
+        <g transform="rotate(-90 100 100)">
+          <circle class="cl-trail g" cx="100" cy="100" r="74" pathLength="360" stroke-dasharray="0 360"/>
+          <circle class="cl-trail t" cx="100" cy="100" r="74" pathLength="360" stroke-dasharray="0 360"/>
+        </g>
+        <circle class="cl-dot" cx="100" cy="26" r="5"/>
+      </svg>
+      <span class="cl-n on" data-i="0"><svg viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg></span>
+      <span class="cl-n" data-i="1"><svg viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+      <span class="cl-n" data-i="2"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg></span>
+      <div class="cl-mid"><small>WEEKLY</small><b>loop</b></div>
+    </div>
+    <ol class="cl-steps">
+      <li class="cl-step on" data-i="0"><span>01</span><div><b>Plan</b><p>AI drafts the plan</p></div></li>
+      <li class="cl-step" data-i="1"><span>02</span><div><b>Show up</b><p>Target <em>&gt;60%</em> completion</p></div></li>
+      <li class="cl-step" data-i="2"><span>03</span><div><b>Repeat</b><p>Target <em>&gt;40%</em> retention</p></div></li>
+    </ol>
+  </div>
+  <p class="cl-cap">Every loop drives the North Star, the share of invites sent through Chrona.</p>
+</div>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.cl-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var dot = wrap.querySelector('.cl-dot'), trails = [].slice.call(wrap.querySelectorAll('.cl-trail'));
+  var nodes = [].slice.call(wrap.querySelectorAll('.cl-n')), steps = [].slice.call(wrap.querySelectorAll('.cl-step'));
+  var R = 74, TRAIL = 80, SEG = 2300;       // radius, trail length (degrees), ms per node to node leg
+  var started = false, visible = false, raf = 0, last = 0, clock = 0, active = -1;
+  function frame(now) {
+    raf = 0;
+    if (!visible || document.hidden) return;
+    clock += Math.min(64, now - last); last = now;
+    var leg = clock / SEG, seg = Math.floor(leg) % 3, u = leg % 1;
+    // ease in and out of each node, so the dot lingers where it lights something
+    var e = u - Math.sin(2 * Math.PI * u) / (2 * Math.PI), th = (seg + e) * 120, rad = th * Math.PI / 180;
+    dot.setAttribute('cx', (100 + R * Math.sin(rad)).toFixed(2)); dot.setAttribute('cy', (100 - R * Math.cos(rad)).toFixed(2));
+    trails.forEach(function (t) { t.setAttribute('stroke-dasharray', TRAIL + ' ' + (360 - TRAIL)); t.setAttribute('stroke-dashoffset', (TRAIL - th).toFixed(1)); });
+    var a = Math.floor((((th + 18) % 360) / 120)) % 3;
+    if (a !== active) { active = a; nodes.forEach(function (n, i) { n.classList.toggle('on', i === a); }); steps.forEach(function (s, i) { s.classList.toggle('on', i === a); }); }
+    raf = requestAnimationFrame(frame);
+  }
+  function wake() { if (!raf && visible && !document.hidden && started) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible && es[0].intersectionRatio >= .4) started = true;
+    wake();
+  }, { threshold: [0, .4] }).observe(board);
+  document.addEventListener('visibilitychange', wake);
+})();
+</script>
+</div>

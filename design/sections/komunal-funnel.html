@@ -1,0 +1,188 @@
+<!-- Komunal: deposit placement funnel and placement volume, laid out funnel | volume (stacked below ~900px), in the shared
+     diagram language (design/sections/VIZ-STYLE.md): head row, flat board, two chart lanes on ONE shared baseline, caption under.
+     Funnel bars are grey with only "Complete" in lime; the Fund -> Complete step chip (90%) is lime because that is the step the
+     placement routing fixed (see komunal-placement-routing above). Volume is a flat 2px lime line over a faint area.
+     Markup is the final state, so the page is complete without JavaScript; the script resets to the start state and grows the
+     bars / draws the line once the board is 40% in view, then loops while on screen. Reduced motion keeps the final state.
+     Nothing is measured in script, so a shut drawer is fine. Volumes are illustrative under NDA; the +12-point lift is actual. -->
+<div class="kfl-wrap" style="margin-top: 24px;">
+<style>
+.kfl-wrap {
+  container-type: inline-size;
+  --kfl-panel: #1a1b1f; --kfl-node: #232429; --kfl-tile: #2b2c32; --kfl-line: rgba(255, 255, 255, .08);
+  --kfl-ink: #f2f2f4; --kfl-ink-2: #c2c3cb; --kfl-ink-3: #8b8d98; --kfl-edge: #4a4d57; --kfl-grey: #6b6e78;
+  --kfl-lime: oklch(0.9 0.2 122); --kfl-amber: #fdb022;
+  --kfl-plot: 200px; --kfl-below: 84px;
+}
+.kfl-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kfl-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kfl-head span:first-child { color: var(--kfl-lime); }
+
+.kfl-board { border-radius: 14px; background: var(--kfl-panel); box-shadow: 0 0 0 1px var(--kfl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: stretch; font-family: Archivo, system-ui, sans-serif; color: var(--kfl-ink); }
+.kfl-lane { display: flex; flex-direction: column; min-width: 0; padding: 18px 20px 16px; border-radius: 12px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kfl-line); }
+
+/* chart title (left) and headline numbers (right) */
+.kfl-lh { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; margin-bottom: 18px; }
+.kfl-lh h3 { margin: 0; font: 600 14px/1.25 Archivo, sans-serif; color: var(--kfl-ink); }
+.kfl-lh p { margin: 5px 0 0; font: 500 11px/1.35 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-hl { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.kfl-big { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.kfl-big b { font: 800 26px/1 Archivo, sans-serif; letter-spacing: -.01em; color: var(--kfl-lime); }
+.kfl-big span { font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kfl-ink-3); }
+.kfl-pill { padding: 5px 8px; border-radius: 6px; background: oklch(0.9 0.2 122 / .08); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .5); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kfl-lime); white-space: nowrap; }
+
+/* both charts end on one baseline: the chart block is pushed to the bottom of its (stretched) lane,
+   and the plot and the strip under the axis have the same fixed heights in both lanes */
+.kfl-chart { margin-top: auto; }
+.kfl-plot { position: relative; height: var(--kfl-plot); border-bottom: 1px solid var(--kfl-edge); }
+.kfl-grid { position: absolute; left: 0; right: 0; height: 1px; background: var(--kfl-line); }
+.kfl-below { min-height: var(--kfl-below); padding-top: 8px; }
+
+/* funnel */
+.kfl-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 4px; }
+.kfl-col { position: relative; }
+.kfl-bar { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--p) * 1.5px); border-radius: 4px 4px 0 0; background: var(--kfl-grey); transition: height .75s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 90ms); }
+.kfl-col.win .kfl-bar { background: var(--kfl-lime); }
+.kfl-val { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); padding-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap; transition: opacity .4s ease calc(var(--i) * 90ms + .3s); }
+.kfl-val b { font: 700 16px/1 Archivo, sans-serif; color: var(--kfl-ink); }
+.kfl-val small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-col.win .kfl-val b { color: var(--kfl-lime); }
+.kfl-names { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 4px; }
+.kfl-names span { text-align: center; font: 500 13px/1.25 Archivo, sans-serif; color: var(--kfl-ink-2); }
+.kfl-names span:last-child { color: var(--kfl-ink); font-weight: 600; }
+.kfl-steps { margin-top: 14px; }
+.kfl-steps > small { display: block; font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--kfl-ink-3); }
+.kfl-chips { position: relative; height: 24px; margin-top: 6px; }
+.kfl-chip { position: absolute; top: 0; left: calc(var(--k) * 20%); transform: translateX(-50%); padding: 5px 7px; border-radius: 6px; background: var(--kfl-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-2); }
+.kfl-chip.win { background: oklch(0.9 0.2 122 / .1); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); color: var(--kfl-lime); font-weight: 600; }
+
+/* volume: a flat 2px line over a faint area; the points are HTML so they stay round at any width */
+.kfl-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; transition: clip-path 1.4s linear; clip-path: inset(-20% 0 0 0); }
+.kfl-area { fill: url(#kfl-fade); stroke: none; }
+.kfl-ln { fill: none; stroke: var(--kfl-lime); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.kfl-pt { position: absolute; left: calc((var(--i) + .5) / 6 * 100%); bottom: calc((var(--v) - 92) / 32 * 100%); width: 7px; height: 7px; margin: 0 0 -3.5px -3.5px; border-radius: 50%; background: var(--kfl-lime); box-shadow: 0 0 0 2px var(--kfl-panel); transition: opacity .3s ease calc(var(--i) * 280ms), transform .3s ease calc(var(--i) * 280ms); }
+.kfl-pt.end { box-shadow: 0 0 0 2px var(--kfl-panel), 0 0 0 7px oklch(0.9 0.2 122 / .15); }
+.kfl-pv { position: absolute; left: calc((var(--i) + .5) / 6 * 100%); bottom: calc((var(--v) - 92) / 32 * 100% + 12px); transform: translateX(-50%); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); transition: opacity .3s ease calc(var(--i) * 280ms); }
+.kfl-pv.end { font-weight: 600; color: var(--kfl-lime); }
+.kfl-months { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.kfl-months span { text-align: center; font: 500 11px/1.25 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-months span:last-child { color: var(--kfl-ink-2); font-weight: 600; }
+
+/* start state while it plays */
+.kfl-wrap.idle .kfl-bar { height: 0; }
+.kfl-wrap.idle .kfl-val, .kfl-wrap.idle .kfl-pv { opacity: 0; }
+.kfl-wrap.idle .kfl-pt { opacity: 0; transform: scale(.4); }
+.kfl-wrap.idle .kfl-svg { clip-path: inset(-20% 100% 0 0); }
+.kfl-wrap.snap *, .kfl-wrap.snap *::before { transition: none !important; }
+
+.kfl-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* stacked: funnel above volume */
+@container (max-width: 860px) {
+  .kfl-board { grid-template-columns: minmax(0, 1fr); }
+  .kfl-below { min-height: 0; }
+}
+/* narrow */
+@container (max-width: 520px) {
+  .kfl-board { padding: 10px; gap: 10px; }
+  .kfl-lane { padding: 14px 12px 12px; }
+  .kfl-hl { align-items: flex-start; }
+  .kfl-val b { font-size: 15px; }
+  .kfl-names span { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .kfl-wrap *, .kfl-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kfl-head"><span>DEPOSIT PLACEMENT FUNNEL · VOLUME</span><span>DEPOSITOBPR · ILLUSTRATIVE VOLUMES</span></div>
+
+<div class="kfl-board">
+
+  <div class="kfl-lane">
+    <div class="kfl-lh">
+      <div><h3>Deposit Placement Funnel</h3><p>DepositoBPR · Representative 30 days</p></div>
+      <div class="kfl-hl"><div class="kfl-big"><b>55.0%</b><span>END-TO-END</span></div><span class="kfl-pill">+12 PTS POST-REVAMP</span></div>
+    </div>
+    <div class="kfl-chart">
+      <div class="kfl-plot" role="img" aria-label="Deposit placement funnel: 100% open app, 84% register, 71% verify KYC, 61% fund, 55% complete. Step to step: 84%, 85%, 86%, and 90% from fund to complete.">
+        <div class="kfl-grid" style="bottom: 75px"></div>
+        <div class="kfl-grid" style="bottom: 150px"></div>
+        <div class="kfl-cols">
+          <div class="kfl-col" style="--p:100; --i:0"><div class="kfl-bar"><div class="kfl-val"><b>100%</b><small>12,840</small></div></div></div>
+          <div class="kfl-col" style="--p:84; --i:1"><div class="kfl-bar"><div class="kfl-val"><b>84%</b><small>10,790</small></div></div></div>
+          <div class="kfl-col" style="--p:71; --i:2"><div class="kfl-bar"><div class="kfl-val"><b>71%</b><small>9,120</small></div></div></div>
+          <div class="kfl-col" style="--p:61; --i:3"><div class="kfl-bar"><div class="kfl-val"><b>61%</b><small>7,830</small></div></div></div>
+          <div class="kfl-col win" style="--p:55; --i:4"><div class="kfl-bar"><div class="kfl-val"><b>55%</b><small>7,060</small></div></div></div>
+        </div>
+      </div>
+      <div class="kfl-below" aria-hidden="true">
+        <div class="kfl-names"><span>Open app</span><span>Register</span><span>Verify KYC</span><span>Fund</span><span>Complete</span></div>
+        <div class="kfl-steps">
+          <small>STEP-TO-STEP</small>
+          <div class="kfl-chips">
+            <span class="kfl-chip" style="--k:1">84%</span><span class="kfl-chip" style="--k:2">85%</span><span class="kfl-chip" style="--k:3">86%</span><span class="kfl-chip win" style="--k:4">90%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kfl-lane">
+    <div class="kfl-lh">
+      <div><h3>Deposit Placement Volume</h3><p>Indexed to launch · 6 months post-revamp</p></div>
+      <div class="kfl-hl"><div class="kfl-big"><b>+3.0%</b><span>MoM</span></div><span class="kfl-pill">+16% CUMULATIVE</span></div>
+    </div>
+    <div class="kfl-chart">
+      <div class="kfl-plot" role="img" aria-label="Deposit placement volume, indexed to launch, rising about 3 percent month over month for six months: 100, 103, 106, 109, 113, 116, up 16 percent cumulatively since the revamp.">
+        <div class="kfl-grid" style="bottom: 25%"></div>
+        <div class="kfl-grid" style="bottom: 50%"></div>
+        <div class="kfl-grid" style="bottom: 75%"></div>
+        <svg class="kfl-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="kfl-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="oklch(0.9 0.2 122)" stop-opacity=".09"/><stop offset="1" stop-color="oklch(0.9 0.2 122)" stop-opacity="0"/></linearGradient></defs>
+          <polygon class="kfl-area" points="8.33,75 25,65.63 41.67,56.25 58.33,46.88 75,34.38 91.67,25 91.67,100 8.33,100"/>
+          <polyline class="kfl-ln" points="8.33,75 25,65.63 41.67,56.25 58.33,46.88 75,34.38 91.67,25"/>
+        </svg>
+        <span class="kfl-pt" style="--i:0; --v:100"></span><span class="kfl-pt" style="--i:1; --v:103"></span><span class="kfl-pt" style="--i:2; --v:106"></span><span class="kfl-pt" style="--i:3; --v:109"></span><span class="kfl-pt" style="--i:4; --v:113"></span><span class="kfl-pt end" style="--i:5; --v:116"></span>
+        <span class="kfl-pv" style="--i:0; --v:100">100</span><span class="kfl-pv" style="--i:1; --v:103">103</span><span class="kfl-pv" style="--i:2; --v:106">106</span><span class="kfl-pv" style="--i:3; --v:109">109</span><span class="kfl-pv" style="--i:4; --v:113">113</span><span class="kfl-pv end" style="--i:5; --v:116">116</span>
+      </div>
+      <div class="kfl-below" aria-hidden="true">
+        <div class="kfl-months"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<p class="kfl-cap">Iterative UX audits and enhancements lifted step-to-step conversion across the placement flow. Volumes are illustrative under NDA; the +12-point lift is actual.</p>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kfl-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var HOLD = 5200, timers = [], visible = false, pending = false, ran = false;
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  // snap to the start state with no transition, so a replay never shows the bars shrinking
+  function idle() {
+    clear(); wrap.classList.add('snap', 'idle'); void board.offsetWidth;
+    later(function () { wrap.classList.remove('snap'); }, 30);
+  }
+  function play() {
+    ran = true; clear();
+    later(function () { wrap.classList.remove('idle'); }, 60);
+    later(replay, 60 + HOLD);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    pending = false; board.style.transition = 'opacity .4s'; board.style.opacity = .35;
+    later(function () { idle(); board.style.opacity = 1; later(play, 300); }, 420);
+  }
+  idle();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
+  var seen = new IntersectionObserver(function (es) {
+    // 40% of the board, or half the screen when the lanes stack taller than the screen
+    var e = es[0]; if (e.isIntersecting && !ran && (e.intersectionRatio >= .4 || e.intersectionRect.height >= innerHeight * .5)) { seen.disconnect(); play(); }
+  }, { threshold: [0, .1, .2, .3, .4, .5, .7] });
+  seen.observe(board);
+})();
+</script>
+</div>

@@ -1,0 +1,123 @@
+<!-- LinkAja: CS OPEX after the self-service CTP revamp, indexed chart, in the shared diagram language (design/sections/VIZ-STYLE.md).
+     Eight flat bars fall from the ticket-driven months to month 12 (their heights are the indexed values: the first bar is
+     the 100 mark, the last about a fifth of it, the -80% the callout reads). The bars are the grey context mark; lime marks
+     the outcome only: the last bar, the trend line and the -80%.
+     Markup is the finished state, so the page is complete without JavaScript; the script starts from empty, raises the bars,
+     draws the line, then loops (on screen only). Reduced motion keeps the finished state. Nothing is measured, so it
+     is safe inside a drawer that is still shut. -->
+<div class="kop-wrap">
+<style>
+.kop-wrap {
+  container-type: inline-size;
+  --kop-panel: #1a1b1f; --kop-node: #232429; --kop-tile: #2b2c32; --kop-line: rgba(255, 255, 255, .08);
+  --kop-ink: #f2f2f4; --kop-ink-2: #c2c3cb; --kop-ink-3: #8b8d98; --kop-edge: #4a4d57; --kop-grey: #6b6e78;
+  --kop-lime: oklch(0.9 0.2 122); --kop-amber: #fdb022;
+  margin-top: 24px;
+}
+.kop-head { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kop-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kop-head span:first-child { color: var(--kop-lime); }
+
+.kop-board { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: stretch; border-radius: 14px; background: var(--kop-panel); box-shadow: 0 0 0 1px var(--kop-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 24px 28px 20px; gap: 0 32px; font-family: Archivo, system-ui, sans-serif; color: var(--kop-ink); }
+.kop-chart { min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* plot: a fixed height, so nothing moves while it plays; columns are 1/8 wide each, the bar inset 1px a side = a 2px gap */
+.kop-plot { position: relative; height: 220px; }
+.kop-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); }
+.kop-col { position: relative; padding: 0 1px; }
+.kop-bar { position: absolute; left: 1px; right: 1px; bottom: 0; height: var(--h); border-radius: 4px 4px 0 0; background: var(--kop-grey); transform-origin: 50% 100%; transition: transform .6s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i) * 70ms); }
+.kop-bar.out { background: var(--kop-lime); }
+.kop-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; clip-path: inset(-12px -12px -12px -12px); transition: clip-path .9s cubic-bezier(.4, 0, .2, 1) .55s; }
+.kop-line polyline { fill: none; stroke: var(--kop-lime); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.kop-glow { stroke-width: 7 !important; opacity: .13; }
+.kop-pt { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--kop-lime); box-shadow: 0 0 0 2px var(--kop-panel); transition: opacity .3s, transform .3s; }
+.kop-pt.end { width: 8px; height: 8px; margin: -4px 0 0 -4px; }
+.kop-pt.start { transition-delay: .55s; }
+.kop-pt.end { transition-delay: 1.4s; }
+.kop-axis { height: 0; border-top: 1px solid var(--kop-edge); }
+.kop-ticks { display: flex; justify-content: space-between; margin-top: 10px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* start state, applied by the script only; the markup above is the finished state */
+.kop-pre .kop-bar { transform: scaleY(0); transition: none; }
+.kop-pre .kop-line { clip-path: inset(-12px 100% -12px -12px); transition: none; }
+.kop-pre .kop-pt { opacity: 0; transform: scale(.4); transition: none; }
+.kop-pre .kop-call > * { opacity: 0; transform: translateY(6px); transition: none; }
+
+/* the callout: the number that moved */
+.kop-call { display: flex; flex-direction: column; justify-content: center; gap: 10px; padding-left: 32px; border-left: 1px solid var(--kop-line); min-width: 0; }
+.kop-call > * { transition: opacity .6s ease, transform .6s ease; }
+.kop-call > :nth-child(1) { transition-delay: 1.2s; }
+.kop-call > :nth-child(2) { transition-delay: 1.4s; }
+.kop-call > :nth-child(3) { transition-delay: 1.5s; }
+.kop-val { font: 800 72px/1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--kop-lime); }
+.kop-l1 { font: 600 12px/1.4 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--kop-ink-2); }
+.kop-l2 { font: 500 11px/1.5 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* narrow: the callout stacks under the chart */
+@container (max-width: 700px) {
+  .kop-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 16px; gap: 18px 0; }
+  .kop-plot { height: 180px; }
+  .kop-call { padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--kop-line); gap: 8px; }
+  .kop-val { font-size: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .kop-wrap *, .kop-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kop-head"><span>CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED</span><span>TICKET-DRIVEN → SELF-SERVICE</span></div>
+
+<div class="kop-board">
+  <div class="kop-chart" role="img" aria-label="Customer-service operating cost falling roughly 80 percent as support shifts to self-service, from month 1 to month 12">
+    <div class="kop-plot">
+      <div class="kop-cols" aria-hidden="true">
+        <div class="kop-col"><i class="kop-bar" style="--h:89.5%;--i:0"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:81.1%;--i:1"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:69.5%;--i:2"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:54.7%;--i:3"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:37.9%;--i:4"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:25.3%;--i:5"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:16.8%;--i:6"></i></div>
+        <div class="kop-col"><i class="kop-bar out" style="--h:13.7%;--i:7"></i></div>
+      </div>
+      <svg class="kop-line" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline class="kop-glow" points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"/>
+        <polyline points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"/>
+      </svg>
+      <i class="kop-pt start" style="left:6.25%;top:10.5%"></i>
+      <i class="kop-pt end" style="left:93.75%;top:86.3%"></i>
+    </div>
+    <div class="kop-axis"></div>
+    <div class="kop-ticks" aria-hidden="true"><span>MONTH 1</span><span>MONTH 12</span></div>
+  </div>
+
+  <div class="kop-call">
+    <div class="kop-val">−80%</div>
+    <div class="kop-l1">CUSTOMER-SERVICE OPEX</div>
+    <div class="kop-l2">SUPPORT TICKETS DEFLECTED TO IN-APP SELF-SERVICE FLOWS</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kop-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var HOLD = 6000, timer = 0, visible = false, ran = false, pending = false;
+  function reset() { wrap.classList.add('kop-pre'); void board.offsetWidth; }
+  function play() {
+    clearTimeout(timer); ran = true; pending = false;
+    reset(); wrap.classList.remove('kop-pre');
+    timer = setTimeout(replay, 2400 + HOLD);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    play();
+  }
+  reset();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) play(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending && visible) play(); });
+  var seen = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); play(); }
+  }, { threshold: [0, .4, .7] });
+  seen.observe(board);
+})();
+</script>
+</div>

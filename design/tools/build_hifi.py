@@ -72,6 +72,11 @@ for a in top.find_all('a'):
 for a in top.find_all('a', href='#work'):
     a['href'] = '#linkaja'
 
+def section(name):
+    # a piece that lives in the repo (design/sections/<name>.html), edited there instead of in the capture
+    return soup(open(os.path.join(HERE, '..', 'sections', name + '.html'), encoding='utf-8').read())
+
+
 # ---------- hero ----------
 hero = soup(read('hero'))
 p = hero.find('p')
@@ -337,18 +342,17 @@ def polish_phones(html):
     return html, n
 
 
-route_html, n_route = polish_phones(str(route))
 shots_html, n_shots = polish_phones(str(shots))
-assert n_route == 2 and n_shots == 4, (n_route, n_shots)
-assert (route_html.count(LA_BACK), route_html.count(LA_DOT)) == (2, 2), (route_html.count(LA_BACK), route_html.count(LA_DOT))
+assert n_shots == 4, n_shots
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
-          '<div class="mk-block">' + str(chart) + '</div>'
-          '<div class="mk-block">' + str(problem) + '</div>'
-          '<div class="mk-block">' + str(support) + '</div>'
-          '<div class="mk-block">' + route_html + '</div>'
+          # the diagrams live in design/sections/ so they share one design language (design/sections/VIZ-STYLE.md)
+          '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
+          '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
+          '<div class="mk-block">' + str(section('linkaja-support-model')) + '</div>'
+          '<div class="mk-block">' + str(section('linkaja-intent-routing')) + '</div>'
           '<div class="mk-block">' + str(shots_head) + shots_html + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
@@ -458,59 +462,32 @@ def blocks(*els):
 
 kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
 
-
-def without_ds(row):
-    # the live row pairs "Tooling migration" with the old "One design system · three orgs" tree; the tree is replaced
-    for card in row.find_all(recursive=False):
-        if 'ONE DESIGN SYSTEM' in card.get_text(' ', strip=True).upper():
-            card.decompose()
-    return row
+# the Lumio eyebrow was blue; drawer labels are lime titles (design/sections/VIZ-STYLE.md)
+for sp in brd[3].find_all('span', string='LUMIO · DIGITAL SIGNAGE NETWORK'):
+    sp['style'] = sp['style'].replace('rgb(95, 176, 255)', 'oklch(0.9 0.2 122)')
 
 
-def with_shipped_flow(row):
-    # the funnel row's old two-phone "shipped screen + flow" panel becomes the four-phone flow with the routing (design/sections/)
-    panel = next(d for d in row.find_all('div') if 'SHIPPED SCREEN + FLOW' in d.get_text(' ', strip=True)
-                 and 'min-height: 340px' in (d.get('style') or ''))
-    # four phones need the full width: the flow spans the whole grid row, so the funnel takes the row above to itself
-    cell = soup('<div style="grid-column: 1 / -1; min-width: 0;"></div>').div
-    cell.append(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-shipped-flow.html'), encoding='utf-8').read()))
-    grid = panel.parent
-    panel.replace_with(cell)
-    # one column: the funnel panel takes its own full row, laid out as funnel | volume so its charts keep their scale
-    grid['style'] = re.sub(r'grid-template-columns:[^;]*;', 'grid-template-columns: minmax(0, 1fr);', grid.get('style', ''))
-    fun = next(d for d in grid.find_all('div', recursive=False) if 'Deposit Placement Funnel' in d.get_text())
-    head, chart, vol, spacer, note = fun.find_all(recursive=False)
-    a_col = soup('<div class="kfun-a"></div>').div
-    head.insert_before(a_col); a_col.append(head.extract()); a_col.append(chart.extract())
-    fun['class'] = 'kfun'; vol['class'] = 'kfun-b'; spacer['class'] = 'kfun-sp'; note['class'] = 'kfun-n'
-    grid.insert(0, soup('''<style>
-.kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
-.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; display: flex; flex-direction: column; }
-/* both charts sit on the row's baseline, whichever column is taller, not floating under their titles */
-.kfun > .kfun-a { align-self: stretch; display: flex; flex-direction: column; }
-.kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: auto; }
-.kfun > .kfun-sp { display: none; }
-.kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
-@media (max-width: 899px) {
-  .kfun { grid-template-columns: minmax(0, 1fr); }
-  .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
-  .kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: 0; }
-}
-</style>'''))
-    return row
+def panel(root, text):
+    # the smallest framed element (a border or background in its style) holding the text
+    found = [e for e in root.find_all(True) if text in e.get_text(' ', strip=True)
+             and ('border' in (e.get('style') or '') or 'background' in (e.get('style') or ''))]
+    return min(found, key=lambda e: len(str(e)))
 
+
+# Chrona's and the Garmin brief's diagram panels come from design/sections/, the photos around them from the capture
+for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 'THE ENGINE', 'ai-chrona-engine'),
+                         (lab_[2], 'DATA PIPELINE', 'lab-garmin-pipeline'), (lab_[2], 'LIVE DEPLOYMENT', 'lab-garmin-deploy')):
+    panel(root, text).replace_with(section(name))
 
 LIVE = {
     # the design system story (design/sections/), the tooling migration (its old design-system card removed),
     # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
-    'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
-                      without_ds(kom[2]),
-                      soup(open(os.path.join(HERE, '..', 'sections', 'komunal-placement-routing.html'), encoding='utf-8').read()),
-                      with_shipped_flow(kom[3])),
+    'komunal': blocks(section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-placement-routing'),
+                      section('komunal-funnel'), section('komunal-shipped-flow')),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
-                    brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
-    # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
-    'ai': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'ai-decision-desk.html'), encoding='utf-8').read()), ai_[3]),
+                    brd[2], brd[3], section('board-governance')),   # captain + back office, Lumio, governance
+    # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
+    'ai': blocks(section('ai-decision-desk'), ai_[3]),
     'lab': blocks(lab_[2]),                                 # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups

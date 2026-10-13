@@ -1,0 +1,217 @@
+<!-- LinkAja: the support model redesigned, before (one in-person agent queue) vs after (case mapping + intent routing).
+     Built in the shared diagram language (design/sections/VIZ-STYLE.md): head row, a #1a1b1f board with two lanes,
+     caption under the board. BEFORE is amber (the problem); AFTER is neutral node boxes joined by dashed `edge`
+     connectors, with the lit lime path request -> routing -> chatbot, and the chatbot card is the outcome (lime ring and
+     number). The human agent card is neutral grey: escalation is not a failure.
+     Connectors in the after lane are drawn by the script into an SVG from the real box positions (on view, on resize and
+     when a shut drawer opens), so they line up at every width, side by side or stacked. The same script runs lime packets
+     along the lit path while the board is on screen (reduced motion keeps them still). Copy and numbers as on the live site. -->
+<div class="lsm-wrap">
+<style>
+.lsm-wrap {
+  container-type: inline-size; container-name: lsmw;
+  --lsm-panel: #1a1b1f; --lsm-node: #232429; --lsm-tile: #2b2c32; --lsm-line: rgba(255, 255, 255, .08);
+  --lsm-ink: #f2f2f4; --lsm-ink-2: #c2c3cb; --lsm-ink-3: #8b8d98; --lsm-edge: #4a4d57;
+  --lsm-lime: oklch(0.9 0.2 122); --lsm-amber: #fdb022;
+  margin-top: 24px;
+}
+.lsm-wrap *, .lsm-wrap *::before, .lsm-wrap *::after { box-sizing: border-box; }
+.lsm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.lsm-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.lsm-head span:first-child { color: var(--lsm-lime); }
+
+.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); box-shadow: 0 0 0 1px var(--lsm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: Archivo, system-ui, sans-serif; color: var(--lsm-ink); }
+.lsm-lane { display: flex; flex-direction: column; min-width: 0; border-radius: 12px; padding: 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-lane.after { container-type: inline-size; container-name: lsml; }
+.lsm-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 9px; border-radius: 6px; background: var(--lsm-tile); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--lsm-ink-2); }
+.lsm-tag i { width: 8px; height: 8px; border-radius: 50%; }
+.lsm-lane.before .lsm-tag i { background: var(--lsm-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.lsm-lane.after .lsm-tag i { background: var(--lsm-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+/* boxes */
+.lsm-node { display: flex; align-items: center; justify-content: center; gap: 11px; width: 100%; padding: 12px 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-node.route { justify-content: flex-start; gap: 13px; padding: 14px 16px; max-width: 440px; }
+.lsm-node.req { max-width: 340px; }
+.lsm-node b { font: 600 14px/1.25 Archivo, sans-serif; }
+.lsm-node.route b { font-size: 15px; }
+.lsm-node.route p { margin: 3px 0 0; font: 400 13px/1.45 Archivo, sans-serif; color: var(--lsm-ink-2); }
+.lsm-ico { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--lsm-tile); color: var(--lsm-ink-2); }
+.lsm-ico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.lsm-ico.lime { color: var(--lsm-lime); }
+.lsm-ico.amber { color: var(--lsm-amber); }
+
+/* before lane: request, a dashed connector, the amber queue */
+.lsm-bcol { display: flex; flex-direction: column; align-items: center; }
+.lsm-cx { position: relative; flex: none; width: 12px; height: 32px; }
+.lsm-cx::before { content: ''; position: absolute; left: 50%; top: 2px; bottom: 5px; width: 1.5px; margin-left: -.75px; background: repeating-linear-gradient(180deg, var(--lsm-edge) 0 4px, transparent 4px 10px); }
+.lsm-cx::after { content: ''; position: absolute; left: 50%; bottom: 3px; width: 7px; height: 7px; margin-left: -3.5px; border-right: 1.5px solid var(--lsm-edge); border-bottom: 1.5px solid var(--lsm-edge); transform: rotate(45deg); }
+.lsm-queue { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding: 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); text-align: center; }
+.lsm-queue .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
+.lsm-queue .lsm-ico svg { width: 20px; height: 20px; }
+.lsm-queue b { display: block; font: 700 15px/1.25 Archivo, sans-serif; }
+.lsm-queue small { display: block; margin-top: 5px; font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .04em; color: var(--lsm-ink-3); }
+.lsm-note { margin: auto 0 0; padding-top: 18px; font: 400 13px/1.55 Archivo, sans-serif; color: var(--lsm-ink-3); text-wrap: pretty; }
+
+/* after lane: a tree; the svg overlay (drawn by script) joins the boxes */
+.lsm-tree { position: relative; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+.lsm-edges { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lsm-edges path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.lsm-edges .base { stroke: var(--lsm-edge); stroke-width: 1.5; stroke-dasharray: 4 6; }
+.lsm-edges .glow { stroke: var(--lsm-lime); stroke-width: 7; opacity: .13; }
+.lsm-edges .lit { stroke: var(--lsm-lime); stroke-width: 2.5; }
+.lsm-edges .head { stroke-width: 1.5; }
+.lsm-edges .head.lit { stroke-width: 2.5; }
+.lsm-edges .head.base { stroke-dasharray: none; }
+.lsm-edges circle { fill: var(--lsm-lime); filter: drop-shadow(0 0 3px oklch(0.9 0.2 122 / .8)); opacity: 0; }
+.lsm-outs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; width: 100%; margin-top: 6px; }
+.lsm-card { display: flex; flex-direction: column; min-width: 0; padding: 18px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-card.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.lsm-ch { display: flex; align-items: center; gap: 11px; }
+.lsm-ch .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
+.lsm-ch .lsm-ico svg { width: 20px; height: 20px; }
+.lsm-ch b { display: block; font: 700 15px/1.25 Archivo, sans-serif; }
+.lsm-ch small { display: block; margin-top: 4px; font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--lsm-ink-3); }
+.lsm-val { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 16px 0 6px; }
+.lsm-val strong { font: 800 40px/1 Archivo, sans-serif; font-stretch: 120%; letter-spacing: -.02em; color: var(--lsm-ink); }
+.lsm-card.win .lsm-val strong { color: var(--lsm-lime); }
+.lsm-val span { font: 500 13px/1.3 Archivo, sans-serif; color: var(--lsm-ink-2); }
+.lsm-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 10px; }
+.lsm-chips span { padding: 6px 9px; border-radius: 6px; background: var(--lsm-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--lsm-ink-2); white-space: nowrap; }
+
+.lsm-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); text-wrap: pretty; }
+
+/* the two outcome cards stack when the after lane gets narrow; the connectors then run down a left gutter */
+@container lsml (max-width: 540px) {
+  .lsm-node.route, .lsm-node.req { max-width: none; }
+  .lsm-outs { grid-template-columns: minmax(0, 1fr); gap: 14px; padding-left: 34px; width: 100%; box-sizing: border-box; }
+}
+/* the lanes stack */
+@container lsmw (max-width: 760px) {
+  .lsm-board { grid-template-columns: minmax(0, 1fr); }
+  .lsm-note { padding-top: 16px; }
+}
+@container lsmw (max-width: 520px) {
+  .lsm-board { padding: 10px; gap: 10px; }
+  .lsm-lane { padding: 12px; }
+  .lsm-tag { margin-bottom: 12px; }
+  .lsm-tree { gap: 30px; }
+  .lsm-card { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .lsm-wrap * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="lsm-head"><span>SUPPORT MODEL, REDESIGNED</span><span>IN-PERSON AGENTS → MAPPED, INTENT-ROUTED ASSIST</span></div>
+
+<div class="lsm-board" role="img" aria-label="Support model, redesigned. Before: every support request went to one in-person agent queue; every issue, simple or complex, waited on a person, so ticket volume scaled with users, and so did cost to serve. After: every support request goes through case mapping and intent routing, where thousands of past tickets were clustered by intent and then routed, not a blanket bot. About 72% are resolved instantly by an automated chatbot (mapped, high-frequency cases: Aktivasi, Limit, Tagihan, FAQ umum) and about 28% are smart-escalated to a human agent (complex and sensitive cases: Sengketa, Indikasi fraud, Kasus khusus).">
+
+  <div class="lsm-lane before">
+    <span class="lsm-tag"><i></i>BEFORE</span>
+    <div class="lsm-bcol">
+      <div class="lsm-node"><span class="lsm-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><b>Every support request</b></div>
+      <span class="lsm-cx"></span>
+      <div class="lsm-queue">
+        <span class="lsm-ico amber"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg></span>
+        <div><b>In-person agent queue</b><small>ONE HUMAN QUEUE FOR ALL</small></div>
+      </div>
+    </div>
+    <p class="lsm-note">Every issue, simple or complex, waited on a person. Ticket volume scaled with users, and so did cost to serve.</p>
+  </div>
+
+  <div class="lsm-lane after">
+    <span class="lsm-tag"><i></i>AFTER</span>
+    <div class="lsm-tree">
+      <svg class="lsm-edges" aria-hidden="true"></svg>
+      <div class="lsm-node req" data-n="req"><span class="lsm-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg></span><b>Every support request</b></div>
+      <div class="lsm-node route" data-n="route"><span class="lsm-ico lime"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg></span><div><b>Case mapping + intent routing</b><p>Thousands of past tickets clustered by intent, then routed, not a blanket bot.</p></div></div>
+      <div class="lsm-outs">
+        <div class="lsm-card win" data-n="bot">
+          <div class="lsm-ch"><span class="lsm-ico lime"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span><div><b>Automated chatbot</b><small>MAPPED, HIGH-FREQUENCY CASES</small></div></div>
+          <div class="lsm-val"><strong>~72%</strong><span>resolved instantly</span></div>
+          <div class="lsm-chips"><span>Aktivasi</span><span>Limit</span><span>Tagihan</span><span>FAQ umum</span></div>
+        </div>
+        <div class="lsm-card" data-n="human">
+          <div class="lsm-ch"><span class="lsm-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14v-3a9 9 0 0 1 18 0v3"/><path d="M21 16a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h3zM3 16a2 2 0 0 0 2 2h1a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3z"/><path d="M18 19a3 3 0 0 1-3 3h-3"/></svg></span><div><b>Human agent</b><small>COMPLEX &amp; SENSITIVE CASES</small></div></div>
+          <div class="lsm-val"><strong>~28%</strong><span>smart-escalated</span></div>
+          <div class="lsm-chips"><span>Sengketa</span><span>Indikasi fraud</span><span>Kasus khusus</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="lsm-cap">Not a blanket bot: the most frequent cases were mapped by intent and handed to automation, while complex or sensitive issues route straight to the right human, so quality held as cost fell.</p>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.lsm-board'), tree = wrap.querySelector('.lsm-tree'), svg = wrap.querySelector('.lsm-edges');
+  var NS = 'http://www.w3.org/2000/svg', lit = [], dots = [], visible = false, raf = 0, T0 = performance.now();
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function n(k) { return tree.querySelector('[data-n="' + k + '"]'); }
+  function mk(tag, cls, attrs) { var e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); for (var a in attrs) e.setAttribute(a, attrs[a]); return e; }
+  function put(d, cls) { var p = mk('path', cls, { d: d }); svg.appendChild(p); return p; }
+  function box(el, T) { var r = el.getBoundingClientRect(); return { l: r.left - T.left, r: r.right - T.left, t: r.top - T.top, b: r.bottom - T.top, cx: r.left + r.width / 2 - T.left, cy: r.top + r.height / 2 - T.top }; }
+  // a connector: a dashed base line, and when it is on the lit path a glow and a lime line over it; arrowhead at the end
+  function edge(d, head, isLit) {
+    var base = put(d, 'base'); if (!isLit) { put(head, 'head base'); return null; }
+    put(d, 'glow'); var l = put(d, 'lit'); put(head, 'head lit'); return l;
+  }
+  function draw() {
+    var T = tree.getBoundingClientRect();
+    // a shut drawer (or a hidden tree) has no layout yet: draw when it opens or when the size changes, not while parsing
+    if (!T.width || !T.height) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('viewBox', '0 0 ' + T.width + ' ' + T.height);
+    var rq = box(n('req'), T), ro = box(n('route'), T), bo = box(n('bot'), T), hu = box(n('human'), T);
+    lit = []; dots = [];
+    // request -> routing, straight down (lit: the path every request takes)
+    var x = rq.cx, y1 = rq.b + 1, y2 = ro.t - 2;
+    lit.push(edge('M' + x + ' ' + y1 + ' V' + y2, 'M' + (x - 4.5) + ' ' + (y2 - 6) + ' L' + x + ' ' + y2 + ' L' + (x + 4.5) + ' ' + (y2 - 6), true));
+    var human = [], chat = [];
+    if (Math.abs(bo.t - hu.t) < 4) {
+      // cards side by side: curves from the bottom centre of the routing box to the top centre of each card
+      [[hu, false], [bo, true]].forEach(function (c) {
+        var q = c[0], x1 = ro.cx, ya = ro.b + 1, x2 = q.cx, yb = q.t - 2, dy = (yb - ya) / 2;
+        var d = 'M' + x1 + ' ' + ya + ' C' + x1 + ' ' + (ya + dy) + ' ' + x2 + ' ' + (yb - dy) + ' ' + x2 + ' ' + yb;
+        var h = 'M' + (x2 - 4.5) + ' ' + (yb - 6) + ' L' + x2 + ' ' + yb + ' L' + (x2 + 4.5) + ' ' + (yb - 6);
+        var l = edge(d, h, c[1]); if (c[1]) lit.push(l);
+      });
+    } else {
+      // cards stacked: a trunk down the left gutter, branching right into each card
+      var xt = 16, r = 10, ya = ro.b + 1;
+      [[hu, false], [bo, true]].forEach(function (c) {
+        var q = c[0], ym = q.cy, xe = q.l - 2;
+        var d = 'M' + xt + ' ' + ya + ' V' + (ym - r) + ' Q' + xt + ' ' + ym + ' ' + (xt + r) + ' ' + ym + ' H' + xe;
+        var h = 'M' + (xe - 6) + ' ' + (ym - 4.5) + ' L' + xe + ' ' + ym + ' L' + (xe - 6) + ' ' + (ym + 4.5);
+        var l = edge(d, h, c[1]); if (c[1]) lit.push(l);
+      });
+    }
+    // packets travel request -> routing -> chatbot along the lit path
+    if (!reduce && 'IntersectionObserver' in window) {
+      var lens = lit.map(function (p) { return p.getTotalLength(); });
+      [0, .5].forEach(function (ph) { var c = mk('circle', '', { r: 3 }); svg.appendChild(c); dots.push({ c: c, ph: ph }); });
+      dots.lens = lens; wake();
+    }
+  }
+  function loop(now) {
+    raf = 0; if (!visible || document.hidden || !dots.length) return;
+    var la = dots.lens[0], lb = dots.lens[1], tot = la + lb;
+    dots.forEach(function (k) {
+      var u = ((now - T0) / 3200 + k.ph) % 1, d = u * tot, p = d < la ? lit[0].getPointAtLength(d) : lit[1].getPointAtLength(d - la);
+      k.c.setAttribute('cx', p.x); k.c.setAttribute('cy', p.y); k.c.style.opacity = Math.min(1, u * 8, (1 - u) * 8).toFixed(2);
+    });
+    raf = requestAnimationFrame(loop);
+  }
+  function wake() { if (!raf && visible && dots.length) raf = requestAnimationFrame(loop); }
+
+  draw();
+  if ('ResizeObserver' in window) new ResizeObserver(draw).observe(tree);
+  addEventListener('resize', draw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
+  if (reduce || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (es) {
+    var e = es[0]; visible = e.isIntersecting && (e.intersectionRatio >= .4 || e.intersectionRect.height >= innerHeight * .5); wake();
+  }, { threshold: [0, .1, .2, .3, .4, .5, .7] }).observe(board);
+  document.addEventListener('visibilitychange', wake);
+})();
+</script>
+</div>

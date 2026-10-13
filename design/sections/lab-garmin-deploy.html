@@ -1,0 +1,37 @@
+<!-- Garmin Daily Brief: live deployment on GCP.
+     Three items (Compute Engine VM, APScheduler cron, self-healing and alerting) on the same board as the pipeline panel
+     (design/sections/VIZ-STYLE.md): lime mono title in the head row, a status line inside the board (lime dot with halo +
+     mono RUNNING), line icons in ink-2 inside tile chips. Static: no script, complete without JavaScript.
+     Edited here; build_hifi.py reads this file in place of the captured block. -->
+<div class="gpd-wrap">
+<style>
+.gpd-wrap {
+  --gpd-panel: #1a1b1f; --gpd-node: #232429; --gpd-tile: #2b2c32; --gpd-line: rgba(255, 255, 255, .08);
+  --gpd-ink: #f2f2f4; --gpd-ink-2: #c2c3cb; --gpd-ink-3: #8b8d98; --gpd-edge: #4a4d57;
+  --gpd-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%; min-width: 0;
+}
+.gpd-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.gpd-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.gpd-head span:first-child { color: var(--gpd-lime); }
+.gpd-board { flex: 1 1 auto; border-radius: 14px; background: var(--gpd-panel); box-shadow: 0 0 0 1px var(--gpd-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 22px; font-family: Archivo, system-ui, sans-serif; color: var(--gpd-ink); }
+.gpd-st { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--gpd-lime); }
+.gpd-st i { width: 8px; height: 8px; border-radius: 50%; background: var(--gpd-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.gpd-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+.gpd-item { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 14px; }
+.gpd-chip { width: 28px; height: 28px; border-radius: 6px; background: var(--gpd-tile); display: flex; align-items: center; justify-content: center; color: var(--gpd-ink-2); }
+.gpd-chip svg { width: 16px; height: 16px; display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gpd-item h4 { margin: 4px 0 4px; font: 600 14px/1.3 Archivo, system-ui, sans-serif; color: var(--gpd-ink); }
+.gpd-item p { margin: 0; font: 400 13px/1.5 Archivo, system-ui, sans-serif; color: var(--gpd-ink-2); }
+@media (max-width: 420px) { .gpd-board { padding: 18px 16px; } .gpd-item { column-gap: 12px; } }
+</style>
+<div class="gpd-head"><span>LIVE DEPLOYMENT · GCP</span></div>
+<div class="gpd-board">
+<div class="gpd-st"><i></i>RUNNING</div>
+<ul class="gpd-items">
+<li class="gpd-item"><span class="gpd-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><rect height="8" rx="2" width="20" x="2" y="2"></rect><rect height="8" rx="2" width="20" x="2" y="14"></rect><line x1="6" x2="6.01" y1="6" y2="6"></line><line x1="6" x2="6.01" y1="18" y2="18"></line></svg></span><div><h4>Compute Engine VM · Dockerized</h4><p>Ubuntu 24.04, Docker Compose. Rebuilds keep the SQLite + OAuth token volume intact.</p></div></li>
+<li class="gpd-item"><span class="gpd-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg></span><div><h4>APScheduler cron</h4><p>Refreshes 04:00–22:00 WIB every 30 min; overnight the device sleeps and stretches its poll interval to save battery.</p></div></li>
+<li class="gpd-item"><span class="gpd-chip"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg></span><div><h4>Self-healing &amp; alerting</h4><p>A 5-min heartbeat watches the device; if it goes silent past threshold, an outage is logged and an email alert fires via SMTP.</p></div></li>
+</ul>
+</div>
+</div>
