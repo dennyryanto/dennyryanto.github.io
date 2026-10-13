@@ -207,14 +207,35 @@ toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-co
           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
+# phone mockups: no Dynamic Island (at this scale it crowded every header), and the chat header gets the same back
+# chevron as the other screens plus an online dot, on the 24px side margin the nav bars use
+ISLAND = re.compile(r'<div style="[^"]*width: 116px; height: 33px[^"]*"></div>')
+LA_BACK = ('<svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" '
+           'style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewBox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg>')
+LA_DOT = '<span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>'
+
+
+def polish_phones(html):
+    html, n = ISLAND.subn('', html)
+    head = '<div style="padding: 22px 22px 0px; display: flex; align-items: center; gap: 12px;">'
+    html = html.replace(head, '<div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;">' + LA_BACK)
+    html = re.sub(r'''(opacity: 0\.85; margin-top: 4px;['"]>)Online</div>''', lambda m: m.group(1) + LA_DOT + 'Online</div>', html)
+    return html, n
+
+
+route_html, n_route = polish_phones(str(route))
+shots_html, n_shots = polish_phones(str(shots))
+assert n_route == 2 and n_shots == 4, (n_route, n_shots)
+assert (route_html.count(LA_BACK), route_html.count(LA_DOT)) == (2, 2), (route_html.count(LA_BACK), route_html.count(LA_DOT))
+
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
           '<div class="mk-block">' + str(chart) + '</div>'
           '<div class="mk-block">' + str(problem) + '</div>'
           '<div class="mk-block">' + str(support) + '</div>'
-          '<div class="mk-block">' + str(route) + '</div>'
-          '<div class="mk-block">' + str(shots_head) + str(shots) + '</div>'
+          '<div class="mk-block">' + route_html + '</div>'
+          '<div class="mk-block">' + str(shots_head) + shots_html + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
 
