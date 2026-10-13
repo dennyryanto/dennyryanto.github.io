@@ -477,19 +477,44 @@ html { scroll-behavior: smooth; }
 
     // Independent · desktop: raw sources → the signal that matters → the decision desk
     independent: function () {
-      var grid = [];
-      for (var a = 0; a < 7; a++) for (var b = 0; b < 4; b++) { var x = 0.4 + a * 1.4, y = 0.4 + b * 1.35; if (a === 4 && b === 3) continue; grid.push(['rect', x, y, x + 1.1, y + 1.05, (a * 5 + b * 3) % 7 === 0 ? 'f2' : 's2']); }
+      // the final screen is the workflow builder (dark, Dify-style): app bar, node cards, curved connectors
+      function curve(x1, y1, x2, y2) { var pts = [], dx = (x2 - x1) / 2; for (var i = 0; i <= 12; i++) { var u = i / 12, v = 1 - u;
+        pts.push([v * v * v * x1 + 3 * v * v * u * (x1 + dx) + 3 * v * u * u * (x2 - dx) + u * u * u * x2, v * v * v * y1 + 3 * v * v * u * y1 + 3 * v * u * u * y2 + u * u * u * y2]); } return pts; }
+      function node(x0, y0, x1, y1, rows) {
+        var o = [['rect', x0, y0, x1, y1, 's'], ['rect', x0 + 0.12, y0 + 0.12, x0 + 0.36, y0 + 0.36, 'f2'], ['line', x0 + 0.5, y0 + 0.24, x0 + 0.5 + (x1 - x0) * 0.42, y0 + 0.24, 's']];
+        for (var r = 0; r < rows; r++) { var y = y0 + 0.66 + r * 0.38; o.push(['line', x0 + 0.16, y, x1 - 0.16, y, 's2']); }
+        return o;
+      }
+      var app = [['rect', 0.42, 0.9, 0.72, 1.2, 'f2'], ['line', 0.9, 1.05, 2.3, 1.05, 's'], ['line', 2.8, 1.05, 3.5, 1.05, 's2'], ['line', 3.8, 1.05, 4.4, 1.05, 's2'],
+                 ['rect', 8.55, 0.9, 9.5, 1.2, 's'], ['rect', 7.3, 0.9, 8.35, 1.2, 's2'], ['line', 0.22, 1.38, 9.78, 1.38, 's2']]
+        .concat(node(0.5, 1.85, 2.0, 4.35, 5), node(2.5, 2.15, 3.95, 3.6, 3), node(4.45, 2.15, 5.9, 3.6, 3), node(6.4, 2.35, 7.45, 3.45, 2),
+                node(7.95, 1.6, 9.45, 3.4, 0), node(7.95, 4.25, 9.45, 5.35, 2))
+        .concat([['pl', curve(2.0, 2.09, 2.5, 2.39), 's2'], ['pl', curve(3.95, 2.39, 4.45, 2.39), 's2'], ['pl', curve(5.9, 2.39, 6.4, 2.59), 's2'],
+                 ['pl', curve(7.45, 2.97, 7.95, 1.84), 's2'], ['pl', curve(7.45, 3.24, 7.95, 4.49), 's2'],
+                 ['rect', 0.45, 5.45, 1.75, 5.8, 's2']]);
+      // the middle layer: demand signals, one bar per SKU against the 0.80 confidence threshold (dashed)
+      // a compact chart in the upper half: bars rise toward the viewer from a baseline at 3.6; only one clears the threshold at 2.3
+      var sig = [], H = [0.9, 0.55, 1.15, 0.4, 0.8, 1.05, 0.5, 0.95, 0.7, 0.85, 0];
+      for (var i = 0; i < 11; i++) { var x = 0.55 + i * 0.72; if (!H[i]) continue; sig.push(['rect', x, 3.6 - H[i], x + 0.42, 3.6, i % 4 === 1 ? 'f2' : 's2']); }
+      for (var q = 0.4; q < 9.6; q += 0.5) sig.push(['line', q, 2.3, q + 0.25, 2.3, 's']);
+      sig.push(['line', 0.4, 3.6, 9.6, 3.6, 's']);
+      // below the chart, the SKUs it scored, as a quiet list
+      for (var r = 0; r < 4; r++) sig.push(['line', 0.6, 4.3 + r * 0.42, 0.6 + [3.4, 2.6, 3.0, 2.2][r], 4.3 + r * 0.42, 's2']);
       return scene('desktop', [
-        { ops: [], blocks: [[0.7, 0.6, 0.8, 0.7, 0.5], [3.6, 0.7, 0.7, 0.6, 0.8], [6.3, 0.9, 0.9, 0.6, 0.4], [8.6, 1.4, 0.6, 0.6, 0.6], [3.7, 3.1, 0.6, 0.6, 0.6], [5.6, 2.0, 0.6, 0.6, 0.9], [0.9, 4.3, 0.6, 0.7, 0.7], [7.4, 3.9, 0.8, 0.7, 0.5], [3.4, 4.8, 0.7, 0.5, 0.4], [8.8, 4.9, 0.5, 0.5, 0.5]] },
-        { ops: grid },
-        { ops: [['line', 0.3, 1.05, 2.0, 1.05, 's2'], ['line', 2.0, 0.8, 2.0, 5.95, 's2'], ['line', 0.6, 1.5, 1.6, 1.5, 's'], ['line', 0.6, 2.0, 1.4, 2.0, 's2'], ['line', 0.6, 2.5, 1.5, 2.5, 's2'], ['line', 0.6, 3.0, 1.3, 3.0, 's2'],
-          ['line', 2.4, 1.3, 5.6, 1.3, 's'], ['line', 2.4, 1.75, 7.4, 1.75, 's2'], ['line', 2.4, 2.15, 6.6, 2.15, 's2'],
-          ['rect', 2.4, 3.28, 9.4, 3.52, 's2'], ['rect', 4.0, 4.675, 5.4, 5.275, 's'], ['img', 8.0, 4.3, 9.4, 5.6]] }
+        // the bottom layer: siloed sources (ERP, CRM, warehouse sheets, POS), the warehouse store full of duplicates
+        { ops: [], blocks: [[0.6, 0.8, 0.9, 0.8, 0.7], [3.0, 0.9, 0.8, 0.7, 0.5], [5.5, 0.8, 0.8, 0.8, 0.8], [7.9, 1.1, 0.9, 0.7, 0.6],
+                            [1.0, 3.1, 0.6, 0.6, 0.6], [1.85, 3.25, 0.45, 0.45, 0.6], [1.2, 4.05, 0.45, 0.45, 0.6],
+                            [4.2, 3.3, 0.8, 0.7, 0.4], [6.4, 3.0, 0.7, 0.6, 0.9], [3.4, 4.8, 0.7, 0.5, 0.4], [5.9, 4.9, 0.6, 0.5, 0.6]] },
+        { ops: sig },
+        { ops: app }
       ], [
-        // the one source worth trusting → the confidence it gives
-        { k: 0, at: [4.0, 3.4], h: 0.6, ops: [['rect', -0.6, -0.6, 0.6, 0.6, 'Ds']], land: [['rect', -1.6, -0.12, 2.4, 0.12, 'D']] },
-        // the signal that settles it → approve
-        { k: 1, at: [6.55, 4.975], ops: [['rect', -0.55, -0.525, 0.55, 0.525, 'D']], land: [['rect', -0.95, -0.3, 0.95, 0.3, 'D']] }
+        // the source worth fixing (the warehouse store) → its row in the Sources node, cleaned
+        { k: 0, at: [1.3, 3.4], h: 0.6, ops: [['rect', -0.3, -0.3, 0.3, 0.3, 'Ds']], land: [['rect', -0.62, -0.1, 0.52, 0.1, 'D']] },
+        // the one SKU whose signal clears the threshold → the lit path and the decision, ready to approve
+        { k: 1, at: [8.7, 2.5], ops: [['rect', -0.21, -0.75, 0.21, 1.1, 'D']],
+          land: [['pl', curve(2.0 - 8.7, 2.09 - 2.5, 2.5 - 8.7, 2.39 - 2.5), 'Ds'], ['pl', curve(3.95 - 8.7, -0.11, 4.45 - 8.7, -0.11), 'Ds'],
+                 ['pl', curve(5.9 - 8.7, -0.11, 6.4 - 8.7, 0.09), 'Ds'], ['pl', curve(7.45 - 8.7, 0.47, 7.95 - 8.7, -0.66), 'Ds'],
+                 ['rect', -0.75, -0.9, 0.75, 0.9, 'Ds'], ['rect', -0.6, -0.3, 0.6, 0.15, 'Ds'], ['rect', -0.6, 0.38, 0.05, 0.66, 'D']] }
       ]);
     },
 
