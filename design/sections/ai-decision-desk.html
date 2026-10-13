@@ -37,10 +37,14 @@
 .dfy-canvas { position: relative; min-width: 1136px; height: 456px;
   background-color: var(--dfy-canvas); background-image: radial-gradient(var(--dfy-dot) 1px, transparent 1.2px); background-size: 18px 18px; }
 .dfy-edges { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.dfy-edges path { fill: none; stroke: var(--dfy-edge); stroke-width: 2; }
-.dfy-edges path.else { stroke-dasharray: 5 5; }
-.dfy-edges path.key { stroke: var(--dfy-lime); stroke-width: 3; }
-.dfy-edges path.keyline { stroke: var(--dfy-lime); stroke-width: 7; opacity: .14; }
+.dfy-edges path { fill: none; stroke-linecap: round; }
+.dfy-edges .base { stroke: var(--dfy-edge); stroke-width: 2; }
+.dfy-edges .base.branch { stroke-dasharray: 5 5; }
+.dfy-edges .lit { stroke-width: 3; }
+.dfy-edges .glow { stroke-width: 7; opacity: .14; }
+/* lime: the path to a decision; amber: the call is sent to a person */
+.dfy-edges g.lime .lit, .dfy-edges g.lime .glow { stroke: var(--dfy-lime); }
+.dfy-edges g.amber .lit, .dfy-edges g.amber .glow { stroke: var(--dfy-amber); }
 
 .dfy-node { position: absolute; left: var(--x); top: var(--y); width: var(--w, 210px); background: var(--dfy-node); border-radius: 14px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 0 0 1px var(--dfy-line); transition: box-shadow .3s, opacity .3s; }
@@ -99,7 +103,8 @@
   .dfy-node { position: relative; left: auto; top: auto; width: auto; }
   .dfy-node + .dfy-node::before { content: ''; position: absolute; left: 24px; top: -23px; height: 22px; width: 2px; background: var(--dfy-edge); }
   .dfy-node.key-in[data-st="done"]::before, .dfy-node.key-in[data-st="run"]::before { background: var(--dfy-lime); width: 3px; }
-  .dfy-node.dfy-skip::before { background: repeating-linear-gradient(var(--dfy-edge) 0 4px, transparent 4px 8px); }
+  .dfy-node.warn-in[data-st="done"]::before, .dfy-node.warn-in[data-st="run"]::before { background: var(--dfy-amber); width: 3px; }
+  .dfy-node[data-st="skip"]::before { background: repeating-linear-gradient(var(--dfy-edge) 0 4px, transparent 4px 8px); }
 }
 /* motion, decoration only: waiting tags, the streamed note, the chosen branch, the decision rising in, and the idle life after the run */
 .dfy-tag.wait { color: var(--dfy-ink-3); background: var(--dfy-tile); box-shadow: inset 0 0 0 1px var(--dfy-line); }
@@ -108,6 +113,12 @@
 @keyframes dfy-blink { 50% { opacity: 0; } }
 .dfy-port { transition: background-color .3s, color .3s, box-shadow .3s; }
 .dfy-port.chosen { color: var(--dfy-lime); background: oklch(0.9 0.2 122 / .08); box-shadow: inset 0 0 0 1px oklch(0.9 0.2 122 / .3); }
+.dfy-port.chosen.warn { color: var(--dfy-amber); background: rgba(253, 176, 34, .08); box-shadow: inset 0 0 0 1px rgba(253, 176, 34, .35); }
+/* the low-confidence run: the review node takes the call, in amber */
+.dfy-node.dfy-rev[data-st="done"] { box-shadow: 0 0 0 1.5px var(--dfy-amber), 0 0 0 5px rgba(253, 176, 34, .1), 0 16px 36px -16px rgba(253, 176, 34, .35); }
+.dfy-node.dfy-rev[data-st="done"] .dfy-ico { background: var(--dfy-amber) !important; }
+.dfy-node.dfy-rev[data-st="done"] .dfy-note { color: var(--dfy-ink-2); }
+.dfy-packet.amber { fill: var(--dfy-amber); filter: drop-shadow(0 0 4px rgba(253, 176, 34, .8)); }
 .dfy-port.passed { opacity: .5; }
 .dfy-dec { transition: opacity .45s ease-out, transform .45s ease-out; }
 .dfy-node.dfy-out:not([data-st="done"]) .dfy-dec { opacity: .25; transform: translateY(6px); }
@@ -122,6 +133,7 @@
 @keyframes dfy-shine { 0%, 70% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
 @media (max-width: 899px) {
   /* stacked: a bright streak runs down the lime connectors instead of the packets */
+  .dfy-wrap.live .dfy-node.warn-in[data-st="done"]::before { background: linear-gradient(var(--dfy-amber), var(--dfy-amber)), linear-gradient(transparent, #fff4d6, transparent); background-size: 100% 100%, 100% 40%; background-repeat: no-repeat; background-blend-mode: screen; animation: dfy-stream 1.8s linear infinite; }
   .dfy-wrap.live .dfy-node.key-in[data-st="done"]::before { background: linear-gradient(var(--dfy-lime), var(--dfy-lime)) , linear-gradient(transparent, #f6ffd6, transparent); background-size: 100% 100%, 100% 40%; background-repeat: no-repeat; background-blend-mode: screen; animation: dfy-stream 1.8s linear infinite; }
   @keyframes dfy-stream { from { background-position: 0 0, 0 -120%; } to { background-position: 0 0, 0 220%; } }
 }
@@ -130,7 +142,7 @@
 
 <div class="dfy-head"><span>ENTERPRISE AI · DATA-TO-DECISION WORKFLOW</span><span>ILLUSTRATIVE</span></div>
 
-<div class="dfy-app" role="img" aria-label="A workflow builder canvas. Four siloed sources (a legacy ERP, a sales CRM, warehouse sheets and POS exports) feed a clean-and-validate step, which removes 312 duplicate rows, then an LLM step that scores demand signals. A confidence check at 0.80 sends the 0.86 result to a decision, reorder top-selling SKUs for the east warehouse, waiting for the operator's approval; the low-confidence branch to a planner review queue is skipped.">
+<div class="dfy-app" role="img" aria-label="A workflow builder canvas. Four siloed sources (a legacy ERP, a sales CRM, warehouse sheets and POS exports) feed a clean-and-validate step, which removes 312 duplicate rows, then an LLM step that scores demand signals. A confidence check at 0.80 sends the 0.86 result to a decision, reorder top-selling SKUs for the east warehouse, waiting for the operator's approval; the low-confidence branch to a planner review queue is skipped. On alternate runs the confidence comes back at 0.62, below the threshold, and the call goes to the planner instead.">
   <div class="dfy-bar">
     <div class="dfy-crumb"><i>O</i><span>Ops copilot</span><small>/ Weekly replenishment</small></div>
     <div class="dfy-tabs"><span class="on">Orchestrate</span><span>Logs</span><span>Monitoring</span></div>
@@ -184,9 +196,9 @@
         </div>
       </div>
 
-      <div class="dfy-node dfy-skip" id="dfy-rev" data-st="skip" style="--x:952px;--y:300px;--w:170px">
+      <div class="dfy-node dfy-rev" id="dfy-rev" data-st="skip" style="--x:952px;--y:300px;--w:170px">
         <div class="dfy-nh"><span class="dfy-ico" style="--c:#98a2b3"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M3 14c.6-2.6 2.6-4 5-4s4.4 1.4 5 4"/></svg></span><span class="dfy-nt">Planner review</span><span class="dfy-st"><i></i></span></div>
-        <div class="dfy-nb"><div class="dfy-note">Low-confidence calls wait here for a person. Skipped this run.</div></div>
+        <div class="dfy-nb"><div class="dfy-note" data-high="Low-confidence calls wait here for a person. Skipped this run." data-low="Signals disagree at 0.62, so a planner checks the call before anything ships.">Low-confidence calls wait here for a person. Skipped this run.</div></div>
       </div>
 
       <div class="dfy-rail" aria-hidden="true"><span class="on">Select</span><span>Hand</span><span>100%</span></div>
@@ -200,38 +212,47 @@
   var wrap = document.currentScript.parentNode, canvas = wrap.querySelector('.dfy-canvas'), svg = wrap.querySelector('.dfy-edges');
   var $ = function (id) { return wrap.querySelector('#' + id); };
   var NS = 'http://www.w3.org/2000/svg';
-  // edges: from node (and port), to node; "key" marks the path that produced the decision
-  var EDGES = [['dfy-src', null, 'dfy-clean', 1], ['dfy-clean', null, 'dfy-llm', 1], ['dfy-llm', null, 'dfy-if', 1],
-               ['dfy-if', 'true', 'dfy-dec', 1], ['dfy-if', 'false', 'dfy-rev', 0]];
-  var paths = [];
+  // edges: from node (and port), to node, and the kind: the chain every run takes, or one of the two branches
+  var EDGES = [['dfy-src', null, 'dfy-clean', 'chain'], ['dfy-clean', null, 'dfy-llm', 'chain'], ['dfy-llm', null, 'dfy-if', 'chain'],
+               ['dfy-if', 'true', 'dfy-dec', 'true'], ['dfy-if', 'false', 'dfy-rev', 'false']];
+  // the loop alternates two runs: a confident call reaches the decision; an unsure one goes to a planner
+  var SCEN = [{ conf: 0.86, branch: 'true', to: 'dfy-dec', other: 'dfy-rev', note: 'data-high' },
+              { conf: 0.62, branch: 'false', to: 'dfy-rev', other: 'dfy-dec', note: 'data-low' }];
+  var sc = SCEN[0], runs = 0, paths = [];
+  function lit(e) { return e[3] === 'chain' || e[3] === sc.branch; }
   function pt(el, side, port) {
     var c = canvas.getBoundingClientRect(), r = el.getBoundingClientRect(), y = r.top - c.top + 22;
     if (port) { var p = el.querySelector('[data-port="' + port + '"]').getBoundingClientRect(); y = p.top - c.top + p.height / 2; }
     return [side === 'out' ? r.right - c.left : r.left - c.left, y];
   }
+  function mk(cls, d) { var e = document.createElementNS(NS, 'path'); e.setAttribute('class', cls); e.setAttribute('d', d); return e; }
   function draw() {
     if (getComputedStyle(svg).display === 'none') return;
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     paths = EDGES.map(function (e) {
       var a = pt($(e[0]), 'out', e[1]), b = pt($(e[2]), 'in'), dx = Math.max(36, (b[0] - a[0]) / 2);
       var d = 'M' + a[0] + ' ' + a[1] + ' C' + (a[0] + dx) + ' ' + a[1] + ' ' + (b[0] - dx) + ' ' + b[1] + ' ' + b[0] + ' ' + b[1];
-      var g = document.createElementNS(NS, 'g'), under = document.createElementNS(NS, 'path'), line = document.createElementNS(NS, 'path');
-      under.setAttribute('d', d); line.setAttribute('d', d);
-      if (e[3]) { under.setAttribute('class', 'keyline'); line.setAttribute('class', 'key'); g.appendChild(under); }
-      else line.setAttribute('class', 'else');
-      g.appendChild(line); svg.appendChild(g);
-      return { key: !!e[3], under: e[3] ? under : null, line: line, len: line.getTotalLength() };
+      var g = document.createElementNS(NS, 'g'), base = mk('base' + (e[3] === 'chain' ? '' : ' branch'), d), glow = mk('glow', d), line = mk('lit', d);
+      g.setAttribute('class', e[3] === 'false' ? 'amber' : 'lime');
+      g.appendChild(base); g.appendChild(glow); g.appendChild(line); svg.appendChild(g);
+      var p = { e: e, glow: glow, line: line, len: line.getTotalLength() };
+      if (!lit(e)) hide(p);
+      return p;
     });
+    pk = wrap.classList.contains('live') ? packets() : [];
   }
+  function hide(p) { [p.line, p.glow].forEach(function (l) { l.style.transition = 'none'; l.style.strokeDasharray = p.len; l.style.strokeDashoffset = p.len; }); }
+  function show(p, ms) { [p.line, p.glow].forEach(function (l) { void l.getBoundingClientRect(); l.style.transition = 'stroke-dashoffset ' + ms + 'ms ease-out'; l.style.strokeDashoffset = 0; }); }
+
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, ran = false, pk = [];
+  var chain = ['dfy-src', 'dfy-clean', 'dfy-llm', 'dfy-if'].map($), dec = $('dfy-dec'), rev = $('dfy-rev'), revNote = rev.querySelector('.dfy-note');
+  var fix = wrap.querySelector('[data-fix]'), runL = wrap.querySelector('.dfy-run-l');
+  var srcTags = [].slice.call(wrap.querySelectorAll('#dfy-src .dfy-tag')), note = wrap.querySelector('[data-stream]'), noteText = note.textContent;
+  var counters = [].slice.call(wrap.querySelectorAll('[data-count]')), conf = counters[3], ports = [].slice.call(wrap.querySelectorAll('.dfy-port'));
   draw();
   addEventListener('resize', function () { draw(); if (!ran) idle(); });
   var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(function () { draw(); if (!ran) idle(); }, 0); });
 
-  // the run: idle first, then each step runs and lands in turn; only the key path lights up
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, ran = false, nodes = [].slice.call(wrap.querySelectorAll('.dfy-node[data-step]'));
-  var fix = wrap.querySelector('[data-fix]'), runL = wrap.querySelector('.dfy-run-l');
-  var srcTags = [].slice.call(wrap.querySelectorAll('#dfy-src .dfy-tag')), note = wrap.querySelector('[data-stream]'), noteText = note.textContent;
-  var counters = [].slice.call(wrap.querySelectorAll('[data-count]')), ports = [].slice.call(wrap.querySelectorAll('.dfy-port'));
   function fmt(v, el) { var dp = +(el.getAttribute('data-dp') || 0); return dp ? v.toFixed(dp) : Math.round(v).toLocaleString('en-US'); }
   function count(el, ms) {
     var ab = el.getAttribute('data-count').split('>'), from = +ab[0], to = +ab[1], t0 = performance.now();
@@ -239,64 +260,71 @@
   }
   function stream(ms) {
     var words = noteText.split(' '), i = 0, caret = '<span class="dfy-caret"></span>';
-    var iv = setInterval(function () { i++; note.innerHTML = words.slice(0, i).join(' ') + caret; if (i >= words.length) { clearInterval(iv); setTimeout(function () { note.textContent = noteText; }, 400); } }, ms / words.length);
+    var iv = setInterval(function () { i++; note.innerHTML = words.slice(0, i).join(' ') + caret; if (i >= words.length) { clearInterval(iv); later(function () { note.textContent = noteText; }, 400); } }, ms / words.length);
+    timers.push({ iv: iv });
   }
-  function hidePath(p) { [p.line, p.under].forEach(function (l) { if (l) { l.style.transition = 'none'; l.style.strokeDasharray = p.len; l.style.strokeDashoffset = p.len; } }); }
-  function showPath(p, ms) { [p.line, p.under].forEach(function (l) { if (l) { void l.getBoundingClientRect(); l.style.transition = 'stroke-dashoffset ' + ms + 'ms ease-out'; l.style.strokeDashoffset = 0; } }); }
+  // idle: every node waiting, nothing lit, figures at their start
   function idle() {
-    nodes.forEach(function (n) { n.setAttribute('data-st', 'idle'); });
-    paths.forEach(function (p) { if (p.key) hidePath(p); });
+    chain.concat([dec, rev]).forEach(function (n) { n.setAttribute('data-st', 'idle'); });
+    paths.forEach(hide);
     srcTags.forEach(function (t) { t.className = 'dfy-tag wait'; t.textContent = '…'; });
     counters.forEach(function (c) { c.textContent = fmt(+c.getAttribute('data-count').split('>')[0], c); });
-    note.textContent = ''; ports.forEach(function (p) { p.classList.remove('chosen', 'passed'); });
+    note.textContent = ''; ports.forEach(function (p) { p.classList.remove('chosen', 'passed', 'warn'); });
     wrap.classList.remove('live'); runL.textContent = 'Ready';
     pk.forEach(function (k) { k.c.style.opacity = 0; });
   }
   // what each step does while it runs (ms is how long it runs)
   var DURING = [
-    function (ms) { srcTags.forEach(function (t, i) { setTimeout(function () {
+    function (ms) { srcTags.forEach(function (t, i) { later(function () {
       if (t === fix) { t.className = 'dfy-tag fix'; t.textContent = t.getAttribute('data-fix'); } else { t.className = 'dfy-tag ok'; t.textContent = 'OK'; } }, (i + 1) * ms / (srcTags.length + 1)); }); },
-    function (ms) { counters.slice(0, 3).forEach(function (c) { count(c, ms); }); setTimeout(function () { fix.className = 'dfy-tag ok'; fix.textContent = 'OK'; }, ms * .6); },
-    function (ms) { stream(ms * .8); count(counters[3], ms); },
-    function () { ports[0].classList.add('chosen'); ports[1].classList.add('passed'); },
+    function (ms) { counters.slice(0, 3).forEach(function (c) { count(c, ms); }); later(function () { fix.className = 'dfy-tag ok'; fix.textContent = 'OK'; }, ms * .6); },
+    function (ms) { stream(ms * .8); count(conf, ms); },
+    function () { var yes = sc.branch === 'true'; ports[yes ? 0 : 1].classList.add('chosen'); if (!yes) ports[1].classList.add('warn'); ports[yes ? 1 : 0].classList.add('passed'); },
     function () {}
   ];
-  // the run loops: it holds the finished state (with the data flowing) for HOLD ms, eases out, resets and runs again;
+  // the run loops: it holds the finished state (with the data flowing) for HOLD ms, eases out, resets and runs the other case;
   // it only replays on screen, and waits for the reader to come back otherwise
   var HOLD = 5200, pending = false, timers = [];
-  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function clearAll() { timers.forEach(function (t) { if (t && t.iv) clearInterval(t.iv); else clearTimeout(t); }); timers = []; }
   function replay() {
     if (!visible || document.hidden) { pending = true; return; }
     pending = false; wrap.classList.add('dfy-fade');
-    later(function () { idle(); wrap.classList.remove('dfy-fade'); later(play, 350); }, 450);
+    later(function () { sc = SCEN[runs % 2]; idle(); wrap.classList.remove('dfy-fade'); later(play, 350); }, 450);
   }
   function play() {
-    timers.forEach(clearTimeout); timers = [];
+    clearAll(); sc = SCEN[runs % 2]; runs++;
     ran = true; runL.textContent = 'Running…';
-    var t = 250, step = [700, 900, 1200, 400, 450];
-    nodes.forEach(function (n, i) {
+    conf.setAttribute('data-count', '0>' + sc.conf); revNote.textContent = revNote.getAttribute(sc.note);
+    // the phone layout's connectors follow the branch taken
+    dec.classList.toggle('key-in', sc.to === 'dfy-dec'); rev.classList.toggle('warn-in', sc.to === 'dfy-rev');
+    var order = chain.concat([$(sc.to)]), t = 250, step = [700, 900, 1200, 400, 450];
+    order.forEach(function (n, i) {
       later(function () { n.setAttribute('data-st', 'run'); DURING[i](step[i]); }, t);
       t += step[i];
       later(function () {
         n.setAttribute('data-st', 'done');
-        var out = paths.filter(function (p, k) { return p.key && EDGES[k][0] === n.id; })[0];
-        if (out) showPath(out, 380);
-        if (i === nodes.length - 1) { runL.textContent = 'Ran in 2.4s'; later(function () { wrap.classList.add('live'); later(replay, HOLD); }, 400); }
+        if (i === 3) $(sc.other).setAttribute('data-st', 'skip');
+        paths.forEach(function (p) { if (p.e[0] === n.id && lit(p.e)) show(p, 380); });
+        if (i === order.length - 1) {
+          runL.textContent = sc.branch === 'true' ? 'Ran in 2.4s' : 'Needs review';
+          later(function () { wrap.classList.add('live'); later(replay, HOLD); }, 400);
+        }
       }, t);
       t += 380;
     });
   }
 
-  // after the run: packets of data keep flowing along the lit path, only while the canvas is on screen
+  // after a run: packets of data flow along the lit path, only while the canvas is on screen
   var visible = false, raf = 0, T0 = performance.now(), PERIOD = 1700;
   function packets() {
     if (getComputedStyle(svg).display === 'none') return [];
     var out = [];
-    paths.forEach(function (p) { if (!p.key) return;
-      [0, .5].forEach(function (phase) { var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3'); c.setAttribute('class', 'dfy-packet'); c.style.opacity = 0; p.line.parentNode.appendChild(c); out.push({ p: p, c: c, phase: phase }); }); });
+    paths.forEach(function (p) { if (!lit(p.e)) return;
+      [0, .5].forEach(function (phase) { var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3'); c.setAttribute('class', 'dfy-packet' + (p.e[3] === 'false' ? ' amber' : ''));
+        c.style.opacity = 0; p.line.parentNode.appendChild(c); out.push({ p: p, c: c, phase: phase }); }); });
     return out;
   }
-  var pk = [];
   function loop(now) {
     raf = 0;
     if (!visible || document.hidden || !wrap.classList.contains('live')) return;
@@ -307,14 +335,14 @@
     raf = requestAnimationFrame(loop);
   }
   function wake() { if (!raf && visible && wrap.classList.contains('live')) raf = requestAnimationFrame(loop); }
-  new MutationObserver(function () { if (wrap.classList.contains('live')) { if (!pk.length) pk = packets(); wake(); } }).observe(wrap, { attributes: true, attributeFilter: ['class'] });
-  document.addEventListener('visibilitychange', wake);
-  var redraw = draw; draw = function () { redraw(); pk = ran && wrap.classList.contains('live') ? packets() : []; };
+  new MutationObserver(function () {
+    if (wrap.classList.contains('live')) { pk.forEach(function (k) { k.c.remove(); }); pk = packets(); wake(); }
+  }).observe(wrap, { attributes: true, attributeFilter: ['class'] });
 
   if (reduce || !('IntersectionObserver' in window)) return;
   idle();
   new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(canvas);
-  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
+  document.addEventListener('visibilitychange', function () { wake(); if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); draw(); idle(); play(); }
   }, { threshold: [0, .4, .7] });
