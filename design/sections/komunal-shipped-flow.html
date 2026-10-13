@@ -94,6 +94,18 @@
 .ksf .auto small { display: block; margin-top: 2px; font-size: 12px; font-weight: 600; line-height: 1.35; color: #6b7796; }
 .ksf .ghost { text-align: center; font-size: 15px; font-weight: 800; color: #3b5bdb; padding: 15px; border-radius: 14px; border: 1.5px solid #3b5bdb; }
 
+/* screen 3: the RTGS cut-off as a countdown; the bar is what is left of the sending window */
+.ksf .cd { background: #fff; border: 1px solid #e7ebf5; border-radius: 18px; padding: 12px 16px 13px; box-shadow: rgba(30, 50, 120, .35) 0 14px 30px -22px; }
+.ksf .cdr { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.ksf .cdl b { display: block; margin-top: 4px; font-size: 14px; font-weight: 800; color: #17213b; }
+.ksf .cdt { display: flex; align-items: flex-start; gap: 4px; }
+.ksf .cdt > span { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.ksf .cdt b { min-width: 38px; text-align: center; padding: 6px 0; border-radius: 9px; background: #eef1fc; color: #3b5bdb; font-size: 19px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.ksf .cdt small { font-size: 10.5px; font-weight: 700; color: #8a94ac; }
+.ksf .cdt > i { font-style: normal; font-size: 17px; font-weight: 800; color: #9aa4bc; padding-top: 6px; }
+.ksf .cdbar { margin-top: 11px; height: 4px; border-radius: 2px; background: #e2e7f2; overflow: hidden; }
+.ksf .cdbar i { display: block; height: 100%; width: 62%; border-radius: 2px; background: #3b5bdb; }
+
 @media (max-width: 760px) {
   .ksf-panel { padding: 16px; }
   .ksf-row { flex-wrap: wrap; gap: 20px 12px; }
@@ -201,17 +213,19 @@
 <figure class="ksf-step"><div style="flex: 1 1 0px; min-width: 0px; max-width: 236px; background: linear-gradient(155deg, rgb(35, 38, 46), rgb(12, 13, 16)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.9) 0px 30px 56px -26px, rgba(255, 255, 255, 0.07) 0px 0px 0px 1px inset;">
 <div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(255, 255, 255);">
 <div style="position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: Archivo, -apple-system, sans-serif; display: flex; flex-direction: column; background: rgb(233, 239, 253);"><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 35, 63, 0.4); z-index: 9;"></div><div style="background: rgb(255, 255, 255); border-radius: 0px 0px 28px 28px; padding-bottom: 18px;"><div style="padding: 15px 22px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(23, 33, 59);"><span style="font-weight: 800; font-size: 15px; letter-spacing: 0.01em;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div class="nav"><span class="bk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span><span class="t">Transfer via RTGS</span><span class="s">Langkah 3 dari 3</span></div><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i></div></div><div class="body">
-<div class="due"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kirim sebelum 15:00 WIB · sisa 4 jam 45 menit</div>
+<div class="cd" data-left="17112"><div class="cdr"><span class="cdl"><span class="lb">Batas kirim RTGS</span><b>Hari ini, 15:00 WIB</b></span>
+<span class="cdt"><span><b data-u="h">04</b><small>jam</small></span><i>:</i><span><b data-u="m">45</b><small>menit</small></span><i>:</i><span><b data-u="s">12</b><small>detik</small></span></span></div>
+<div class="cdbar"><i></i></div></div>
 <div class="card inst">
 <div class="row big"><span><span class="lb">Nominal</span><span class="v2">Rp 750.000.000</span></span><span class="c">Salin</span></div>
 <div class="row"><span><span class="lb">Rekening tujuan</span><b>PT BPR Artha Sejahtera</b><small>0123 4567 890</small></span><span class="c">Salin</span></div>
 <div class="row"><span><span class="lb">Berita transfer</span><b class="code">DEP-7F3K</b><small>Wajib, agar dana langsung tercocokkan</small></span><span class="c">Salin</span></div>
 </div>
 <div class="card steps"><div class="h">Cara transfer</div>
-<div class="st"><i>1</i><span>Buka aplikasi Mandiri, pilih Transfer lalu RTGS</span></div>
-<div class="st"><i>2</i><span>Masukkan nominal dan rekening tujuan persis</span></div>
+<div class="st"><i>1</i><span>Di aplikasi Mandiri, pilih Transfer › RTGS</span></div>
+<div class="st"><i>2</i><span>Isi nominal dan rekening tujuan persis</span></div>
 <div class="st"><i>3</i><span>Tulis kode DEP-7F3K di berita transfer</span></div></div>
-<div class="tip"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span>Cek limit transfer harian Anda minimal Rp750 jt. Jika kurang, naikkan limit di aplikasi bank atau ubah nominal.</span></div>
+<div class="tip"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span>Pastikan limit transfer harian Anda minimal Rp750 jt.</span></div>
 </div>
 <div class="foot"><div class="auto"><i></i><span><b>Menunggu dana masuk</b><small>Terdeteksi otomatis · tidak ada yang dikunci</small></span></div><div class="ghost">Ganti cara transfer</div></div>
 </div>
@@ -230,4 +244,20 @@
 </div>
 <p class="ksf-cap">As shipped: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.</p>
 </div>
+<script>
+(function () {
+  var root = document.currentScript.parentNode, cd = root.querySelector('.ksf .cd'); if (!cd) return;
+  var left = +cd.getAttribute('data-left'), WINDOW = 25200, bar = cd.querySelector('.cdbar i'), u = {};
+  ['h', 'm', 's'].forEach(function (k) { u[k] = cd.querySelector('[data-u="' + k + '"]'); });
+  function two(n) { return (n < 10 ? '0' : '') + n; }
+  function paint() {
+    u.h.textContent = two(Math.floor(left / 3600)); u.m.textContent = two(Math.floor(left / 60) % 60); u.s.textContent = two(left % 60);
+    bar.style.width = (left / WINDOW * 100).toFixed(1) + '%';
+  }
+  paint();
+  var on = false;
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { on = es[0].isIntersecting; }).observe(cd); else on = true;
+  setInterval(function () { if (!on || document.hidden) return; left = left > 0 ? left - 1 : 17112; paint(); }, 1000);
+})();
+</script>
 </div>
