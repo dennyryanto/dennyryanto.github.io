@@ -351,13 +351,44 @@ def without_ds(row):
         if 'ONE DESIGN SYSTEM' in card.get_text(' ', strip=True).upper():
             card.decompose()
     return row
+
+
+def with_shipped_flow(row):
+    # the funnel row's old two-phone "shipped screen + flow" panel becomes the four-phone flow with the routing (design/sections/)
+    panel = next(d for d in row.find_all('div') if 'SHIPPED SCREEN + FLOW' in d.get_text(' ', strip=True)
+                 and 'min-height: 340px' in (d.get('style') or ''))
+    # four phones need the full width: the flow spans the whole grid row, so the funnel takes the row above to itself
+    cell = soup('<div style="grid-column: 1 / -1; min-width: 0;"></div>').div
+    cell.append(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-shipped-flow.html'), encoding='utf-8').read()))
+    grid = panel.parent
+    panel.replace_with(cell)
+    # one column: the funnel panel takes its own full row, laid out as funnel | volume so its charts keep their scale
+    grid['style'] = re.sub(r'grid-template-columns:[^;]*;', 'grid-template-columns: minmax(0, 1fr);', grid.get('style', ''))
+    fun = next(d for d in grid.find_all('div', recursive=False) if 'Deposit Placement Funnel' in d.get_text())
+    head, chart, vol, spacer, note = fun.find_all(recursive=False)
+    a_col = soup('<div class="kfun-a"></div>').div
+    head.insert_before(a_col); a_col.append(head.extract()); a_col.append(chart.extract())
+    fun['class'] = 'kfun'; vol['class'] = 'kfun-b'; spacer['class'] = 'kfun-sp'; note['class'] = 'kfun-n'
+    grid.insert(0, soup('''<style>
+.kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
+.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; }
+.kfun > .kfun-sp { display: none; }
+.kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
+@media (max-width: 899px) {
+  .kfun { grid-template-columns: minmax(0, 1fr); }
+  .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
+}
+</style>'''))
+    return row
+
+
 LIVE = {
     # the design system story (design/sections/), the tooling migration (its old design-system card removed),
     # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
     'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
                       without_ds(kom[2]),
                       soup(open(os.path.join(HERE, '..', 'sections', 'komunal-placement-routing.html'), encoding='utf-8').read()),
-                      kom[3]),
+                      with_shipped_flow(kom[3])),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
     # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
