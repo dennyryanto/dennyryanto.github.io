@@ -2,7 +2,8 @@
      their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
      Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
      plays the library publishing to each surface, then loops (on screen only). Reduced motion keeps the "after" state.
-     Fonts are the site's own (Archivo, IBM Plex Mono) plus the system serif, so nothing new downloads. -->
+     The "before" differences are deliberately close (shades of one blue, one sans at different widths and weights,
+     small radius differences): the drift was subtle, which is why it went unnoticed. -->
 <div class="kds-wrap">
 <style>
 .kds-wrap {
@@ -34,7 +35,7 @@
 .kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
 .kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-stage { flex: 1; display: grid; place-items: center; padding: 16px 14px; background: #f4f5f7; color: #101828; min-height: 196px; }
+.kds-stage { flex: 1; display: grid; place-items: center; padding: 18px 14px; background: #f4f5f7; color: #101828; min-height: 178px; }
 .kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--kds-line); }
 .kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
 .kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
@@ -42,9 +43,9 @@
 
 /* each surface reads its look from these; "off" values are what that org shipped on its own */
 .kds-surf { --f: var(--ds-font); --wd: var(--ds-wide); --c: var(--ds-primary); --cr: var(--ds-card-r); --br: var(--ds-btn-r); --fw: 700; }
-.kds-surf.off[data-org="product"] { --f: Archivo, sans-serif; --wd: 125%; --c: #2563eb; --cr: 4px; --br: 4px; --fw: 800; }
-.kds-surf.off[data-org="eng"] { --f: 'IBM Plex Mono', monospace; --wd: 100%; --c: #059669; --cr: 0px; --br: 0px; --fw: 600; }
-.kds-surf.off[data-org="mkt"] { --f: Georgia, 'Times New Roman', serif; --wd: 100%; --c: #ea580c; --cr: 20px; --br: 999px; --fw: 700; }
+.kds-surf.off[data-org="product"] { --wd: 112%; --c: #2f7fe6; --cr: 6px; --br: 6px; --fw: 800; }
+.kds-surf.off[data-org="eng"] { --wd: 86%; --c: #2a46ad; --cr: 3px; --br: 3px; --fw: 600; }
+.kds-surf.off[data-org="mkt"] { --wd: 100%; --c: #5d6fd8; --cr: 18px; --br: 16px; --fw: 500; }
 .kds-ui { font-family: var(--f); font-stretch: var(--wd); transition: opacity .18s; }
 .kds-ui.swap { opacity: 0; }
 .kds-card { width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
@@ -53,17 +54,6 @@
 .kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--c); transition: color .5s; letter-spacing: -.01em; }
 .kds-rate span { font-size: 12px; font-weight: 500; color: #667085; }
 .kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
-/* the coded surface shows its source above the preview */
-.kds-code { width: 100%; max-width: 230px; margin-bottom: 10px; padding: 8px 10px; border-radius: 8px; background: #101828; color: #c2c3cb; font: 500 11px/1.5 'IBM Plex Mono', monospace; overflow: hidden; white-space: nowrap; }
-.kds-code em { font-style: normal; color: #7cd4fd; }
-.kds-code b { font-weight: 500; color: var(--kds-lime); }
-.kds-surf.off .kds-code b { color: #fda29b; }
-/* the landing page surface is a hero, not a card */
-.kds-hero { width: 100%; max-width: 250px; text-align: left; }
-.kds-hero strong { display: block; font-size: 19px; line-height: 1.2; font-weight: var(--fw); color: #101828; text-wrap: balance; }
-.kds-hero strong span { color: var(--c); transition: color .5s; }
-.kds-hero p { margin: 6px 0 0; font-size: 12px; line-height: 1.45; color: #475467; }
-.kds-hero .kds-btn { display: inline-block; padding: 9px 16px; }
 
 /* the library: one source of tokens and components */
 .kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px 16px; transition: opacity .5s, transform .5s, box-shadow .5s; }
@@ -71,9 +61,7 @@
 .kds-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
 .kds-lh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-ch { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
-.kds-ch span { padding: 5px 8px; border-radius: 999px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); }
-.kds-groups { margin-top: 14px; display: grid; grid-template-columns: 1.3fr 1.2fr .8fr 1.4fr; gap: 12px; }
+.kds-groups { margin-top: 14px; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 12px; }
 .kds-g { padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
 .kds-g > small { display: block; margin-bottom: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
 .kds-sw { display: flex; gap: 5px; }
@@ -84,8 +72,6 @@
 .kds-comp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .kds-comp span { padding: 6px 10px; border-radius: var(--ds-btn-r); font: 600 11px/1 Archivo, sans-serif; }
 .kds-comp .p { background: var(--ds-primary); color: #fff; }
-.kds-comp .s { box-shadow: inset 0 0 0 1px var(--kds-edge); color: var(--kds-ink-2); }
-.kds-comp .in { flex: 1; min-width: 70px; padding: 6px 8px; border-radius: 8px; background: var(--kds-panel); box-shadow: inset 0 0 0 1px var(--kds-line); color: var(--kds-ink-3); font: 400 11px/1 Archivo, sans-serif; }
 
 .kds-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
@@ -94,58 +80,46 @@
   .kds-edges { display: none; }
   .kds-board { gap: 20px; }
   /* each stage keeps room for its taller look (before or after), so nothing below moves when the fonts swap */
-  .kds-stage { min-height: 0; }
-  .kds-surf[data-org="product"] .kds-stage { min-height: 162px; }
-  .kds-surf[data-org="eng"] .kds-stage { min-height: 218px; }
-  .kds-surf[data-org="mkt"] .kds-stage { min-height: 138px; }
-  .kds-ch { margin-left: 0; }
-}
+  .kds-stage { min-height: 170px; }
+  }
 @media (prefers-reduced-motion: reduce) { .kds-wrap *, .kds-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
 
 <div class="kds-head"><span>ONE DESIGN SYSTEM · THREE ORGS</span><span>ILLUSTRATIVE</span></div>
 
-<div class="kds-board" role="img" aria-label="The same deposit offer as three teams shipped it. Before: Product used a wide sans with a blue primary and 4-pixel corners, Engineering a monospace with a green primary and square corners, Marketing a serif with an orange primary and pill buttons. After: one design system library publishes shared tokens for colour, type, radius and components through a Figma library, tokens.json and Framer components, and all three surfaces render the offer the same way.">
+<div class="kds-board" role="img" aria-label="The same deposit offer card as three teams shipped it. Before: Product, Engineering and Marketing each used a slightly different blue, a different width and weight of the same sans, and different corner radii. After: one design system library publishes shared colour, type and radius tokens and a primary button, and all three cards match.">
   <svg class="kds-edges" aria-hidden="true"></svg>
-  <div class="kds-status"><i></i><span class="kds-status-t">1 type family · 1 palette · 1 radius scale</span></div>
+  <div class="kds-status"><i></i><span class="kds-status-t">1 type scale · 1 palette · 1 radius scale</span></div>
 
   <div class="kds-surfaces">
     <div class="kds-surf joined" data-org="product">
-      <div class="kds-sh"><b>Product</b><small>App · Figma</small></div>
-      <div class="kds-stage"><div class="kds-ui">
-        <div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div>
-      </div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="Archivo Wide" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#2563EB" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 4" data-on="radius/md">radius/md</span></div>
+      <div class="kds-sh"><b>Product</b><small>App</small></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#2F7FE6" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 6" data-on="radius/md">radius/md</span></div>
     </div>
     <div class="kds-surf joined" data-org="eng">
-      <div class="kds-sh"><b>Engineering</b><small>Web app · React</small></div>
-      <div class="kds-stage"><div class="kds-ui">
-        <div class="kds-code">&lt;<em>DepositCard</em> tone=<b data-off='"green"' data-on='{ds.primary}'>{ds.primary}</b> /&gt;</div>
-        <div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div>
-      </div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="Plex Mono" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#059669" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 0" data-on="radius/md">radius/md</span></div>
+      <div class="kds-sh"><b>Engineering</b><small>Web app</small></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#2A46AD" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 3" data-on="radius/md">radius/md</span></div>
     </div>
     <div class="kds-surf joined" data-org="mkt">
-      <div class="kds-sh"><b>Marketing</b><small>Website · Framer</small></div>
-      <div class="kds-stage"><div class="kds-ui">
-        <div class="kds-hero"><strong>Simpan dana di BPR, bunga hingga <span>6.25%</span></strong><p>Deposito dijamin LPS, mulai dari Rp1 juta.</p><span class="kds-btn">Mulai deposito</span></div>
-      </div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="Georgia" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#EA580C" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="pill 999" data-on="radius/md">radius/md</span></div>
+      <div class="kds-sh"><b>Marketing</b><small>Website</small></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#5D6FD8" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 18" data-on="radius/md">radius/md</span></div>
     </div>
   </div>
 
   <div class="kds-lib">
-    <div class="kds-lh"><b>Komunal DS</b><small>v1.0 · foundations, tokens, components</small>
-      <div class="kds-ch"><span>Figma library</span><span>tokens.json</span><span>Framer components</span></div></div>
+    <div class="kds-lh"><b>Komunal DS</b><small>one library for design, code and the website</small></div>
     <div class="kds-groups">
-      <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#12b76a"></i><i style="--c:#f79009"></i></div></div>
-      <div class="kds-g"><small>TYPE · DS SANS</small><div class="kds-type"><span style="font-size:26px">Aa</span><span style="font-size:20px">Aa</span><span style="font-size:15px">Aa</span><span style="font-size:12px">Aa</span></div></div>
+      <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#d0d5dd"></i></div></div>
+      <div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:26px">Aa</span><span style="font-size:18px">Aa</span><span style="font-size:13px">Aa</span></div></div>
       <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><i style="border-top-right-radius:4px"></i><i style="border-top-right-radius:10px"></i><i style="border-top-right-radius:16px"></i></div></div>
-      <div class="kds-g"><small>COMPONENTS</small><div class="kds-comp"><span class="p">Button</span><span class="s">Secondary</span><span class="in">Input</span></div></div>
+      <div class="kds-g"><small>BUTTON</small><div class="kds-comp"><span class="p">Primary</span></div></div>
     </div>
   </div>
 </div>
-<p class="kds-cap">The same offer, shipped by three teams: before the system, each picked its own font, colour and corners. One library now publishes the tokens and components all three build from, in Figma, in code and in Framer.</p>
+<p class="kds-cap">The same offer card, shipped by three teams. Before the system, each drifted a little: its own shade of blue, its own weight of type, its own corners. One library now publishes the tokens all three build from.</p>
 
 <script>
 (function () {
@@ -182,7 +156,7 @@
     if (quiet) { apply(); return; }
     ui.classList.add('swap'); later(function () { apply(); ui.classList.remove('swap'); }, 180);
   }
-  var BEFORE = '3 fonts · 3 primaries · 3 corner radii', AFTER = '1 type family · 1 palette · 1 radius scale';
+  var BEFORE = '3 type styles · 3 blues · 3 corner radii', AFTER = '1 type scale · 1 palette · 1 radius scale';
   function before() {
     wrap.classList.add('before'); wrap.classList.remove('live');
     surfs.forEach(function (s) { setSurface(s, false, true); }); paths.forEach(hide);
