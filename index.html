@@ -1296,10 +1296,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 <div style="margin-top: auto; padding-top: 20px; font: 400 13px / 1.55 Archivo; color: rgba(242, 239, 232, 0.6);">Championed the shift to Framer for building and updating web components, replacing the legacy Sanity platform, collapsing release cycles from weeks to days.</div>
 </div>
-</div></div><div class="mk-block"><!-- Komunal: placement routing. Before, checkout locked a placement onto one payment rail (a Permata VA) and a listener
-     waited for the money; when the sender's bank limit, fee or cut-off blocked the transfer, the funds never came and the
-     user sat locked out until the hold expired: the funnel's drop-off. After, routing checks amount, source bank and time
-     against every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
+</div></div><div class="mk-block"><!-- Komunal: placement routing. Before, checkout locked a placement onto a payment method and a listener waited for the
+     money; when the sender's own transfer limit blocked it (a low bank default, a cap the user set and forgot, or an
+     account never upgraded to a higher tier), the funds never came and the user was locked out of new deposits until
+     customer service released them: the funnel's drop-off. After, routing checks amount, source bank and time against
+     every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
      Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
      plays "before" then "after", and loops (on screen only). Reduced motion keeps the final state.
      Limits are illustrative, from published bank, BI-FAST and Xendit rules; they differ by bank and change over time. -->
@@ -1400,27 +1401,40 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 }
 /* narrow: lanes stacked */
 @container (max-width: 620px) {
-  .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 12px; }
-  .kpr-lane { padding: 12px; }
+  .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 10px; }
+  .kpr-lane { padding: 10px; }
+  /* compact: tighter steps, the after lane skips the placement it shares with before, tags sit in the corner */
+  .kpr-lh { margin-bottom: 8px; gap: 6px 8px; }
+  .kpr-node { padding: 8px 10px; gap: 2px; }
+  .kpr-node:not([data-k]) .m { display: none; }
+  .kpr-lane.after .kpr-flow > :nth-child(-n+2) { display: none; }
+  .kpr-link { height: 12px; margin: 2px 0; }
+  .kpr-out { position: absolute; top: 8px; right: 10px; margin: 0; }
+  .kpr-chip { margin-top: 4px; }
+  .kpr-rails { gap: 3px; }
+  .kpr-rail { padding: 4px 8px; }
+  .kpr-tiles { gap: 8px; }
+  .kpr-tile { flex-direction: row; align-items: baseline; gap: 12px; padding: 10px 12px; }
+  .kpr-tile b { flex: none; min-width: 3.4em; font-size: 22px; }
   .kpr-tiles { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .kpr-wrap *, .kpr-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
 <div class="kpr-head"><span>PLACEMENT ROUTING · BEFORE AND AFTER</span><span>ILLUSTRATIVE</span></div>
-<p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked a placement onto one payment rail, then a listener waited for the money. But money moves in Indonesia over several rails (bank virtual accounts, BI-FAST, RTGS), each with its own limits, fees and hours, and every bank adds its own caps. When the sender's bank blocked the transfer, the funds never came and the user sat locked out until the hold expired. The revamp routes first: it checks the amount, bank and time against every rail, shows one clear step, and locks nothing until the funds land.</p>
-<div aria-label="Placing Rp75,000,000 from a Mandiri account at 20:40. Before: checkout locked the placement onto a Permata virtual account, the bank app rejected the interbank payment for being over its Rp25M cap, the listener waited for funds that never arrived, and the user was locked out of new placements until the hold expired. After: a route check compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day, and RTGS needs Rp100M and closes at 15:00, so it picks BI-FAST, shows one clear step with nothing locked, the funds arrive in seconds and the deposit is active." class="kpr-board" role="img">
+<p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked a placement onto a payment method, then a listener waited for the money. But money in Indonesia moves over several rails (bank virtual accounts, BI-FAST, RTGS), each with its own limits, fees and hours, and every account has its own transfer limit: a low bank default, a cap the user set and forgot, or an account never upgraded to a higher tier. When that limit blocked the transfer, the funds never came and the user was locked out of new deposits. Only customer service could release them. The revamp routes first: it checks the amount, bank and time against every rail, shows one clear step, and locks nothing until the funds land.</p>
+<div aria-label="Placing Rp75,000,000 from a Mandiri account at 20:40. Before: checkout locked the placement onto a virtual account, the bank app rejected the transfer for being over the account's transfer limit (a low default, a forgotten cap or a basic-tier account), the listener waited for funds that never arrived, and the user was locked out of new deposits until customer service released them. After: a route check compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day, and RTGS needs Rp100M and closes at 15:00, so it picks BI-FAST, shows one clear step with nothing locked, the funds arrive in seconds and the deposit is active." class="kpr-board" role="img">
 <div class="kpr-lane before bad" data-lane="before">
 <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
 <div class="kpr-flow">
 <div class="kpr-node"><small>PLACEMENT</small><b>Rp75,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 20:40</span></div>
 <div class="kpr-link on"><b></b></div>
-<div class="kpr-node"><small>CHECKOUT</small><b><svg aria-hidden="true" class="kpr-ico" viewbox="0 0 16 16"><rect fill="none" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" width="10" x="3" y="7"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>Permata VA issued</b><span>Amount and payment method locked in</span><span class="m">VA 013 8870 1204 5531</span></div>
+<div class="kpr-node"><small>CHECKOUT</small><b><svg aria-hidden="true" class="kpr-ico" viewbox="0 0 16 16"><rect fill="none" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5" width="10" x="3" y="7"></rect><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.5"></path></svg>Virtual account issued</b><span>Amount and payment method locked in</span><span class="m">VA 8870 1204 5531</span></div>
 <div class="kpr-link on"><b></b></div>
-<div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Interbank VA payment over the app's cap</span><span class="m">Cap Rp25M · Mandiri app</span></div>
+<div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Over this account's transfer limit</span><span class="m">Low default · forgotten cap · basic tier</span></div>
 <div class="kpr-link cut"><b></b></div>
-<div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Hold expires in 24h</span></div>
+<div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Waited 3 days and counting</span></div>
 <div class="kpr-link cut"><b></b></div>
-<div class="kpr-node fail" data-k="end"><small>OUTCOME</small><b>Locked out</b><span>No new placement until the hold expires</span><span class="kpr-out">DROP-OFF</span></div>
+<div class="kpr-node fail" data-k="end"><small>OUTCOME</small><b>Locked out</b><span>No new deposit until customer service steps in</span><span class="kpr-out">DROP-OFF</span></div>
 </div>
 </div>
 <div class="kpr-lane after good" data-lane="after">
@@ -1437,7 +1451,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </ul>
 </div>
 <div class="kpr-link on"><b></b></div>
-<div class="kpr-node"><small>ONE CLEAR STEP</small><b>Send via BI-FAST</b><span>Fee Rp2,500 · lands in seconds</span><span class="kpr-chip">Change amount or method</span></div>
+<div class="kpr-node" data-k="step"><small>ONE CLEAR STEP</small><b>Send via BI-FAST</b><span>Fee Rp2,500 · lands in seconds</span><span class="m">Check your app's transfer limit first</span><span class="kpr-chip">Change amount or method</span></div>
 <div class="kpr-link on"><b></b></div>
 <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds received</span></b><span>Matched to this placement</span><span class="m kpr-hold">8s after the transfer</span></div>
 <div class="kpr-link on"><b></b></div>
@@ -1475,7 +1489,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     });
     rails.forEach(function (r) { r.setAttribute('data-v', ''); });
     txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp75M');
-    txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Hold 23:59:59');
+    txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Waited 0h 00m');
     txt(A.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(A.k('listen'), '.kpr-hold', 'Nothing locked yet');
   }
   function on(n) { n.classList.remove('idle'); }
@@ -1487,14 +1501,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     // before: placement, locked onto a Permata VA, the bank app refuses, the listener waits on money that never comes
     later(function () { on(n[0]); B.st.textContent = 'Checking out…'; }, t);
     later(function () { run(l[0]); }, t += 450);
-    later(function () { on(n[1]); B.st.textContent = 'Locked to one rail'; }, t += 450);
+    later(function () { on(n[1]); B.st.textContent = 'Locked in at checkout'; }, t += 450);
     later(function () { run(l[1]); }, t += 600);
     later(function () { on(n[2]); B.st.textContent = 'Paying from the bank app…'; }, t += 450);
     later(function () { n[2].classList.add('fail'); txt(n[2], '.kpr-bank-t', 'Transfer rejected'); }, t += 700);
     later(function () { l[2].classList.add('cut'); on(n[3]); n[3].classList.add('wait'); B.st.textContent = 'Waiting on funds…'; }, t += 500);
-    var left = 86399;                                    // the hold counts down; time runs fast so the wait reads as long
-    for (var i = 1; i <= 12; i++) later(function () { left -= 7000 + Math.floor(Math.random() * 600); txt(n[3], '.kpr-hold', 'Hold ' + clock(left)); }, t + i * 110);
-    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds never arrive'); txt(n[3], '.kpr-hold', 'Hold expires in 24h'); }, t += 1500);
+    var waited = 0;                                      // there was no timeout: time runs fast so the wait reads as days
+    for (var i = 1; i <= 12; i++) later(function () { waited += 360 + Math.floor(Math.random() * 40); txt(n[3], '.kpr-hold', 'Waited ' + span(waited)); }, t + i * 110);
+    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds never arrive'); txt(n[3], '.kpr-hold', 'Waited 3 days and counting'); }, t += 1500);
     later(function () { l[3].classList.add('cut'); on(n[4]); n[4].classList.add('fail'); B.el.classList.add('bad'); B.st.textContent = 'Locked out · drop-off'; }, t += 400);
 
     // after: the route check measures every rail first, picks one, and nothing is locked until the money lands
@@ -1514,7 +1528,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     later(function () { run(l[3]); }, t += 200);
     later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed in seconds'; later(replay, HOLD); }, t += 450);
   }
-  function clock(s) { s = Math.max(0, s); function p(v) { return (v < 10 ? '0' : '') + v; } return p(Math.floor(s / 3600)) + ':' + p(Math.floor(s / 60) % 60) + ':' + p(s % 60); }
+  function span(m) { var h = Math.floor(m / 60), r = m % 60; return h + 'h ' + (r < 10 ? '0' : '') + r + 'm'; }
   function replay() {
     if (!visible || document.hidden) { pending = true; return; }
     pending = false; board.style.transition = 'opacity .4s'; board.style.opacity = .35;
