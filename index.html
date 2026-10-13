@@ -946,7 +946,18 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <p style="margin: 0px; max-width: 620px; font: 400 18px / 1.65 Archivo; color: rgba(242, 239, 232, 0.7);">I lead product design where it moves the business. Across fintech, enterprise and consumer platforms I’ve turned design strategy into P&amp;L results: lower cost to serve, higher conversion, and platforms used by tens of millions.</p>
 <a class="scp2" data-r="avail" href="#contact" style='margin-top: 34px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid rgba(242, 239, 232, 0.18); border-radius: 100px; font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; color: rgba(242, 239, 232, 0.85);'>OPEN TO HEAD / AVP ROLES · JAKARTA</a>
 </div>
-<aside data-r="profile-card" style="flex: 0 0 auto; width: 360px; margin-top: 18px; box-sizing: border-box; padding: 28px; border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 18px; background: linear-gradient(rgba(242, 239, 232, 0.05), rgba(242, 239, 232, 0.016));">
+<!--
+  Hey there, code explorer.
+  You found the easter egg the hard way. Respect.
+  The easy way: tap my profile card 10 times, quickly.
+
+  Since you are already here, a fun fact: sci-fi movies are why I got into UI/UX.
+  I used to pause films just to study the screens in the background, the ship
+  consoles and HUDs, and wonder who designed them. Now I design the real ones.
+
+  If you like digging this deep, say hi: denny.ryanto@gmail.com
+  Denny
+--><aside data-r="profile-card" style="flex: 0 0 auto; width: 360px; margin-top: 18px; box-sizing: border-box;" tabindex="0"><div class="ee-in"><div class="ee-front" style="padding: 28px; border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 18px; background: linear-gradient(rgba(242, 239, 232, 0.05), rgba(242, 239, 232, 0.016))">
 <div style="display: flex; align-items: center; gap: 18px; margin-bottom: 22px;">
 <div style="position: relative; flex: 0 0 auto; width: 104px; height: 104px;">
 <div style="width: 104px; height: 104px; background: rgba(242, 239, 232, 0.07); border-radius: 50%; overflow: hidden;">
@@ -979,7 +990,91 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <span style='padding: 7px 10px; border: 1px solid rgba(242, 239, 232, 0.16); border-radius: 100px; font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.7);'>ENTERPRISE</span>
 <span style='padding: 7px 10px; border: 1px solid rgba(242, 239, 232, 0.16); border-radius: 100px; font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.7);'>CONSUMER</span>
 </div>
-</aside>
+</div><div aria-hidden="true" class="ee-back" style="padding: 28px; border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 18px; background: linear-gradient(rgba(242, 239, 232, 0.05), rgba(242, 239, 232, 0.016))">
+<div class="ee-eyebrow">EASTER EGG · 1 OF 1</div>
+<div class="ee-title">You found it.</div>
+<p>Ten taps? Okay, you’re officially curious. Here’s something that’s not on my CV: I’m a huge sci-fi movie nerd.</p>
+<p>Long before I knew UI/UX was a job, I’d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn’t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
+<p>Thanks for poking around. You’re my kind of person.</p>
+<button class="ee-close" type="button">FLIP BACK <span aria-hidden="true">↺</span></button>
+</div></div></aside><style>
+[data-r="profile-card"] { perspective: 1400px; outline: none; -webkit-tap-highlight-color: transparent; }
+/* the site's card padding and header spacing now belong to the faces, so the card keeps its live size */
+[data-r="profile-card"] { padding: 0 !important; }
+[data-r="profile-card"] > div.ee-in:first-child { margin-bottom: 0 !important; }
+@media (min-width: 1181px) {
+  .ee-front, .ee-back { padding: 22px 24px !important; }
+  .ee-front > div:first-child { margin-bottom: 14px !important; }
+}
+@media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
+[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 2px oklch(0.9 0.2 122 / .6); border-radius: 18px; }
+.ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
+.ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
+  background: linear-gradient(rgba(242, 239, 232, .06), rgba(242, 239, 232, .02)), #161511 !important; overflow: hidden; }
+.ee-eyebrow { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: oklch(0.9 0.2 122); }
+/* the only way back: a button, so an extra eleventh tap can't flip the card before the message is read */
+.ee-close { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
+  border: 1px solid oklch(0.9 0.2 122 / .55); background: oklch(0.9 0.2 122 / .08); color: oklch(0.9 0.2 122); cursor: pointer;
+  font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; transition: background-color .2s, border-color .2s; }
+.ee-close span { font-size: 14px; letter-spacing: 0; }
+.ee-close:hover { background: oklch(0.9 0.2 122 / .16); border-color: oklch(0.9 0.2 122); }
+.ee-close:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
+.ee-title { font: 800 21px/1.1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.01em; color: #f2efe8; }
+.ee-back p { margin: 0; font: 400 14px/1.5 Archivo, sans-serif; color: rgba(242, 239, 232, .82); }
+[data-r="profile-card"].ee-flipped .ee-in { transform: rotateY(180deg); }
+/* the hint: one small wobble on the seventh tap */
+@keyframes ee-wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-2.2deg); } 45% { transform: rotate(1.8deg); } 70% { transform: rotate(-.9deg); } }
+[data-r="profile-card"].ee-wobble .ee-in { animation: ee-wobble .5s ease-in-out; }
+.ee-spark { position: fixed; z-index: 60; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none;
+  background: oklch(0.93 0.2 122); box-shadow: 0 0 10px 2px oklch(0.9 0.2 122 / .75); }
+.ee-spark.s { width: 3px; height: 14px; margin: -7px 0 0 -1.5px; border-radius: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .ee-in { transition: none; transform-style: flat; }
+  .ee-back { transform: none; opacity: 0; transition: opacity .3s; }
+  [data-r="profile-card"].ee-flipped .ee-in { transform: none; }
+  [data-r="profile-card"].ee-flipped .ee-back { opacity: 1; }
+}
+</style>
+<script>
+(function () {
+  var card = document.querySelector('[data-r="profile-card"]'); if (!card) return;
+  var front = card.querySelector('.ee-front'), back = card.querySelector('.ee-back');
+  var n = 0, last = 0, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var close = back.querySelector('.ee-close');
+  function flip(on) {
+    card.classList.toggle('ee-flipped', on);
+    front.setAttribute('aria-hidden', on ? 'true' : 'false'); back.setAttribute('aria-hidden', on ? 'false' : 'true');
+    close.tabIndex = on ? 0 : -1;
+    if (on) setTimeout(function () { close.focus({ preventScroll: true }); }, reduce ? 0 : 700); else card.focus({ preventScroll: true });
+  }
+  close.tabIndex = -1;
+  close.addEventListener('click', function (e) { e.stopPropagation(); n = 0; flip(false); });
+  function sparks() {
+    var r = card.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    // dots and short streaks fly out from the card's edge, hold their size, then fade
+    for (var i = 0; i < 36; i++) {
+      var d = document.createElement('i'); d.className = 'ee-spark' + (i % 3 ? '' : ' s');
+      var a = Math.PI * 2 * i / 36 + Math.random() * .3, ex = Math.cos(a), ey = Math.sin(a);
+      var sx = cx + ex * r.width * .45, sy = cy + ey * r.height * .4;
+      d.style.left = sx + 'px'; d.style.top = sy + 'px'; document.body.appendChild(d);
+      var dist = 90 + Math.random() * 160, s = .7 + Math.random() * .7, rot = 'rotate(' + (a * 180 / Math.PI + 90) + 'deg)';
+      d.animate([{ transform: 'translate(0,0) ' + rot + ' scale(' + s + ')', opacity: 1 },
+                 { transform: 'translate(' + ex * dist * .75 + 'px,' + ey * dist * .75 + 'px) ' + rot + ' scale(' + s + ')', opacity: 1, offset: .55 },
+                 { transform: 'translate(' + ex * dist + 'px,' + (ey * dist + 30) + 'px) ' + rot + ' scale(.2)', opacity: 0 }],
+                { duration: 1000 + Math.random() * 600, easing: 'cubic-bezier(.15,.6,.3,1)' }).onfinish = (function (el) { return function () { el.remove(); }; })(d);
+    }
+  }
+  function tap() {
+    if (card.classList.contains('ee-flipped')) return;   // only the button flips it back
+    var now = Date.now(); n = now - last > 1500 ? 1 : n + 1; last = now;
+    if (n === 7 && !reduce) { card.classList.remove('ee-wobble'); void card.offsetWidth; card.classList.add('ee-wobble'); }
+    if (n >= 10) { n = 0; flip(true); if (!reduce && card.animate) sparks(); }
+  }
+  card.addEventListener('click', function (e) { if (!e.target.closest('a, button')) tap(); });
+  card.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target === card) { e.preventDefault(); tap(); } });
+})();
+</script>
 </div>
 <nav aria-label="Case index" class="mk-index-nav"><div class="mk-index-wrap"><div class="mk-index"><a class="mk-idx" href="#linkaja" data-open="linkaja"><div class="mk-dest"><span class="mk-dest-n">01</span><span class="mk-dest-co">LinkAja</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">−80%</div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 17h6v-6"></path><path d="m22 17-8.5-8.5-5 5L2 7"></path></svg><span>CS OPEX</span></div><p class="mk-idx-c">Customer-service cost after self-service replaced agent tickets for 70M users.</p></a><a class="mk-idx" href="#komunal" data-open="komunal"><div class="mk-dest"><span class="mk-dest-n">02</span><span class="mk-dest-co">Komunal</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">+12<span class="mk-unit">PTS</span></div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg><span>DEPOSIT FUNNEL</span></div><p class="mk-idx-c">Deposit-funnel completion after UX audits and a redesign of DepositoBPR.</p></a><a class="mk-idx" href="#board" data-open="board"><div class="mk-dest"><span class="mk-dest-n">03</span><span class="mk-dest-co">Dash · Lumio</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">~200K</div><div class="mk-idx-l"><svg fill="none" height="15" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="color: oklch(0.9 0.2 122);" viewbox="0 0 24 24" width="15"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"></path><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"></path><path d="M2 7h20"></path></svg><span>CUSTOMERS / MONTH</span></div><p class="mk-idx-c">Diners ordering through Dash each month, across 30+ restaurant chains.</p></a><a class="mk-idx" href="#ai" data-open="ai"><div class="mk-dest"><span class="mk-dest-n">04</span><span class="mk-dest-co">Independent</span><span class="mk-arrow" aria-hidden="true">↓</span></div><div data-m="count" class="mk-idx-n">0→1</div><div class="mk-idx-l"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:oklch(0.9 0.2 122)"><path d="M9.94 15.5A2 2 0 0 0 8.5 14.06l-6.14-1.58a.5.5 0 0 1 0-.96L8.5 9.94A2 2 0 0 0 9.94 8.5l1.58-6.14a.5.5 0 0 1 .96 0L14.06 8.5A2 2 0 0 0 15.5 9.94l6.14 1.58a.5.5 0 0 1 0 .96L15.5 14.06a2 2 0 0 0-1.44 1.44l-1.58 6.14a.5.5 0 0 1-.96 0z"/></svg><span>AI-NATIVE BUILDS</span></div><p class="mk-idx-c">Products taken from concept to working software with multi-agent Claude Code.</p></a></div></div></nav><section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap"><div class="mk-clients-head"><span>Clients &amp; brands</span></div><div class="mk-clients-grid"><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/4f18fc84149ae009.webp" alt="Ismaya Group logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/dfad4492e6304a80.webp" alt="SOGO logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/f2005b518eafa700.webp" alt="MAP logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/a6d6d9703fba01a3.webp" alt="Philips logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/213c0db0dfc737bf.webp" alt="DANA logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/1fae008fa13b49c5.webp" alt="Tokopedia logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/7b01863cd8d48f8d.webp" alt="Netflix logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/7519e6f5c3765a44.webp" alt="Jasamarga logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/38245e0db3d583ac.webp" alt="Summarecon logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/4329b92e43394303.webp" alt="Galeries Lafayette logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/c60007fda0404d12.webp" alt="Genki Sushi logo"></div><div class="mk-client"><img loading="lazy" decoding="async" src="assets/img/b2d48d4a4dfa5bd9.webp" alt="Rainbow logo"></div></div></div></section>
 <main>
