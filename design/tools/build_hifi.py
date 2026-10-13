@@ -322,8 +322,18 @@ def blocks(*els):
 
 
 kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
+
+
+def without_ds(row):
+    # the live row pairs "Tooling migration" with the old "One design system · three orgs" tree; the tree is replaced
+    for card in row.find_all(recursive=False):
+        if 'ONE DESIGN SYSTEM' in card.get_text(' ', strip=True).upper():
+            card.decompose()
+    return row
 LIVE = {
-    'komunal': blocks(kom[2], kom[3]),                      # tooling migration, deposit funnel
+    # the design system story (design/sections/), then the tooling migration (its old design-system card removed), then the funnel
+    'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
+                      without_ds(kom[2]), kom[3]),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
     # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
@@ -472,6 +482,20 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
+
+# ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------
+COMPONENT = os.environ.get('COMPONENT')
+if COMPONENT:
+    piece = open(os.path.join(HERE, '..', 'sections', COMPONENT + '.html'), encoding='utf-8').read()
+    body = ('<section class="mk-case" id="preview"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:64px 40px 72px">'
+            + piece + '</div></section>')
+    name = ' '.join(w.capitalize() for w in COMPONENT.split('-'))
+    page = (tpl.replace('<title>Portfolio Hi-Fi v1</title>', '<meta charset="utf-8">\n<title>%s</title>' % name)
+               .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
+               .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
+               .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
+    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(page)
+    print('component', COMPONENT, len(page), 'bytes')
 
 # ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
 SECTION = os.environ.get('SECTION')

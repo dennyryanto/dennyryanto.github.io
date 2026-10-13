@@ -249,7 +249,8 @@
   var fix = wrap.querySelector('[data-fix]'), runL = wrap.querySelector('.dfy-run-l');
   var srcTags = [].slice.call(wrap.querySelectorAll('#dfy-src .dfy-tag')), note = wrap.querySelector('[data-stream]'), noteText = note.textContent;
   var counters = [].slice.call(wrap.querySelectorAll('[data-count]')), conf = counters[3], ports = [].slice.call(wrap.querySelectorAll('.dfy-port'));
-  draw();
+  // a shut drawer has no layout yet: measure when it opens (mk-open) or when the canvas comes into view, not while the page parses
+  if (!wrap.closest('.mk-drawer:not(.open)')) draw();
   addEventListener('resize', function () { draw(); if (!ran) idle(); });
   var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(function () { draw(); if (!ran) idle(); }, 0); });
 
