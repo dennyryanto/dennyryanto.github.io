@@ -1,6 +1,6 @@
 """Assemble the hi-fi mockup (opening, case 01 LinkAja in full, and the heroes of the other cases and labs) from the live site's rendered pieces."""
 import base64, json, re, sys, os
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 
 S = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -87,6 +87,120 @@ slot = hero.find('image-slot')
 img = hero.new_tag('img', src='data:image/webp;base64,' + head, alt='Denny Ryanto',
                    style='width:100%;height:100%;object-fit:cover;display:block')
 slot.parent.replace_with(img)
+
+# ---------- easter egg: ten quick taps on the profile card flip it over to a fun fact, with a burst of lime sparks ----------
+# the card's frame (padding, border, radius, background) moves onto its two faces so the whole card can turn in 3D;
+# the outer <aside> keeps its size and place, so nothing on the page moves
+card = hero.find(attrs={'data-r': 'profile-card'})
+FRAME = ('padding', 'border', 'border-radius', 'background')
+decls = [d.strip() for d in card['style'].split(';') if d.strip()]
+frame = '; '.join(d for d in decls if d.split(':')[0].strip() in FRAME)
+card['style'] = '; '.join(d for d in decls if d.split(':')[0].strip() not in FRAME) + ';'
+card['tabindex'] = '0'
+flip = soup('<div class="ee-in"><div class="ee-front"></div></div>').div
+front = flip.div
+for ch in list(card.contents):
+    front.append(ch.extract())
+front['style'] = frame
+flip.append(soup("""<div class="ee-back" aria-hidden="true" style="%s">
+<div class="ee-eyebrow">EASTER EGG · 1 OF 1</div>
+<div class="ee-title">You found it.</div>
+<p>Ten taps? Okay, you&rsquo;re officially curious. Here&rsquo;s something that&rsquo;s not on my CV: I&rsquo;m a huge sci-fi movie nerd.</p>
+<p>Long before I knew UI/UX was a job, I&rsquo;d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn&rsquo;t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
+<p>Thanks for poking around. You&rsquo;re my kind of person.</p>
+<button type="button" class="ee-close">FLIP BACK <span aria-hidden="true">&#8634;</span></button>
+</div>""" % frame).div)
+card.append(flip)
+card.insert_before(Comment("""
+  Hey there, code explorer.
+  You found the easter egg the hard way. Respect.
+  The easy way: tap my profile card 10 times, quickly.
+
+  Since you are already here, a fun fact: sci-fi movies are why I got into UI/UX.
+  I used to pause films just to study the screens in the background, the ship
+  consoles and HUDs, and wonder who designed them. Now I design the real ones.
+
+  If you like digging this deep, say hi: denny.ryanto@gmail.com
+  Denny
+"""))
+card.insert_after(soup("""<style>
+[data-r="profile-card"] { perspective: 1400px; outline: none; -webkit-tap-highlight-color: transparent; }
+/* the site's card padding and header spacing now belong to the faces, so the card keeps its live size */
+[data-r="profile-card"] { padding: 0 !important; }
+[data-r="profile-card"] > div.ee-in:first-child { margin-bottom: 0 !important; }
+@media (min-width: 1181px) {
+  .ee-front, .ee-back { padding: 22px 24px !important; }
+  .ee-front > div:first-child { margin-bottom: 14px !important; }
+}
+@media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
+[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 2px oklch(0.9 0.2 122 / .6); border-radius: 18px; }
+.ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
+.ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
+  background: linear-gradient(rgba(242, 239, 232, .06), rgba(242, 239, 232, .02)), #161511 !important; overflow: hidden; }
+.ee-eyebrow { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: oklch(0.9 0.2 122); }
+/* the only way back: a button, so an extra eleventh tap can't flip the card before the message is read */
+.ee-close { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
+  border: 1px solid oklch(0.9 0.2 122 / .55); background: oklch(0.9 0.2 122 / .08); color: oklch(0.9 0.2 122); cursor: pointer;
+  font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; transition: background-color .2s, border-color .2s; }
+.ee-close span { font-size: 14px; letter-spacing: 0; }
+.ee-close:hover { background: oklch(0.9 0.2 122 / .16); border-color: oklch(0.9 0.2 122); }
+.ee-close:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
+.ee-title { font: 800 21px/1.1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.01em; color: #f2efe8; }
+.ee-back p { margin: 0; font: 400 14px/1.5 Archivo, sans-serif; color: rgba(242, 239, 232, .82); }
+[data-r="profile-card"].ee-flipped .ee-in { transform: rotateY(180deg); }
+/* the hint: one small wobble on the seventh tap */
+@keyframes ee-wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-2.2deg); } 45% { transform: rotate(1.8deg); } 70% { transform: rotate(-.9deg); } }
+[data-r="profile-card"].ee-wobble .ee-in { animation: ee-wobble .5s ease-in-out; }
+.ee-spark { position: fixed; z-index: 60; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; pointer-events: none;
+  background: oklch(0.93 0.2 122); box-shadow: 0 0 10px 2px oklch(0.9 0.2 122 / .75); }
+.ee-spark.s { width: 3px; height: 14px; margin: -7px 0 0 -1.5px; border-radius: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .ee-in { transition: none; transform-style: flat; }
+  .ee-back { transform: none; opacity: 0; transition: opacity .3s; }
+  [data-r="profile-card"].ee-flipped .ee-in { transform: none; }
+  [data-r="profile-card"].ee-flipped .ee-back { opacity: 1; }
+}
+</style>
+<script>
+(function () {
+  var card = document.querySelector('[data-r="profile-card"]'); if (!card) return;
+  var front = card.querySelector('.ee-front'), back = card.querySelector('.ee-back');
+  var n = 0, last = 0, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var close = back.querySelector('.ee-close');
+  function flip(on) {
+    card.classList.toggle('ee-flipped', on);
+    front.setAttribute('aria-hidden', on ? 'true' : 'false'); back.setAttribute('aria-hidden', on ? 'false' : 'true');
+    close.tabIndex = on ? 0 : -1;
+    if (on) setTimeout(function () { close.focus({ preventScroll: true }); }, reduce ? 0 : 700); else card.focus({ preventScroll: true });
+  }
+  close.tabIndex = -1;
+  close.addEventListener('click', function (e) { e.stopPropagation(); n = 0; flip(false); });
+  function sparks() {
+    var r = card.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    // dots and short streaks fly out from the card's edge, hold their size, then fade
+    for (var i = 0; i < 36; i++) {
+      var d = document.createElement('i'); d.className = 'ee-spark' + (i % 3 ? '' : ' s');
+      var a = Math.PI * 2 * i / 36 + Math.random() * .3, ex = Math.cos(a), ey = Math.sin(a);
+      var sx = cx + ex * r.width * .45, sy = cy + ey * r.height * .4;
+      d.style.left = sx + 'px'; d.style.top = sy + 'px'; document.body.appendChild(d);
+      var dist = 90 + Math.random() * 160, s = .7 + Math.random() * .7, rot = 'rotate(' + (a * 180 / Math.PI + 90) + 'deg)';
+      d.animate([{ transform: 'translate(0,0) ' + rot + ' scale(' + s + ')', opacity: 1 },
+                 { transform: 'translate(' + ex * dist * .75 + 'px,' + ey * dist * .75 + 'px) ' + rot + ' scale(' + s + ')', opacity: 1, offset: .55 },
+                 { transform: 'translate(' + ex * dist + 'px,' + (ey * dist + 30) + 'px) ' + rot + ' scale(.2)', opacity: 0 }],
+                { duration: 1000 + Math.random() * 600, easing: 'cubic-bezier(.15,.6,.3,1)' }).onfinish = (function (el) { return function () { el.remove(); }; })(d);
+    }
+  }
+  function tap() {
+    if (card.classList.contains('ee-flipped')) return;   // only the button flips it back
+    var now = Date.now(); n = now - last > 1500 ? 1 : n + 1; last = now;
+    if (n === 7 && !reduce) { card.classList.remove('ee-wobble'); void card.offsetWidth; card.classList.add('ee-wobble'); }
+    if (n >= 10) { n = 0; flip(true); if (!reduce && card.animate) sparks(); }
+  }
+  card.addEventListener('click', function (e) { if (!e.target.closest('a, button')) tap(); });
+  card.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target === card) { e.preventDefault(); tap(); } });
+})();
+</script>"""))
 
 # ---------- case index (replaces the stat band) ----------
 brands = soup(read('brands'))
