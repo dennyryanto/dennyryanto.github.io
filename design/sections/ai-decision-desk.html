@@ -1,26 +1,26 @@
 <!-- Independent consulting: the enterprise AI workflow, shown in the case study drawer.
      A workflow canvas in the style of Dify (no Dify name or logo; the section is marked illustrative).
      Edit here; build_hifi.py reads this file instead of the live-site capture.
-     Markup is the finished state, so the page is complete without JavaScript; the script below resets it to idle
+     Dark theme, to sit with the site. Markup is the finished state, so the page is complete without JavaScript; the script below resets it to idle
      and plays one run when the canvas comes into view (reduced motion keeps the finished state). -->
 <div class="dfy-wrap">
 <style>
 .dfy-wrap {
-  /* canvas palette: a light builder UI set into the dark page, like the product screens elsewhere */
-  --dfy-canvas: #f2f4f7; --dfy-dot: #d0d5dd; --dfy-node: #ffffff; --dfy-line: #eaecf0; --dfy-tile: #f9fafb;
-  --dfy-ink: #101828; --dfy-ink-2: #475467; --dfy-ink-3: #667085; --dfy-edge: #c4cad4;
-  --dfy-blue: #155eef; --dfy-green: #17b26a; --dfy-amber: #dc6803;
-  /* the outcome: the site's lime, with a dark keyline so it holds on the light canvas */
-  --dfy-lime: oklch(0.9 0.2 122); --dfy-lime-ink: #3d5200;
+  /* canvas palette: the builder's dark theme, a cool graphite that still reads as its own window on the warm page */
+  --dfy-canvas: #1a1b1f; --dfy-dot: #34363d; --dfy-node: #232429; --dfy-line: rgba(255, 255, 255, .08); --dfy-tile: #2b2c32;
+  --dfy-ink: #f2f2f4; --dfy-ink-2: #c2c3cb; --dfy-ink-3: #8b8d98; --dfy-edge: #4a4d57; --dfy-bar: #1f2025;
+  --dfy-blue: #2970ff; --dfy-green: #17b26a; --dfy-amber: #fdb022;
+  /* the outcome: the site's lime */
+  --dfy-lime: oklch(0.9 0.2 122); --dfy-lime-ink: #c8f135;
   margin-top: 4px;
 }
 .dfy-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .dfy-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
 .dfy-head span:first-child { color: var(--dfy-lime); }
 
-.dfy-app { border-radius: 14px; overflow: hidden; background: var(--dfy-canvas); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .8); font-family: Archivo, system-ui, sans-serif; color: var(--dfy-ink); }
+.dfy-app { border-radius: 14px; overflow: hidden; background: var(--dfy-canvas); box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); font-family: Archivo, system-ui, sans-serif; color: var(--dfy-ink); }
 /* app bar */
-.dfy-bar { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: var(--dfy-node); border-bottom: 1px solid var(--dfy-line); }
+.dfy-bar { display: flex; align-items: center; gap: 14px; padding: 10px 14px; background: var(--dfy-bar); border-bottom: 1px solid var(--dfy-line); }
 .dfy-crumb { display: flex; align-items: center; gap: 8px; min-width: 0; font: 600 13px/1.2 Archivo, sans-serif; }
 .dfy-crumb i { flex: none; width: 24px; height: 24px; border-radius: 7px; background: linear-gradient(135deg, #ff9f1c, #f04438); display: grid; place-items: center; color: #fff; font: 700 12px/1 Archivo, sans-serif; font-style: normal; }
 .dfy-crumb small { font: 400 12px/1.2 Archivo, sans-serif; color: var(--dfy-ink-3); white-space: nowrap; }
@@ -40,10 +40,10 @@
 .dfy-edges path { fill: none; stroke: var(--dfy-edge); stroke-width: 2; }
 .dfy-edges path.else { stroke-dasharray: 5 5; }
 .dfy-edges path.key { stroke: var(--dfy-lime); stroke-width: 3; }
-.dfy-edges path.keyline { stroke: var(--dfy-lime-ink); stroke-width: 5.5; opacity: .35; }
+.dfy-edges path.keyline { stroke: var(--dfy-lime); stroke-width: 7; opacity: .14; }
 
 .dfy-node { position: absolute; left: var(--x); top: var(--y); width: var(--w, 210px); background: var(--dfy-node); border-radius: 14px;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 0 0 1px var(--dfy-line); transition: box-shadow .3s, opacity .3s; }
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 0 0 1px var(--dfy-line); transition: box-shadow .3s, opacity .3s; }
 .dfy-nh { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px; }
 .dfy-ico { flex: none; width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center; color: #fff; background: var(--c); }
 .dfy-ico svg { width: 14px; height: 14px; }
@@ -54,27 +54,27 @@
 .dfy-row code { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--dfy-ink-3); }
 .dfy-note { font: 400 12px/1.4 Archivo, sans-serif; color: var(--dfy-ink-3); }
 .dfy-tag { flex: none; padding: 3px 6px; border-radius: 6px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .02em; }
-.dfy-tag.ok { color: #067647; background: #dcfae6; }
-.dfy-tag.fix { color: #93370d; background: #fef0c7; }
+.dfy-tag.ok { color: #47cd89; background: rgba(23, 178, 106, .14); }
+.dfy-tag.fix { color: var(--dfy-amber); background: rgba(253, 176, 34, .14); }
 .dfy-port { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: 8px; background: var(--dfy-tile); font: 600 11px/1 'IBM Plex Mono', monospace; color: var(--dfy-ink-3); }
 
 /* run status, top right of each node: idle ring, running spinner, done tick with time, skipped dash */
 .dfy-st { flex: none; display: inline-flex; align-items: center; gap: 5px; font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--dfy-ink-3); }
 .dfy-st i { width: 14px; height: 14px; border-radius: 50%; display: grid; place-items: center; }
 .dfy-node[data-st="idle"] .dfy-st i { box-shadow: inset 0 0 0 1.5px var(--dfy-dot); }
-.dfy-node[data-st="run"] { box-shadow: 0 0 0 2px var(--dfy-blue), 0 8px 24px -10px rgba(21, 94, 239, .45); }
-.dfy-node[data-st="run"] .dfy-st i { box-shadow: inset 0 0 0 2px #d1e0ff; border-top: 2px solid var(--dfy-blue); animation: dfy-spin .7s linear infinite; }
+.dfy-node[data-st="run"] { box-shadow: 0 0 0 2px var(--dfy-blue), 0 8px 24px -10px rgba(41, 112, 255, .55); }
+.dfy-node[data-st="run"] .dfy-st i { box-shadow: inset 0 0 0 2px rgba(41, 112, 255, .3); border-top: 2px solid var(--dfy-blue); animation: dfy-spin .7s linear infinite; }
 .dfy-node[data-st="done"] .dfy-st i { background: var(--dfy-green); }
 .dfy-node[data-st="done"] .dfy-st i::after { content: ''; width: 6px; height: 3px; border: 1.6px solid #fff; border-top: 0; border-right: 0; transform: translateY(-1px) rotate(-45deg); }
-.dfy-node[data-st="skip"] { opacity: .55; }
+.dfy-node[data-st="skip"] { opacity: .5; }
 .dfy-node[data-st="skip"] .dfy-st i::after { content: ''; width: 7px; height: 1.6px; background: var(--dfy-ink-3); }
 .dfy-node:not([data-st="done"]) .dfy-st em { display: none; }
 .dfy-st em { font-style: normal; }
 @keyframes dfy-spin { to { transform: rotate(360deg); } }
 
 /* the decision: the only lime object on the canvas once the run lands */
-.dfy-node.dfy-out[data-st="done"] { box-shadow: 0 0 0 2px var(--dfy-lime), 0 0 0 4px rgba(61, 82, 0, .25), 0 14px 30px -14px rgba(61, 82, 0, .6); }
-.dfy-dec { padding: 10px 11px; border-radius: 10px; background: #f7fde4; box-shadow: inset 0 0 0 1px #d9f08c; }
+.dfy-node.dfy-out[data-st="done"] { box-shadow: 0 0 0 1.5px var(--dfy-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.dfy-dec { padding: 10px 11px; border-radius: 10px; background: oklch(0.9 0.2 122 / .07); box-shadow: inset 0 0 0 1px oklch(0.9 0.2 122 / .35); }
 .dfy-dec small { display: block; font: 600 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--dfy-lime-ink); }
 .dfy-dec strong { display: block; margin-top: 5px; font: 700 14px/1.3 Archivo, sans-serif; color: var(--dfy-ink); }
 .dfy-dec p { margin: 4px 0 0; font: 400 12px/1.4 Archivo, sans-serif; color: var(--dfy-ink-2); }
@@ -97,7 +97,7 @@
   .dfy-edges { display: none; }
   .dfy-node { position: relative; left: auto; top: auto; width: auto; }
   .dfy-node + .dfy-node::before { content: ''; position: absolute; left: 24px; top: -23px; height: 22px; width: 2px; background: var(--dfy-edge); }
-  .dfy-node.key-in[data-st="done"]::before, .dfy-node.key-in[data-st="run"]::before { background: var(--dfy-lime); width: 3px; box-shadow: 0 0 0 1px rgba(61, 82, 0, .3); }
+  .dfy-node.key-in[data-st="done"]::before, .dfy-node.key-in[data-st="run"]::before { background: var(--dfy-lime); width: 3px; }
   .dfy-node.dfy-skip::before { background: repeating-linear-gradient(var(--dfy-edge) 0 4px, transparent 4px 8px); }
 }
 @media (prefers-reduced-motion: reduce) { .dfy-node, .dfy-node * { transition: none !important; animation: none !important; } }
