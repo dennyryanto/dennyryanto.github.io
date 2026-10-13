@@ -3,6 +3,7 @@ import base64, json, re, sys, os
 from bs4 import BeautifulSoup
 
 S = sys.argv[1]
+HERE = os.path.dirname(os.path.abspath(__file__))
 H = os.path.join(S, 'hifi')
 read = lambda n: open(os.path.join(H, n + '.html'), encoding='utf-8').read()
 
@@ -155,7 +156,6 @@ bullets = intro.find('h2').find_next_sibling('div')
 # signature visual: exploded layers drawn live in code (stack.js); the OPEX chart moves into the drawer
 SV_ALT = ('Line drawing: three phone-shaped layers (support tickets, intents, and the chat screen as a wireframe). A lime ticket and a lime intent each '
           'send a thread straight up and land as the lime answer and quick reply in the chat.')
-HERE = os.path.dirname(os.path.abspath(__file__))
 STACK_JS = open(os.path.join(HERE, '..', 'generative', 'stack.js'), encoding='utf-8').read()
 
 # key numbers: a centred band of three, each with the number, what it measures and one line of context
@@ -326,7 +326,8 @@ LIVE = {
     'komunal': blocks(kom[2], kom[3]),                      # tooling migration, deposit funnel
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
-    'ai': blocks(ai_[2], ai_[3]),                           # decision desk, Chrona
+    # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
+    'ai': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'ai-decision-desk.html'), encoding='utf-8').read()), ai_[3]),
     'lab': blocks(lab_[2]),                                 # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
@@ -471,4 +472,22 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
+
+# ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
+SECTION = os.environ.get('SECTION')
+if SECTION:
+    sec = next(c for c in CASES if c['id'] == SECTION)
+    one = case_section(sec)
+    one = (one.replace('<div class="mk-drawer" id="d-%s">' % SECTION, '<div class="mk-drawer open" id="d-%s">' % SECTION)
+              .replace('<div class="mk-drawer-inner mk-shut">', '<div class="mk-drawer-inner settled">', 1)
+              .replace('aria-expanded="false"', 'aria-expanded="true"', 1)
+              .replace('<span class="mk-t-closed">', '<span class="mk-t-closed" aria-hidden="true">', 1)
+              .replace('<span class="mk-t-open" aria-hidden="true">', '<span class="mk-t-open">', 1))
+    one, _ = floor_type(one_type(one))
+    page = (tpl.replace('<title>Portfolio Hi-Fi v1</title>', '<meta charset="utf-8">\n<title>%s Section</title>' % sec['n'].split('/')[-1].strip().title().replace('&Amp;', '&amp;'))
+               .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
+               .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
+               .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', one).replace('/*STACK*/', STACK_JS))
+    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(page)
+    print('section', SECTION, len(page), 'bytes')
 print('bytes', len(out), 'read times', re.findall(r'(\d+) min read', out))
