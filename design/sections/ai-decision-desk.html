@@ -111,6 +111,9 @@
 .dfy-port.passed { opacity: .5; }
 .dfy-dec { transition: opacity .45s ease-out, transform .45s ease-out; }
 .dfy-node.dfy-out:not([data-st="done"]) .dfy-dec { opacity: .25; transform: translateY(6px); }
+/* between loops the finished run eases out before the canvas resets */
+.dfy-canvas { transition: opacity .45s ease; }
+.dfy-wrap.dfy-fade .dfy-canvas { opacity: .35; }
 .dfy-packet { fill: var(--dfy-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
 .dfy-wrap.live .dfy-run b { animation: dfy-pulse 2.4s ease-in-out infinite; }
 @keyframes dfy-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(23, 178, 106, .5); } 50% { box-shadow: 0 0 0 5px rgba(23, 178, 106, 0); } }
@@ -247,6 +250,7 @@
     counters.forEach(function (c) { c.textContent = fmt(+c.getAttribute('data-count').split('>')[0], c); });
     note.textContent = ''; ports.forEach(function (p) { p.classList.remove('chosen', 'passed'); });
     wrap.classList.remove('live'); runL.textContent = 'Ready';
+    pk.forEach(function (k) { k.c.style.opacity = 0; });
   }
   // what each step does while it runs (ms is how long it runs)
   var DURING = [
@@ -257,17 +261,27 @@
     function () { ports[0].classList.add('chosen'); ports[1].classList.add('passed'); },
     function () {}
   ];
+  // the run loops: it holds the finished state (with the data flowing) for HOLD ms, eases out, resets and runs again;
+  // it only replays on screen, and waits for the reader to come back otherwise
+  var HOLD = 5200, pending = false, timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    pending = false; wrap.classList.add('dfy-fade');
+    later(function () { idle(); wrap.classList.remove('dfy-fade'); later(play, 350); }, 450);
+  }
   function play() {
+    timers.forEach(clearTimeout); timers = [];
     ran = true; runL.textContent = 'Running…';
     var t = 250, step = [700, 900, 1200, 400, 450];
     nodes.forEach(function (n, i) {
-      setTimeout(function () { n.setAttribute('data-st', 'run'); DURING[i](step[i]); }, t);
+      later(function () { n.setAttribute('data-st', 'run'); DURING[i](step[i]); }, t);
       t += step[i];
-      setTimeout(function () {
+      later(function () {
         n.setAttribute('data-st', 'done');
         var out = paths.filter(function (p, k) { return p.key && EDGES[k][0] === n.id; })[0];
         if (out) showPath(out, 380);
-        if (i === nodes.length - 1) { runL.textContent = 'Ran in 2.4s'; setTimeout(function () { wrap.classList.add('live'); }, 400); }
+        if (i === nodes.length - 1) { runL.textContent = 'Ran in 2.4s'; later(function () { wrap.classList.add('live'); later(replay, HOLD); }, 400); }
       }, t);
       t += 380;
     });
@@ -299,7 +313,8 @@
 
   if (reduce || !('IntersectionObserver' in window)) return;
   idle();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); }, { threshold: 0 }).observe(canvas);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(canvas);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); draw(); idle(); play(); }
   }, { threshold: [0, .4, .7] });
