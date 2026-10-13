@@ -1,0 +1,225 @@
+<!-- Komunal: placement routing. Before, checkout locked a placement onto one payment rail (a Permata VA) and a listener
+     waited for the money; when the sender's bank limit, fee or cut-off blocked the transfer, the funds never came and the
+     user sat locked out until the hold expired: the funnel's drop-off. After, routing checks amount, source bank and time
+     against every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
+     Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
+     plays "before" then "after", and loops (on screen only). Reduced motion keeps the final state.
+     Limits are illustrative, from published bank, BI-FAST and Xendit rules; they differ by bank and change over time. -->
+<div class="kpr-wrap">
+<style>
+.kpr-wrap {
+  container-type: inline-size;
+  --kpr-panel: #1a1b1f; --kpr-node: #232429; --kpr-tile: #2b2c32; --kpr-line: rgba(255, 255, 255, .08);
+  --kpr-ink: #f2f2f4; --kpr-ink-2: #c2c3cb; --kpr-ink-3: #8b8d98; --kpr-edge: #4a4d57;
+  --kpr-lime: oklch(0.9 0.2 122); --kpr-amber: #fdb022;
+}
+.kpr-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kpr-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kpr-head span:first-child { color: var(--kpr-lime); }
+
+.kpr-board { border-radius: 14px; background: var(--kpr-panel); box-shadow: 0 0 0 1px var(--kpr-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: Archivo, system-ui, sans-serif; color: var(--kpr-ink); }
+.kpr-lane { border-radius: 12px; padding: 14px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; }
+.kpr-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.kpr-tag { padding: 4px 8px; border-radius: 6px; background: var(--kpr-tile); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kpr-ink-2); }
+.kpr-lh b { font: 600 14px/1.2 Archivo, sans-serif; }
+.kpr-st { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kpr-ink-3); white-space: nowrap; }
+.kpr-st i { width: 8px; height: 8px; border-radius: 50%; background: var(--kpr-edge); transition: background-color .3s, box-shadow .3s; }
+.kpr-lane.bad .kpr-st { color: var(--kpr-amber); }
+.kpr-lane.bad .kpr-st i { background: var(--kpr-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.kpr-lane.good .kpr-st { color: var(--kpr-lime); }
+.kpr-lane.good .kpr-st i { background: var(--kpr-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+/* one flow: node, link, node, link … ; both lanes share the columns so the steps line up */
+.kpr-flow { display: grid; grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1.45fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
+.kpr-node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 11px 12px; border-radius: 10px; background: var(--kpr-node); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; transition: opacity .35s, box-shadow .35s; }
+.kpr-node small { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kpr-ink-3); }
+.kpr-node b { display: flex; align-items: center; gap: 7px; font: 600 14px/1.25 Archivo, sans-serif; }
+.kpr-node > span { font: 400 12px/1.4 Archivo, sans-serif; color: var(--kpr-ink-2); }
+.kpr-node .m { font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--kpr-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpr-node.idle { opacity: .3; }
+.kpr-node.fail { box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); }
+.kpr-node.fail b { color: var(--kpr-amber); }
+.kpr-node.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.kpr-node.win b { color: var(--kpr-lime); }
+.kpr-out { margin-top: auto; align-self: flex-start; padding: 3px 6px; border-radius: 5px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; }
+.kpr-node.fail .kpr-out { color: var(--kpr-amber); background: rgba(253, 176, 34, .1); }
+.kpr-node.win .kpr-out { color: var(--kpr-lime); background: oklch(0.9 0.2 122 / .1); }
+.kpr-ico { flex: none; width: 14px; height: 14px; }
+.kpr-spin { flex: none; width: 13px; height: 13px; border-radius: 50%; border: 2px solid var(--kpr-edge); }
+.kpr-node.wait .kpr-spin { border-top-color: var(--kpr-ink); animation: kpr-rot .8s linear infinite; }
+@keyframes kpr-rot { to { transform: rotate(360deg); } }
+.kpr-lane.after .kpr-node:not(.wait) .kpr-spin { display: none; }
+.kpr-chip { margin-top: auto; align-self: flex-start; padding: 5px 8px; border-radius: 6px; background: var(--kpr-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kpr-ink-2); }
+
+/* the route check: every rail measured against this amount, bank and time; one is chosen */
+.kpr-rails { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
+.kpr-rail { display: grid; grid-template-columns: minmax(0, 1fr) 14px; column-gap: 8px; padding: 6px 8px; border-radius: 7px; background: var(--kpr-tile); transition: background-color .3s, opacity .3s; }
+.kpr-rail b { font: 600 12px/1.2 Archivo, sans-serif; color: var(--kpr-ink); }
+.kpr-rail span { grid-column: 1; font: 400 11px/1.3 'IBM Plex Mono', monospace; color: var(--kpr-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpr-rail i { grid-column: 2; grid-row: 1 / 3; align-self: center; font: 600 12px/1 'IBM Plex Mono', monospace; font-style: normal; text-align: center; color: var(--kpr-ink-3); }
+.kpr-rail[data-v="no"] { opacity: .6; }
+.kpr-rail[data-v="no"] b { text-decoration: line-through; text-decoration-color: var(--kpr-ink-3); }
+.kpr-rail[data-v="ok"] { background: oklch(0.9 0.2 122 / .1); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .4); }
+.kpr-rail[data-v="ok"] b, .kpr-rail[data-v="ok"] i { color: var(--kpr-lime); }
+.kpr-rail[data-v="ok"] span { color: var(--kpr-ink-2); }
+.kpr-rail[data-v=""] i { color: transparent; }
+
+/* links between steps: a line, and a packet that runs along it */
+.kpr-link { position: relative; align-self: center; height: 2px; margin: 0 4px; }
+.kpr-link::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, var(--kpr-edge) 0 4px, transparent 4px 8px); transition: background .3s; }
+.kpr-link.on::before { background: var(--kpr-ink-3); }
+.kpr-lane.after .kpr-link.on::before { background: var(--kpr-lime); }
+.kpr-link.cut::before { background: repeating-linear-gradient(90deg, rgba(253, 176, 34, .6) 0 4px, transparent 4px 8px); }
+.kpr-link b { position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--kpr-ink); opacity: 0; }
+.kpr-lane.after .kpr-link b { background: var(--kpr-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); }
+.kpr-link.run b { animation: kpr-x .45s linear; }
+@keyframes kpr-x { 0% { left: 0; opacity: 1; } 100% { left: 100%; opacity: 1; } }
+
+.kpr-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.kpr-note { margin: 6px 0 0; max-width: 72ch; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: rgba(242, 239, 232, .45); }
+
+/* medium: the two lanes side by side, each flowing down */
+@container (max-width: 1060px) {
+  .kpr-board { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .kpr-flow { grid-template-columns: minmax(0, 1fr); }
+  .kpr-link { align-self: auto; justify-self: center; width: 2px; height: 22px; margin: 4px 0; }
+  .kpr-link::before { background: repeating-linear-gradient(180deg, var(--kpr-edge) 0 4px, transparent 4px 8px); }
+  .kpr-link.cut::before { background: repeating-linear-gradient(180deg, rgba(253, 176, 34, .6) 0 4px, transparent 4px 8px); }
+  .kpr-link b { top: 0; left: 50%; }
+  .kpr-link.run b { animation-name: kpr-y; }
+  @keyframes kpr-y { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 1; } }
+  .kpr-out, .kpr-chip { margin-top: 4px; }
+  /* the status gets its own line, so a longer status never pushes the flow down */
+  .kpr-st { flex-basis: 100%; margin-left: 0; }
+}
+/* narrow: lanes stacked */
+@container (max-width: 620px) {
+  .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 12px; }
+  .kpr-lane { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .kpr-wrap *, .kpr-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kpr-head"><span>PLACEMENT ROUTING · BEFORE AND AFTER</span><span>ILLUSTRATIVE</span></div>
+
+<div class="kpr-board" role="img" aria-label="Placing Rp75,000,000 from a Mandiri account at 20:40. Before: checkout locked the placement onto a Permata virtual account, the bank app rejected the interbank payment for being over its Rp25M cap, the listener waited for funds that never arrived, and the user was locked out of new placements until the hold expired. After: a route check compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day, and RTGS needs Rp100M and closes at 15:00, so it picks BI-FAST, shows one clear step with nothing locked, the funds arrive in seconds and the deposit is active.">
+
+  <div class="kpr-lane before bad" data-lane="before">
+    <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
+    <div class="kpr-flow">
+      <div class="kpr-node"><small>PLACEMENT</small><b>Rp75,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 20:40</span></div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node"><small>CHECKOUT</small><b><svg class="kpr-ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Permata VA issued</b><span>Amount and payment method locked in</span><span class="m">VA 013 8870 1204 5531</span></div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Interbank VA payment over the app's cap</span><span class="m">Cap Rp25M · Mandiri app</span></div>
+      <div class="kpr-link cut"><b></b></div>
+      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Hold expires in 24h</span></div>
+      <div class="kpr-link cut"><b></b></div>
+      <div class="kpr-node fail" data-k="end"><small>OUTCOME</small><b>Locked out</b><span>No new placement until the hold expires</span><span class="kpr-out">DROP-OFF</span></div>
+    </div>
+  </div>
+
+  <div class="kpr-lane after good" data-lane="after">
+    <div class="kpr-lh"><span class="kpr-tag">AFTER</span><b>Route first, lock when funds land</b><span class="kpr-st"><i></i><span class="kpr-st-t">Placed in seconds</span></span></div>
+    <div class="kpr-flow">
+      <div class="kpr-node"><small>PLACEMENT</small><b>Rp75,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 20:40</span></div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node" data-k="route"><small>ROUTE CHECK · AMOUNT · BANK · TIME</small>
+        <ul class="kpr-rails">
+          <li class="kpr-rail" data-v="no" data-to="no"><b>Permata VA</b><span>Interbank pay capped at Rp25M</span><i>✕</i></li>
+          <li class="kpr-rail" data-v="no" data-to="no"><b>Xendit · Mandiri VA</b><span>App caps VA at Rp30M a day</span><i>✕</i></li>
+          <li class="kpr-rail" data-v="ok" data-to="ok"><b>BI-FAST</b><span>Up to Rp100M a transfer · 24/7</span><i>✓</i></li>
+          <li class="kpr-rail" data-v="no" data-to="no"><b>RTGS</b><span>Min Rp100M · closes 15:00</span><i>✕</i></li>
+        </ul>
+      </div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node"><small>ONE CLEAR STEP</small><b>Send via BI-FAST</b><span>Fee Rp2,500 · lands in seconds</span><span class="kpr-chip">Change amount or method</span></div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds received</span></b><span>Matched to this placement</span><span class="m kpr-hold">8s after the transfer</span></div>
+      <div class="kpr-link on"><b></b></div>
+      <div class="kpr-node win" data-k="end"><small>OUTCOME</small><b>Deposit active</b><span>Rp75,000,000 at 6.25% p.a.</span><span class="kpr-out">PLACED</span></div>
+    </div>
+  </div>
+</div>
+<p class="kpr-cap">Checkout used to lock a placement onto one payment rail, then wait for the money. When the sender's bank limit, fee or cut-off blocked the transfer, the funds never came and the user sat locked out until the hold expired. That was the funnel's drop-off. Routing now checks the amount, bank and time against every rail first, shows one clear step, and locks nothing until the funds land.</p>
+<p class="kpr-note">Limits follow published bank, BI-FAST and payment-gateway rules; they differ by bank and change over time.</p>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kpr-board');
+  var lanes = [].slice.call(wrap.querySelectorAll('.kpr-lane')).map(function (l) {
+    return { el: l, nodes: [].slice.call(l.querySelectorAll('.kpr-node')), links: [].slice.call(l.querySelectorAll('.kpr-link')), st: l.querySelector('.kpr-st-t'),
+      k: function (k) { return l.querySelector('[data-k="' + k + '"]'); } };
+  });
+  var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail'));
+  var timers = [], HOLD = 5200, pending = false, ran = false, visible = false;
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function txt(scope, sel, s) { scope.querySelector(sel).textContent = s; }
+
+  function idle() {
+    timers.forEach(clearTimeout); timers = [];
+    lanes.forEach(function (L) {
+      L.el.classList.remove('bad', 'good'); L.st.textContent = 'Idle';
+      L.nodes.forEach(function (n) { n.classList.add('idle'); n.classList.remove('fail', 'win', 'wait'); });
+      L.links.forEach(function (k) { k.classList.remove('on', 'cut', 'run'); });
+    });
+    rails.forEach(function (r) { r.setAttribute('data-v', ''); });
+    txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp75M');
+    txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Hold 23:59:59');
+    txt(A.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(A.k('listen'), '.kpr-hold', 'Nothing locked yet');
+  }
+  function on(n) { n.classList.remove('idle'); }
+  function run(k, cls) { k.classList.remove('run'); void k.offsetWidth; k.classList.add(cls || 'on', 'run'); }
+
+  function play() {
+    timers.forEach(clearTimeout); timers = []; ran = true;
+    var t = 500, n = B.nodes, l = B.links;   // each lane's own n and l: the timers fire after both are set up
+    // before: placement, locked onto a Permata VA, the bank app refuses, the listener waits on money that never comes
+    later(function () { on(n[0]); B.st.textContent = 'Checking out…'; }, t);
+    later(function () { run(l[0]); }, t += 450);
+    later(function () { on(n[1]); B.st.textContent = 'Locked to one rail'; }, t += 450);
+    later(function () { run(l[1]); }, t += 600);
+    later(function () { on(n[2]); B.st.textContent = 'Paying from the bank app…'; }, t += 450);
+    later(function () { n[2].classList.add('fail'); txt(n[2], '.kpr-bank-t', 'Transfer rejected'); }, t += 700);
+    later(function () { l[2].classList.add('cut'); on(n[3]); n[3].classList.add('wait'); B.st.textContent = 'Waiting on funds…'; }, t += 500);
+    var left = 86399;                                    // the hold counts down; time runs fast so the wait reads as long
+    for (var i = 1; i <= 12; i++) later(function () { left -= 7000 + Math.floor(Math.random() * 600); txt(n[3], '.kpr-hold', 'Hold ' + clock(left)); }, t + i * 110);
+    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds never arrive'); txt(n[3], '.kpr-hold', 'Hold expires in 24h'); }, t += 1500);
+    later(function () { l[3].classList.add('cut'); on(n[4]); n[4].classList.add('fail'); B.el.classList.add('bad'); B.st.textContent = 'Locked out · drop-off'; }, t += 400);
+
+    // after: the route check measures every rail first, picks one, and nothing is locked until the money lands
+    t += 900; after(t);
+  }
+  function after(t) {
+    var n = A.nodes, l = A.links;
+    later(function () { on(n[0]); A.st.textContent = 'Routing…'; }, t);
+    later(function () { run(l[0]); }, t += 450);
+    later(function () { on(n[1]); }, t += 450);
+    rails.forEach(function (r) { later(function () { r.setAttribute('data-v', r.getAttribute('data-to')); }, t += 380); });
+    later(function () { run(l[1]); A.st.textContent = 'BI-FAST chosen'; }, t += 450);
+    later(function () { on(n[2]); }, t += 450);
+    later(function () { run(l[2]); }, t += 650);
+    later(function () { on(n[3]); n[3].classList.add('wait'); A.st.textContent = 'Waiting on funds…'; }, t += 450);
+    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds received'); txt(n[3], '.kpr-hold', '8s after the transfer'); }, t += 900);
+    later(function () { run(l[3]); }, t += 200);
+    later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed in seconds'; later(replay, HOLD); }, t += 450);
+  }
+  function clock(s) { s = Math.max(0, s); function p(v) { return (v < 10 ? '0' : '') + v; } return p(Math.floor(s / 3600)) + ':' + p(Math.floor(s / 60) % 60) + ':' + p(s % 60); }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    pending = false; board.style.transition = 'opacity .4s'; board.style.opacity = .35;
+    later(function () { idle(); board.style.opacity = 1; later(play, 300); }, 420);
+  }
+
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  idle();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
+  var seen = new IntersectionObserver(function (es) {
+    // 40% of the board, or half the screen when the lanes stack taller than the screen
+    var e = es[0]; if (e.isIntersecting && !ran && (e.intersectionRatio >= .4 || e.intersectionRect.height >= innerHeight * .5)) { seen.disconnect(); play(); }
+  }, { threshold: [0, .1, .2, .3, .4, .5, .7] });
+  seen.observe(board);
+})();
+</script>
+</div>
