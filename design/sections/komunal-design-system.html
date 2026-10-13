@@ -46,9 +46,15 @@
 .kds-surf.off[data-org="product"] { --wd: 112%; --c: #2f7fe6; --cr: 6px; --br: 6px; --fw: 800; }
 .kds-surf.off[data-org="eng"] { --wd: 86%; --c: #2a46ad; --cr: 3px; --br: 3px; --fw: 600; }
 .kds-surf.off[data-org="mkt"] { --wd: 100%; --c: #5d6fd8; --cr: 18px; --br: 16px; --fw: 500; }
+/* Marketing also brought colours the system never had: an off-palette pink promo tag and a gradient button */
+.kds-promo { position: absolute; top: -9px; right: 12px; padding: 3px 7px; border-radius: 6px; background: #e8ecfa; color: var(--ds-primary); font: 600 11px/1.2 Archivo, sans-serif; transition: background-color .5s, color .5s; }
+.kds-surf.off .kds-promo { background: #f0567a; color: #fff; }
+.kds-surf.off[data-org="mkt"] .kds-btn { background: linear-gradient(90deg, #5d6fd8, #f0567a); }
+.kds-tok i.x { display: none; background: #f0567a; }
+.kds-surf.off .kds-tok i.x { display: inline-block; }
 .kds-ui { font-family: var(--f); font-stretch: var(--wd); transition: opacity .18s; }
 .kds-ui.swap { opacity: 0; }
-.kds-card { width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
+.kds-card { position: relative; width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
 .kds-card small { display: block; font-size: 11px; letter-spacing: .02em; color: #667085; }
 .kds-card strong { display: block; margin-top: 3px; font-size: 15px; font-weight: var(--fw); color: #101828; }
 .kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--c); transition: color .5s; letter-spacing: -.01em; }
@@ -87,7 +93,7 @@
 
 <div class="kds-head"><span>ONE DESIGN SYSTEM · THREE ORGS</span><span>ILLUSTRATIVE</span></div>
 
-<div class="kds-board" role="img" aria-label="The same deposit offer card as three teams shipped it. Before: Product, Engineering and Marketing each used a slightly different blue, a different width and weight of the same sans, and different corner radii. After: one design system library publishes shared colour, type and radius tokens and a primary button, and all three cards match.">
+<div class="kds-board" role="img" aria-label="The same deposit offer card as three teams shipped it. Before: Product, Engineering and Marketing each used a slightly different blue, a different width and weight of the same sans, and different corner radii, and Marketing added an off-palette pink promo tag and a gradient button. After: one design system library publishes shared colour, type and radius tokens and a primary button, and all three cards match.">
   <svg class="kds-edges" aria-hidden="true"></svg>
   <div class="kds-status"><i></i><span class="kds-status-t">1 type scale · 1 palette · 1 radius scale</span></div>
 
@@ -104,8 +110,8 @@
     </div>
     <div class="kds-surf joined" data-org="mkt">
       <div class="kds-sh"><b>Marketing</b><small>Website</small></div>
-      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#5D6FD8" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 18" data-on="radius/md">radius/md</span></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><span class="kds-promo">Promo</span><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><i class="x"></i><span data-off="+ pink" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 18" data-on="radius/md">radius/md</span></div>
     </div>
   </div>
 
@@ -119,7 +125,7 @@
     </div>
   </div>
 </div>
-<p class="kds-cap">The same offer card, shipped by three teams. Before the system, each drifted a little: its own shade of blue, its own weight of type, its own corners. One library now publishes the tokens all three build from.</p>
+<p class="kds-cap">The same offer card, shipped by three teams. Before the system, each drifted a little: its own shade of blue, its own weight of type, its own corners, and Marketing added colours the system never had. One library now publishes the tokens all three build from.</p>
 
 <script>
 (function () {
@@ -156,7 +162,7 @@
     if (quiet) { apply(); return; }
     ui.classList.add('swap'); later(function () { apply(); ui.classList.remove('swap'); }, 180);
   }
-  var BEFORE = '3 type styles · 3 blues · 3 corner radii', AFTER = '1 type scale · 1 palette · 1 radius scale';
+  var BEFORE = '3 type styles · 4 colours · 3 corner radii', AFTER = '1 type scale · 1 palette · 1 radius scale';
   function before() {
     wrap.classList.add('before'); wrap.classList.remove('live');
     surfs.forEach(function (s) { setSurface(s, false, true); }); paths.forEach(hide);

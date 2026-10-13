@@ -36,7 +36,9 @@
 .kpr-node small { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kpr-ink-3); }
 .kpr-node b { display: flex; align-items: center; gap: 7px; font: 600 14px/1.25 Archivo, sans-serif; }
 .kpr-node > span { font: 400 12px/1.4 Archivo, sans-serif; color: var(--kpr-ink-2); }
-.kpr-node .m { font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--kpr-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.kpr-node .m { font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--kpr-ink-3); }
+/* the wait counter changes while it plays, so it stays on one line and never moves the layout */
+.kpr-node .kpr-hold { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpr-node.idle { opacity: .3; }
 .kpr-node.fail { box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); }
 .kpr-node.fail b { color: var(--kpr-amber); }
@@ -53,6 +55,10 @@
 .kpr-chip { margin-top: auto; align-self: flex-start; padding: 5px 8px; border-radius: 6px; background: var(--kpr-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kpr-ink-2); }
 
 /* the route check: every rail measured against this amount, bank and time; one is chosen */
+/* the amount itself is checked first: large placements are where account caps bite (amber: needs attention) */
+.kpr-amt { margin-top: 4px; display: flex; align-items: baseline; gap: 8px; padding: 6px 8px; border-radius: 7px; background: rgba(253, 176, 34, .08); box-shadow: 0 0 0 1px rgba(253, 176, 34, .3); }
+.kpr-amt b { font: 600 12px/1.2 'IBM Plex Mono', monospace; color: var(--kpr-amber); white-space: nowrap; }
+.kpr-amt span { font: 400 11px/1.3 'IBM Plex Mono', monospace; color: var(--kpr-ink-2); }
 .kpr-rails { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
 .kpr-rail { display: grid; grid-template-columns: minmax(0, 1fr) 14px; column-gap: 8px; padding: 6px 8px; border-radius: 7px; background: var(--kpr-tile); transition: background-color .3s, opacity .3s; }
 .kpr-rail b { font: 600 12px/1.2 Archivo, sans-serif; color: var(--kpr-ink); }
@@ -129,42 +135,43 @@
 <div class="kpr-head"><span>PLACEMENT ROUTING · BEFORE AND AFTER</span><span>ILLUSTRATIVE</span></div>
 <p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked the amount and payment method, then waited for the money. When the sender's transfer limit blocked it (a low bank default, a forgotten cap or a basic-tier account), the funds never came, and the user was locked out until customer service stepped in. The revamp checks every rail first (VA, BI-FAST, RTGS) and locks nothing until the funds land.</p>
 
-<div class="kpr-board" role="img" aria-label="Placing Rp75,000,000 from a Mandiri account at 20:40. Before: checkout locked the placement onto a virtual account, the bank app rejected the transfer for being over the account's transfer limit (a low default, a forgotten cap or a basic-tier account), the listener waited for funds that never arrived, and the user was locked out of new deposits until customer service released them. After: a route check compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day, and RTGS needs Rp100M and closes at 15:00, so it picks BI-FAST, shows one clear step with nothing locked, the funds arrive in seconds and the deposit is active.">
+<div class="kpr-board" role="img" aria-label="Placing Rp750,000,000 from a Mandiri account at 10:15. Before: checkout locked the placement onto a virtual account, the bank app rejected the transfer for being over the account's transfer limit (a low default, a forgotten cap or a basic-tier account), the listener waited for funds that never arrived, and the user was locked out of new deposits until customer service released them. After: a route check first flags that Rp750M is above the Rp500M where most accounts hit a cap, then compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day and BI-FAST at Rp250M a transfer, so it picks RTGS (Rp100M and up, before 15:00), shows one clear step with nothing locked and a prompt to confirm the account limit, the funds arrive the same day and the deposit is active.">
 
   <div class="kpr-lane before bad" data-lane="before">
     <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
     <div class="kpr-flow">
-      <div class="kpr-node"><small>PLACEMENT</small><b>Rp75,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 20:40</span></div>
+      <div class="kpr-node"><small>PLACEMENT</small><b>Rp750,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 10:15</span></div>
       <div class="kpr-link on"><b></b></div>
       <div class="kpr-node"><small>CHECKOUT</small><b><svg class="kpr-ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Virtual account issued</b><span>Amount and payment method locked in</span><span class="m">VA 8870 1204 5531</span></div>
       <div class="kpr-link on"><b></b></div>
       <div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Over this account's transfer limit</span><span class="m">Low default · forgotten cap · basic tier</span></div>
       <div class="kpr-link cut"><b></b></div>
-      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Waited 3 days and counting</span></div>
+      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Waited 3+ days</span></div>
       <div class="kpr-link cut"><b></b></div>
       <div class="kpr-node fail" data-k="end"><small>OUTCOME</small><b>Locked out</b><span>No new deposit until customer service steps in</span><span class="kpr-out">DROP-OFF</span></div>
     </div>
   </div>
 
   <div class="kpr-lane after good" data-lane="after">
-    <div class="kpr-lh"><span class="kpr-tag">AFTER</span><b>Route first, lock when funds land</b><span class="kpr-st"><i></i><span class="kpr-st-t">Placed in seconds</span></span></div>
+    <div class="kpr-lh"><span class="kpr-tag">AFTER</span><b>Route first, lock when funds land</b><span class="kpr-st"><i></i><span class="kpr-st-t">Placed the same day</span></span></div>
     <div class="kpr-flow">
-      <div class="kpr-node"><small>PLACEMENT</small><b>Rp75,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 20:40</span></div>
+      <div class="kpr-node"><small>PLACEMENT</small><b>Rp750,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 10:15</span></div>
       <div class="kpr-link on"><b></b></div>
       <div class="kpr-node" data-k="route"><small>ROUTE CHECK · AMOUNT · BANK · TIME</small>
+        <div class="kpr-amt"><b>Rp750M</b><span>Above Rp500M, where most accounts hit a cap</span></div>
         <ul class="kpr-rails">
           <li class="kpr-rail" data-v="no" data-to="no"><b>Permata VA</b><span>Interbank pay capped at Rp25M</span><i>✕</i></li>
           <li class="kpr-rail" data-v="no" data-to="no"><b>Xendit · Mandiri VA</b><span>App caps VA at Rp30M a day</span><i>✕</i></li>
-          <li class="kpr-rail" data-v="ok" data-to="ok"><b>BI-FAST</b><span>Up to Rp100M a transfer · 24/7</span><i>✓</i></li>
-          <li class="kpr-rail" data-v="no" data-to="no"><b>RTGS</b><span>Min Rp100M · closes 15:00</span><i>✕</i></li>
+          <li class="kpr-rail" data-v="no" data-to="no"><b>BI-FAST</b><span>Max Rp250M a transfer</span><i>✕</i></li>
+          <li class="kpr-rail" data-v="ok" data-to="ok"><b>RTGS</b><span>Rp100M and up · before 15:00</span><i>✓</i></li>
         </ul>
       </div>
       <div class="kpr-link on"><b></b></div>
-      <div class="kpr-node" data-k="step"><small>ONE CLEAR STEP</small><b>Send via BI-FAST</b><span>Fee Rp2,500 · lands in seconds</span><span class="m">Check your app's transfer limit first</span><span class="kpr-chip">Change amount or method</span></div>
+      <div class="kpr-node" data-k="step"><small>ONE CLEAR STEP</small><b>Send via RTGS</b><span>Before 15:00 · lands the same day</span><span class="m">Confirm your account's limit covers Rp750M</span><span class="kpr-chip">Change amount or method</span></div>
       <div class="kpr-link on"><b></b></div>
-      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds received</span></b><span>Matched to this placement</span><span class="m kpr-hold">8s after the transfer</span></div>
+      <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds received</span></b><span>Matched to this placement</span><span class="m kpr-hold">Same day, before cut-off</span></div>
       <div class="kpr-link on"><b></b></div>
-      <div class="kpr-node win" data-k="end"><small>OUTCOME</small><b>Deposit active</b><span>Rp75,000,000 at 6.25% p.a.</span><span class="kpr-out">PLACED</span></div>
+      <div class="kpr-node win" data-k="end"><small>OUTCOME</small><b>Deposit active</b><span>Rp750,000,000 at 6.25% p.a.</span><span class="kpr-out">PLACED</span></div>
     </div>
   </div>
 </div>
@@ -198,7 +205,7 @@
       L.links.forEach(function (k) { k.classList.remove('on', 'cut', 'run'); });
     });
     rails.forEach(function (r) { r.setAttribute('data-v', ''); });
-    txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp75M');
+    txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp750M');
     txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Waited 0h 00m');
     txt(A.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(A.k('listen'), '.kpr-hold', 'Nothing locked yet');
   }
@@ -218,7 +225,7 @@
     later(function () { l[2].classList.add('cut'); on(n[3]); n[3].classList.add('wait'); B.st.textContent = 'Waiting on funds…'; }, t += 500);
     var waited = 0;                                      // there was no timeout: time runs fast so the wait reads as days
     for (var i = 1; i <= 12; i++) later(function () { waited += 360 + Math.floor(Math.random() * 40); txt(n[3], '.kpr-hold', 'Waited ' + span(waited)); }, t + i * 110);
-    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds never arrive'); txt(n[3], '.kpr-hold', 'Waited 3 days and counting'); }, t += 1500);
+    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds never arrive'); txt(n[3], '.kpr-hold', 'Waited 3+ days'); }, t += 1500);
     later(function () { l[3].classList.add('cut'); on(n[4]); n[4].classList.add('fail'); B.el.classList.add('bad'); B.st.textContent = 'Locked out · drop-off'; }, t += 400);
 
     // after: the route check measures every rail first, picks one, and nothing is locked until the money lands
@@ -230,13 +237,13 @@
     later(function () { run(l[0]); }, t += 450);
     later(function () { on(n[1]); }, t += 450);
     rails.forEach(function (r) { later(function () { r.setAttribute('data-v', r.getAttribute('data-to')); }, t += 380); });
-    later(function () { run(l[1]); A.st.textContent = 'BI-FAST chosen'; }, t += 450);
+    later(function () { run(l[1]); A.st.textContent = 'RTGS chosen'; }, t += 450);
     later(function () { on(n[2]); }, t += 450);
     later(function () { run(l[2]); }, t += 650);
     later(function () { on(n[3]); n[3].classList.add('wait'); A.st.textContent = 'Waiting on funds…'; }, t += 450);
-    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds received'); txt(n[3], '.kpr-hold', '8s after the transfer'); }, t += 900);
+    later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds received'); txt(n[3], '.kpr-hold', 'Same day, before cut-off'); }, t += 900);
     later(function () { run(l[3]); }, t += 200);
-    later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed in seconds'; later(replay, HOLD); }, t += 450);
+    later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed the same day'; later(replay, HOLD); }, t += 450);
   }
   function span(m) { var h = Math.floor(m / 60), r = m % 60; return h + 'h ' + (r < 10 ? '0' : '') + r + 'm'; }
   function replay() {
