@@ -1,0 +1,240 @@
+<!-- Komunal: one design system for three orgs. Before, Product, Engineering and Marketing each shipped the same offer in
+     their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
+     Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
+     plays the library publishing to each surface, then loops (on screen only). Reduced motion keeps the "after" state.
+     Fonts are the site's own (Archivo, IBM Plex Mono) plus the system serif, so nothing new downloads. -->
+<div class="kds-wrap">
+<style>
+.kds-wrap {
+  --kds-panel: #1a1b1f; --kds-node: #232429; --kds-tile: #2b2c32; --kds-line: rgba(255, 255, 255, .08);
+  --kds-ink: #f2f2f4; --kds-ink-2: #c2c3cb; --kds-ink-3: #8b8d98; --kds-edge: #4a4d57;
+  --kds-lime: oklch(0.9 0.2 122); --kds-amber: #fdb022;
+  /* the shared tokens every surface ends up on */
+  --ds-font: Archivo, system-ui, sans-serif; --ds-wide: 100%; --ds-primary: #3a5ccc; --ds-card-r: 12px; --ds-btn-r: 10px;
+}
+.kds-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kds-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kds-head span:first-child { color: var(--kds-lime); }
+
+.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 34px; font-family: Archivo, system-ui, sans-serif; color: var(--kds-ink); }
+.kds-status { display: flex; align-items: center; gap: 10px; font: 500 12px/1.3 'IBM Plex Mono', monospace; color: var(--kds-ink-2); }
+.kds-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--kds-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); transition: background-color .3s, box-shadow .3s; }
+.kds-wrap.before .kds-status i { background: var(--kds-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.kds-edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+.kds-edges path { fill: none; stroke-linecap: round; }
+.kds-edges .base { stroke: var(--kds-edge); stroke-width: 1.5; stroke-dasharray: 4 6; }
+.kds-edges .lit { stroke: var(--kds-lime); stroke-width: 2.5; }
+.kds-edges .glow { stroke: var(--kds-lime); stroke-width: 7; opacity: .13; }
+.kds-dot { fill: var(--kds-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+
+/* the three surfaces: the same offer as each org ships it */
+.kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
+.kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
+.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--kds-line); }
+.kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
+.kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
+.kds-stage { flex: 1; display: grid; place-items: center; padding: 16px 14px; background: #f4f5f7; color: #101828; min-height: 196px; }
+.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--kds-line); }
+.kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
+.kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
+.kds-surf:not(.joined) .kds-tok { color: var(--kds-amber); background: rgba(253, 176, 34, .1); }
+
+/* each surface reads its look from these; "off" values are what that org shipped on its own */
+.kds-surf { --f: var(--ds-font); --wd: var(--ds-wide); --c: var(--ds-primary); --cr: var(--ds-card-r); --br: var(--ds-btn-r); --fw: 700; }
+.kds-surf.off[data-org="product"] { --f: Archivo, sans-serif; --wd: 125%; --c: #2563eb; --cr: 4px; --br: 4px; --fw: 800; }
+.kds-surf.off[data-org="eng"] { --f: 'IBM Plex Mono', monospace; --wd: 100%; --c: #059669; --cr: 0px; --br: 0px; --fw: 600; }
+.kds-surf.off[data-org="mkt"] { --f: Georgia, 'Times New Roman', serif; --wd: 100%; --c: #ea580c; --cr: 20px; --br: 999px; --fw: 700; }
+.kds-ui { font-family: var(--f); font-stretch: var(--wd); transition: opacity .18s; }
+.kds-ui.swap { opacity: 0; }
+.kds-card { width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
+.kds-card small { display: block; font-size: 11px; letter-spacing: .02em; color: #667085; }
+.kds-card strong { display: block; margin-top: 3px; font-size: 15px; font-weight: var(--fw); color: #101828; }
+.kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--c); transition: color .5s; letter-spacing: -.01em; }
+.kds-rate span { font-size: 12px; font-weight: 500; color: #667085; }
+.kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
+/* the coded surface shows its source above the preview */
+.kds-code { width: 100%; max-width: 230px; margin-bottom: 10px; padding: 8px 10px; border-radius: 8px; background: #101828; color: #c2c3cb; font: 500 11px/1.5 'IBM Plex Mono', monospace; overflow: hidden; white-space: nowrap; }
+.kds-code em { font-style: normal; color: #7cd4fd; }
+.kds-code b { font-weight: 500; color: var(--kds-lime); }
+.kds-surf.off .kds-code b { color: #fda29b; }
+/* the landing page surface is a hero, not a card */
+.kds-hero { width: 100%; max-width: 250px; text-align: left; }
+.kds-hero strong { display: block; font-size: 19px; line-height: 1.2; font-weight: var(--fw); color: #101828; text-wrap: balance; }
+.kds-hero strong span { color: var(--c); transition: color .5s; }
+.kds-hero p { margin: 6px 0 0; font-size: 12px; line-height: 1.45; color: #475467; }
+.kds-hero .kds-btn { display: inline-block; padding: 9px 16px; }
+
+/* the library: one source of tokens and components */
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px 16px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
+.kds-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
+.kds-lh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
+.kds-ch { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.kds-ch span { padding: 5px 8px; border-radius: 999px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); }
+.kds-groups { margin-top: 14px; display: grid; grid-template-columns: 1.3fr 1.2fr .8fr 1.4fr; gap: 12px; }
+.kds-g { padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-g > small { display: block; margin-bottom: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
+.kds-sw { display: flex; gap: 5px; }
+.kds-sw i { flex: 1; height: 26px; border-radius: 6px; background: var(--c); }
+.kds-type { display: flex; align-items: baseline; gap: 10px; font-family: Archivo, sans-serif; font-weight: 700; color: var(--kds-ink); }
+.kds-rad { display: flex; gap: 8px; align-items: center; }
+.kds-rad i { width: 24px; height: 24px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
+.kds-comp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.kds-comp span { padding: 6px 10px; border-radius: var(--ds-btn-r); font: 600 11px/1 Archivo, sans-serif; }
+.kds-comp .p { background: var(--ds-primary); color: #fff; }
+.kds-comp .s { box-shadow: inset 0 0 0 1px var(--kds-edge); color: var(--kds-ink-2); }
+.kds-comp .in { flex: 1; min-width: 70px; padding: 6px 8px; border-radius: 8px; background: var(--kds-panel); box-shadow: inset 0 0 0 1px var(--kds-line); color: var(--kds-ink-3); font: 400 11px/1 Archivo, sans-serif; }
+
+.kds-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+@media (max-width: 899px) {
+  .kds-surfaces, .kds-groups { grid-template-columns: minmax(0, 1fr); }
+  .kds-edges { display: none; }
+  .kds-board { gap: 20px; }
+  /* each stage keeps room for its taller look (before or after), so nothing below moves when the fonts swap */
+  .kds-stage { min-height: 0; }
+  .kds-surf[data-org="product"] .kds-stage { min-height: 162px; }
+  .kds-surf[data-org="eng"] .kds-stage { min-height: 218px; }
+  .kds-surf[data-org="mkt"] .kds-stage { min-height: 138px; }
+  .kds-ch { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .kds-wrap *, .kds-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kds-head"><span>ONE DESIGN SYSTEM · THREE ORGS</span><span>ILLUSTRATIVE</span></div>
+
+<div class="kds-board" role="img" aria-label="The same deposit offer as three teams shipped it. Before: Product used a wide sans with a blue primary and 4-pixel corners, Engineering a monospace with a green primary and square corners, Marketing a serif with an orange primary and pill buttons. After: one design system library publishes shared tokens for colour, type, radius and components through a Figma library, tokens.json and Framer components, and all three surfaces render the offer the same way.">
+  <svg class="kds-edges" aria-hidden="true"></svg>
+  <div class="kds-status"><i></i><span class="kds-status-t">1 type family · 1 palette · 1 radius scale</span></div>
+
+  <div class="kds-surfaces">
+    <div class="kds-surf joined" data-org="product">
+      <div class="kds-sh"><b>Product</b><small>App · Figma</small></div>
+      <div class="kds-stage"><div class="kds-ui">
+        <div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div>
+      </div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="Archivo Wide" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#2563EB" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 4" data-on="radius/md">radius/md</span></div>
+    </div>
+    <div class="kds-surf joined" data-org="eng">
+      <div class="kds-sh"><b>Engineering</b><small>Web app · React</small></div>
+      <div class="kds-stage"><div class="kds-ui">
+        <div class="kds-code">&lt;<em>DepositCard</em> tone=<b data-off='"green"' data-on='{ds.primary}'>{ds.primary}</b> /&gt;</div>
+        <div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div>
+      </div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="Plex Mono" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#059669" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 0" data-on="radius/md">radius/md</span></div>
+    </div>
+    <div class="kds-surf joined" data-org="mkt">
+      <div class="kds-sh"><b>Marketing</b><small>Website · Framer</small></div>
+      <div class="kds-stage"><div class="kds-ui">
+        <div class="kds-hero"><strong>Simpan dana di BPR, bunga hingga <span>6.25%</span></strong><p>Deposito dijamin LPS, mulai dari Rp1 juta.</p><span class="kds-btn">Mulai deposito</span></div>
+      </div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="Georgia" data-on="DS Sans">DS Sans</span><span class="kds-tok"><i></i><span data-off="#EA580C" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="pill 999" data-on="radius/md">radius/md</span></div>
+    </div>
+  </div>
+
+  <div class="kds-lib">
+    <div class="kds-lh"><b>Komunal DS</b><small>v1.0 · foundations, tokens, components</small>
+      <div class="kds-ch"><span>Figma library</span><span>tokens.json</span><span>Framer components</span></div></div>
+    <div class="kds-groups">
+      <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#12b76a"></i><i style="--c:#f79009"></i></div></div>
+      <div class="kds-g"><small>TYPE · DS SANS</small><div class="kds-type"><span style="font-size:26px">Aa</span><span style="font-size:20px">Aa</span><span style="font-size:15px">Aa</span><span style="font-size:12px">Aa</span></div></div>
+      <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><i style="border-top-right-radius:4px"></i><i style="border-top-right-radius:10px"></i><i style="border-top-right-radius:16px"></i></div></div>
+      <div class="kds-g"><small>COMPONENTS</small><div class="kds-comp"><span class="p">Button</span><span class="s">Secondary</span><span class="in">Input</span></div></div>
+    </div>
+  </div>
+</div>
+<p class="kds-cap">The same offer, shipped by three teams: before the system, each picked its own font, colour and corners. One library now publishes the tokens and components all three build from, in Figma, in code and in Framer.</p>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kds-board'), svg = wrap.querySelector('.kds-edges');
+  var lib = wrap.querySelector('.kds-lib'), surfs = [].slice.call(wrap.querySelectorAll('.kds-surf')), statusT = wrap.querySelector('.kds-status-t');
+  var NS = 'http://www.w3.org/2000/svg', paths = [];
+  function mk(cls, d) { var e = document.createElementNS(NS, 'path'); e.setAttribute('class', cls); e.setAttribute('d', d); return e; }
+  // connectors: from three points on the library's top edge up to the bottom of each surface
+  function draw() {
+    if (getComputedStyle(svg).display === 'none') { paths = []; return; }
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var B = board.getBoundingClientRect(), L = lib.getBoundingClientRect();
+    paths = surfs.map(function (s, i) {
+      var r = s.getBoundingClientRect(), x2 = r.left + r.width / 2 - B.left, y2 = r.bottom - B.top, x1 = L.left - B.left + L.width * (i + .5) / 3, y1 = L.top - B.top, dy = (y1 - y2) / 2;
+      var d = 'M' + x1 + ' ' + y1 + ' C' + x1 + ' ' + (y1 - dy) + ' ' + x2 + ' ' + (y2 + dy) + ' ' + x2 + ' ' + y2;
+      var g = document.createElementNS(NS, 'g'), base = mk('base', d), glow = mk('glow', d), lit = mk('lit', d);
+      g.appendChild(base); g.appendChild(glow); g.appendChild(lit); svg.appendChild(g);
+      var p = { glow: glow, lit: lit, len: lit.getTotalLength(), g: g };
+      if (!s.classList.contains('joined')) hide(p);
+      return p;
+    });
+    dots = wrap.classList.contains('live') ? makeDots() : [];
+  }
+  function hide(p) { [p.lit, p.glow].forEach(function (l) { l.style.transition = 'none'; l.style.strokeDasharray = p.len; l.style.strokeDashoffset = p.len; }); }
+  function show(p, ms) { [p.lit, p.glow].forEach(function (l) { void l.getBoundingClientRect(); l.style.transition = 'stroke-dashoffset ' + ms + 'ms ease-out'; l.style.strokeDashoffset = 0; }); }
+
+  // a surface on its own (before) or on the library (after); fonts cannot ease, so the content blinks through the swap
+  function setSurface(s, joined, quiet) {
+    var ui = s.querySelector('.kds-ui');
+    function apply() {
+      s.classList.toggle('off', !joined); s.classList.toggle('joined', joined);
+      [].slice.call(s.querySelectorAll('[data-off]')).forEach(function (t) { t.textContent = t.getAttribute(joined ? 'data-on' : 'data-off'); });
+    }
+    if (quiet) { apply(); return; }
+    ui.classList.add('swap'); later(function () { apply(); ui.classList.remove('swap'); }, 180);
+  }
+  var BEFORE = '3 fonts · 3 primaries · 3 corner radii', AFTER = '1 type family · 1 palette · 1 radius scale';
+  function before() {
+    wrap.classList.add('before'); wrap.classList.remove('live');
+    surfs.forEach(function (s) { setSurface(s, false, true); }); paths.forEach(hide);
+    dots.forEach(function (k) { k.c.style.opacity = 0; }); statusT.textContent = BEFORE;
+  }
+  var timers = [], HOLD = 5200, pending = false, ran = false;
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function play() {
+    timers.forEach(clearTimeout); timers = []; ran = true;
+    var t = 1600;                                   // hold "before" long enough to read it
+    later(function () { wrap.classList.remove('before'); statusT.textContent = 'Publishing tokens…'; }, t);
+    t += 700;
+    surfs.forEach(function (s, i) {
+      later(function () { if (paths[i]) show(paths[i], 450); }, t);
+      later(function () { setSurface(s, true); }, t + 380);
+      t += 650;
+    });
+    later(function () { statusT.textContent = AFTER; wrap.classList.add('live'); later(replay, HOLD); }, t + 200);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    pending = false; board.style.transition = 'opacity .4s'; board.style.opacity = .35;
+    later(function () { before(); board.style.opacity = 1; later(play, 300); }, 420);
+  }
+
+  // after publishing: dots run up the connectors from the library, only while on screen
+  var dots = [], raf = 0, T0 = performance.now(), visible = false;
+  function makeDots() {
+    var out = [];
+    paths.forEach(function (p) { [0, .5].forEach(function (ph) { var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '2.6'); c.setAttribute('class', 'kds-dot'); c.style.opacity = 0; p.g.appendChild(c); out.push({ p: p, c: c, ph: ph }); }); });
+    return out;
+  }
+  function loop(now) {
+    raf = 0;
+    if (!visible || document.hidden || !wrap.classList.contains('live')) return;
+    dots.forEach(function (k) { var u = ((now - T0) / 1600 + k.ph) % 1, at = k.p.lit.getPointAtLength(u * k.p.len); k.c.setAttribute('cx', at.x); k.c.setAttribute('cy', at.y); k.c.style.opacity = Math.sin(Math.PI * u).toFixed(2); });
+    raf = requestAnimationFrame(loop);
+  }
+  function wake() { if (!raf && visible && wrap.classList.contains('live')) raf = requestAnimationFrame(loop); }
+  new MutationObserver(function () { if (wrap.classList.contains('live')) { dots.forEach(function (k) { k.c.remove(); }); dots = makeDots(); wake(); } }).observe(wrap, { attributes: true, attributeFilter: ['class'] });
+
+  draw();
+  addEventListener('resize', function () { draw(); });
+  var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  before();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { wake(); if (!document.hidden && pending) replay(); });
+  var seen = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); draw(); before(); play(); }
+  }, { threshold: [0, .4, .7] });
+  seen.observe(board);
+})();
+</script>
+</div>

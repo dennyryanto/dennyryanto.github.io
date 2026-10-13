@@ -473,6 +473,20 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('/*STACK*/', STACK_JS))
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
 
+# ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------
+COMPONENT = os.environ.get('COMPONENT')
+if COMPONENT:
+    piece = open(os.path.join(HERE, '..', 'sections', COMPONENT + '.html'), encoding='utf-8').read()
+    body = ('<section class="mk-case" id="preview"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:64px 40px 72px">'
+            + piece + '</div></section>')
+    name = ' '.join(w.capitalize() for w in COMPONENT.split('-'))
+    page = (tpl.replace('<title>Portfolio Hi-Fi v1</title>', '<meta charset="utf-8">\n<title>%s</title>' % name)
+               .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
+               .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
+               .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
+    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(page)
+    print('component', COMPONENT, len(page), 'bytes')
+
 # ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
 SECTION = os.environ.get('SECTION')
 if SECTION:
