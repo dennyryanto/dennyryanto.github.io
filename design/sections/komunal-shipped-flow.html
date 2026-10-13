@@ -14,54 +14,67 @@
 .ksf-step figcaption b { color: rgba(242, 239, 232, .9); font-weight: 600; }
 .ksf-cap { margin: 18px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
-/* the two new screens, drawn on the shipped screens' 375 × 812 canvas and palette */
-.ksf .nav { display: flex; align-items: center; gap: 10px; padding: 16px 20px 0; color: #17213b; }
-.ksf .nav .bk { display: flex; }
-.ksf .nav .t { font-size: 19px; font-weight: 800; letter-spacing: -.01em; }
-.ksf .nav .s { margin-left: auto; font-size: 12.5px; font-weight: 700; color: #8a94ac; }
-.ksf .body { flex: 1 1 0%; display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 0; min-height: 0; }
-.ksf .card { background: #fff; border: 1px solid #e7ebf5; border-radius: 18px; padding: 14px 16px; box-shadow: rgba(30, 50, 120, .4) 0 14px 30px -20px; }
-.ksf .prod { display: flex; align-items: center; gap: 11px; padding: 12px 14px; }
-.ksf .prod .ic { width: 34px; height: 34px; border-radius: 10px; background: #eef1fc; color: #3b5bdb; display: flex; align-items: center; justify-content: center; flex: none; }
+/* the two new screens, drawn on the shipped screens' 375 x 812 canvas and palette.
+   type scale (canvas px): 26 amount · 17 screen title · 15 option / value · 13 body · 12 support · 11 caps label */
+.ksf .nav { display: flex; align-items: center; gap: 8px; padding: 14px 20px 0; color: #17213b; }
+.ksf .nav .bk { display: flex; margin-left: -4px; }
+.ksf .nav .t { font-size: 17px; font-weight: 800; letter-spacing: -.01em; }
+.ksf .nav .s { margin-left: auto; font-size: 12px; font-weight: 600; color: #8a94ac; }
+.ksf .prog { display: flex; gap: 4px; padding: 12px 20px 0; }
+.ksf .prog i { flex: 1; height: 3px; border-radius: 2px; background: #e2e7f2; }
+.ksf .prog i.on { background: #3b5bdb; }
+.ksf .body { flex: 1 1 0%; display: flex; flex-direction: column; gap: 12px; padding: 14px 20px 0; min-height: 0; }
+.ksf .card { background: #fff; border: 1px solid #e7ebf5; border-radius: 18px; padding: 14px 16px; box-shadow: rgba(30, 50, 120, .35) 0 14px 30px -22px; }
+.ksf .prod { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+.ksf .prod .ic { width: 32px; height: 32px; border-radius: 9px; background: #eef1fc; color: #3b5bdb; display: flex; align-items: center; justify-content: center; flex: none; }
 .ksf .prod b { display: block; font-size: 14px; font-weight: 800; color: #17213b; }
 .ksf .prod small { display: block; margin-top: 2px; font-size: 12px; font-weight: 600; color: #6b7796; }
 .ksf .lb { display: block; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: #8a94ac; }
-.ksf .lb.out { margin: 4px 0 -2px 2px; }
-.ksf .amt .v { margin-top: 5px; padding-bottom: 10px; border-bottom: 2px solid #3b5bdb; font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: #17213b; }
-.ksf .src { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 12.5px; font-weight: 600; color: #6b7796; }
-.ksf .src b { color: #17213b; font-weight: 800; }
-.ksf .src .chg { margin-left: auto; color: #3b5bdb; font-weight: 800; }
-.ksf .warn, .ksf .tip { display: flex; gap: 9px; align-items: flex-start; border-radius: 12px; padding: 10px 12px; background: #fff6e5; border: 1px solid #fce3b0; font-size: 12px; line-height: 1.4; font-weight: 600; color: #7a4a06; }
-.ksf .warn { margin-top: 11px; }
+.ksf .lb.out { margin: 2px 0 -4px 2px; }
+.ksf .amt .v { margin-top: 6px; padding-bottom: 10px; border-bottom: 1.5px solid #3b5bdb; font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: #17213b; }
+.ksf .src { display: flex; align-items: center; gap: 5px; margin-top: 10px; font-size: 13px; font-weight: 600; color: #6b7796; }
+.ksf .src b { color: #17213b; font-weight: 700; }
+.ksf .src .chg { margin-left: auto; color: #3b5bdb; font-weight: 700; }
+.ksf .warn, .ksf .tip { display: flex; gap: 8px; align-items: flex-start; border-radius: 12px; padding: 10px 12px; background: #fff7e8; border: 1px solid #fbe4b6; font-size: 12px; line-height: 1.45; font-weight: 600; color: #7a4a06; }
+.ksf .warn { margin-top: 12px; }
 .ksf .warn > span:first-child, .ksf .tip > span:first-child { color: #c27a06; display: flex; padding-top: 1px; }
-.ksf .opt { display: flex; align-items: center; gap: 11px; background: #fff; border: 1.5px solid #e7ebf5; border-radius: 14px; padding: 10px 13px; }
-.ksf .opt .rd { flex: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid #c9d0e0; }
-.ksf .opt b { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 800; color: #17213b; }
-.ksf .opt small { display: block; margin-top: 2px; font-size: 11.5px; font-weight: 600; color: #6b7796; }
-.ksf .opt em { font-style: normal; font-size: 10.5px; font-weight: 800; padding: 3px 7px; border-radius: 100px; background: #eef1fc; color: #3b5bdb; }
-.ksf .opt.on { border: 2px solid #3b5bdb; box-shadow: rgba(59, 91, 219, .35) 0 10px 22px -16px; }
-.ksf .opt.on .rd { border: 5px solid #3b5bdb; }
-.ksf .opt.off { background: #f4f6fb; }
-.ksf .opt.off b, .ksf .opt.off small { color: #9aa4bc; }
+.ksf .warn svg, .ksf .tip svg { width: 14px; height: 14px; }
+/* the one choice: a 16px radio, the same weight as the icons around it */
+.ksf .opt { display: flex; align-items: flex-start; gap: 12px; background: #fff; border-radius: 16px; padding: 13px 16px; }
+.ksf .opt .rd { flex: none; position: relative; width: 16px; height: 16px; margin-top: 2px; border-radius: 50%; border: 1.5px solid #c9d0e0; }
+.ksf .opt.on { box-shadow: 0 0 0 1.5px #3b5bdb, rgba(59, 91, 219, .3) 0 12px 24px -18px; }
+.ksf .opt.on .rd { border-color: #3b5bdb; }
+.ksf .opt.on .rd::after { content: ''; position: absolute; inset: 2.5px; border-radius: 50%; background: #3b5bdb; }
+.ksf .opt b { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: #17213b; }
+.ksf .opt small { display: block; margin-top: 3px; font-size: 12px; font-weight: 600; color: #6b7796; }
+.ksf .opt em { font-style: normal; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 100px; background: #eef1fc; color: #3b5bdb; }
+/* the rails that don't fit this amount: one quiet list, not three more choices */
+.ksf .na { border-radius: 16px; background: #f4f6fb; border: 1px solid #e7ebf5; padding: 4px 16px; }
+.ksf .nah { padding: 9px 0 5px; font-size: 11px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: #9aa4bc; }
+.ksf .nar { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 8px 0; }
+.ksf .nar + .nar { border-top: 1px solid #e7ebf5; }
+.ksf .nar b { font-size: 13px; font-weight: 700; color: #6b7796; }
+.ksf .nar span { font-size: 12px; font-weight: 600; color: #9aa4bc; }
 .ksf .foot { padding: 10px 20px 30px; }
-.ksf .free, .ksf .wait { display: flex; align-items: center; justify-content: center; gap: 7px; margin-bottom: 10px; font-size: 12.5px; font-weight: 700; color: #3f7a57; }
+.ksf .free, .ksf .wait { display: flex; align-items: center; justify-content: center; gap: 7px; margin-bottom: 12px; font-size: 12px; font-weight: 600; color: #3f7a57; }
+.ksf .free svg { width: 14px; height: 14px; }
 .ksf .wait { color: #6b7796; }
-.ksf .wait i { width: 8px; height: 8px; border-radius: 50%; background: #3b5bdb; box-shadow: 0 0 0 4px rgba(59, 91, 219, .18); }
+.ksf .wait i { width: 7px; height: 7px; border-radius: 50%; background: #3b5bdb; box-shadow: 0 0 0 3px rgba(59, 91, 219, .18); }
 .ksf .cta { background: #3b5bdb; color: #fff; text-align: center; font-size: 15.5px; font-weight: 800; padding: 16px; border-radius: 14px; }
-.ksf .alt { text-align: center; margin-top: 12px; font-size: 13.5px; font-weight: 700; color: #3b5bdb; }
-.ksf .due { display: flex; align-items: center; gap: 7px; align-self: flex-start; padding: 7px 11px; border-radius: 100px; background: #eef1fc; color: #3b5bdb; font-size: 12px; font-weight: 800; }
-.ksf .inst { padding: 4px 16px; }
-.ksf .inst .row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 11px 0; }
+.ksf .alt { text-align: center; margin-top: 13px; font-size: 13.5px; font-weight: 700; color: #3b5bdb; }
+.ksf .due { display: flex; align-items: center; gap: 7px; align-self: flex-start; padding: 7px 12px; border-radius: 100px; background: #eef1fc; color: #3b5bdb; font-size: 12px; font-weight: 700; }
+.ksf .inst { padding: 2px 16px; }
+.ksf .inst .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; }
 .ksf .inst .row + .row { border-top: 1px dashed #e2e7f2; }
-.ksf .inst .row b { display: block; margin-top: 3px; font-size: 14px; font-weight: 800; color: #17213b; }
+.ksf .inst .row b { display: block; margin-top: 4px; font-size: 15px; font-weight: 800; color: #17213b; }
 .ksf .inst .row small { display: block; margin-top: 2px; font-size: 12px; font-weight: 600; color: #6b7796; }
-.ksf .inst .v2 { display: block; margin-top: 3px; font-size: 22px; font-weight: 800; letter-spacing: -.02em; color: #17213b; }
+.ksf .inst .v2 { display: block; margin-top: 4px; font-size: 26px; font-weight: 800; letter-spacing: -.02em; color: #17213b; }
 .ksf .inst .code { letter-spacing: .06em; }
-.ksf .inst .c { flex: none; font-size: 12px; font-weight: 800; color: #3b5bdb; background: #eef1fc; padding: 6px 10px; border-radius: 8px; }
-.ksf .steps .h { font-size: 12.5px; font-weight: 800; color: #17213b; margin-bottom: 10px; }
-.ksf .steps .st { display: flex; align-items: center; gap: 10px; font-size: 12.5px; font-weight: 600; line-height: 1.35; color: #3a4763; }
-.ksf .steps .st + .st { margin-top: 9px; }
-.ksf .steps .st i { flex: none; width: 22px; height: 22px; border-radius: 50%; background: #eef1fc; color: #3b5bdb; font-style: normal; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.ksf .inst .c { flex: none; font-size: 12px; font-weight: 700; color: #3b5bdb; border: 1px solid #d9e0f7; padding: 5px 10px; border-radius: 8px; }
+.ksf .steps .h { font-size: 13px; font-weight: 800; color: #17213b; margin-bottom: 10px; }
+.ksf .steps .st { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; line-height: 1.35; color: #3a4763; }
+.ksf .steps .st + .st { margin-top: 10px; }
+.ksf .steps .st i { flex: none; width: 20px; height: 20px; border-radius: 50%; background: #eef1fc; color: #3b5bdb; font-style: normal; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
 
 @media (max-width: 760px) {
   .ksf-panel { padding: 16px; }
@@ -151,16 +164,17 @@
 </div><figcaption><b>1</b> Pick a product</figcaption></figure>
 <figure class="ksf-step"><div style="flex: 1 1 0px; min-width: 0px; max-width: 236px; background: linear-gradient(155deg, rgb(35, 38, 46), rgb(12, 13, 16)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.9) 0px 30px 56px -26px, rgba(255, 255, 255, 0.07) 0px 0px 0px 1px inset;">
 <div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(255, 255, 255);">
-<div style="position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: Archivo, -apple-system, sans-serif; display: flex; flex-direction: column; background: rgb(233, 239, 253);"><div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 116px; height: 33px; background: rgb(0, 0, 0); border-radius: 20px; z-index: 9;"></div><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 35, 63, 0.4); z-index: 9;"></div><div style="background: rgb(255, 255, 255); border-radius: 0px 0px 28px 28px; padding-bottom: 18px;"><div style="padding: 15px 22px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(23, 33, 59);"><span style="font-weight: 800; font-size: 15px; letter-spacing: 0.01em;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div class="nav"><span class="bk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span><span class="t">Penempatan</span><span class="s">2 / 3</span></div></div><div class="body">
+<div style="position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: Archivo, -apple-system, sans-serif; display: flex; flex-direction: column; background: rgb(233, 239, 253);"><div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 116px; height: 33px; background: rgb(0, 0, 0); border-radius: 20px; z-index: 9;"></div><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 35, 63, 0.4); z-index: 9;"></div><div style="background: rgb(255, 255, 255); border-radius: 0px 0px 28px 28px; padding-bottom: 18px;"><div style="padding: 15px 22px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(23, 33, 59);"><span style="font-weight: 800; font-size: 15px; letter-spacing: 0.01em;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div class="nav"><span class="bk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span><span class="t">Penempatan</span><span class="s">Langkah 2 dari 3</span></div><div class="prog"><i class="on"></i><i class="on"></i><i class=""></i></div></div><div class="body">
 <div class="card prod"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10M9 21V10M15 21V10M19 21V10"/><path d="M4 10h16L12 3z"/></svg></span><span><b>BPR Artha Sejahtera</b><small>Deposito 12 bulan · 6,75% p.a.</small></span></div>
 <div class="card amt"><div class="lb">Nominal penempatan</div><div class="v">Rp 750.000.000</div>
 <div class="src">Dari <b>Mandiri ···· 4821</b><span class="chg">Ubah</span></div>
 <div class="warn"><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><span>Di atas Rp500 juta, banyak rekening terkena batas transfer. Pastikan limit Anda cukup.</span></div></div>
 <div class="lb out">Cara transfer</div>
-<div class="opt on"><span class="rd"></span><span class="tx"><b>RTGS <em>Direkomendasikan</em></b><small>Rp100 jt ke atas · kirim sebelum 15:00 WIB</small></span></div>
-<div class="opt off"><span class="rd"></span><span class="tx"><b>BI-FAST</b><small>Maks. Rp250 jt per transfer</small></span></div>
-<div class="opt off"><span class="rd"></span><span class="tx"><b>VA Mandiri</b><small>Livin' maks. Rp30 jt per hari</small></span></div>
-<div class="opt off"><span class="rd"></span><span class="tx"><b>VA Permata</b><small>Antarbank maks. Rp25 jt</small></span></div>
+<div class="opt on"><span class="rd"></span><span class="tx"><b>RTGS <em>Direkomendasikan</em></b><small>Rp100 jt ke atas · masuk hari ini</small><small>Kirim sebelum 15:00 WIB</small></span></div>
+<div class="na"><div class="nah">Tidak tersedia untuk Rp750 jt</div>
+<div class="nar"><b>BI-FAST</b><span>Maks. Rp250 jt / transfer</span></div>
+<div class="nar"><b>VA Mandiri</b><span>Maks. Rp30 jt / hari</span></div>
+<div class="nar"><b>VA Permata</b><span>Antarbank maks. Rp25 jt</span></div></div>
 </div>
 <div class="foot"><div class="free"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>Belum ada dana yang dikunci</div><div class="cta">Lanjut ke instruksi</div></div>
 </div>
@@ -168,7 +182,7 @@
 </div><figcaption><b>2</b> Amount + route check</figcaption></figure>
 <figure class="ksf-step"><div style="flex: 1 1 0px; min-width: 0px; max-width: 236px; background: linear-gradient(155deg, rgb(35, 38, 46), rgb(12, 13, 16)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.9) 0px 30px 56px -26px, rgba(255, 255, 255, 0.07) 0px 0px 0px 1px inset;">
 <div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(255, 255, 255);">
-<div style="position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: Archivo, -apple-system, sans-serif; display: flex; flex-direction: column; background: rgb(233, 239, 253);"><div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 116px; height: 33px; background: rgb(0, 0, 0); border-radius: 20px; z-index: 9;"></div><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 35, 63, 0.4); z-index: 9;"></div><div style="background: rgb(255, 255, 255); border-radius: 0px 0px 28px 28px; padding-bottom: 18px;"><div style="padding: 15px 22px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(23, 33, 59);"><span style="font-weight: 800; font-size: 15px; letter-spacing: 0.01em;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div class="nav"><span class="bk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span><span class="t">Transfer via RTGS</span><span class="s">3 / 3</span></div></div><div class="body">
+<div style="position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: Archivo, -apple-system, sans-serif; display: flex; flex-direction: column; background: rgb(233, 239, 253);"><div style="position: absolute; top: 14px; left: 50%; transform: translateX(-50%); width: 116px; height: 33px; background: rgb(0, 0, 0); border-radius: 20px; z-index: 9;"></div><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 35, 63, 0.4); z-index: 9;"></div><div style="background: rgb(255, 255, 255); border-radius: 0px 0px 28px 28px; padding-bottom: 18px;"><div style="padding: 15px 22px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(23, 33, 59);"><span style="font-weight: 800; font-size: 15px; letter-spacing: 0.01em;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div class="nav"><span class="bk"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></span><span class="t">Transfer via RTGS</span><span class="s">Langkah 3 dari 3</span></div><div class="prog"><i class="on"></i><i class="on"></i><i class="on"></i></div></div><div class="body">
 <div class="due"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Kirim sebelum 15:00 WIB · sisa 4 jam 45 menit</div>
 <div class="card inst">
 <div class="row big"><span><span class="lb">Nominal</span><span class="v2">Rp 750.000.000</span></span><span class="c">Salin</span></div>
