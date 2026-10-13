@@ -108,7 +108,7 @@ flip.append(soup("""<div class="ee-back" aria-hidden="true" style="%s">
 <p>Ten taps? Okay, you&rsquo;re officially curious. Here&rsquo;s something that&rsquo;s not on my CV: I&rsquo;m a huge sci-fi movie nerd.</p>
 <p>Long before I knew UI/UX was a job, I&rsquo;d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn&rsquo;t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
 <p>Thanks for poking around. You&rsquo;re my kind of person.</p>
-<div class="ee-foot">TAP TO FLIP BACK</div>
+<button type="button" class="ee-close">FLIP BACK <span aria-hidden="true">&#8634;</span></button>
 </div>""" % frame).div)
 card.append(flip)
 card.insert_before(Comment("""
@@ -125,14 +125,27 @@ card.insert_before(Comment("""
 """))
 card.insert_after(soup("""<style>
 [data-r="profile-card"] { perspective: 1400px; outline: none; -webkit-tap-highlight-color: transparent; }
+/* the site's card padding and header spacing now belong to the faces, so the card keeps its live size */
+[data-r="profile-card"] { padding: 0 !important; }
+[data-r="profile-card"] > div.ee-in:first-child { margin-bottom: 0 !important; }
+@media (min-width: 1181px) {
+  .ee-front, .ee-back { padding: 22px 24px !important; }
+  .ee-front > div:first-child { margin-bottom: 14px !important; }
+}
+@media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
 [data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 2px oklch(0.9 0.2 122 / .6); border-radius: 18px; }
 .ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
 .ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
   background: linear-gradient(rgba(242, 239, 232, .06), rgba(242, 239, 232, .02)), #161511 !important; overflow: hidden; }
-.ee-eyebrow, .ee-foot { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; }
-.ee-eyebrow { color: oklch(0.9 0.2 122); }
-.ee-foot { margin-top: auto; color: rgba(242, 239, 232, .5); }
+.ee-eyebrow { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: oklch(0.9 0.2 122); }
+/* the only way back: a button, so an extra eleventh tap can't flip the card before the message is read */
+.ee-close { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
+  border: 1px solid oklch(0.9 0.2 122 / .55); background: oklch(0.9 0.2 122 / .08); color: oklch(0.9 0.2 122); cursor: pointer;
+  font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; transition: background-color .2s, border-color .2s; }
+.ee-close span { font-size: 14px; letter-spacing: 0; }
+.ee-close:hover { background: oklch(0.9 0.2 122 / .16); border-color: oklch(0.9 0.2 122); }
+.ee-close:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
 .ee-title { font: 800 21px/1.1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.01em; color: #f2efe8; }
 .ee-back p { margin: 0; font: 400 14px/1.5 Archivo, sans-serif; color: rgba(242, 239, 232, .82); }
 [data-r="profile-card"].ee-flipped .ee-in { transform: rotateY(180deg); }
@@ -154,10 +167,15 @@ card.insert_after(soup("""<style>
   var card = document.querySelector('[data-r="profile-card"]'); if (!card) return;
   var front = card.querySelector('.ee-front'), back = card.querySelector('.ee-back');
   var n = 0, last = 0, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var close = back.querySelector('.ee-close');
   function flip(on) {
     card.classList.toggle('ee-flipped', on);
     front.setAttribute('aria-hidden', on ? 'true' : 'false'); back.setAttribute('aria-hidden', on ? 'false' : 'true');
+    close.tabIndex = on ? 0 : -1;
+    if (on) setTimeout(function () { close.focus({ preventScroll: true }); }, reduce ? 0 : 700); else card.focus({ preventScroll: true });
   }
+  close.tabIndex = -1;
+  close.addEventListener('click', function (e) { e.stopPropagation(); n = 0; flip(false); });
   function sparks() {
     var r = card.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     // dots and short streaks fly out from the card's edge, hold their size, then fade
@@ -174,7 +192,7 @@ card.insert_after(soup("""<style>
     }
   }
   function tap() {
-    if (card.classList.contains('ee-flipped')) { flip(false); return; }
+    if (card.classList.contains('ee-flipped')) return;   // only the button flips it back
     var now = Date.now(); n = now - last > 1500 ? 1 : n + 1; last = now;
     if (n === 7 && !reduce) { card.classList.remove('ee-wobble'); void card.offsetWidth; card.classList.add('ee-wobble'); }
     if (n >= 10) { n = 0; flip(true); if (!reduce && card.animate) sparks(); }
