@@ -331,9 +331,12 @@ def without_ds(row):
             card.decompose()
     return row
 LIVE = {
-    # the design system story (design/sections/), then the tooling migration (its old design-system card removed), then the funnel
+    # the design system story (design/sections/), the tooling migration (its old design-system card removed),
+    # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
     'komunal': blocks(soup(open(os.path.join(HERE, '..', 'sections', 'komunal-design-system.html'), encoding='utf-8').read()),
-                      without_ds(kom[2]), kom[3]),
+                      without_ds(kom[2]),
+                      soup(open(os.path.join(HERE, '..', 'sections', 'komunal-placement-routing.html'), encoding='utf-8').read()),
+                      kom[3]),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], brd[4]),                # captain + back office, Lumio, governance
     # the decision desk lives in the repo (design/sections/) so it can be polished; Chrona still comes from the capture
