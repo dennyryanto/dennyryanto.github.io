@@ -1,0 +1,202 @@
+<!-- Review page only (not wired into the site): design alternatives for the "what the routing moved" metrics under the
+     placement-routing visualization. Figures match the funnel below it on the site: end-to-end completion 55% after a
+     +12-point lift (so 43% before), Fund → Complete 90%, placement volume indexed 100 → 116 over six months. -->
+<div class="kma">
+<style>
+.kma {
+  --panel: #1a1b1f; --node: #232429; --tile: #2b2c32; --line: rgba(255, 255, 255, .08);
+  --ink: #f2f2f4; --ink-2: #c2c3cb; --ink-3: #8b8d98; --edge: #4a4d57; --grey: #6b6e78;
+  --lime: oklch(0.9 0.2 122);
+  display: grid; gap: 40px; font-family: Archivo, system-ui, sans-serif; color: var(--ink);
+}
+.kma-alt > header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.kma-alt > header b { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--lime); }
+.kma-alt > header span { font: 400 13px/1.4 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.kma-ih { margin-bottom: 10px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kma-card { border-radius: 12px; background: var(--panel); box-shadow: 0 0 0 1px var(--line); padding: 16px; min-width: 0; }
+.kma-k { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--ink-3); }
+.kma-v { font: 700 28px/1 Archivo, sans-serif; letter-spacing: -.01em; }
+.kma-s { font: 400 13px/1.45 Archivo, sans-serif; color: var(--ink-2); }
+.kma-m { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--ink-3); }
+[data-tip] { cursor: default; }
+.kma-tip { position: fixed; z-index: 9; pointer-events: none; padding: 6px 8px; border-radius: 6px; background: #0e0f12; box-shadow: 0 0 0 1px var(--line); font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--ink); opacity: 0; transition: opacity .12s; white-space: nowrap; }
+
+/* current, for comparison */
+.kma-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kma-tile { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: 12px; background: var(--panel); box-shadow: 0 0 0 1px var(--line); }
+.kma-tile .kma-v { color: var(--lime); }
+
+/* A: before → after, each metric drawn */
+.kma-a { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 12px; }
+.kma-a .kma-card { display: grid; gap: 14px; align-content: start; }
+.kma-row { display: grid; gap: 8px; }
+.kma-row-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.kma-track { position: relative; height: 22px; }
+.kma-track::before { content: ''; position: absolute; left: 0; right: 0; top: 10px; height: 2px; border-radius: 2px; background: var(--tile); }
+.kma-span { position: absolute; top: 9px; height: 4px; border-radius: 2px; background: var(--lime); }
+.kma-dot { position: absolute; top: 5px; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; box-shadow: 0 0 0 2px var(--panel); }
+.kma-dot.was { background: var(--grey); }
+.kma-dot.now { background: var(--lime); }
+.kma-scale { display: flex; justify-content: space-between; }
+.kma-bar { height: 8px; border-radius: 4px; background: var(--tile); overflow: hidden; }
+.kma-bar i { display: block; height: 100%; border-radius: 4px; background: var(--lime); }
+/* the line stretches with the card; dots and labels are HTML so they never scale below the type floor */
+.kma-line { display: grid; gap: 14px; align-content: start; }
+.kma-plot { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 120px auto; column-gap: 10px; row-gap: 6px; }
+.kma-area { position: relative; grid-column: 1; grid-row: 1; margin: 6px 6px 6px 6px; }
+.kma-area svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.kma-line .grid { stroke: var(--line); stroke-width: 1; }
+.kma-line .ln { fill: none; stroke: var(--lime); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.kma-pt { position: absolute; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--lime); box-shadow: 0 0 0 2px var(--panel); }
+.kma-pt.end { width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px; }
+.kma-pt::after { content: ''; position: absolute; inset: -10px; border-radius: 50%; }
+.kma-y { grid-column: 2; grid-row: 1; }
+.kma-y.top { align-self: start; color: var(--ink); font-weight: 600; }
+.kma-y.bot { align-self: end; }
+.kma-x { grid-column: 1; display: flex; justify-content: space-between; }
+
+/* B: one headline, the rest supporting */
+.kma-b { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 12px; }
+.kma-hero { display: grid; gap: 12px; align-content: start; }
+.kma-hero .kma-v { font-size: 56px; letter-spacing: -.02em; }
+.kma-hero .kma-v small { font-size: 22px; font-weight: 600; margin-left: 4px; color: var(--ink-2); }
+.kma-stack { display: flex; gap: 2px; height: 14px; }
+.kma-stack i { display: block; height: 100%; }
+.kma-stack .was { background: var(--grey); border-radius: 4px 0 0 4px; }
+.kma-stack .add { background: var(--lime); }
+.kma-stack .rest { flex: 1; background: var(--tile); border-radius: 0 4px 4px 0; }
+.kma-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+.kma-legend span { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--ink-2); }
+.kma-legend i { width: 10px; height: 10px; border-radius: 3px; }
+.kma-side { display: grid; gap: 12px; }
+.kma-side .kma-card { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 14px; }
+.kma-side .kma-v { font-size: 26px; grid-row: 1 / 3; }
+.kma-side svg { grid-column: 1 / -1; display: block; width: 100%; height: 34px; margin-top: 6px; overflow: visible; }
+
+/* C: where in the funnel it acted */
+.kma-c { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; }
+.kma-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: start; margin-top: 12px; }
+.kma-step { display: grid; gap: 6px; }
+.kma-col { position: relative; width: 22px; height: 96px; border-radius: 4px; background: var(--tile); }
+.kma-col i { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 4px; background: var(--grey); }
+.kma-step.hit .kma-col i { background: var(--lime); }
+.kma-step .kma-v { font-size: 18px; }
+.kma-step.hit .kma-k { color: var(--lime); }
+.kma-note { margin-top: 12px; display: flex; align-items: center; gap: 8px; }
+.kma-note i { width: 10px; height: 10px; border-radius: 3px; background: var(--lime); }
+.kma-c .kma-side .kma-card { grid-template-columns: minmax(0, 1fr); }
+.kma-c .kma-side .kma-v { grid-row: auto; }
+
+@media (max-width: 760px) {
+  .kma-tiles, .kma-a, .kma-b, .kma-c { grid-template-columns: minmax(0, 1fr); }
+  .kma-hero .kma-v { font-size: 44px; }
+}
+</style>
+
+<!-- current -->
+<section class="kma-alt">
+  <header><b>CURRENT</b><span>Three tiles, numbers only.</span></header>
+  <div class="kma-ih">WHAT IT MOVED · SEE THE FUNNEL BELOW</div>
+  <div class="kma-tiles">
+    <div class="kma-tile"><b class="kma-v">90%</b><span class="kma-s">of funded placements now complete: the Fund → Complete step, where placements used to stall</span></div>
+    <div class="kma-tile"><b class="kma-v">+12 pts</b><span class="kma-s">end-to-end deposit-funnel completion after the revamp</span></div>
+    <div class="kma-tile"><b class="kma-v">+16%</b><span class="kma-s">placement volume over the six months after launch, about 3% a month</span></div>
+  </div>
+</section>
+
+<!-- A -->
+<section class="kma-alt">
+  <header><b>A · BEFORE → AFTER</b><span>Each metric drawn: the completion shift as a dumbbell, the funding step as a bar, volume as a line.</span></header>
+  <div class="kma-ih">WHAT IT MOVED · SEE THE FUNNEL BELOW</div>
+  <div class="kma-a">
+    <div class="kma-card">
+      <div class="kma-row">
+        <div class="kma-row-h"><span class="kma-k">END-TO-END COMPLETION</span><span class="kma-m">43% → <b style="color:var(--ink)">55%</b> · +12 pts</span></div>
+        <div class="kma-track" role="img" aria-label="End-to-end completion rose from 43% to 55%">
+          <span class="kma-span" style="left:43%;width:12%"></span>
+          <span class="kma-dot was" style="left:43%" data-tip="Before the revamp · 43%"></span>
+          <span class="kma-dot now" style="left:55%" data-tip="After · 55% (+12 pts)"></span>
+        </div>
+        <div class="kma-scale kma-m"><span>0%</span><span>50%</span><span>100%</span></div>
+      </div>
+      <div class="kma-row">
+        <div class="kma-row-h"><span class="kma-k">FUND → COMPLETE, WHERE IT STALLED</span><span class="kma-m"><b style="color:var(--ink)">90%</b> of funded placements land</span></div>
+        <div class="kma-bar" role="img" aria-label="90% of funded placements complete" data-tip="Fund → Complete · 90%"><i style="width:90%"></i></div>
+      </div>
+    </div>
+    <div class="kma-card kma-line">
+      <div class="kma-row-h"><span class="kma-k">PLACEMENT VOLUME · INDEXED</span><span class="kma-m">+16% in 6 months</span></div>
+      <div class="kma-plot" role="img" aria-label="Placement volume indexed to launch: 100, 103, 106, 109, 113, 116 over months one to six">
+        <span class="kma-y top kma-m">116</span><span class="kma-y bot kma-m">100</span>
+        <div class="kma-area"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line class="grid" x1="0" x2="100" y1="0" y2="0" vector-effect="non-scaling-stroke"/><line class="grid" x1="0" x2="100" y1="100" y2="100" vector-effect="non-scaling-stroke"/><polyline class="ln" points="0,100 20,81.25 40,62.5 60,43.75 80,18.75 100,0" vector-effect="non-scaling-stroke"/></svg><div class="pts"></div></div>
+        <div class="kma-x kma-m"><span>M1</span><span>M6</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B -->
+<section class="kma-alt">
+  <header><b>B · ONE HEADLINE</b><span>The actual +12 points leads; the funding step and volume support it.</span></header>
+  <div class="kma-ih">WHAT IT MOVED · SEE THE FUNNEL BELOW</div>
+  <div class="kma-b">
+    <div class="kma-card kma-hero">
+      <span class="kma-k">END-TO-END DEPOSIT-FUNNEL COMPLETION</span>
+      <b class="kma-v">+12<small>pts</small></b>
+      <span class="kma-s">From 43% to 55% of people who open the app now finish a placement.</span>
+      <div class="kma-stack" role="img" aria-label="43% before, plus 12 points after the revamp, out of 100%">
+        <i class="was" style="width:43%" data-tip="Before · 43%"></i><i class="add" style="width:12%" data-tip="Added by the revamp · +12 pts"></i><i class="rest"></i>
+      </div>
+      <div class="kma-legend"><span><i style="background:var(--grey)"></i>Before · 43%</span><span><i style="background:var(--lime)"></i>Added · +12 pts</span></div>
+    </div>
+    <div class="kma-side">
+      <div class="kma-card"><b class="kma-v">90%</b><span class="kma-k">FUND → COMPLETE</span><span class="kma-s">The step where placements used to stall</span></div>
+      <div class="kma-card"><b class="kma-v">+16%</b><span class="kma-k">PLACEMENT VOLUME</span><span class="kma-s">Six months after launch, ~3% a month</span>
+        <svg viewBox="0 0 300 34" preserveAspectRatio="none" aria-hidden="true"><polyline points="2,32 61,26 120,20 179,15 238,8 298,2" fill="none" stroke="var(--lime)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- C -->
+<section class="kma-alt">
+  <header><b>C · WHERE IT ACTED</b><span>Step-to-step conversion with the funding step marked, then the totals it fed.</span></header>
+  <div class="kma-ih">WHAT IT MOVED · SEE THE FUNNEL BELOW</div>
+  <div class="kma-c">
+    <div class="kma-card">
+      <span class="kma-k">STEP-TO-STEP CONVERSION · AFTER THE REVAMP</span>
+      <div class="kma-steps" role="img" aria-label="Step-to-step conversion: open to register 84%, register to KYC 85%, KYC to fund 86%, fund to complete 90%, the step routing fixed">
+        <div class="kma-step" data-tip="Open → Register · 84%"><div class="kma-col"><i style="height:84%"></i></div><b class="kma-v">84%</b><span class="kma-k">OPEN → REGISTER</span></div>
+        <div class="kma-step" data-tip="Register → KYC · 85%"><div class="kma-col"><i style="height:85%"></i></div><b class="kma-v">85%</b><span class="kma-k">REGISTER → KYC</span></div>
+        <div class="kma-step" data-tip="KYC → Fund · 86%"><div class="kma-col"><i style="height:86%"></i></div><b class="kma-v">86%</b><span class="kma-k">KYC → FUND</span></div>
+        <div class="kma-step hit" data-tip="Fund → Complete · 90% · routing fixed this step"><div class="kma-col"><i style="height:90%"></i></div><b class="kma-v">90%</b><span class="kma-k">FUND → COMPLETE</span></div>
+      </div>
+      <div class="kma-note"><i></i><span class="kma-s">The step routing fixed: funded placements no longer get stuck.</span></div>
+    </div>
+    <div class="kma-side">
+      <div class="kma-card"><span class="kma-k">END-TO-END COMPLETION</span><b class="kma-v">+12 pts</b><span class="kma-s">43% → 55%</span></div>
+      <div class="kma-card"><span class="kma-k">PLACEMENT VOLUME</span><b class="kma-v">+16%</b><span class="kma-s">Six months after launch</span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var root = document.currentScript.parentNode, NS = 'http://www.w3.org/2000/svg';
+  // A's line: a dot per month, positioned in % over the stretched line, each with a hover target larger than the mark
+  var vals = [100, 103, 106, 109, 113, 116], g = root.querySelector('.kma-line .pts');
+  vals.forEach(function (v, i) {
+    var d = document.createElement('span'); d.className = 'kma-pt' + (i === 5 ? ' end' : '');
+    d.style.left = (i * 20) + '%'; d.style.top = (100 - (v - 100) / 16 * 100) + '%'; d.setAttribute('data-tip', 'M' + (i + 1) + ' · ' + v);
+    g.appendChild(d);
+  });
+  var tip = document.createElement('div'); tip.className = 'kma-tip'; document.body.appendChild(tip);
+  root.addEventListener('pointermove', function (e) {
+    var t = e.target.closest('[data-tip]');
+    if (!t) { tip.style.opacity = 0; return; }
+    tip.textContent = t.getAttribute('data-tip'); tip.style.left = (e.clientX + 12) + 'px'; tip.style.top = (e.clientY - 30) + 'px'; tip.style.opacity = 1;
+  });
+  root.addEventListener('pointerleave', function () { tip.style.opacity = 0; });
+})();
+</script>
+</div>
