@@ -1,31 +1,123 @@
-<!-- LinkAja: CS OPEX after the self-service CTP revamp, indexed chart.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 24px; background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 6px; padding: 30px 32px 26px;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
-<span style='font: 600 10.5px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED</span>
-<span style='font: 600 10.5px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.6);'>TICKET-DRIVEN → SELF-SERVICE</span>
+<!-- LinkAja: CS OPEX after the self-service CTP revamp, indexed chart, in the shared diagram language (design/sections/VIZ-STYLE.md).
+     Eight flat bars fall from the ticket-driven months to month 12 (their heights are the indexed values: the first bar is
+     the 100 mark, the last about a fifth of it, the -80% the callout reads). The bars are the grey context mark; lime marks
+     the outcome only: the last bar, the trend line and the -80%.
+     Markup is the finished state, so the page is complete without JavaScript; the script starts from empty, raises the bars,
+     draws the line, then loops (on screen only). Reduced motion keeps the finished state. Nothing is measured, so it
+     is safe inside a drawer that is still shut. -->
+<div class="kop-wrap">
+<style>
+.kop-wrap {
+  container-type: inline-size;
+  --kop-panel: #1a1b1f; --kop-node: #232429; --kop-tile: #2b2c32; --kop-line: rgba(255, 255, 255, .08);
+  --kop-ink: #f2f2f4; --kop-ink-2: #c2c3cb; --kop-ink-3: #8b8d98; --kop-edge: #4a4d57; --kop-grey: #6b6e78;
+  --kop-lime: oklch(0.9 0.2 122); --kop-amber: #fdb022;
+  margin-top: 24px;
+}
+.kop-head { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kop-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kop-head span:first-child { color: var(--kop-lime); }
+
+.kop-board { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: stretch; border-radius: 14px; background: var(--kop-panel); box-shadow: 0 0 0 1px var(--kop-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 24px 28px 20px; gap: 0 32px; font-family: Archivo, system-ui, sans-serif; color: var(--kop-ink); }
+.kop-chart { min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* plot: a fixed height, so nothing moves while it plays; columns are 1/8 wide each, the bar inset 1px a side = a 2px gap */
+.kop-plot { position: relative; height: 220px; }
+.kop-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); }
+.kop-col { position: relative; padding: 0 1px; }
+.kop-bar { position: absolute; left: 1px; right: 1px; bottom: 0; height: var(--h); border-radius: 4px 4px 0 0; background: var(--kop-grey); transform-origin: 50% 100%; transition: transform .6s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i) * 70ms); }
+.kop-bar.out { background: var(--kop-lime); }
+.kop-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; clip-path: inset(-12px -12px -12px -12px); transition: clip-path .9s cubic-bezier(.4, 0, .2, 1) .55s; }
+.kop-line polyline { fill: none; stroke: var(--kop-lime); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.kop-glow { stroke-width: 7 !important; opacity: .13; }
+.kop-pt { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--kop-lime); box-shadow: 0 0 0 2px var(--kop-panel); transition: opacity .3s, transform .3s; }
+.kop-pt.end { width: 8px; height: 8px; margin: -4px 0 0 -4px; }
+.kop-pt.start { transition-delay: .55s; }
+.kop-pt.end { transition-delay: 1.4s; }
+.kop-axis { height: 0; border-top: 1px solid var(--kop-edge); }
+.kop-ticks { display: flex; justify-content: space-between; margin-top: 10px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* start state, applied by the script only; the markup above is the finished state */
+.kop-pre .kop-bar { transform: scaleY(0); transition: none; }
+.kop-pre .kop-line { clip-path: inset(-12px 100% -12px -12px); transition: none; }
+.kop-pre .kop-pt { opacity: 0; transform: scale(.4); transition: none; }
+.kop-pre .kop-call > * { opacity: 0; transform: translateY(6px); transition: none; }
+
+/* the callout: the number that moved */
+.kop-call { display: flex; flex-direction: column; justify-content: center; gap: 10px; padding-left: 32px; border-left: 1px solid var(--kop-line); min-width: 0; }
+.kop-call > * { transition: opacity .6s ease, transform .6s ease; }
+.kop-call > :nth-child(1) { transition-delay: 1.2s; }
+.kop-call > :nth-child(2) { transition-delay: 1.4s; }
+.kop-call > :nth-child(3) { transition-delay: 1.5s; }
+.kop-val { font: 800 72px/1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--kop-lime); }
+.kop-l1 { font: 600 12px/1.4 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--kop-ink-2); }
+.kop-l2 { font: 500 11px/1.5 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* narrow: the callout stacks under the chart */
+@container (max-width: 700px) {
+  .kop-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 16px; gap: 18px 0; }
+  .kop-plot { height: 180px; }
+  .kop-call { padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--kop-line); gap: 8px; }
+  .kop-val { font-size: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .kop-wrap *, .kop-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kop-head"><span>CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED</span><span>TICKET-DRIVEN → SELF-SERVICE</span></div>
+
+<div class="kop-board">
+  <div class="kop-chart" role="img" aria-label="Customer-service operating cost falling roughly 80 percent as support shifts to self-service, from month 1 to month 12">
+    <div class="kop-plot">
+      <div class="kop-cols" aria-hidden="true">
+        <div class="kop-col"><i class="kop-bar" style="--h:89.5%;--i:0"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:81.1%;--i:1"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:69.5%;--i:2"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:54.7%;--i:3"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:37.9%;--i:4"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:25.3%;--i:5"></i></div>
+        <div class="kop-col"><i class="kop-bar" style="--h:16.8%;--i:6"></i></div>
+        <div class="kop-col"><i class="kop-bar out" style="--h:13.7%;--i:7"></i></div>
+      </div>
+      <svg class="kop-line" viewBox="0 0 800 100" preserveAspectRatio="none" aria-hidden="true">
+        <polyline class="kop-glow" points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"/>
+        <polyline points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"/>
+      </svg>
+      <i class="kop-pt start" style="left:6.25%;top:10.5%"></i>
+      <i class="kop-pt end" style="left:93.75%;top:86.3%"></i>
+    </div>
+    <div class="kop-axis"></div>
+    <div class="kop-ticks" aria-hidden="true"><span>MONTH 1</span><span>MONTH 12</span></div>
+  </div>
+
+  <div class="kop-call">
+    <div class="kop-val">−80%</div>
+    <div class="kop-l1">CUSTOMER-SERVICE OPEX</div>
+    <div class="kop-l2">SUPPORT TICKETS DEFLECTED TO IN-APP SELF-SERVICE FLOWS</div>
+  </div>
 </div>
-<svg aria-label="Customer-service operating cost falling roughly 80 percent as support shifts to self-service" data-m="draw" preserveaspectratio="xMidYMid meet" role="img" style="width: 100%; height: auto; display: block;" viewbox="0 0 1000 250">
-<g font-family="'IBM Plex Mono',monospace">
-<line stroke="rgba(242,239,232,.18)" stroke-width="1.5" x1="30" x2="700" y1="212" y2="212"></line>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="92,42 102,35 102,205 92,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="40,42 50,35 102,35 92,42"></polygon><polygon fill="rgba(242,239,232,.14)" points="40,42 92,42 92,212 40,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="178,58 188,51 188,205 178,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="126,58 136,51 188,51 178,58"></polygon><polygon fill="rgba(242,239,232,.14)" points="126,58 178,58 178,212 126,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="264,80 274,73 274,205 264,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="212,80 222,73 274,73 264,80"></polygon><polygon fill="rgba(242,239,232,.14)" points="212,80 264,80 264,212 212,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.08)" points="350,108 360,101 360,205 350,212"></polygon><polygon fill="rgba(242,239,232,0.30)" points="298,108 308,101 360,101 350,108"></polygon><polygon fill="rgba(242,239,232,.16)" points="298,108 350,108 350,212 298,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.10)" points="436,140 446,133 446,205 436,212"></polygon><polygon fill="rgba(242,239,232,0.38)" points="384,140 394,133 446,133 436,140"></polygon><polygon fill="rgba(242,239,232,.2)" points="384,140 436,140 436,212 384,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / .55)" points="522,164 532,157 532,205 522,212"></polygon><polygon fill="oklch(0.97 0.13 122 / .55)" points="470,164 480,157 532,157 522,164"></polygon><polygon fill="oklch(0.9 0.2 122 / .55)" points="470,164 522,164 522,212 470,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / .78)" points="608,180 618,173 618,205 608,212"></polygon><polygon fill="oklch(0.97 0.13 122 / .78)" points="556,180 566,173 618,173 608,180"></polygon><polygon fill="oklch(0.9 0.2 122 / .78)" points="556,180 608,180 608,212 556,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / 1)" points="694,186 704,179 704,205 694,212"></polygon><polygon fill="oklch(0.97 0.13 122 / 1)" points="642,186 652,179 704,179 694,186"></polygon><polygon fill="oklch(0.9 0.2 122)" points="642,186 694,186 694,212 642,212"></polygon></g>
-<polyline fill="none" points="71,39 157,55 243,77 329,105 415,137 501,161 587,177 673,183" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
-<g fill="oklch(0.9 0.2 122)"><circle cx="71" cy="39" r="3.5"></circle><circle cx="673" cy="183" r="4.5"></circle></g>
-<text fill="rgba(242,239,232,.4)" font-size="12" x="40" y="238">MONTH 1</text>
-<text fill="rgba(242,239,232,.4)" font-size="12" text-anchor="end" x="704" y="238">MONTH 12</text>
-<line stroke="rgba(242,239,232,.14)" stroke-width="1" x1="752" x2="752" y1="30" y2="212"></line>
-<text data-m="count" fill="oklch(0.9 0.2 122)" font-family="Archivo,sans-serif" font-size="72" font-variant-numeric="tabular-nums" font-weight="800" letter-spacing="-3" x="784" y="118">−80%</text>
-<text fill="rgba(242,239,232,.7)" font-size="13" font-weight="600" x="786" y="150">CUSTOMER-SERVICE OPEX</text>
-<text fill="rgba(242,239,232,.45)" font-size="12" x="786" y="172">SUPPORT TICKETS DEFLECTED TO</text>
-<text fill="rgba(242,239,232,.45)" font-size="12" x="786" y="190">IN-APP SELF-SERVICE FLOWS</text>
-</g>
-</svg>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kop-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var HOLD = 6000, timer = 0, visible = false, ran = false, pending = false;
+  function reset() { wrap.classList.add('kop-pre'); void board.offsetWidth; }
+  function play() {
+    clearTimeout(timer); ran = true; pending = false;
+    reset(); wrap.classList.remove('kop-pre');
+    timer = setTimeout(replay, 2400 + HOLD);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    play();
+  }
+  reset();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) play(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending && visible) play(); });
+  var seen = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); play(); }
+  }, { threshold: [0, .4, .7] });
+  seen.observe(board);
+})();
+</script>
 </div>

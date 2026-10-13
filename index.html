@@ -1081,102 +1081,496 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <section class="mk-case" id="linkaja" style="border-top:1px solid rgba(242,239,232,.14)"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px"><div data-m="reveal" style="display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 26px; flex-wrap: wrap;">
 <div style='display: flex; align-items: center; gap: 10px; font: 600 12px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.16em; color: oklch(0.9 0.2 122);'><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg><span>01 / LINKAJA</span></div>
 <div style='font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.6);'>PRODUCT DESIGN LEAD · SEP 2021 – JUN 2023</div>
-</div><div class="mk-split"><div class="mk-split-text"><h2 style="margin: 0px 0px 20px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 112%; font-size: 46px; line-height: 1.04; font-family: Archivo; letter-spacing: -0.02em; text-wrap: balance;">Design that cut OPEX 80% for 70 million users.</h2><p class="mk-sub">Security and account issues could only be fixed by an agent, so support cost grew with every new user. Self-service flows and intent routing broke that link.</p><div class="mk-abouts"><p class="mk-about"><b>LinkAja</b> is an Indonesian digital payments and e-wallet app used by 70M+ people.</p></div></div><figure class="mk-sv"><canvas aria-label="Line drawing: three phone-shaped layers (support tickets, intents, and the chat screen as a wireframe). A lime ticket and a lime intent each send a thread straight up and land as the lime answer and quick reply in the chat." data-stack="linkaja" role="img"></canvas></figure></div><button aria-controls="d-linkaja" aria-expanded="false" class="mk-toggle" type="button"><span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span aria-hidden="true" class="mk-t-open">Close</span></span><span class="mk-t-meta">3 min read</span><span aria-hidden="true" class="mk-t-icon"><svg fill="none" height="11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 20 11" width="20"><path d="M1.5 1.5 10 9.5l8.5-8"></path></svg></span></button><div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body"><div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div><div class="mk-keys"><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:oklch(0.9 0.2 122)">−80%</div><div class="mk-key-l">CS OPEX</div><p class="mk-key-c">Customer-service cost after self-service replaced agent tickets.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">70M+</div><div class="mk-key-l">USERS · HOME REVAMP</div><p class="mk-key-c">People reached by the redesigned home screen.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">~72%</div><div class="mk-key-l">CASES AUTOMATED</div><p class="mk-key-c">Support cases now solved in the app, without an agent.</p></div></div></div><div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div><ul class="mk-list"><li>Customer Touch Point revamp: self-service security and account flows replaced agent tickets, cutting customer-service OPEX by up to 80%.</li><li>Co-led the home-screen redesign for 70M+ users, driven by dashboards and research, improving information architecture, clarity and engagement.</li><li>Shipped MyPaylater, a conversational-AI chatbot revamp and loyalty programs; also served as UX Writer for brand voice consistency.</li><li>Recipient of the Customer Champion Award; led designers across features while bridging PMs, business, engineering and research.</li></ul></div><div class="mk-block"><!-- LinkAja: CS OPEX after the self-service CTP revamp, indexed chart.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 24px; background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 6px; padding: 30px 32px 26px;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED</span>
-<span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.6);'>TICKET-DRIVEN → SELF-SERVICE</span>
+</div><div class="mk-split"><div class="mk-split-text"><h2 style="margin: 0px 0px 20px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 112%; font-size: 46px; line-height: 1.04; font-family: Archivo; letter-spacing: -0.02em; text-wrap: balance;">Design that cut OPEX 80% for 70 million users.</h2><p class="mk-sub">Security and account issues could only be fixed by an agent, so support cost grew with every new user. Self-service flows and intent routing broke that link.</p><div class="mk-abouts"><p class="mk-about"><b>LinkAja</b> is an Indonesian digital payments and e-wallet app used by 70M+ people.</p></div></div><figure class="mk-sv"><canvas aria-label="Line drawing: three phone-shaped layers (support tickets, intents, and the chat screen as a wireframe). A lime ticket and a lime intent each send a thread straight up and land as the lime answer and quick reply in the chat." data-stack="linkaja" role="img"></canvas></figure></div><button aria-controls="d-linkaja" aria-expanded="false" class="mk-toggle" type="button"><span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span aria-hidden="true" class="mk-t-open">Close</span></span><span class="mk-t-meta">3 min read</span><span aria-hidden="true" class="mk-t-icon"><svg fill="none" height="11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 20 11" width="20"><path d="M1.5 1.5 10 9.5l8.5-8"></path></svg></span></button><div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body"><div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div><div class="mk-keys"><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:oklch(0.9 0.2 122)">−80%</div><div class="mk-key-l">CS OPEX</div><p class="mk-key-c">Customer-service cost after self-service replaced agent tickets.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">70M+</div><div class="mk-key-l">USERS · HOME REVAMP</div><p class="mk-key-c">People reached by the redesigned home screen.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">~72%</div><div class="mk-key-l">CASES AUTOMATED</div><p class="mk-key-c">Support cases now solved in the app, without an agent.</p></div></div></div><div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div><ul class="mk-list"><li>Customer Touch Point revamp: self-service security and account flows replaced agent tickets, cutting customer-service OPEX by up to 80%.</li><li>Co-led the home-screen redesign for 70M+ users, driven by dashboards and research, improving information architecture, clarity and engagement.</li><li>Shipped MyPaylater, a conversational-AI chatbot revamp and loyalty programs; also served as UX Writer for brand voice consistency.</li><li>Recipient of the Customer Champion Award; led designers across features while bridging PMs, business, engineering and research.</li></ul></div><div class="mk-block"><!-- LinkAja: CS OPEX after the self-service CTP revamp, indexed chart, in the shared diagram language (design/sections/VIZ-STYLE.md).
+     Eight flat bars fall from the ticket-driven months to month 12 (their heights are the indexed values: the first bar is
+     the 100 mark, the last about a fifth of it, the -80% the callout reads). The bars are the grey context mark; lime marks
+     the outcome only: the last bar, the trend line and the -80%.
+     Markup is the finished state, so the page is complete without JavaScript; the script starts from empty, raises the bars,
+     draws the line, then loops (on screen only). Reduced motion keeps the finished state. Nothing is measured, so it
+     is safe inside a drawer that is still shut. -->
+<div class="kop-wrap">
+<style>
+.kop-wrap {
+  container-type: inline-size;
+  --kop-panel: #1a1b1f; --kop-node: #232429; --kop-tile: #2b2c32; --kop-line: rgba(255, 255, 255, .08);
+  --kop-ink: #f2f2f4; --kop-ink-2: #c2c3cb; --kop-ink-3: #8b8d98; --kop-edge: #4a4d57; --kop-grey: #6b6e78;
+  --kop-lime: oklch(0.9 0.2 122); --kop-amber: #fdb022;
+  margin-top: 24px;
+}
+.kop-head { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kop-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kop-head span:first-child { color: var(--kop-lime); }
+
+.kop-board { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: stretch; border-radius: 14px; background: var(--kop-panel); box-shadow: 0 0 0 1px var(--kop-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 24px 28px 20px; gap: 0 32px; font-family: Archivo, system-ui, sans-serif; color: var(--kop-ink); }
+.kop-chart { min-width: 0; display: flex; flex-direction: column; justify-content: flex-end; }
+
+/* plot: a fixed height, so nothing moves while it plays; columns are 1/8 wide each, the bar inset 1px a side = a 2px gap */
+.kop-plot { position: relative; height: 220px; }
+.kop-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); }
+.kop-col { position: relative; padding: 0 1px; }
+.kop-bar { position: absolute; left: 1px; right: 1px; bottom: 0; height: var(--h); border-radius: 4px 4px 0 0; background: var(--kop-grey); transform-origin: 50% 100%; transition: transform .6s cubic-bezier(.2, .8, .2, 1); transition-delay: calc(var(--i) * 70ms); }
+.kop-bar.out { background: var(--kop-lime); }
+.kop-line { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; clip-path: inset(-12px -12px -12px -12px); transition: clip-path .9s cubic-bezier(.4, 0, .2, 1) .55s; }
+.kop-line polyline { fill: none; stroke: var(--kop-lime); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.kop-glow { stroke-width: 7 !important; opacity: .13; }
+.kop-pt { position: absolute; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: var(--kop-lime); box-shadow: 0 0 0 2px var(--kop-panel); transition: opacity .3s, transform .3s; }
+.kop-pt.end { width: 8px; height: 8px; margin: -4px 0 0 -4px; }
+.kop-pt.start { transition-delay: .55s; }
+.kop-pt.end { transition-delay: 1.4s; }
+.kop-axis { height: 0; border-top: 1px solid var(--kop-edge); }
+.kop-ticks { display: flex; justify-content: space-between; margin-top: 10px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* start state, applied by the script only; the markup above is the finished state */
+.kop-pre .kop-bar { transform: scaleY(0); transition: none; }
+.kop-pre .kop-line { clip-path: inset(-12px 100% -12px -12px); transition: none; }
+.kop-pre .kop-pt { opacity: 0; transform: scale(.4); transition: none; }
+.kop-pre .kop-call > * { opacity: 0; transform: translateY(6px); transition: none; }
+
+/* the callout: the number that moved */
+.kop-call { display: flex; flex-direction: column; justify-content: center; gap: 10px; padding-left: 32px; border-left: 1px solid var(--kop-line); min-width: 0; }
+.kop-call > * { transition: opacity .6s ease, transform .6s ease; }
+.kop-call > :nth-child(1) { transition-delay: 1.2s; }
+.kop-call > :nth-child(2) { transition-delay: 1.4s; }
+.kop-call > :nth-child(3) { transition-delay: 1.5s; }
+.kop-val { font: 800 72px/1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.03em; font-variant-numeric: tabular-nums; color: var(--kop-lime); }
+.kop-l1 { font: 600 12px/1.4 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--kop-ink-2); }
+.kop-l2 { font: 500 11px/1.5 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kop-ink-3); }
+
+/* narrow: the callout stacks under the chart */
+@container (max-width: 700px) {
+  .kop-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 16px; gap: 18px 0; }
+  .kop-plot { height: 180px; }
+  .kop-call { padding: 16px 0 0; border-left: 0; border-top: 1px solid var(--kop-line); gap: 8px; }
+  .kop-val { font-size: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .kop-wrap *, .kop-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="kop-head"><span>CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED</span><span>TICKET-DRIVEN → SELF-SERVICE</span></div>
+<div class="kop-board">
+<div aria-label="Customer-service operating cost falling roughly 80 percent as support shifts to self-service, from month 1 to month 12" class="kop-chart" role="img">
+<div class="kop-plot">
+<div aria-hidden="true" class="kop-cols">
+<div class="kop-col"><i class="kop-bar" style="--h:89.5%;--i:0"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:81.1%;--i:1"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:69.5%;--i:2"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:54.7%;--i:3"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:37.9%;--i:4"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:25.3%;--i:5"></i></div>
+<div class="kop-col"><i class="kop-bar" style="--h:16.8%;--i:6"></i></div>
+<div class="kop-col"><i class="kop-bar out" style="--h:13.7%;--i:7"></i></div>
 </div>
-<svg aria-label="Customer-service operating cost falling roughly 80 percent as support shifts to self-service" data-m="draw" preserveaspectratio="xMidYMid meet" role="img" style="width: 100%; height: auto; display: block;" viewbox="0 0 1000 250">
-<g font-family="'IBM Plex Mono',monospace">
-<line stroke="rgba(242,239,232,.18)" stroke-width="1.5" x1="30" x2="700" y1="212" y2="212"></line>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="92,42 102,35 102,205 92,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="40,42 50,35 102,35 92,42"></polygon><polygon fill="rgba(242,239,232,.14)" points="40,42 92,42 92,212 40,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="178,58 188,51 188,205 178,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="126,58 136,51 188,51 178,58"></polygon><polygon fill="rgba(242,239,232,.14)" points="126,58 178,58 178,212 126,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.07)" points="264,80 274,73 274,205 264,212"></polygon><polygon fill="rgba(242,239,232,0.27)" points="212,80 222,73 274,73 264,80"></polygon><polygon fill="rgba(242,239,232,.14)" points="212,80 264,80 264,212 212,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.08)" points="350,108 360,101 360,205 350,212"></polygon><polygon fill="rgba(242,239,232,0.30)" points="298,108 308,101 360,101 350,108"></polygon><polygon fill="rgba(242,239,232,.16)" points="298,108 350,108 350,212 298,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="rgba(242,239,232,0.10)" points="436,140 446,133 446,205 436,212"></polygon><polygon fill="rgba(242,239,232,0.38)" points="384,140 394,133 446,133 436,140"></polygon><polygon fill="rgba(242,239,232,.2)" points="384,140 436,140 436,212 384,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / .55)" points="522,164 532,157 532,205 522,212"></polygon><polygon fill="oklch(0.97 0.13 122 / .55)" points="470,164 480,157 532,157 522,164"></polygon><polygon fill="oklch(0.9 0.2 122 / .55)" points="470,164 522,164 522,212 470,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / .78)" points="608,180 618,173 618,205 608,212"></polygon><polygon fill="oklch(0.97 0.13 122 / .78)" points="556,180 566,173 618,173 608,180"></polygon><polygon fill="oklch(0.9 0.2 122 / .78)" points="556,180 608,180 608,212 556,212"></polygon></g>
-<g data-r="bar3d"><polygon fill="oklch(0.6 0.15 122 / 1)" points="694,186 704,179 704,205 694,212"></polygon><polygon fill="oklch(0.97 0.13 122 / 1)" points="642,186 652,179 704,179 694,186"></polygon><polygon fill="oklch(0.9 0.2 122)" points="642,186 694,186 694,212 642,212"></polygon></g>
-<polyline fill="none" points="71,39 157,55 243,77 329,105 415,137 501,161 587,177 673,183" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></polyline>
-<g fill="oklch(0.9 0.2 122)"><circle cx="71" cy="39" r="3.5"></circle><circle cx="673" cy="183" r="4.5"></circle></g>
-<text fill="rgba(242,239,232,.4)" font-size="12" x="40" y="238">MONTH 1</text>
-<text fill="rgba(242,239,232,.4)" font-size="12" text-anchor="end" x="704" y="238">MONTH 12</text>
-<line stroke="rgba(242,239,232,.14)" stroke-width="1" x1="752" x2="752" y1="30" y2="212"></line>
-<text data-m="count" fill="oklch(0.9 0.2 122)" font-family="Archivo,sans-serif" font-size="72" font-variant-numeric="tabular-nums" font-weight="800" letter-spacing="-3" x="784" y="118">−80%</text>
-<text fill="rgba(242,239,232,.7)" font-size="13" font-weight="600" x="786" y="150">CUSTOMER-SERVICE OPEX</text>
-<text fill="rgba(242,239,232,.45)" font-size="12" x="786" y="172">SUPPORT TICKETS DEFLECTED TO</text>
-<text fill="rgba(242,239,232,.45)" font-size="12" x="786" y="190">IN-APP SELF-SERVICE FLOWS</text>
-</g>
+<svg aria-hidden="true" class="kop-line" preserveaspectratio="none" viewbox="0 0 800 100">
+<polyline class="kop-glow" points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"></polyline>
+<polyline points="50,10.5 150,18.9 250,30.5 350,45.3 450,62.1 550,74.7 650,83.2 750,86.3"></polyline>
 </svg>
+<i class="kop-pt start" style="left:6.25%;top:10.5%"></i>
+<i class="kop-pt end" style="left:93.75%;top:86.3%"></i>
 </div>
-</div><div class="mk-block"><!-- LinkAja: the problem and the fix, before/after mini diagram.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; align-items: center;">
-<div style="display: flex; flex-direction: column; gap: 22px;">
-<div><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgb(232, 72, 79);'>THE PROBLEM</span><p style="margin: 10px 0px 0px; font: 400 17px / 1.55 Archivo; color: rgba(242, 239, 232, 0.8); text-wrap: pretty;">Security and account issues could only be resolved by an agent. Each one became a support ticket, so customer-service cost grew with every new user.</p></div>
-<div><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>THE FIX</span><p style="margin: 10px 0px 0px; font: 400 17px / 1.55 Archivo; color: rgba(242, 239, 232, 0.8); text-wrap: pretty;">Self-service security and account flows replaced agent tickets, so most issues are now solved in the app.</p></div>
+<div class="kop-axis"></div>
+<div aria-hidden="true" class="kop-ticks"><span>MONTH 1</span><span>MONTH 12</span></div>
 </div>
-<div style="background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 6px; padding: 26px 28px;"><svg aria-label="Before: every issue became a ticket queued for an agent. After: issues solved in the app." data-m="scrub" role="img" style="width: 100%; height: auto; display: block;" viewbox="0 0 520 214"><g font-family="'IBM Plex Mono',monospace" font-size="15" font-weight="600" letter-spacing="1"><text fill="#E8484F" x="0" y="20">BEFORE</text><rect fill="none" height="58" rx="7" stroke="#f2efe8" stroke-width="2.5" width="34" x="0" y="40"></rect><line stroke="#f2efe8" stroke-linecap="round" stroke-width="2.5" x1="12" x2="22" y1="90" y2="90"></line><line stroke="rgba(242,239,232,.5)" stroke-width="2.5" x1="48" x2="112" y1="69" y2="69"></line><path d="M110 62 L120 69 L110 76" fill="none" stroke="rgba(242,239,232,.5)" stroke-linejoin="round" stroke-width="2.5"></path><rect data-mp="ticket" fill="#161511" height="30" opacity="0.45" rx="4" stroke="#E8484F" stroke-width="2.5" width="46" x="146" y="40"></rect><rect data-mp="ticket" fill="#161511" height="30" opacity="0.7" rx="4" stroke="#E8484F" stroke-width="2.5" width="46" x="138" y="50"></rect><rect data-mp="ticket" fill="#161511" height="30" opacity="1" rx="4" stroke="#E8484F" stroke-width="2.5" width="46" x="130" y="60"></rect><line stroke="rgba(242,239,232,.5)" stroke-width="2.5" x1="196" x2="260" y1="69" y2="69"></line><path d="M258 62 L268 69 L258 76" fill="none" stroke="rgba(242,239,232,.5)" stroke-linejoin="round" stroke-width="2.5"></path><circle cx="306" cy="58" fill="none" r="14" stroke="#f2efe8" stroke-width="2.5"></circle><path d="M282 100 C282 80 330 80 330 100" fill="none" stroke="#f2efe8" stroke-width="2.5"></path><path d="M290 58 C290 38 322 38 322 58" fill="none" stroke="#E8484F" stroke-width="2.5"></path><text fill="rgba(242,239,232,.85)" x="352" y="60">TICKET TO</text><text fill="rgba(242,239,232,.85)" x="352" y="82">AGENT QUEUE</text><line data-mp="divider" stroke="rgba(242,239,232,.14)" x1="0" x2="520" y1="116" y2="116"></line><text fill="oklch(0.9 0.2 122)" x="0" y="146">AFTER</text><rect fill="none" height="58" rx="7" stroke="#f2efe8" stroke-width="2.5" width="34" x="0" y="152"></rect><line stroke="#f2efe8" stroke-linecap="round" stroke-width="2.5" x1="12" x2="22" y1="202" y2="202"></line><line stroke="oklch(0.9 0.2 122)" stroke-width="2.5" x1="48" x2="112" y1="181" y2="181"></line><path d="M110 174 L120 181 L110 188" fill="none" stroke="oklch(0.9 0.2 122)" stroke-linejoin="round" stroke-width="2.5"></path><circle cx="150" cy="181" data-mp="check" fill="oklch(0.9 0.2 122)" r="24"></circle><path d="M139 181 L147 189 L162 173" data-mp="check" fill="none" stroke="#182003" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"></path><text fill="rgba(242,239,232,.85)" x="206" y="177">SOLVED IN-APP</text><text fill="rgba(242,239,232,.85)" x="206" y="199">NO AGENT</text></g></svg></div>
-</div>
-</div><div class="mk-block"><!-- LinkAja: support model redesigned, before tree vs after intent-routed tree.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 24px; background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 6px; padding: 30px 32px;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 28px; flex-wrap: wrap;">
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>SUPPORT MODEL, REDESIGNED</span>
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>IN-PERSON AGENTS → MAPPED, INTENT-ROUTED ASSIST</span>
-</div>
-<div data-m="ba" data-r="stack2" style="display: grid; grid-template-columns: 0.82fr 1.7fr; gap: 0px; align-items: stretch;">
-<div data-r="ba-before" style="padding-right: 36px; border-right: 1px solid rgba(242, 239, 232, 0.12); display: flex; flex-direction: column;">
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgb(232, 72, 79);'>BEFORE</span>
-<div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
-<div style="width: 100%; background: rgba(242, 239, 232, 0.05); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 12px; padding: 13px 16px; display: flex; align-items: center; gap: 11px; justify-content: center;"><svg fill="none" height="19" stroke="rgba(242,239,232,.75)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewbox="0 0 24 24" width="19"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span style="font: 700 13.5px Archivo; color: rgb(242, 239, 232);">Every support request</span></div>
-<div style="display: flex; flex-direction: column; align-items: center; padding: 7px 0px;"><div style="width: 2px; height: 16px; background: rgba(242, 239, 232, 0.28);"></div><svg fill="none" height="13" stroke="rgba(242,239,232,.4)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="13"><path d="m6 9 6 6 6-6"></path></svg></div>
-<div style="width: 100%; background: rgba(232, 35, 43, 0.08); border: 1px solid rgba(232, 35, 43, 0.35); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center;"><span style="width: 44px; height: 44px; border-radius: 13px; background: rgba(232, 35, 43, 0.14); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="20" stroke="#E8484F" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewbox="0 0 24 24" width="20"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg></span><div><div style="font: 800 14.5px Archivo; color: rgb(242, 239, 232);">In-person agent queue</div><div style='font: 500 11px / 1.4 "IBM Plex Mono", monospace; color: rgba(242, 239, 232, 0.6); margin-top: 5px; letter-spacing: 0.02em;'>ONE HUMAN QUEUE FOR ALL</div></div></div>
-</div>
-<p style="margin: 22px 0px 0px; font: 400 13px / 1.6 Archivo; color: rgba(242, 239, 232, 0.55); text-wrap: pretty;">Every issue, simple or complex, waited on a person. Ticket volume scaled with users, and so did cost to serve.</p>
-</div>
-<div data-r="ba-after" style="padding-left: 36px; display: flex; flex-direction: column;">
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>AFTER</span>
-<div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
-<div style="width: 340px; max-width: 100%; background: rgba(242, 239, 232, 0.05); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 12px; padding: 13px 16px; display: flex; align-items: center; gap: 11px; justify-content: center;"><svg fill="none" height="19" stroke="rgba(242,239,232,.75)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewbox="0 0 24 24" width="19"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg><span style="font: 700 13.5px Archivo; color: rgb(242, 239, 232);">Every support request</span></div>
-<div style="display: flex; flex-direction: column; align-items: center; padding: 7px 0px;"><div style="width: 2px; height: 16px; background: rgba(242, 239, 232, 0.28);"></div><svg fill="none" height="13" stroke="rgba(242,239,232,.4)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 24 24" width="13"><path d="m6 9 6 6 6-6"></path></svg></div>
-<div style="width: 420px; max-width: 100%; background: linear-gradient(oklch(0.9 0.2 122 / 0.12), oklch(0.9 0.2 122 / 0.04)); border: 1.5px solid oklch(0.9 0.2 122 / 0.55); border-radius: 14px; padding: 16px 18px; display: flex; align-items: center; gap: 13px;">
-<span style="flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px; background: oklch(0.9 0.2 122 / 0.16); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="20" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.9" viewbox="0 0 24 24" width="20"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg></span>
-<div><div style="font: 800 15px Archivo; color: rgb(242, 239, 232);">Case mapping + intent routing</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.6); margin-top: 3px;">Thousands of past tickets clustered by intent, then routed, not a blanket bot.</div></div>
+<div class="kop-call">
+<div class="kop-val">−80%</div>
+<div class="kop-l1">CUSTOMER-SERVICE OPEX</div>
+<div class="kop-l2">SUPPORT TICKETS DEFLECTED TO IN-APP SELF-SERVICE FLOWS</div>
 </div>
 </div>
-<svg aria-hidden="true" preserveaspectratio="none" style="width: 100%; height: 34px; display: block; margin-top: 2px;" viewbox="0 0 100 34"><path d="M50 0 V10 Q50 17 40 17 L27 17 Q17 17 17 24 V34" fill="none" stroke="rgba(242,239,232,.3)" stroke-width="1.4" vector-effect="non-scaling-stroke"></path><path d="M50 0 V10 Q50 17 60 17 L73 17 Q83 17 83 24 V34" fill="none" stroke="rgba(242,239,232,.3)" stroke-width="1.4" vector-effect="non-scaling-stroke"></path></svg>
-<div data-r="stack2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 2px;">
-<div style="background: oklch(0.9 0.2 122 / 0.07); border: 1px solid oklch(0.9 0.2 122 / 0.4); border-radius: 14px; padding: 18px;">
-<div style="display: flex; align-items: center; gap: 11px;"><span style="flex: 0 0 auto; width: 40px; height: 40px; border-radius: 11px; background: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="22" stroke="#182003" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2M20 14h2M15 13v2M9 13v2"></path></svg></span><div style="flex: 1 1 0%;"><div style="font: 800 15px Archivo; color: rgb(242, 239, 232);">Automated chatbot</div><div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: oklch(0.9 0.2 122); margin-top: 4px;'>MAPPED, HIGH-FREQUENCY CASES</div></div></div>
-<div style="display: flex; align-items: baseline; gap: 8px; margin: 16px 0px 6px;"><span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 120%; font-size: 40px; line-height: 1; font-family: Archivo; letter-spacing: -0.02em; color: oklch(0.9 0.2 122);">~72%</span><span style="font: 500 11.5px Archivo; color: rgba(242, 239, 232, 0.6);">resolved instantly</span></div>
-<div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px;"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: oklch(0.9 0.2 122); border: 1px solid oklch(0.9 0.2 122 / 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Aktivasi</span><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: oklch(0.9 0.2 122); border: 1px solid oklch(0.9 0.2 122 / 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Limit</span><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: oklch(0.9 0.2 122); border: 1px solid oklch(0.9 0.2 122 / 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Tagihan</span><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: oklch(0.9 0.2 122); border: 1px solid oklch(0.9 0.2 122 / 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>FAQ umum</span></div>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kop-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var HOLD = 6000, timer = 0, visible = false, ran = false, pending = false;
+  function reset() { wrap.classList.add('kop-pre'); void board.offsetWidth; }
+  function play() {
+    clearTimeout(timer); ran = true; pending = false;
+    reset(); wrap.classList.remove('kop-pre');
+    timer = setTimeout(replay, 2400 + HOLD);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    play();
+  }
+  reset();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) play(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending && visible) play(); });
+  var seen = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); play(); }
+  }, { threshold: [0, .4, .7] });
+  seen.observe(board);
+})();
+</script>
 </div>
-<div style="background: rgba(232, 35, 43, 0.06); border: 1px solid rgba(232, 35, 43, 0.34); border-radius: 14px; padding: 18px;">
-<div style="display: flex; align-items: center; gap: 11px;"><span style="flex: 0 0 auto; width: 40px; height: 40px; border-radius: 11px; background: rgb(225, 27, 34); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="22" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M3 14v-3a9 9 0 0 1 18 0v3"></path><path d="M21 16a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h3zM3 16a2 2 0 0 0 2 2h1a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3z"></path><path d="M18 19a3 3 0 0 1-3 3h-3"></path></svg></span><div style="flex: 1 1 0%;"><div style="font: 800 15px Archivo; color: rgb(242, 239, 232);">Human agent</div><div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgb(232, 72, 79); margin-top: 4px;'>COMPLEX &amp; SENSITIVE CASES</div></div></div>
-<div style="display: flex; align-items: baseline; gap: 8px; margin: 16px 0px 6px;"><span style="font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 120%; font-size: 40px; line-height: 1; font-family: Archivo; letter-spacing: -0.02em; color: rgb(242, 239, 232);">~28%</span><span style="font: 500 11.5px Archivo; color: rgba(242, 239, 232, 0.6);">smart-escalated</span></div>
-<div style="display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px;"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: rgb(232, 133, 138); border: 1px solid rgba(232, 35, 43, 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Sengketa</span><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: rgb(232, 133, 138); border: 1px solid rgba(232, 35, 43, 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Indikasi fraud</span><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.03em; color: rgb(232, 133, 138); border: 1px solid rgba(232, 35, 43, 0.4); background: transparent; padding: 6px 9px; border-radius: 100px; white-space: nowrap;'>Kasus khusus</span></div>
+</div><div class="mk-block"><!-- LinkAja: the problem and the fix, with a before/after mini diagram.
+     Left, the problem (amber: needs attention) and the fix (lime: the result). Right, a board in the shared diagram
+     language (design/sections/VIZ-STYLE.md): BEFORE is amber, a phone sends a ticket stack down a dashed connector to an
+     agent queue; AFTER is one lit lime connector from the phone to a lime check (the outcome).
+     Markup is the finished state, so the page is complete without JavaScript; the script only starts a lime dot that
+     travels the AFTER path while the board is on screen (reduced motion keeps it still). -->
+<div class="lpf-wrap">
+<style>
+.lpf-wrap {
+  --lpf-panel: #1a1b1f; --lpf-node: #232429; --lpf-tile: #2b2c32; --lpf-line: rgba(255, 255, 255, .08);
+  --lpf-ink: #f2f2f4; --lpf-ink-2: #c2c3cb; --lpf-ink-3: #8b8d98; --lpf-edge: #4a4d57;
+  --lpf-lime: oklch(0.9 0.2 122); --lpf-amber: #fdb022;
+  margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; align-items: center;
+}
+.lpf-text { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+.lpf-eyebrow { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--lpf-amber); }
+.lpf-eyebrow.fix { color: var(--lpf-lime); }
+.lpf-text p { margin: 10px 0 0; font: 400 17px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .8); text-wrap: pretty; }
+
+.lpf-board { min-width: 0; border-radius: 14px; background: var(--lpf-panel); box-shadow: 0 0 0 1px var(--lpf-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px 22px; font-family: Archivo, system-ui, sans-serif; color: var(--lpf-ink); }
+.lpf-row + .lpf-row { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--lpf-line); }
+/* status line: dot + label (amber for the problem, lime for the good state) */
+.lpf-st { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font: 500 12px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; }
+.lpf-st i { width: 8px; height: 8px; border-radius: 50%; }
+.lpf-row.before .lpf-st { color: var(--lpf-amber); }
+.lpf-row.before .lpf-st i { background: var(--lpf-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.lpf-row.after .lpf-st { color: var(--lpf-lime); }
+.lpf-row.after .lpf-st i { background: var(--lpf-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+.lpf-flow { display: flex; align-items: center; min-height: 56px; }
+.lpf-tile { flex: none; width: 44px; height: 44px; border-radius: 10px; background: var(--lpf-tile); box-shadow: 0 0 0 1px var(--lpf-line); display: grid; place-items: center; color: var(--lpf-ink-2); }
+.lpf-tile svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.lpf-stack { flex: none; width: 58px; height: 46px; }
+.lpf-stack svg { width: 100%; height: 100%; display: block; }
+.lpf-lbl { flex: none; display: flex; flex-direction: column; gap: 3px; margin-left: 12px; font: 500 11px/1.25 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--lpf-ink-2); white-space: nowrap; }
+.lpf-check { flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 0 5px oklch(0.9 0.2 122 / .15); display: grid; place-items: center; }
+.lpf-check svg { width: 24px; height: 24px; fill: none; stroke: #182003; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* connectors: resting = dashed edge, 1.5px; the lit path = lime 2.5px with a soft glow; small arrowheads in the same colour */
+.lpf-c { position: relative; flex: 1 1 0; min-width: 22px; height: 12px; margin: 0 8px; }
+.lpf-c::before { content: ''; position: absolute; left: 0; right: 4px; top: 50%; height: 1.5px; margin-top: -.75px; background: repeating-linear-gradient(90deg, var(--lpf-edge) 0 4px, transparent 4px 10px); }
+.lpf-c::after { content: ''; position: absolute; right: 1px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-top: 1.5px solid var(--lpf-edge); border-right: 1.5px solid var(--lpf-edge); transform: rotate(45deg); transform-origin: center; }
+.lpf-c.lit::before { height: 2.5px; margin-top: -1.25px; border-radius: 2px; background: var(--lpf-lime); box-shadow: 0 0 0 2.5px oklch(0.9 0.2 122 / .13); }
+.lpf-c.lit::after { border-color: var(--lpf-lime); width: 8px; height: 8px; margin-top: -4px; border-width: 2.5px; }
+.lpf-dot { position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); opacity: 0; }
+.lpf-wrap.go .lpf-dot { animation: lpf-run 1.8s linear infinite; }
+@keyframes lpf-run { 0% { left: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 6px); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .lpf-wrap .lpf-dot { animation: none !important; display: none; } }
+
+@media (max-width: 480px) {
+  .lpf-board { padding: 16px 14px; }
+  .lpf-lbl { margin-left: 8px; }
+  .lpf-c { min-width: 14px; margin: 0 6px; }
+}
+</style>
+<div class="lpf-text">
+<div><span class="lpf-eyebrow">THE PROBLEM</span><p>Security and account issues could only be resolved by an agent. Each one became a support ticket, so customer-service cost grew with every new user.</p></div>
+<div><span class="lpf-eyebrow fix">THE FIX</span><p>Self-service security and account flows replaced agent tickets, so most issues are now solved in the app.</p></div>
+</div>
+<div aria-label="Before: every issue became a ticket queued for an agent. After: issues solved in the app." class="lpf-board" role="img">
+<div class="lpf-row before">
+<div class="lpf-st"><i></i>BEFORE</div>
+<div class="lpf-flow">
+<span class="lpf-tile"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="19" rx="2.5" width="11" x="6.5" y="2.5"></rect><path d="M10.5 18.5h3"></path></svg></span>
+<span class="lpf-c"></span>
+<span class="lpf-stack"><svg aria-hidden="true" viewbox="0 0 58 46">
+<rect fill="#232429" height="24" opacity=".4" rx="4" stroke="#fdb022" stroke-width="1.5" width="36" x="19" y="3"></rect>
+<rect fill="#232429" height="24" opacity=".7" rx="4" stroke="#fdb022" stroke-width="1.5" width="36" x="11" y="11"></rect>
+<rect fill="#232429" height="24" rx="4" stroke="#fdb022" stroke-width="1.5" width="36" x="3" y="19"></rect>
+<path d="M10 28h22M10 34h13" fill="none" opacity=".8" stroke="#fdb022" stroke-linecap="round" stroke-width="1.5"></path></svg></span>
+<span class="lpf-c"></span>
+<span class="lpf-tile"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="12" cy="8" r="3.8"></circle><path d="M4.5 20.5c0-4.4 3.4-7 7.5-7s7.5 2.6 7.5 7"></path></svg></span>
+<span class="lpf-lbl"><span>TICKET TO</span><span>AGENT QUEUE</span></span>
 </div>
 </div>
-<p style="margin: 20px 0px 0px; font: 400 13px / 1.6 Archivo; color: rgba(242, 239, 232, 0.55); text-wrap: pretty;">Not a blanket bot: the most frequent cases were mapped by intent and handed to automation, while complex or sensitive issues route straight to the right human, so quality held as cost fell.</p>
+<div class="lpf-row after">
+<div class="lpf-st"><i></i>AFTER</div>
+<div class="lpf-flow">
+<span class="lpf-tile"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="19" rx="2.5" width="11" x="6.5" y="2.5"></rect><path d="M10.5 18.5h3"></path></svg></span>
+<span class="lpf-c lit"><i class="lpf-dot"></i></span>
+<span class="lpf-check"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M5.5 12.5l4.2 4.2L18.5 7.5"></path></svg></span>
+<span class="lpf-lbl"><span>SOLVED IN-APP</span><span>NO AGENT</span></span>
 </div>
-</div></div>
-</div><div class="mk-block"><!-- LinkAja: intent routing in chat, the 72/28 split bar and the two chat phones (phones are product UI: keep their look).
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div data-r="route-card" style="margin-top: 24px; background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, 0.14); border-radius: 6px; padding: 30px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 32px 48px; align-items: center;">
-<div>
-<div style="display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>INTENT ROUTING IN CHAT</span><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>ILLUSTRATIVE</span></div>
-<p style="margin: 16px 0px 22px; font: 400 16px / 1.6 Archivo; color: rgba(242, 239, 232, 0.75); text-wrap: pretty;">Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.</p>
-<div data-m="bar" data-r="split3d" style="display: flex; height: 48px; margin: 12px 14px 0px 0px;"><div class="seg3d seg3d-ok" style="width: 72%; background: oklch(0.9 0.2 122); color: rgb(24, 32, 3); display: flex; align-items: center; padding: 0px 16px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 110%; font-size: 24px; line-height: 1; font-family: Archivo;">~72%</div><div class="seg3d seg3d-esc" data-r="route-esc" style="flex: 1 1 0%; background: rgb(232, 72, 79); color: rgb(255, 255, 255); display: flex; align-items: center; padding: 0px 12px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 110%; font-size: 19px; line-height: 1; font-family: Archivo;">~28%</div></div>
-<div data-r="route-labels" style="display: flex; margin-top: 10px; gap: 8px;"><div style="width: 72%;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>RESOLVED BY CHATBOT</span></div><div style="flex: 1 1 0%;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>ESCALATED</span></div></div>
+</div>
+</div>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.lpf-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var visible = false;
+  function sync() { wrap.classList.toggle('go', visible && !document.hidden); }
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting && es[0].intersectionRatio >= .4; sync(); }, { threshold: [0, .4, .7] }).observe(board);
+  document.addEventListener('visibilitychange', sync);
+})();
+</script>
+</div>
+</div><div class="mk-block"><!-- LinkAja: the support model redesigned, before (one in-person agent queue) vs after (case mapping + intent routing).
+     Built in the shared diagram language (design/sections/VIZ-STYLE.md): head row, a #1a1b1f board with two lanes,
+     caption under the board. BEFORE is amber (the problem); AFTER is neutral node boxes joined by dashed `edge`
+     connectors, with the lit lime path request -> routing -> chatbot, and the chatbot card is the outcome (lime ring and
+     number). The human agent card is neutral grey: escalation is not a failure.
+     Connectors in the after lane are drawn by the script into an SVG from the real box positions (on view, on resize and
+     when a shut drawer opens), so they line up at every width, side by side or stacked. The same script runs lime packets
+     along the lit path while the board is on screen (reduced motion keeps them still). Copy and numbers as on the live site. -->
+<div class="lsm-wrap">
+<style>
+.lsm-wrap {
+  container-type: inline-size; container-name: lsmw;
+  --lsm-panel: #1a1b1f; --lsm-node: #232429; --lsm-tile: #2b2c32; --lsm-line: rgba(255, 255, 255, .08);
+  --lsm-ink: #f2f2f4; --lsm-ink-2: #c2c3cb; --lsm-ink-3: #8b8d98; --lsm-edge: #4a4d57;
+  --lsm-lime: oklch(0.9 0.2 122); --lsm-amber: #fdb022;
+  margin-top: 24px;
+}
+.lsm-wrap *, .lsm-wrap *::before, .lsm-wrap *::after { box-sizing: border-box; }
+.lsm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.lsm-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.lsm-head span:first-child { color: var(--lsm-lime); }
+
+.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); box-shadow: 0 0 0 1px var(--lsm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: Archivo, system-ui, sans-serif; color: var(--lsm-ink); }
+.lsm-lane { display: flex; flex-direction: column; min-width: 0; border-radius: 12px; padding: 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-lane.after { container-type: inline-size; container-name: lsml; }
+.lsm-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 9px; border-radius: 6px; background: var(--lsm-tile); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--lsm-ink-2); }
+.lsm-tag i { width: 8px; height: 8px; border-radius: 50%; }
+.lsm-lane.before .lsm-tag i { background: var(--lsm-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.lsm-lane.after .lsm-tag i { background: var(--lsm-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+/* boxes */
+.lsm-node { display: flex; align-items: center; justify-content: center; gap: 11px; width: 100%; padding: 12px 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-node.route { justify-content: flex-start; gap: 13px; padding: 14px 16px; max-width: 440px; }
+.lsm-node.req { max-width: 340px; }
+.lsm-node b { font: 600 14px/1.25 Archivo, sans-serif; }
+.lsm-node.route b { font-size: 15px; }
+.lsm-node.route p { margin: 3px 0 0; font: 400 13px/1.45 Archivo, sans-serif; color: var(--lsm-ink-2); }
+.lsm-ico { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--lsm-tile); color: var(--lsm-ink-2); }
+.lsm-ico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.lsm-ico.lime { color: var(--lsm-lime); }
+.lsm-ico.amber { color: var(--lsm-amber); }
+
+/* before lane: request, a dashed connector, the amber queue */
+.lsm-bcol { display: flex; flex-direction: column; align-items: center; }
+.lsm-cx { position: relative; flex: none; width: 12px; height: 32px; }
+.lsm-cx::before { content: ''; position: absolute; left: 50%; top: 2px; bottom: 5px; width: 1.5px; margin-left: -.75px; background: repeating-linear-gradient(180deg, var(--lsm-edge) 0 4px, transparent 4px 10px); }
+.lsm-cx::after { content: ''; position: absolute; left: 50%; bottom: 3px; width: 7px; height: 7px; margin-left: -3.5px; border-right: 1.5px solid var(--lsm-edge); border-bottom: 1.5px solid var(--lsm-edge); transform: rotate(45deg); }
+.lsm-queue { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding: 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); text-align: center; }
+.lsm-queue .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
+.lsm-queue .lsm-ico svg { width: 20px; height: 20px; }
+.lsm-queue b { display: block; font: 700 15px/1.25 Archivo, sans-serif; }
+.lsm-queue small { display: block; margin-top: 5px; font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .04em; color: var(--lsm-ink-3); }
+.lsm-note { margin: auto 0 0; padding-top: 18px; font: 400 13px/1.55 Archivo, sans-serif; color: var(--lsm-ink-3); text-wrap: pretty; }
+
+/* after lane: a tree; the svg overlay (drawn by script) joins the boxes */
+.lsm-tree { position: relative; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+.lsm-edges { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.lsm-edges path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.lsm-edges .base { stroke: var(--lsm-edge); stroke-width: 1.5; stroke-dasharray: 4 6; }
+.lsm-edges .glow { stroke: var(--lsm-lime); stroke-width: 7; opacity: .13; }
+.lsm-edges .lit { stroke: var(--lsm-lime); stroke-width: 2.5; }
+.lsm-edges .head { stroke-width: 1.5; }
+.lsm-edges .head.lit { stroke-width: 2.5; }
+.lsm-edges .head.base { stroke-dasharray: none; }
+.lsm-edges circle { fill: var(--lsm-lime); filter: drop-shadow(0 0 3px oklch(0.9 0.2 122 / .8)); opacity: 0; }
+.lsm-outs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; width: 100%; margin-top: 6px; }
+.lsm-card { display: flex; flex-direction: column; min-width: 0; padding: 18px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-card.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.lsm-ch { display: flex; align-items: center; gap: 11px; }
+.lsm-ch .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
+.lsm-ch .lsm-ico svg { width: 20px; height: 20px; }
+.lsm-ch b { display: block; font: 700 15px/1.25 Archivo, sans-serif; }
+.lsm-ch small { display: block; margin-top: 4px; font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--lsm-ink-3); }
+.lsm-val { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 16px 0 6px; }
+.lsm-val strong { font: 800 40px/1 Archivo, sans-serif; font-stretch: 120%; letter-spacing: -.02em; color: var(--lsm-ink); }
+.lsm-card.win .lsm-val strong { color: var(--lsm-lime); }
+.lsm-val span { font: 500 13px/1.3 Archivo, sans-serif; color: var(--lsm-ink-2); }
+.lsm-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 10px; }
+.lsm-chips span { padding: 6px 9px; border-radius: 6px; background: var(--lsm-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--lsm-ink-2); white-space: nowrap; }
+
+.lsm-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); text-wrap: pretty; }
+
+/* the two outcome cards stack when the after lane gets narrow; the connectors then run down a left gutter */
+@container lsml (max-width: 540px) {
+  .lsm-node.route, .lsm-node.req { max-width: none; }
+  .lsm-outs { grid-template-columns: minmax(0, 1fr); gap: 14px; padding-left: 34px; width: 100%; box-sizing: border-box; }
+}
+/* the lanes stack */
+@container lsmw (max-width: 760px) {
+  .lsm-board { grid-template-columns: minmax(0, 1fr); }
+  .lsm-note { padding-top: 16px; }
+}
+@container lsmw (max-width: 520px) {
+  .lsm-board { padding: 10px; gap: 10px; }
+  .lsm-lane { padding: 12px; }
+  .lsm-tag { margin-bottom: 12px; }
+  .lsm-tree { gap: 30px; }
+  .lsm-card { padding: 14px; }
+}
+@media (prefers-reduced-motion: reduce) { .lsm-wrap * { transition: none !important; animation: none !important; } }
+</style>
+<div class="lsm-head"><span>SUPPORT MODEL, REDESIGNED</span><span>IN-PERSON AGENTS → MAPPED, INTENT-ROUTED ASSIST</span></div>
+<div aria-label="Support model, redesigned. Before: every support request went to one in-person agent queue; every issue, simple or complex, waited on a person, so ticket volume scaled with users, and so did cost to serve. After: every support request goes through case mapping and intent routing, where thousands of past tickets were clustered by intent and then routed, not a blanket bot. About 72% are resolved instantly by an automated chatbot (mapped, high-frequency cases: Aktivasi, Limit, Tagihan, FAQ umum) and about 28% are smart-escalated to a human agent (complex and sensitive cases: Sengketa, Indikasi fraud, Kasus khusus)." class="lsm-board" role="img">
+<div class="lsm-lane before">
+<span class="lsm-tag"><i></i>BEFORE</span>
+<div class="lsm-bcol">
+<div class="lsm-node"><span class="lsm-ico"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></span><b>Every support request</b></div>
+<span class="lsm-cx"></span>
+<div class="lsm-queue">
+<span class="lsm-ico amber"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg></span>
+<div><b>In-person agent queue</b><small>ONE HUMAN QUEUE FOR ALL</small></div>
+</div>
+</div>
+<p class="lsm-note">Every issue, simple or complex, waited on a person. Ticket volume scaled with users, and so did cost to serve.</p>
+</div>
+<div class="lsm-lane after">
+<span class="lsm-tag"><i></i>AFTER</span>
+<div class="lsm-tree">
+<svg aria-hidden="true" class="lsm-edges"></svg>
+<div class="lsm-node req" data-n="req"><span class="lsm-ico"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"></path><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg></span><b>Every support request</b></div>
+<div class="lsm-node route" data-n="route"><span class="lsm-ico lime"><svg aria-hidden="true" viewbox="0 0 24 24"><circle cx="6" cy="19" r="3"></circle><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"></path><circle cx="18" cy="5" r="3"></circle></svg></span><div><b>Case mapping + intent routing</b><p>Thousands of past tickets clustered by intent, then routed, not a blanket bot.</p></div></div>
+<div class="lsm-outs">
+<div class="lsm-card win" data-n="bot">
+<div class="lsm-ch"><span class="lsm-ico lime"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 8V4H8"></path><rect height="12" rx="2" width="16" x="4" y="8"></rect><path d="M2 14h2M20 14h2M15 13v2M9 13v2"></path></svg></span><div><b>Automated chatbot</b><small>MAPPED, HIGH-FREQUENCY CASES</small></div></div>
+<div class="lsm-val"><strong>~72%</strong><span>resolved instantly</span></div>
+<div class="lsm-chips"><span>Aktivasi</span><span>Limit</span><span>Tagihan</span><span>FAQ umum</span></div>
+</div>
+<div class="lsm-card" data-n="human">
+<div class="lsm-ch"><span class="lsm-ico"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M3 14v-3a9 9 0 0 1 18 0v3"></path><path d="M21 16a2 2 0 0 1-2 2h-1a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h3zM3 16a2 2 0 0 0 2 2h1a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1H3z"></path><path d="M18 19a3 3 0 0 1-3 3h-3"></path></svg></span><div><b>Human agent</b><small>COMPLEX &amp; SENSITIVE CASES</small></div></div>
+<div class="lsm-val"><strong>~28%</strong><span>smart-escalated</span></div>
+<div class="lsm-chips"><span>Sengketa</span><span>Indikasi fraud</span><span>Kasus khusus</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p class="lsm-cap">Not a blanket bot: the most frequent cases were mapped by intent and handed to automation, while complex or sensitive issues route straight to the right human, so quality held as cost fell.</p>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.lsm-board'), tree = wrap.querySelector('.lsm-tree'), svg = wrap.querySelector('.lsm-edges');
+  var NS = 'http://www.w3.org/2000/svg', lit = [], dots = [], visible = false, raf = 0, T0 = performance.now();
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function n(k) { return tree.querySelector('[data-n="' + k + '"]'); }
+  function mk(tag, cls, attrs) { var e = document.createElementNS(NS, tag); if (cls) e.setAttribute('class', cls); for (var a in attrs) e.setAttribute(a, attrs[a]); return e; }
+  function put(d, cls) { var p = mk('path', cls, { d: d }); svg.appendChild(p); return p; }
+  function box(el, T) { var r = el.getBoundingClientRect(); return { l: r.left - T.left, r: r.right - T.left, t: r.top - T.top, b: r.bottom - T.top, cx: r.left + r.width / 2 - T.left, cy: r.top + r.height / 2 - T.top }; }
+  // a connector: a dashed base line, and when it is on the lit path a glow and a lime line over it; arrowhead at the end
+  function edge(d, head, isLit) {
+    var base = put(d, 'base'); if (!isLit) { put(head, 'head base'); return null; }
+    put(d, 'glow'); var l = put(d, 'lit'); put(head, 'head lit'); return l;
+  }
+  function draw() {
+    var T = tree.getBoundingClientRect();
+    // a shut drawer (or a hidden tree) has no layout yet: draw when it opens or when the size changes, not while parsing
+    if (!T.width || !T.height) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('viewBox', '0 0 ' + T.width + ' ' + T.height);
+    var rq = box(n('req'), T), ro = box(n('route'), T), bo = box(n('bot'), T), hu = box(n('human'), T);
+    lit = []; dots = [];
+    // request -> routing, straight down (lit: the path every request takes)
+    var x = rq.cx, y1 = rq.b + 1, y2 = ro.t - 2;
+    lit.push(edge('M' + x + ' ' + y1 + ' V' + y2, 'M' + (x - 4.5) + ' ' + (y2 - 6) + ' L' + x + ' ' + y2 + ' L' + (x + 4.5) + ' ' + (y2 - 6), true));
+    var human = [], chat = [];
+    if (Math.abs(bo.t - hu.t) < 4) {
+      // cards side by side: curves from the bottom centre of the routing box to the top centre of each card
+      [[hu, false], [bo, true]].forEach(function (c) {
+        var q = c[0], x1 = ro.cx, ya = ro.b + 1, x2 = q.cx, yb = q.t - 2, dy = (yb - ya) / 2;
+        var d = 'M' + x1 + ' ' + ya + ' C' + x1 + ' ' + (ya + dy) + ' ' + x2 + ' ' + (yb - dy) + ' ' + x2 + ' ' + yb;
+        var h = 'M' + (x2 - 4.5) + ' ' + (yb - 6) + ' L' + x2 + ' ' + yb + ' L' + (x2 + 4.5) + ' ' + (yb - 6);
+        var l = edge(d, h, c[1]); if (c[1]) lit.push(l);
+      });
+    } else {
+      // cards stacked: a trunk down the left gutter, branching right into each card
+      var xt = 16, r = 10, ya = ro.b + 1;
+      [[hu, false], [bo, true]].forEach(function (c) {
+        var q = c[0], ym = q.cy, xe = q.l - 2;
+        var d = 'M' + xt + ' ' + ya + ' V' + (ym - r) + ' Q' + xt + ' ' + ym + ' ' + (xt + r) + ' ' + ym + ' H' + xe;
+        var h = 'M' + (xe - 6) + ' ' + (ym - 4.5) + ' L' + xe + ' ' + ym + ' L' + (xe - 6) + ' ' + (ym + 4.5);
+        var l = edge(d, h, c[1]); if (c[1]) lit.push(l);
+      });
+    }
+    // packets travel request -> routing -> chatbot along the lit path
+    if (!reduce && 'IntersectionObserver' in window) {
+      var lens = lit.map(function (p) { return p.getTotalLength(); });
+      [0, .5].forEach(function (ph) { var c = mk('circle', '', { r: 3 }); svg.appendChild(c); dots.push({ c: c, ph: ph }); });
+      dots.lens = lens; wake();
+    }
+  }
+  function loop(now) {
+    raf = 0; if (!visible || document.hidden || !dots.length) return;
+    var la = dots.lens[0], lb = dots.lens[1], tot = la + lb;
+    dots.forEach(function (k) {
+      var u = ((now - T0) / 3200 + k.ph) % 1, d = u * tot, p = d < la ? lit[0].getPointAtLength(d) : lit[1].getPointAtLength(d - la);
+      k.c.setAttribute('cx', p.x); k.c.setAttribute('cy', p.y); k.c.style.opacity = Math.min(1, u * 8, (1 - u) * 8).toFixed(2);
+    });
+    raf = requestAnimationFrame(loop);
+  }
+  function wake() { if (!raf && visible && dots.length) raf = requestAnimationFrame(loop); }
+
+  draw();
+  if ('ResizeObserver' in window) new ResizeObserver(draw).observe(tree);
+  addEventListener('resize', draw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
+  var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
+  if (reduce || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (es) {
+    var e = es[0]; visible = e.isIntersecting && (e.intersectionRatio >= .4 || e.intersectionRect.height >= innerHeight * .5); wake();
+  }, { threshold: [0, .1, .2, .3, .4, .5, .7] }).observe(board);
+  document.addEventListener('visibilitychange', wake);
+})();
+</script>
+</div>
+</div><div class="mk-block"><!-- LinkAja: intent routing in chat, in the shared diagram language (design/sections/VIZ-STYLE.md). Left: what share of chats
+     the bot resolves and what is escalated, a flat two-segment bar (lime = the outcome, the resolved share; grey = escalated, which is
+     not a failure, so no red). Right: the two chat phones, product UI that keeps its own look (their markup is unchanged); only the board
+     and the layout around them follow the diagram style. The ~72% / ~28% split is illustrative.
+     Markup is the finished state, so the page is complete without JavaScript; the script grows the bar on view, once.
+     Reduced motion keeps the finished state. Nothing is measured, so it is safe inside a shut drawer. -->
+<div class="kir-wrap">
+<style>
+.kir-wrap {
+  container-type: inline-size;
+  --kir-panel: #1a1b1f; --kir-node: #232429; --kir-tile: #2b2c32; --kir-line: rgba(255, 255, 255, .08);
+  --kir-ink: #f2f2f4; --kir-ink-2: #c2c3cb; --kir-ink-3: #8b8d98; --kir-edge: #4a4d57; --kir-grey: #6b6e78;
+  --kir-lime: oklch(0.9 0.2 122); --kir-amber: #fdb022;
+  margin-top: 24px;
+}
+.kir-board { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 32px 48px; align-items: center; border-radius: 14px; background: var(--kir-panel); box-shadow: 0 0 0 1px var(--kir-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 28px; font-family: Archivo, system-ui, sans-serif; color: var(--kir-ink); }
+.kir-left { min-width: 0; }
+.kir-head { display: flex; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kir-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kir-head span:first-child { color: var(--kir-lime); }
+.kir-lead { margin: 0 0 24px; font: 400 16px/1.6 Archivo, sans-serif; color: var(--kir-ink-2); text-wrap: pretty; }
+
+/* the split: two flat segments, a 2px gap, rounded ends; widths are the shares */
+.kir-bar { display: flex; gap: 2px; height: 56px; }
+.kir-seg { display: flex; align-items: center; min-width: 0; padding: 0 16px; font: 700 24px/1 Archivo, sans-serif; letter-spacing: -.01em; transform-origin: 0 50%; transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
+.kir-seg.ok { flex: 72 1 0; background: var(--kir-lime); color: #182003; border-radius: 10px 4px 4px 10px; }
+.kir-seg.esc { flex: 28 1 0; background: var(--kir-grey); color: var(--kir-ink); padding: 0 12px; font-size: 20px; border-radius: 4px 10px 10px 4px; transition-delay: .15s; }
+.kir-labels { display: flex; gap: 2px; margin-top: 10px; }
+.kir-labels span { min-width: 0; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kir-ink-3); }
+.kir-labels span:first-child { flex: 72 1 0; padding-left: 2px; color: var(--kir-ink-2); }
+.kir-labels span:last-child { flex: 28 1 0; padding-left: 2px; }
+.kir-pre .kir-seg { transform: scaleX(0); transition: none; }
+
+@container (max-width: 760px) {
+  .kir-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 20px; gap: 24px; }
+  .kir-lead { margin-bottom: 20px; }
+  .kir-bar { height: 48px; }
+  .kir-seg { font-size: 22px; padding: 0 12px; }
+  .kir-seg.esc { font-size: 18px; padding: 0 10px; }
+  .kir-labels span { letter-spacing: .06em; }
+}
+@media (prefers-reduced-motion: reduce) { .kir-wrap *, .kir-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="kir-board">
+<div class="kir-left">
+<div class="kir-head"><span>INTENT ROUTING IN CHAT</span><span>ILLUSTRATIVE</span></div>
+<p class="kir-lead">Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.</p>
+<div aria-label="About 72 percent of chats are resolved by the chatbot and about 28 percent are escalated to an agent" class="kir-bar" role="img"><div class="kir-seg ok">~72%</div><div class="kir-seg esc">~28%</div></div>
+<div aria-hidden="true" class="kir-labels"><span>RESOLVED BY CHATBOT</span><span>ESCALATED</span></div>
 </div>
 <div data-r="route-phones" style="display: flex; gap: 20px; justify-content: center;"><div style="flex: 1 1 0px; min-width: 0px; max-width: 262px; display: flex; flex-direction: column;"><div style="background: linear-gradient(155deg, rgb(42, 42, 48), rgb(14, 14, 17)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.8) 0px 30px 56px -26px, rgba(255, 255, 255, 0.06) 0px 0px 0px 1px inset;"><div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(246, 247, 249);"><div style='position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: "Archivo", -apple-system, sans-serif; display: flex; flex-direction: column;'><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 20, 25, 0.3); z-index: 9;"></div><div style="background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, rgb(232, 35, 43), rgb(179, 20, 28)); background-size: 16px 16px, auto; color: rgb(255, 255, 255); padding-bottom: 18px;"><div style="padding: 16px 30px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(255, 255, 255);"><span style="font-weight: 700; font-size: 15px;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewbox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg><span style='width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font: 800 15px / 1 "Archivo", sans-serif;'>LA</span><div><div style='font: 700 19px / 1.1 "Archivo", sans-serif; white-space: nowrap;'>LinkAja</div><div style='font: 500 13.5px / 1 "Archivo", sans-serif; opacity: 0.85; margin-top: 4px;'><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>Online</div></div></div></div><div style="flex: 1 1 0%; padding: 20px 18px 40px; display: flex; flex-direction: column; gap: 14px;"><div data-c="A1" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Limit PayLater saya kok belum naik?</div><div data-c="A2" style='flex: 0 0 auto; align-self: center; font: 700 11.5px / 1 "Archivo", sans-serif; letter-spacing: 0.08em; color: rgb(28, 122, 74); background: rgb(227, 244, 234); padding: 7px 11px; border-radius: 999px; white-space: nowrap;'>INTENT · LIMIT</div><div aria-hidden="true" class="chat-typing" data-c="TA" style="flex: 0 0 auto; align-self: flex-start; background: rgb(255, 255, 255); border-radius: 18px 18px 18px 5px; padding: 13px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px; display: flex; gap: 5px; align-items: center; overflow: hidden;"><i></i><i></i><i></i></div><div data-c="A3" style='flex: 0 0 auto; align-self: flex-start; max-width: 84%; background: rgb(255, 255, 255); color: rgb(28, 31, 36); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 18px 5px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;'>Limit kamu dievaluasi tiap bulan. Tagihan terakhir lunas tepat waktu, jadi kamu masuk evaluasi berikutnya.</div><div data-c="A4" style="flex: 0 0 auto; align-self: flex-start; width: 84%; box-sizing: border-box; background: rgb(255, 255, 255); border-radius: 14px; padding: 14px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;"><div style='font: 600 12px / 1 "Archivo", sans-serif; letter-spacing: 0.04em; color: rgb(107, 114, 128);'>LIMIT SAAT INI</div><div style='font: 800 25px / 1 "Archivo", sans-serif; color: rgb(28, 31, 36); margin-top: 8px;'>Rp3.750.000</div><div style="height: 6px; border-radius: 3px; background: rgb(241, 242, 244); margin-top: 12px;"><div style="width: 62%; height: 100%; border-radius: 3px; background: rgb(232, 35, 43);"></div></div></div><div data-c="A5" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Oke, makasih!</div><div data-c="A6" style='margin-top: auto; align-self: center; font: 700 13px / 1 "Archivo", sans-serif; color: rgb(28, 122, 74);'>✓ Selesai tanpa agen</div></div></div></div></div></div><div style="flex: 1 1 0px; min-width: 0px; max-width: 262px; display: flex; flex-direction: column;"><div style="background: linear-gradient(155deg, rgb(42, 42, 48), rgb(14, 14, 17)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.8) 0px 30px 56px -26px, rgba(255, 255, 255, 0.06) 0px 0px 0px 1px inset;"><div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(246, 247, 249);"><div style='position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(calc(100cqw * (1 / 375px))); transform-origin: left top; font-family: "Archivo", -apple-system, sans-serif; display: flex; flex-direction: column;'><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 20, 25, 0.3); z-index: 9;"></div><div style="background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, rgb(232, 35, 43), rgb(179, 20, 28)); background-size: 16px 16px, auto; color: rgb(255, 255, 255); padding-bottom: 18px;"><div style="padding: 16px 30px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(255, 255, 255);"><span style="font-weight: 700; font-size: 15px;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewbox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg><span style='width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font: 800 15px / 1 "Archivo", sans-serif;'>LA</span><div><div style='font: 700 19px / 1.1 "Archivo", sans-serif; white-space: nowrap;'>LinkAja</div><div style='font: 500 13.5px / 1 "Archivo", sans-serif; opacity: 0.85; margin-top: 4px;'><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>Online</div></div></div></div><div style="flex: 1 1 0%; padding: 20px 18px 40px; display: flex; flex-direction: column; gap: 14px;"><div data-c="B1" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Ada transaksi yang bukan saya</div><div data-c="B2" style='flex: 0 0 auto; align-self: center; font: 700 11.5px / 1 "Archivo", sans-serif; letter-spacing: 0.08em; color: rgb(179, 20, 28); background: rgb(253, 232, 232); padding: 7px 11px; border-radius: 999px; white-space: nowrap;'>INTENT · INDIKASI FRAUD</div><div aria-hidden="true" class="chat-typing" data-c="TB" style="flex: 0 0 auto; align-self: flex-start; background: rgb(255, 255, 255); border-radius: 18px 18px 18px 5px; padding: 13px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px; display: flex; gap: 5px; align-items: center; overflow: hidden;"><i></i><i></i><i></i></div><div data-c="B3" style='flex: 0 0 auto; align-self: flex-start; max-width: 84%; background: rgb(255, 255, 255); color: rgb(28, 31, 36); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 18px 5px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;'>Akun kamu sudah kami amankan sementara. Kami hubungkan ke agen sekarang.</div><div data-c="B4" style="flex: 0 0 auto; background: rgb(255, 255, 255); border: 1.5px solid rgb(244, 181, 183); border-radius: 14px; padding: 14px 15px;"><div style='font: 700 12px / 1 "Archivo", sans-serif; letter-spacing: 0.06em; color: rgb(179, 20, 28);'>DITERUSKAN KE AGEN</div><div style='font: 500 14px / 1.5 "Archivo", sans-serif; color: rgb(55, 65, 81); margin-top: 7px;'>Riwayat chat, transaksi terkait dan status akun ikut terkirim.</div></div><div data-c="B5" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><span style='flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; background: rgb(253, 232, 232); color: rgb(179, 20, 28); display: flex; align-items: center; justify-content: center; font: 800 13px / 1 "Archivo", sans-serif;'>RN</span><span style='font: 600 14px / 1.35 "Archivo", sans-serif; color: rgb(28, 31, 36);'>Rina, agen keamanan<br/><span style="font-weight: 500; color: rgb(107, 114, 128);">bergabung ke chat</span></span></div></div></div></div></div></div></div>
+</div>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kir-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  wrap.classList.add('kir-pre');
+  var seen = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && es[0].intersectionRatio >= .4) { seen.disconnect(); void board.offsetWidth; wrap.classList.remove('kir-pre'); }
+  }, { threshold: [0, .2, .4, .7] });
+  seen.observe(board);
+})();
+</script>
 </div>
 </div><div class="mk-block"><div style="margin-top: 40px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
 <span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>SELF-SERVICE SCREENS THAT ABSORB THE VOLUME</span>
@@ -1403,19 +1797,76 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 })();
 </script>
 </div>
-</div><div class="mk-block"><!-- Komunal: tooling migration, Sanity to Framer, weeks to days.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: stretch;">
-<div style="background: rgb(15, 19, 25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122); margin-bottom: 22px;'>TOOLING MIGRATION · WEB DELIVERY</div>
-<div data-m="ba" data-r="tool-row" style="display: flex; align-items: stretch; gap: 14px;">
-<div style="flex: 1 1 0%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 18px 16px;"><div style="display: flex; align-items: center; gap: 11px;"><span style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 9px; background: rgb(13, 14, 18); border: 1px solid rgba(255, 255, 255, 0.16); display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" fill="#fff" height="18" viewbox="0 0 24 24" width="18"><path d="m23.327 15.205-.893-1.555-4.321 2.632 4.799-6.11.726-.426-.179-.27.33-.421-1.515-1.261-.693.883-13.992 8.186 5.173-6.221 9.636-5.282-.915-1.769-5.248 2.876 2.584-3.106-1.481-1.305-5.816 6.994-5.777 3.168 4.423-5.847 2.771-1.442-.88-1.789-8.075 4.203L6.186 4.43 4.648 3.198 0 9.349l.072.058.868 1.768 5.153-2.683-4.696 6.207.77.617.458.885 5.425-2.974-5.974 7.185 1.481 1.304.297-.358 14.411-8.459-4.785 6.094.078.065-.007.005.992 1.726 6.364-3.877-2.451 3.954 1.642 1.077L24 15.648z"></path></svg></span><div style="font: 700 19px / 1 Archivo; color: rgba(242, 239, 232, 0.85);">Sanity</div></div><div style="font: 400 12px / 1.4 Archivo; color: rgba(242, 239, 232, 0.6); margin-top: 12px;">Legacy platform · dev-dependent</div><div style='margin-top: 16px; display: inline-block; font: 700 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgb(232, 145, 140); background: rgba(232, 80, 72, 0.12); border: 1px solid rgba(232, 80, 72, 0.32); padding: 7px 10px; border-radius: 6px;'>WEEKS</div></div>
-<div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;"><svg data-r="tool-arrow" fill="none" height="30" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="30"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; color: rgba(242, 239, 232, 0.6);'>CHAMPIONED</span></div>
-<div style="flex: 1 1 0%; background: oklch(0.9 0.2 122 / 0.06); border: 1px solid oklch(0.9 0.2 122 / 0.4); border-radius: 10px; padding: 18px 16px;"><div style="display: flex; align-items: center; gap: 11px;"><span style="flex: 0 0 auto; width: 34px; height: 34px; border-radius: 9px; background: rgb(0, 85, 255); border: 1px solid rgb(0, 85, 255); display: flex; align-items: center; justify-content: center;"><svg aria-hidden="true" fill="#fff" height="16" viewbox="0 0 24 24" width="16"><path d="M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z"></path></svg></span><div style="font: 700 19px / 1 Archivo; color: rgb(242, 239, 232);">Framer</div></div><div style="font: 400 12px / 1.4 Archivo; color: rgba(242, 239, 232, 0.55); margin-top: 12px;">Design-to-web · shipped by design</div><div style='margin-top: 16px; display: inline-block; font: 700 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgb(24, 32, 3); background: oklch(0.9 0.2 122); padding: 7px 10px; border-radius: 6px;'>DAYS</div></div>
+</div><div class="mk-block"><!-- Komunal: tooling migration, Sanity to Framer, weeks to days, in the shared diagram language (design/sections/VIZ-STYLE.md):
+     head row above a flat board, two tool cards joined by a short dashed-to-lime connector, caption under the board.
+     The two logos are the tools' own brand marks and keep their colours; everything around them is the board's palette.
+     The problem (WEEKS) is amber, the outcome (DAYS) is lime, and only the Framer card gets the lime ring.
+     Static: no script. Stacks (connector turns vertical) when the column is narrow. -->
+<div class="ktm-wrap" style="margin-top: 44px;">
+<style>
+.ktm-wrap {
+  container-type: inline-size;
+  --ktm-panel: #1a1b1f; --ktm-node: #232429; --ktm-tile: #2b2c32; --ktm-line: rgba(255, 255, 255, .08);
+  --ktm-ink: #f2f2f4; --ktm-ink-2: #c2c3cb; --ktm-ink-3: #8b8d98; --ktm-edge: #4a4d57;
+  --ktm-lime: oklch(0.9 0.2 122); --ktm-amber: #fdb022;
+}
+.ktm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.ktm-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.ktm-head span:first-child { color: var(--ktm-lime); }
+
+.ktm-board { border-radius: 14px; background: var(--ktm-panel); box-shadow: 0 0 0 1px var(--ktm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: stretch; gap: 14px; font-family: Archivo, system-ui, sans-serif; color: var(--ktm-ink); }
+
+.ktm-card { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; padding: 20px 20px 18px; border-radius: 12px; background: var(--ktm-node); box-shadow: 0 0 0 1px var(--ktm-line); }
+.ktm-card.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.ktm-id { display: flex; align-items: center; gap: 12px; }
+.ktm-logo { flex: none; width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; }
+.ktm-logo.sanity { background: #0d0e12; box-shadow: 0 0 0 1px rgba(255, 255, 255, .16); }
+.ktm-logo.framer { background: #0055ff; }
+.ktm-id b { font: 700 20px/1 Archivo, sans-serif; color: var(--ktm-ink); }
+.ktm-card p { margin: 12px 0 0; font: 400 13px/1.4 Archivo, sans-serif; color: var(--ktm-ink-2); }
+.ktm-chip { margin-top: auto; padding: 5px 8px; border-radius: 6px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; }
+.ktm-card p + .ktm-chip { margin-top: 18px; }
+.ktm-chip.weeks { color: var(--ktm-amber); background: rgba(253, 176, 34, .1); box-shadow: 0 0 0 1px rgba(253, 176, 34, .35); }
+.ktm-chip.days { color: var(--ktm-lime); background: oklch(0.9 0.2 122 / .1); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .4); }
+
+/* connector: dashed in the resting colour, turning lime into the outcome */
+.ktm-con { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+.ktm-con small { font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .12em; color: var(--ktm-ink-3); }
+.ktm-run { position: relative; width: 84px; height: 2px; background: linear-gradient(90deg, var(--ktm-edge), var(--ktm-lime)); -webkit-mask: repeating-linear-gradient(90deg, #000 0 4px, transparent 4px 10px); mask: repeating-linear-gradient(90deg, #000 0 4px, transparent 4px 10px); }
+.ktm-arrow { position: relative; width: 84px; height: 10px; }
+.ktm-arrow::before { content: ''; position: absolute; right: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-top: 2px solid var(--ktm-lime); border-right: 2px solid var(--ktm-lime); transform: rotate(45deg) translate(-2px, 2px); transform-origin: center; border-radius: 1px; }
+.ktm-arrow .ktm-run { position: absolute; left: 0; top: 4px; }
+
+.ktm-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+@container (max-width: 700px) {
+  .ktm-board { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 8px; }
+  .ktm-card { padding: 16px 16px 14px; }
+  .ktm-con { flex-direction: row; justify-content: center; gap: 12px; padding: 4px 0; }
+  .ktm-arrow { width: 10px; height: 52px; order: -1; }
+  .ktm-run { width: 2px; height: 100%; background: linear-gradient(180deg, var(--ktm-edge), var(--ktm-lime)); -webkit-mask: repeating-linear-gradient(180deg, #000 0 4px, transparent 4px 10px); mask: repeating-linear-gradient(180deg, #000 0 4px, transparent 4px 10px); }
+  .ktm-arrow .ktm-run { left: 4px; top: 0; }
+  .ktm-arrow::before { right: auto; left: 50%; top: auto; bottom: 0; margin: 0 0 0 -4px; transform: rotate(135deg) translate(-2px, 2px); }
+}
+</style>
+<div class="ktm-head"><span>TOOLING MIGRATION · WEB DELIVERY</span><span>SANITY → FRAMER</span></div>
+<div aria-label="Tooling migration: Sanity, a legacy platform that depends on developers, with release cycles measured in weeks, championed over to Framer, design-to-web shipped by design, with release cycles measured in days." class="ktm-board" role="img">
+<div class="ktm-card">
+<div class="ktm-id"><span class="ktm-logo sanity"><svg aria-hidden="true" fill="#fff" height="18" viewbox="0 0 24 24" width="18"><path d="m23.327 15.205-.893-1.555-4.321 2.632 4.799-6.11.726-.426-.179-.27.33-.421-1.515-1.261-.693.883-13.992 8.186 5.173-6.221 9.636-5.282-.915-1.769-5.248 2.876 2.584-3.106-1.481-1.305-5.816 6.994-5.777 3.168 4.423-5.847 2.771-1.442-.88-1.789-8.075 4.203L6.186 4.43 4.648 3.198 0 9.349l.072.058.868 1.768 5.153-2.683-4.696 6.207.77.617.458.885 5.425-2.974-5.974 7.185 1.481 1.304.297-.358 14.411-8.459-4.785 6.094.078.065-.007.005.992 1.726 6.364-3.877-2.451 3.954 1.642 1.077L24 15.648z"></path></svg></span><b>Sanity</b></div>
+<p>Legacy platform · dev-dependent</p>
+<span class="ktm-chip weeks">WEEKS</span>
 </div>
-<div style="margin-top: auto; padding-top: 20px; font: 400 13px / 1.55 Archivo; color: rgba(242, 239, 232, 0.6);">Championed the shift to Framer for building and updating web components, replacing the legacy Sanity platform, collapsing release cycles from weeks to days.</div>
+<div aria-hidden="true" class="ktm-con">
+<small>CHAMPIONED</small>
+<div class="ktm-arrow"><div class="ktm-run"></div></div>
 </div>
+<div class="ktm-card win">
+<div class="ktm-id"><span class="ktm-logo framer"><svg aria-hidden="true" fill="#fff" height="16" viewbox="0 0 24 24" width="16"><path d="M4 0h16v8h-8zM4 8h8l8 8H4zM4 16h8v8z"></path></svg></span><b>Framer</b></div>
+<p>Design-to-web · shipped by design</p>
+<span class="ktm-chip days">DAYS</span>
+</div>
+</div>
+<p class="ktm-cap">Championed the shift to Framer for building and updating web components, replacing the legacy Sanity platform, collapsing release cycles from weeks to days.</p>
 </div>
 </div><div class="mk-block"><!-- Komunal: placement routing. Before, checkout locked a placement onto a payment method and a listener waited for the
      money; when the sender's own transfer limit blocked it (a low bank default, a cap the user set and forgot, or an
@@ -1678,113 +2129,204 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 })();
 </script>
 </div>
-</div><div class="mk-block"><!-- Komunal: deposit placement funnel and placement volume, laid out funnel | volume (stacked on phones).
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div class="kfun-wrap" style="margin-top: 24px;"><style>
-.kfun { display: grid !important; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 32px; align-items: start; }
-.kfun > .kfun-b { margin-top: 0 !important; padding-top: 0 !important; border-top: 0 !important; padding-left: 32px; border-left: 1px solid rgba(255, 255, 255, .08); align-self: stretch; display: flex; flex-direction: column; }
-/* both charts sit on the row's baseline, whichever column is taller, not floating under their titles */
-.kfun > .kfun-a { align-self: stretch; display: flex; flex-direction: column; }
-.kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: auto; }
-.kfun > .kfun-sp { display: none; }
-.kfun > .kfun-n { grid-column: 1 / -1; margin-top: 18px; }
-@media (max-width: 899px) {
-  .kfun { grid-template-columns: minmax(0, 1fr); }
-  .kfun > .kfun-b { margin-top: 16px !important; padding-top: 18px !important; border-top: 1px solid rgba(255, 255, 255, .08) !important; padding-left: 0; border-left: 0; }
-  .kfun > .kfun-b > svg:last-child, .kfun > .kfun-a > svg:last-child { margin-top: 0; }
+</div><div class="mk-block"><!-- Komunal: deposit placement funnel and placement volume, laid out funnel | volume (stacked below ~900px), in the shared
+     diagram language (design/sections/VIZ-STYLE.md): head row, flat board, two chart lanes on ONE shared baseline, caption under.
+     Funnel bars are grey with only "Complete" in lime; the Fund -> Complete step chip (90%) is lime because that is the step the
+     placement routing fixed (see komunal-placement-routing above). Volume is a flat 2px lime line over a faint area.
+     Markup is the final state, so the page is complete without JavaScript; the script resets to the start state and grows the
+     bars / draws the line once the board is 40% in view, then loops while on screen. Reduced motion keeps the final state.
+     Nothing is measured in script, so a shut drawer is fine. Volumes are illustrative under NDA; the +12-point lift is actual. -->
+<div class="kfl-wrap" style="margin-top: 24px;">
+<style>
+.kfl-wrap {
+  container-type: inline-size;
+  --kfl-panel: #1a1b1f; --kfl-node: #232429; --kfl-tile: #2b2c32; --kfl-line: rgba(255, 255, 255, .08);
+  --kfl-ink: #f2f2f4; --kfl-ink-2: #c2c3cb; --kfl-ink-3: #8b8d98; --kfl-edge: #4a4d57; --kfl-grey: #6b6e78;
+  --kfl-lime: oklch(0.9 0.2 122); --kfl-amber: #fdb022;
+  --kfl-plot: 200px; --kfl-below: 84px;
 }
-</style><div class="kfun" style="min-height: 340px; background: rgb(15, 19, 25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 22px 24px; display: flex; flex-direction: column; font-family: Archivo, sans-serif;">
-<div class="kfun-a"><div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px;">
-<div>
-<div style="font: 700 15px / 1.2 Archivo, sans-serif; color: rgb(234, 238, 246); letter-spacing: -0.01em;">Deposit Placement Funnel</div>
-<div style="display: flex; align-items: center; gap: 7px; margin-top: 7px;"><span style="width: 7px; height: 7px; border-radius: 2px; background: rgb(76, 134, 255);"></span><span style="font: 500 11px / 1 Archivo, sans-serif; color: rgb(154, 163, 180);">DepositoBPR · Representative 30 days</span></div>
+.kfl-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kfl-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kfl-head span:first-child { color: var(--kfl-lime); }
+
+.kfl-board { border-radius: 14px; background: var(--kfl-panel); box-shadow: 0 0 0 1px var(--kfl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; align-items: stretch; font-family: Archivo, system-ui, sans-serif; color: var(--kfl-ink); }
+.kfl-lane { display: flex; flex-direction: column; min-width: 0; padding: 18px 20px 16px; border-radius: 12px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kfl-line); }
+
+/* chart title (left) and headline numbers (right) */
+.kfl-lh { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 16px; margin-bottom: 18px; }
+.kfl-lh h3 { margin: 0; font: 600 14px/1.25 Archivo, sans-serif; color: var(--kfl-ink); }
+.kfl-lh p { margin: 5px 0 0; font: 500 11px/1.35 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-hl { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.kfl-big { display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.kfl-big b { font: 800 26px/1 Archivo, sans-serif; letter-spacing: -.01em; color: var(--kfl-lime); }
+.kfl-big span { font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kfl-ink-3); }
+.kfl-pill { padding: 5px 8px; border-radius: 6px; background: oklch(0.9 0.2 122 / .08); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .5); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kfl-lime); white-space: nowrap; }
+
+/* both charts end on one baseline: the chart block is pushed to the bottom of its (stretched) lane,
+   and the plot and the strip under the axis have the same fixed heights in both lanes */
+.kfl-chart { margin-top: auto; }
+.kfl-plot { position: relative; height: var(--kfl-plot); border-bottom: 1px solid var(--kfl-edge); }
+.kfl-grid { position: absolute; left: 0; right: 0; height: 1px; background: var(--kfl-line); }
+.kfl-below { min-height: var(--kfl-below); padding-top: 8px; }
+
+/* funnel */
+.kfl-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 4px; }
+.kfl-col { position: relative; }
+.kfl-bar { position: absolute; left: 0; right: 0; bottom: 0; height: calc(var(--p) * 1.5px); border-radius: 4px 4px 0 0; background: var(--kfl-grey); transition: height .75s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 90ms); }
+.kfl-col.win .kfl-bar { background: var(--kfl-lime); }
+.kfl-val { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); padding-bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 3px; white-space: nowrap; transition: opacity .4s ease calc(var(--i) * 90ms + .3s); }
+.kfl-val b { font: 700 16px/1 Archivo, sans-serif; color: var(--kfl-ink); }
+.kfl-val small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-col.win .kfl-val b { color: var(--kfl-lime); }
+.kfl-names { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 4px; }
+.kfl-names span { text-align: center; font: 500 13px/1.25 Archivo, sans-serif; color: var(--kfl-ink-2); }
+.kfl-names span:last-child { color: var(--kfl-ink); font-weight: 600; }
+.kfl-steps { margin-top: 14px; }
+.kfl-steps > small { display: block; font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--kfl-ink-3); }
+.kfl-chips { position: relative; height: 24px; margin-top: 6px; }
+.kfl-chip { position: absolute; top: 0; left: calc(var(--k) * 20%); transform: translateX(-50%); padding: 5px 7px; border-radius: 6px; background: var(--kfl-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-2); }
+.kfl-chip.win { background: oklch(0.9 0.2 122 / .1); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); color: var(--kfl-lime); font-weight: 600; }
+
+/* volume: a flat 2px line over a faint area; the points are HTML so they stay round at any width */
+.kfl-svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; overflow: visible; transition: clip-path 1.4s linear; clip-path: inset(-20% 0 0 0); }
+.kfl-area { fill: url(#kfl-fade); stroke: none; }
+.kfl-ln { fill: none; stroke: var(--kfl-lime); stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.kfl-pt { position: absolute; left: calc((var(--i) + .5) / 6 * 100%); bottom: calc((var(--v) - 92) / 32 * 100%); width: 7px; height: 7px; margin: 0 0 -3.5px -3.5px; border-radius: 50%; background: var(--kfl-lime); box-shadow: 0 0 0 2px var(--kfl-panel); transition: opacity .3s ease calc(var(--i) * 280ms), transform .3s ease calc(var(--i) * 280ms); }
+.kfl-pt.end { box-shadow: 0 0 0 2px var(--kfl-panel), 0 0 0 7px oklch(0.9 0.2 122 / .15); }
+.kfl-pv { position: absolute; left: calc((var(--i) + .5) / 6 * 100%); bottom: calc((var(--v) - 92) / 32 * 100% + 12px); transform: translateX(-50%); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); transition: opacity .3s ease calc(var(--i) * 280ms); }
+.kfl-pv.end { font-weight: 600; color: var(--kfl-lime); }
+.kfl-months { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.kfl-months span { text-align: center; font: 500 11px/1.25 'IBM Plex Mono', monospace; color: var(--kfl-ink-3); }
+.kfl-months span:last-child { color: var(--kfl-ink-2); font-weight: 600; }
+
+/* start state while it plays */
+.kfl-wrap.idle .kfl-bar { height: 0; }
+.kfl-wrap.idle .kfl-val, .kfl-wrap.idle .kfl-pv { opacity: 0; }
+.kfl-wrap.idle .kfl-pt { opacity: 0; transform: scale(.4); }
+.kfl-wrap.idle .kfl-svg { clip-path: inset(-20% 100% 0 0); }
+.kfl-wrap.snap *, .kfl-wrap.snap *::before { transition: none !important; }
+
+.kfl-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* stacked: funnel above volume */
+@container (max-width: 860px) {
+  .kfl-board { grid-template-columns: minmax(0, 1fr); }
+  .kfl-below { min-height: 0; }
+}
+/* narrow */
+@container (max-width: 520px) {
+  .kfl-board { padding: 10px; gap: 10px; }
+  .kfl-lane { padding: 14px 12px 12px; }
+  .kfl-hl { align-items: flex-start; }
+  .kfl-val b { font-size: 15px; }
+  .kfl-names span { font-size: 12px; }
+}
+@media (prefers-reduced-motion: reduce) { .kfl-wrap *, .kfl-wrap *::before { transition: none !important; animation: none !important; } }
+</style>
+<div class="kfl-head"><span>DEPOSIT PLACEMENT FUNNEL · VOLUME</span><span>DEPOSITOBPR · ILLUSTRATIVE VOLUMES</span></div>
+<div class="kfl-board">
+<div class="kfl-lane">
+<div class="kfl-lh">
+<div><h3>Deposit Placement Funnel</h3><p>DepositoBPR · Representative 30 days</p></div>
+<div class="kfl-hl"><div class="kfl-big"><b>55.0%</b><span>END-TO-END</span></div><span class="kfl-pill">+12 PTS POST-REVAMP</span></div>
 </div>
-<div style="text-align: right;"><div style="font: 700 21px / 1 Archivo, sans-serif; color: rgb(111, 160, 255);">55.0%</div><div style="font: 600 11px / 1 Archivo, sans-serif; letter-spacing: 0.1em; color: rgb(154, 163, 180); margin-top: 5px;">END-TO-END</div><div style="margin-top: 7px; display: inline-flex; align-items: center; gap: 4px; font: 700 11px / 1 Archivo, sans-serif; letter-spacing: 0.05em; color: rgb(52, 199, 123); background: rgba(52, 199, 123, 0.12); border-radius: 5px; padding: 4px 7px;"><svg fill="none" height="9" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3" viewbox="0 0 24 24" width="9"><path d="m5 12 7-7 7 7"></path><path d="M12 19V5"></path></svg>+12 PTS POST-REVAMP</div></div>
-</div><svg aria-label="Deposit placement funnel: 100% open app, 84% register, 71% verify KYC, 61% fund, 55% complete" data-r="funnel3d" preserveaspectratio="xMidYMid meet" role="img" style="width: 100%; height: auto; display: block;" viewbox="0 -6 680 268">
-<defs><lineargradient id="dbFunnel" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5A8DFF"></stop><stop offset="1" stop-color="#2C5AD6"></stop></lineargradient><lineargradient id="dbFunnelSide" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2F5FD8"></stop><stop offset="1" stop-color="#173A9A"></stop></lineargradient><lineargradient id="dbFunnelTop" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#9DBBFF"></stop><stop offset="1" stop-color="#7AA2FF"></stop></lineargradient></defs>
-<g font-family="'Archivo',sans-serif">
-<line stroke="rgba(255,255,255,.06)" stroke-width="1" x1="40" x2="648" y1="52" y2="52"></line>
-<line stroke="rgba(255,255,255,.06)" stroke-width="1" x1="40" x2="648" y1="140" y2="140"></line>
-<line stroke="rgba(255,255,255,.14)" stroke-width="1" x1="40" x2="648" y1="228" y2="228"></line>
-<g fill="rgba(76,134,255,.14)"><polygon points="138,44 185,80 185,228 138,220"></polygon><polygon points="259,72 307,103 307,228 259,220"></polygon><polygon points="381,95 429,121 429,228 381,220"></polygon><polygon points="503,113 550,131 550,228 503,220"></polygon></g>
-<g><g data-r="bar3d"><polygon fill="url(#dbFunnelSide)" points="126,52 138,44 138,220 126,228"></polygon><polygon fill="url(#dbFunnelTop)" points="64,52 76,44 138,44 126,52"></polygon><polygon fill="url(#dbFunnel)" points="64,52 126,52 126,228 64,228"></polygon></g><g data-r="bar3d"><polygon fill="url(#dbFunnelSide)" points="247,80 259,72 259,220 247,228"></polygon><polygon fill="url(#dbFunnelTop)" points="185,80 197,72 259,72 247,80"></polygon><polygon fill="url(#dbFunnel)" points="185,80 247,80 247,228 185,228"></polygon></g><g data-r="bar3d"><polygon fill="url(#dbFunnelSide)" points="369,103 381,95 381,220 369,228"></polygon><polygon fill="url(#dbFunnelTop)" points="307,103 319,95 381,95 369,103"></polygon><polygon fill="url(#dbFunnel)" points="307,103 369,103 369,228 307,228"></polygon></g><g data-r="bar3d"><polygon fill="url(#dbFunnelSide)" points="491,121 503,113 503,220 491,228"></polygon><polygon fill="url(#dbFunnelTop)" points="429,121 441,113 503,113 491,121"></polygon><polygon fill="url(#dbFunnel)" points="429,121 491,121 491,228 429,228"></polygon></g><g data-r="bar3d"><polygon fill="url(#dbFunnelSide)" points="612,131 624,123 624,220 612,228"></polygon><polygon fill="url(#dbFunnelTop)" points="550,131 562,123 624,123 612,131"></polygon><polygon fill="url(#dbFunnel)" points="550,131 612,131 612,228 550,228"></polygon></g></g>
-<g text-anchor="middle">
-<text fill="#EAEEF6" font-size="17" font-weight="700" x="95" y="26">100%</text>
-<text fill="#9AA3B4" font-size="10" font-weight="500" x="95" y="39">12,840</text>
-<text fill="#EAEEF6" font-size="17" font-weight="700" x="216" y="54">84%</text>
-<text fill="#9AA3B4" font-size="10" font-weight="500" x="216" y="67">10,790</text>
-<text fill="#EAEEF6" font-size="17" font-weight="700" x="338" y="77">71%</text>
-<text fill="#9AA3B4" font-size="10" font-weight="500" x="338" y="90">9,120</text>
-<text fill="#EAEEF6" font-size="17" font-weight="700" x="460" y="95">61%</text>
-<text fill="#9AA3B4" font-size="10" font-weight="500" x="460" y="108">7,830</text>
-<text fill="#6FA0FF" font-size="17" font-weight="700" x="581" y="105">55%</text>
-<text fill="#9AA3B4" font-size="10" font-weight="500" x="581" y="118">7,060</text>
-</g>
-<g>
-<rect fill="rgba(255,255,255,.07)" height="19" rx="9.5" width="40" x="141" y="187"></rect><text fill="#C3CDDD" font-family="'Archivo',sans-serif" font-size="10" font-weight="600" text-anchor="middle" x="161" y="200">84%</text>
-<rect fill="rgba(255,255,255,.07)" height="19" rx="9.5" width="40" x="263" y="187"></rect><text fill="#C3CDDD" font-family="'Archivo',sans-serif" font-size="10" font-weight="600" text-anchor="middle" x="283" y="200">85%</text>
-<rect fill="rgba(255,255,255,.07)" height="19" rx="9.5" width="40" x="385" y="187"></rect><text fill="#C3CDDD" font-family="'Archivo',sans-serif" font-size="10" font-weight="600" text-anchor="middle" x="405" y="200">86%</text>
-<rect fill="rgba(127,224,168,.14)" height="19" rx="9.5" width="40" x="506" y="187"></rect><text fill="#7FE0A8" font-family="'Archivo',sans-serif" font-size="10" font-weight="600" text-anchor="middle" x="526" y="200">90%</text>
-</g>
-<g fill="#9AA3B4" font-size="11" font-weight="500" text-anchor="middle">
-<text x="95" y="250">Open app</text>
-<text x="216" y="250">Register</text>
-<text x="338" y="250">Verify KYC</text>
-<text x="460" y="250">Fund</text>
-<text x="581" y="250">Complete</text>
-</g>
-</g>
-</svg></div>
-<div class="kfun-b" style="margin-top: 16px; padding-top: 18px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px;">
-<div>
-<div style="font: 700 13.5px / 1.2 Archivo, sans-serif; color: rgb(234, 238, 246); letter-spacing: -0.01em;">Deposit Placement Volume</div>
-<div style="font: 500 11px / 1 Archivo, sans-serif; color: rgb(154, 163, 180); margin-top: 6px;">Indexed to launch · 6 months post-revamp</div>
+<div class="kfl-chart">
+<div aria-label="Deposit placement funnel: 100% open app, 84% register, 71% verify KYC, 61% fund, 55% complete. Step to step: 84%, 85%, 86%, and 90% from fund to complete." class="kfl-plot" role="img">
+<div class="kfl-grid" style="bottom: 75px"></div>
+<div class="kfl-grid" style="bottom: 150px"></div>
+<div class="kfl-cols">
+<div class="kfl-col" style="--p:100; --i:0"><div class="kfl-bar"><div class="kfl-val"><b>100%</b><small>12,840</small></div></div></div>
+<div class="kfl-col" style="--p:84; --i:1"><div class="kfl-bar"><div class="kfl-val"><b>84%</b><small>10,790</small></div></div></div>
+<div class="kfl-col" style="--p:71; --i:2"><div class="kfl-bar"><div class="kfl-val"><b>71%</b><small>9,120</small></div></div></div>
+<div class="kfl-col" style="--p:61; --i:3"><div class="kfl-bar"><div class="kfl-val"><b>61%</b><small>7,830</small></div></div></div>
+<div class="kfl-col win" style="--p:55; --i:4"><div class="kfl-bar"><div class="kfl-val"><b>55%</b><small>7,060</small></div></div></div>
 </div>
-<div style="text-align: right;"><span style="display: inline-flex; align-items: center; gap: 5px; background: rgba(76, 134, 255, 0.16); color: rgb(127, 176, 255); font: 700 11px / 1 Archivo, sans-serif; padding: 6px 10px; border-radius: 100px;"><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 24 24" width="12"><path d="M16 7h6v6"></path><path d="m22 7-8.5 8.5-5-5L2 17"></path></svg>+3.0% MoM</span><div style="font: 600 11px / 1 Archivo, sans-serif; color: rgb(154, 163, 180); margin-top: 6px;">+16% CUMULATIVE</div></div>
 </div>
-<svg aria-label="Deposit placement volume rising about 3 percent month over month for six months, up 16 percent cumulatively since the revamp" data-m="draw" preserveaspectratio="xMidYMid meet" role="img" style="width: 100%; height: auto; display: block;" viewbox="0 0 680 168">
-<defs><lineargradient id="dbGrowth" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="rgba(76,134,255,.34)"></stop><stop offset="1" stop-color="rgba(76,134,255,0)"></stop></lineargradient></defs>
-<g font-family="'Archivo',sans-serif">
-<line stroke="rgba(255,255,255,.12)" stroke-width="1" x1="40" x2="648" y1="130" y2="130"></line>
-<line stroke="rgba(255,255,255,.05)" stroke-width="1" x1="40" x2="648" y1="88" y2="88"></line>
-<line stroke="rgba(255,255,255,.05)" stroke-width="1" x1="40" x2="648" y1="46" y2="46"></line>
-<g data-r="ribbon3d"><polyline fill="none" points="92,97 202,85 311,72 421,60 530,43 640,31" stroke="rgba(127,176,255,.5)" stroke-linejoin="round" stroke-width="1.2"></polyline><g fill="rgba(90,141,255,.42)"><polygon points="70,113 180,101 202,85 92,97"></polygon><polygon points="180,101 289,88 311,72 202,85"></polygon><polygon points="289,88 399,76 421,60 311,72"></polygon><polygon points="399,76 508,59 530,43 421,60"></polygon><polygon points="508,59 618,47 640,31 530,43"></polygon></g><polygon fill="rgba(44,90,214,.6)" points="618,47 640,31 640,114 618,130"></polygon><polygon fill="rgba(76,134,255,.08)" points="70,130 618,130 640,114 92,114"></polygon></g><polygon fill="url(#dbGrowth)" points="70,113 180,101 289,88 399,76 508,59 618,47 618,130 70,130"></polygon>
-<polyline fill="none" points="70,113 180,101 289,88 399,76 508,59 618,47" stroke="#5A8DFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6"></polyline>
-<g fill="#0F1319" stroke="#5A8DFF" stroke-width="2.4"><circle cx="70" cy="113" r="3.4"></circle><circle cx="180" cy="101" r="3.4"></circle><circle cx="289" cy="88" r="3.4"></circle><circle cx="399" cy="76" r="3.4"></circle><circle cx="508" cy="59" r="3.4"></circle></g>
-<circle cx="618" cy="47" fill="#7FB0FF" r="5"></circle>
-<text fill="#9AA3B4" font-size="10.5" font-weight="500" text-anchor="middle" x="70" y="150">M1</text>
-<text fill="#9AA3B4" font-size="10.5" font-weight="500" text-anchor="middle" x="180" y="150">M2</text>
-<text fill="#9AA3B4" font-size="10.5" font-weight="500" text-anchor="middle" x="289" y="150">M3</text>
-<text fill="#9AA3B4" font-size="10.5" font-weight="500" text-anchor="middle" x="399" y="150">M4</text>
-<text fill="#9AA3B4" font-size="10.5" font-weight="500" text-anchor="middle" x="508" y="150">M5</text>
-<text fill="#C3CDDD" font-size="10.5" font-weight="600" text-anchor="middle" x="618" y="150">M6</text>
-<text fill="#7FB0FF" font-size="12" font-weight="700" text-anchor="end" x="612" y="24">116</text>
-<text fill="#9AA3B4" font-size="10.5" font-weight="600" text-anchor="middle" x="70" y="106">100</text>
-</g>
+<div aria-hidden="true" class="kfl-below">
+<div class="kfl-names"><span>Open app</span><span>Register</span><span>Verify KYC</span><span>Fund</span><span>Complete</span></div>
+<div class="kfl-steps">
+<small>STEP-TO-STEP</small>
+<div class="kfl-chips">
+<span class="kfl-chip" style="--k:1">84%</span><span class="kfl-chip" style="--k:2">85%</span><span class="kfl-chip" style="--k:3">86%</span><span class="kfl-chip win" style="--k:4">90%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="kfl-lane">
+<div class="kfl-lh">
+<div><h3>Deposit Placement Volume</h3><p>Indexed to launch · 6 months post-revamp</p></div>
+<div class="kfl-hl"><div class="kfl-big"><b>+3.0%</b><span>MoM</span></div><span class="kfl-pill">+16% CUMULATIVE</span></div>
+</div>
+<div class="kfl-chart">
+<div aria-label="Deposit placement volume, indexed to launch, rising about 3 percent month over month for six months: 100, 103, 106, 109, 113, 116, up 16 percent cumulatively since the revamp." class="kfl-plot" role="img">
+<div class="kfl-grid" style="bottom: 25%"></div>
+<div class="kfl-grid" style="bottom: 50%"></div>
+<div class="kfl-grid" style="bottom: 75%"></div>
+<svg aria-hidden="true" class="kfl-svg" preserveaspectratio="none" viewbox="0 0 100 100">
+<defs><lineargradient id="kfl-fade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="oklch(0.9 0.2 122)" stop-opacity=".09"></stop><stop offset="1" stop-color="oklch(0.9 0.2 122)" stop-opacity="0"></stop></lineargradient></defs>
+<polygon class="kfl-area" points="8.33,75 25,65.63 41.67,56.25 58.33,46.88 75,34.38 91.67,25 91.67,100 8.33,100"></polygon>
+<polyline class="kfl-ln" points="8.33,75 25,65.63 41.67,56.25 58.33,46.88 75,34.38 91.67,25"></polyline>
 </svg>
+<span class="kfl-pt" style="--i:0; --v:100"></span><span class="kfl-pt" style="--i:1; --v:103"></span><span class="kfl-pt" style="--i:2; --v:106"></span><span class="kfl-pt" style="--i:3; --v:109"></span><span class="kfl-pt" style="--i:4; --v:113"></span><span class="kfl-pt end" style="--i:5; --v:116"></span>
+<span class="kfl-pv" style="--i:0; --v:100">100</span><span class="kfl-pv" style="--i:1; --v:103">103</span><span class="kfl-pv" style="--i:2; --v:106">106</span><span class="kfl-pv" style="--i:3; --v:109">109</span><span class="kfl-pv" style="--i:4; --v:113">113</span><span class="kfl-pv end" style="--i:5; --v:116">116</span>
 </div>
-<div class="kfun-sp" style="flex: 1 1 0%; min-height: 10px;"></div>
-<div class="kfun-n" style="padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-<span style="font: 400 11.5px / 1.45 Archivo, sans-serif; color: rgb(154, 163, 180);">Iterative UX audits and enhancements lifted step-to-step conversion across the placement flow. Volumes are illustrative under NDA; the +12-point lift is actual.</span>
+<div aria-hidden="true" class="kfl-below">
+<div class="kfl-months"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span></div>
 </div>
-</div></div>
+</div>
+</div>
+</div>
+<p class="kfl-cap">Iterative UX audits and enhancements lifted step-to-step conversion across the placement flow. Volumes are illustrative under NDA; the +12-point lift is actual.</p>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kfl-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var HOLD = 5200, timers = [], visible = false, pending = false, ran = false;
+  function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  // snap to the start state with no transition, so a replay never shows the bars shrinking
+  function idle() {
+    clear(); wrap.classList.add('snap', 'idle'); void board.offsetWidth;
+    later(function () { wrap.classList.remove('snap'); }, 30);
+  }
+  function play() {
+    ran = true; clear();
+    later(function () { wrap.classList.remove('idle'); }, 60);
+    later(replay, 60 + HOLD);
+  }
+  function replay() {
+    if (!visible || document.hidden) { pending = true; return; }
+    pending = false; board.style.transition = 'opacity .4s'; board.style.opacity = .35;
+    later(function () { idle(); board.style.opacity = 1; later(play, 300); }, 420);
+  }
+  idle();
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
+  var seen = new IntersectionObserver(function (es) {
+    // 40% of the board, or half the screen when the lanes stack taller than the screen
+    var e = es[0]; if (e.isIntersecting && !ran && (e.intersectionRatio >= .4 || e.intersectionRect.height >= innerHeight * .5)) { seen.disconnect(); play(); }
+  }, { threshold: [0, .1, .2, .3, .4, .5, .7] });
+  seen.observe(board);
+})();
+</script>
+</div>
 </div><div class="mk-block"><!-- Komunal: the shipped DepositoBPR flow, updated for the placement routing. The product list and the success screen come
      from the live site's capture; between them, two screens show the routing as it shipped: the amount is checked as it is
      entered (above Rp500M most accounts hit a transfer cap), the app recommends the one rail that works for this amount,
      bank and time, and the instructions screen locks nothing while it waits for the funds. Static markup, no script. -->
 <div class="ksf">
 <style>
-.ksf-panel { min-height: 340px; background: rgb(16, 15, 9); border: 1px solid rgba(242, 239, 232, .14); border-radius: 6px; padding: 26px; display: flex; flex-direction: column; }
-.ksf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+.ksf-panel { min-height: 340px; background: #1a1b1f; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 26px; display: flex; flex-direction: column; }
+.ksf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
 .ksf-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.ksf-head span:first-child { color: oklch(0.9 0.2 122); }
 .ksf-row { flex: 1 1 0%; display: flex; gap: 16px; align-items: flex-start; justify-content: center; }
 .ksf-step { flex: 1 1 0; min-width: 0; max-width: 236px; margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .ksf-step > div { max-width: none !important; }
 .ksf-step figcaption { font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .04em; color: rgba(242, 239, 232, .6); text-align: center; }
 .ksf-step figcaption b { color: rgba(242, 239, 232, .9); font-weight: 600; }
-.ksf-cap { margin: 18px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.ksf-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
 /* the two new screens, drawn on the shipped screens' 375 x 812 canvas and palette.
    type scale (canvas px): 26 amount · 17 screen title · 15 option / value · 13 body · 12 support · 11 caps label */
@@ -1884,8 +2426,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   .ksf-step { flex: 0 0 calc(50% - 6px); }
 }
 </style>
+<div class="ksf-head"><span>SHIPPED SCREEN + FLOW</span><span>DEPOSITOBPR · PRODUCT</span></div>
 <div class="ksf-panel">
-<div class="ksf-head"><span>DEPOSITOBPR · PRODUCT</span><span>SHIPPED SCREEN + FLOW</span></div>
 <div class="ksf-row" data-m="parallax">
 <figure class="ksf-step"><div style="flex: 1 1 0px; min-width: 0px; max-width: 236px; background: linear-gradient(155deg, rgb(35, 38, 46), rgb(12, 13, 16)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.9) 0px 30px 56px -26px, rgba(255, 255, 255, 0.07) 0px 0px 0px 1px inset;">
 <div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(233, 239, 253);">
@@ -2013,8 +2555,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div><figcaption><b>4</b> Deposit active</figcaption></figure>
 </div>
-<p class="ksf-cap">As shipped: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.</p>
 </div>
+<p class="ksf-cap">As shipped: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.</p>
 <script>
 (function () {
   var root = document.currentScript.parentNode, cd = root.querySelector('.ksf .cd'); if (!cd) return;
@@ -2156,7 +2698,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div></div><div class="mk-block"><div style="margin-top: 52px; padding-top: 36px; border-top: 1px solid rgba(242, 239, 232, 0.12);">
 <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; flex-wrap: wrap;">
-<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgb(95, 176, 255);'>LUMIO · DIGITAL SIGNAGE NETWORK</span>
+<span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>LUMIO · DIGITAL SIGNAGE NETWORK</span>
 <span style='font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.6);'>VP DESIGN 2016–24 · COMMISSIONER 2021– · JAKARTA</span>
 </div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 16px; margin-bottom: 16px;">
@@ -2219,22 +2761,57 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 <span style='font: 500 11px / 1.4 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgba(242, 239, 232, 0.6);'>LUMIO · DIGITAL SIGNAGE CMS</span>
 </div>
-</div></div><div class="mk-block"><!-- Dash / Lumio: governance and oversight cards (logos are brand marks: keep them).
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
+</div></div><div class="mk-block"><!-- Dash / Lumio: governance and oversight (logos are brand marks: keep them).
+     One board on the shared diagram language (design/sections/VIZ-STYLE.md): head row with the lime title left and the muted
+     note right; two node boxes side by side (Dash, Lumio), each with a neutral COMMISSIONER label chip (a label, not an outcome),
+     a role sentence, a mono line and big lime stats (the outcomes); a BOARD MANDATE row of neutral pills. The boxes stack below 700px.
+     Static, complete without JavaScript (the stats keep data-m="count" so the page's count-up still applies).
      Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="margin-top: 44px;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; flex-wrap: wrap;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>GOVERNANCE &amp; OVERSIGHT</span><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>COMMISSIONER · DASH / LUMIO</span></div>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 24px;">
-<div style="background: rgb(29, 28, 23); border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 12px; padding: 26px 28px; display: flex; flex-direction: column; gap: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 40px;"><img loading="lazy" decoding="async" alt="Dash" src="assets/img/f168349d1bdebbc2.svg" style="height: 24px; width: auto; max-width: 100%; object-fit: contain; display: block;"/><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgb(24, 32, 3); background: oklch(0.9 0.2 122); padding: 6px 9px; border-radius: 5px; white-space: nowrap;'>COMMISSIONER · 2021–</span></div>
-<div><div style="font: 700 19px / 1.3 Archivo; color: rgb(242, 239, 232); text-wrap: pretty;">Founder &amp; Director. B2B cloud ordering, POS terminals and loyalty for SME and enterprise.</div><div style="margin-top: 8px;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>2016–24 · DASH INOVASI ABADI</span></div></div>
-<div style="display: flex; gap: 36px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid rgba(242, 239, 232, 0.12); margin-top: auto;"><div><div data-m="count" style="font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 110%; font-size: 38px; line-height: 1; font-family: Archivo; letter-spacing: -0.02em; color: oklch(0.9 0.2 122);">30+</div><div style="margin-top: 8px;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>RESTAURANT CHAINS</span></div></div><div><div data-m="count" style="font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 110%; font-size: 38px; line-height: 1; font-family: Archivo; letter-spacing: -0.02em; color: oklch(0.9 0.2 122);">~200K</div><div style="margin-top: 8px;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>CUSTOMERS / MONTH</span></div></div></div></div>
-<div style="background: rgb(29, 28, 23); border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 12px; padding: 26px 28px; display: flex; flex-direction: column; gap: 20px;">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 40px;"><img loading="lazy" decoding="async" alt="Lumio" src="assets/img/5be37d2b7c4cc627.svg" style="height: 28px; width: auto; display: block;"/><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.1em; color: rgb(24, 32, 3); background: oklch(0.9 0.2 122); padding: 6px 9px; border-radius: 5px; white-space: nowrap;'>COMMISSIONER · 2021–</span></div>
-<div><div style="font: 700 19px / 1.3 Archivo; color: rgb(242, 239, 232); text-wrap: pretty;">VP of Design. Cloud signage platform that turns screens into measurable revenue.</div><div style="margin-top: 8px;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>2016–24 · LUMIO INOVASI TECHNOLOGY</span></div></div>
-<div style="display: flex; gap: 36px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid rgba(242, 239, 232, 0.12); margin-top: auto;"><div><div data-m="count" style="font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 110%; font-size: 38px; line-height: 1; font-family: Archivo; letter-spacing: -0.02em; color: oklch(0.9 0.2 122);">150+</div><div style="margin-top: 8px;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>LOCATIONS</span></div></div></div></div>
+<div class="bgv-wrap">
+<style>
+.bgv-wrap {
+  --bgv-panel: #1a1b1f; --bgv-node: #232429; --bgv-tile: #2b2c32; --bgv-line: rgba(255, 255, 255, .08);
+  --bgv-ink: #f2f2f4; --bgv-ink-2: #c2c3cb; --bgv-ink-3: #8b8d98; --bgv-edge: #4a4d57;
+  --bgv-lime: oklch(0.9 0.2 122);
+  margin-top: 44px; min-width: 0;
+}
+.bgv-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.bgv-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.bgv-head span:first-child { color: var(--bgv-lime); }
+.bgv-board { border-radius: 14px; background: var(--bgv-panel); box-shadow: 0 0 0 1px var(--bgv-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 16px; font-family: Archivo, system-ui, sans-serif; color: var(--bgv-ink); }
+.bgv-nodes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.bgv-node { border-radius: 12px; background: var(--bgv-node); box-shadow: 0 0 0 1px var(--bgv-line); padding: 22px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.bgv-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; min-height: 40px; }
+.bgv-top img { height: 24px; width: auto; max-width: 100%; object-fit: contain; display: block; }
+.bgv-top img[alt="Lumio"] { height: 28px; }
+.bgv-chip { padding: 5px 8px; border-radius: 6px; background: var(--bgv-tile); font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--bgv-ink-2); white-space: nowrap; }
+.bgv-node h4 { margin: 0; font: 700 18px/1.35 Archivo, system-ui, sans-serif; color: var(--bgv-ink); text-wrap: pretty; }
+.bgv-mono { display: block; margin-top: 10px; font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--bgv-ink-3); }
+.bgv-stats { display: flex; gap: 14px 36px; flex-wrap: wrap; margin-top: auto; padding-top: 18px; border-top: 1px solid var(--bgv-line); }
+.bgv-n { font: 800 36px/1 Archivo, system-ui, sans-serif; font-stretch: 110%; letter-spacing: -.02em; color: var(--bgv-lime); }
+.bgv-l { display: block; margin-top: 8px; font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .12em; color: var(--bgv-ink-3); }
+.bgv-mand { display: flex; align-items: center; gap: 12px 20px; flex-wrap: wrap; padding: 2px 6px 4px; }
+.bgv-mand > span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.bgv-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.bgv-pills span { padding: 8px 14px; border-radius: 100px; background: var(--bgv-tile); box-shadow: 0 0 0 1px var(--bgv-line); font: 600 13px/1 Archivo, system-ui, sans-serif; color: var(--bgv-ink); white-space: nowrap; }
+@media (max-width: 700px) { .bgv-nodes { grid-template-columns: minmax(0, 1fr); } .bgv-node { padding: 18px; } }
+</style>
+<div class="bgv-head"><span>GOVERNANCE &amp; OVERSIGHT</span><span>COMMISSIONER · DASH / LUMIO</span></div>
+<div class="bgv-board">
+<div class="bgv-nodes">
+<div class="bgv-node">
+<div class="bgv-top"><img loading="lazy" decoding="async" alt="Dash" src="assets/img/f168349d1bdebbc2.svg" style="height: 24px; width: auto; max-width: 100%; object-fit: contain; display: block;"/><span class="bgv-chip">COMMISSIONER · 2021–</span></div>
+<div><h4>Founder &amp; Director. B2B cloud ordering, POS terminals and loyalty for SME and enterprise.</h4><span class="bgv-mono">2016–24 · DASH INOVASI ABADI</span></div>
+<div class="bgv-stats"><div class="bgv-stat"><div class="bgv-n" data-m="count">30+</div><span class="bgv-l">RESTAURANT CHAINS</span></div><div class="bgv-stat"><div class="bgv-n" data-m="count">~200K</div><span class="bgv-l">CUSTOMERS / MONTH</span></div></div>
 </div>
-<div style="display: flex; align-items: center; gap: 12px 20px; margin-top: 22px; flex-wrap: wrap;"><span style='font: 600 11px / 1.3 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: rgba(242, 239, 232, 0.6);'>BOARD MANDATE</span><div style="display: flex; flex-wrap: wrap; gap: 8px;"><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Strategy</span><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Risk</span><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Finance</span><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Governance</span><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Operations</span><span style="font: 600 13px / 1 Archivo; color: rgb(242, 239, 232); border: 1px solid rgba(242, 239, 232, 0.22); padding: 9px 14px; border-radius: 100px; white-space: nowrap;">Investor relations</span></div></div>
+<div class="bgv-node">
+<div class="bgv-top"><img loading="lazy" decoding="async" alt="Lumio" src="assets/img/5be37d2b7c4cc627.svg" style="height: 28px; width: auto; display: block;"/><span class="bgv-chip">COMMISSIONER · 2021–</span></div>
+<div><h4>VP of Design. Cloud signage platform that turns screens into measurable revenue.</h4><span class="bgv-mono">2016–24 · LUMIO INOVASI TECHNOLOGY</span></div>
+<div class="bgv-stats"><div class="bgv-stat"><div class="bgv-n" data-m="count">150+</div><span class="bgv-l">LOCATIONS</span></div></div>
+</div>
+</div>
+<div class="bgv-mand"><span>BOARD MANDATE</span><div class="bgv-pills"><span>Strategy</span><span>Risk</span><span>Finance</span><span>Governance</span><span>Operations</span><span>Investor relations</span></div></div>
+</div>
 </div>
 </div><button class="mk-close" type="button">Close the case study <span aria-hidden="true">↑</span></button></div></div></div></div></section><section class="mk-case" id="ai" style="border-top:1px solid rgba(242,239,232,.14)"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px;font:600 12px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:oklch(0.9 0.2 122)"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><rect height="14" rx="2" width="20" x="2" y="7"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg><span>04 / INDEPENDENT CONSULTING</span></div><div style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">PRODUCT &amp; AI DESIGN CONSULTANT · NOV 2025 – PRESENT</div></div><div class="mk-case-hero"><div><h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Making design teams AI-native.</h2></div><div class="mk-case-side"><p class="mk-sub">A data-to-decision workflow that puts live, AI-driven decisions in front of the people running a business, and Chrona, an AI-first social-planning app built with multi-agent Claude Code.</p></div></div><div class="mk-sv-pair"><figure class="mk-sv"><canvas aria-label="Line drawing: three desktop-shaped layers (siloed data sources, demand signals as bars against a dashed confidence threshold, and the workflow builder as a wireframe of node cards and curved connectors). The lime warehouse store lands as its cleaned row in the Sources node; the one signal above the threshold lands as the lime path and the decision node with its approve button." data-stack="independent" role="img"></canvas><figcaption class="mk-sv-cap">ENTERPRISE AI · DATA TO DECISION</figcaption></figure><figure class="mk-sv"><canvas aria-label="Line drawing: three phone-shaped layers (your week, your friends’ free time, and the drafted plan as a wireframe). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button." data-stack="chrona" role="img"></canvas><figcaption class="mk-sv-cap">FEATURED · CHRONA</figcaption></figure></div><button aria-controls="d-ai" aria-expanded="false" class="mk-toggle" type="button"><span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span aria-hidden="true" class="mk-t-open">Close</span></span><span class="mk-t-meta">2 min read</span><span aria-hidden="true" class="mk-t-icon"><svg fill="none" height="11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 20 11" width="20"><path d="M1.5 1.5 10 9.5l8.5-8"></path></svg></span></button><div class="mk-drawer" id="d-ai"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body"><div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div><div class="mk-keys"><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:oklch(0.9 0.2 122)">0→1</div><div class="mk-key-l">PROTOTYPES W/ CLAUDE CODE</div><p class="mk-key-c">Products taken from concept to working software.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">3</div><div class="mk-key-l">ANTHROPIC CERTIFICATES</div><p class="mk-key-c">AI-native development, Claude Code and AI fluency.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">MCP</div><div class="mk-key-l">AGENTIC WORKFLOWS</div><p class="mk-key-c">Multi-agent builds with specialist sub-agents.</p></div></div></div><div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div><ul class="mk-list"><li>Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.</li><li>Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.</li><li>Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.</li></ul></div><div class="mk-block"><!-- Independent consulting: the enterprise AI workflow, shown in the case study drawer.
      A workflow canvas in the style of Dify (no Dify name or logo; the section is marked illustrative).
@@ -2601,31 +3178,291 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div>
 <div style="margin-top: 38px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 24px; align-items: stretch;">
-<!-- Chrona: product vision, the habit loop diagram.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="background: rgb(20, 19, 16); border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122); margin-bottom: 20px;'>PRODUCT VISION · THE HABIT LOOP</div>
-<div data-r="loop-body" style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; gap: 32px;">
-<div data-r="loop-ring" style="position: relative; flex: 0 0 auto; width: 200px; height: 200px;"><svg fill="none" height="200" stroke="oklch(0.9 0.2 122 / .5)" stroke-linecap="round" stroke-width="1.6" style="position: absolute; inset: 0px;" viewbox="0 0 200 200" width="200"><defs><marker id="loopArrow" markerheight="7" markerwidth="7" orient="auto-start-reverse" refx="6" refy="5" viewbox="0 0 10 10"><path d="M1 1l6 4-6 4" fill="none" stroke="oklch(0.9 0.2 122 / .8)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6"></path></marker></defs><path d="M125.3 30.5A74 74 0 0 1 172.9 112.8" marker-end="url(#loopArrow)"></path><path d="M147.6 156.7A74 74 0 0 1 52.4 156.7" marker-end="url(#loopArrow)"></path><path d="M27.1 112.8A74 74 0 0 1 74.7 30.5" marker-end="url(#loopArrow)"></path></svg><span aria-hidden="true" data-r="loop-dot"></span><span data-i="0" data-r="loop-node" style="position: absolute; left: 78px; top: 4px; width: 44px; height: 44px; border-radius: 13px; background: rgb(29, 28, 23); border: 1px solid oklch(0.9 0.2 122 / 0.45); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg></span><span data-i="1" data-r="loop-node" style="position: absolute; left: 142.1px; top: 115px; width: 44px; height: 44px; border-radius: 13px; background: rgb(29, 28, 23); border: 1px solid oklch(0.9 0.2 122 / 0.45); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span><span data-i="2" data-r="loop-node" style="position: absolute; left: 13.9px; top: 115px; width: 44px; height: 44px; border-radius: 13px; background: rgb(29, 28, 23); border: 1px solid oklch(0.9 0.2 122 / 0.45); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center;"><svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><path d="M17 2l4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg></span><div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -38%); text-align: center;"><div style='font: 700 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>WEEKLY</div><div style="margin-top: 6px; font: 700 13px / 1.1 Archivo; color: rgb(242, 239, 232);">loop</div></div></div>
-<div data-r="loop-steps" style="flex: 0 1 210px; min-width: 0px;"><div data-i="0" data-r="loop-step" style="display: grid; grid-template-columns: 26px minmax(0px, 1fr); gap: 10px; align-items: baseline; padding: 11px 0px; border-bottom: 1px solid rgba(242, 239, 232, 0.08);"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: oklch(0.9 0.2 122);'>01</span><div><div style="font: 700 15px / 1.15 Archivo; color: rgb(242, 239, 232);">Plan</div><div style="margin-top: 4px; font: 400 12.5px / 1.4 Archivo; color: rgba(242, 239, 232, 0.6);">AI drafts the plan</div></div></div><div data-i="1" data-r="loop-step" style="display: grid; grid-template-columns: 26px minmax(0px, 1fr); gap: 10px; align-items: baseline; padding: 11px 0px; border-bottom: 1px solid rgba(242, 239, 232, 0.08);"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: oklch(0.9 0.2 122);'>02</span><div><div style="font: 700 15px / 1.15 Archivo; color: rgb(242, 239, 232);">Show up</div><div style="margin-top: 4px; font: 400 12.5px / 1.4 Archivo; color: rgba(242, 239, 232, 0.6);">Target &gt;60% completion</div></div></div><div data-i="2" data-r="loop-step" style="display: grid; grid-template-columns: 26px minmax(0px, 1fr); gap: 10px; align-items: baseline; padding: 11px 0px;"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: oklch(0.9 0.2 122);'>03</span><div><div style="font: 700 15px / 1.15 Archivo; color: rgb(242, 239, 232);">Repeat</div><div style="margin-top: 4px; font: 400 12.5px / 1.4 Archivo; color: rgba(242, 239, 232, 0.6);">Target &gt;40% retention</div></div></div></div>
+<!-- Chrona: product vision, the habit loop diagram (shared diagram language, design/sections/VIZ-STYLE.md).
+     Three steps (plan, show up, repeat) sit on a dashed ring beside the list of what each one means and its target.
+     Lime marks only what moves the outcome: a dot that travels the loop while the board is in view and lights each node
+     in turn, and the targets' numbers. Markup is the finished state, so the page is complete without JavaScript; the
+     script only moves the dot while the board is on screen (and pauses off screen or in a hidden tab). Reduced motion
+     keeps the still state. Nothing is measured: the ring is a fixed 200px canvas, so a shut drawer is fine.
+     Pairs with ai-chrona-engine.html: same top row, padding and caption row. -->
+<div class="cl-wrap">
+<style>
+.cl-wrap {
+  container-type: inline-size;
+  --cl-panel: #1a1b1f; --cl-node: #232429; --cl-tile: #2b2c32; --cl-line: rgba(255, 255, 255, .08);
+  --cl-ink: #f2f2f4; --cl-ink-2: #c2c3cb; --cl-ink-3: #8b8d98; --cl-edge: #4a4d57;
+  --cl-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%;
+}
+.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); box-shadow: 0 0 0 1px var(--cl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: Archivo, system-ui, sans-serif; color: var(--cl-ink); }
+.cl-top { margin-bottom: 18px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--cl-lime); }
+.cl-body { flex: 1; display: flex; align-items: center; justify-content: center; gap: 36px; min-width: 0; }
+
+/* the ring: a fixed 200px canvas, everything placed inside it */
+.cl-ring { position: relative; flex: none; width: 200px; height: 200px; }
+.cl-ring svg { position: absolute; inset: 0; width: 200px; height: 200px; overflow: visible; }
+.cl-edge { fill: none; stroke: var(--cl-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
+.cl-trail { fill: none; stroke-linecap: round; stroke: var(--cl-lime); }
+.cl-trail.t { stroke-width: 2.5; }
+.cl-trail.g { stroke-width: 7; opacity: .13; }
+.cl-dot { fill: var(--cl-lime); stroke: var(--cl-panel); stroke-width: 2; filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.cl-n { position: absolute; width: 44px; height: 44px; border-radius: 12px; background: var(--cl-node); box-shadow: 0 0 0 1px var(--cl-line); display: grid; place-items: center; color: var(--cl-ink-2); transition: box-shadow .35s, color .35s; }
+.cl-n svg { position: static; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.cl-n.on { color: var(--cl-lime); box-shadow: 0 0 0 1.5px var(--cl-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1); }
+.cl-n:nth-of-type(1) { left: 78px; top: 4px; }
+.cl-n:nth-of-type(2) { left: 142px; top: 115px; }
+.cl-n:nth-of-type(3) { left: 14px; top: 115px; }
+.cl-mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
+.cl-mid small { display: block; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--cl-ink-3); }
+.cl-mid b { display: block; margin-top: 6px; font: 700 16px/1.1 Archivo, sans-serif; color: var(--cl-ink); }
+
+/* the steps */
+.cl-steps { flex: 0 1 230px; min-width: 0; list-style: none; margin: 0; padding: 0; }
+.cl-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--cl-line); }
+.cl-step:last-child { border-bottom: 0; }
+.cl-step:first-child { padding-top: 0; }
+.cl-step:last-child { padding-bottom: 0; }
+.cl-step > span { font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--cl-ink-3); transition: color .35s; }
+.cl-step.on > span { color: var(--cl-ink); }
+.cl-step b { display: block; font: 600 15px/1.2 Archivo, sans-serif; color: var(--cl-ink); }
+.cl-step p { margin: 4px 0 0; font: 400 13px/1.4 Archivo, sans-serif; color: var(--cl-ink-3); }
+.cl-step p em { font: 600 12px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--cl-lime); }
+
+.cl-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--cl-line); max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* narrow: the ring above the list */
+@container (max-width: 480px) {
+  .cl-board { padding: 16px; }
+  .cl-body { flex-direction: column; align-items: stretch; gap: 22px; }
+  .cl-ring { align-self: center; }
+  .cl-steps { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { .cl-wrap * { transition: none !important; animation: none !important; } }
+</style>
+<div aria-label="The Chrona habit loop, weekly: 01 Plan, the AI drafts the plan; 02 Show up, target above 60% completion; 03 Repeat, target above 40% retention. Every loop drives the North Star, the share of invites sent through Chrona." class="cl-board" role="img">
+<div class="cl-top">PRODUCT VISION · THE HABIT LOOP</div>
+<div class="cl-body">
+<div aria-hidden="true" class="cl-ring">
+<svg viewbox="0 0 200 200">
+<circle class="cl-edge" cx="100" cy="100" r="74"></circle>
+<g transform="rotate(-90 100 100)">
+<circle class="cl-trail g" cx="100" cy="100" pathlength="360" r="74" stroke-dasharray="0 360"></circle>
+<circle class="cl-trail t" cx="100" cy="100" pathlength="360" r="74" stroke-dasharray="0 360"></circle>
+</g>
+<circle class="cl-dot" cx="100" cy="26" r="5"></circle>
+</svg>
+<span class="cl-n on" data-i="0"><svg viewbox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg></span>
+<span class="cl-n" data-i="1"><svg viewbox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+<span class="cl-n" data-i="2"><svg viewbox="0 0 24 24"><path d="M17 2l4 4-4 4"></path><path d="M3 11v-1a4 4 0 0 1 4-4h14"></path><path d="M7 22l-4-4 4-4"></path><path d="M21 13v1a4 4 0 0 1-4 4H3"></path></svg></span>
+<div class="cl-mid"><small>WEEKLY</small><b>loop</b></div>
 </div>
-<div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(242, 239, 232, 0.1); font: 400 13px / 1.55 Archivo; color: rgba(242, 239, 232, 0.6);">Every loop drives the North Star, the share of invites sent through Chrona.</div>
+<ol class="cl-steps">
+<li class="cl-step on" data-i="0"><span>01</span><div><b>Plan</b><p>AI drafts the plan</p></div></li>
+<li class="cl-step" data-i="1"><span>02</span><div><b>Show up</b><p>Target <em>&gt;60%</em> completion</p></div></li>
+<li class="cl-step" data-i="2"><span>03</span><div><b>Repeat</b><p>Target <em>&gt;40%</em> retention</p></div></li>
+</ol>
 </div>
-<!-- Chrona: how it works, the engine diagram.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="background: rgb(20, 19, 16); border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122); margin-bottom: 20px;'>HOW IT WORKS · THE ENGINE</div>
-<div data-r="eng-flow" style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-<div data-r="eng-inputs" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px;"><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Your week</span></div><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Circle free</span></div><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Social memory</span></div></div>
-<svg data-r="eng-arrow2" fill="none" height="22" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" style="flex: 0 0 auto; display: none;" viewbox="0 0 14 22" width="14"><path d="M7 1v18"></path><path d="M2 14l5 5 5-5"></path></svg>
-<svg data-r="eng-conn" fill="none" height="126" stroke="oklch(0.9 0.2 122 / .45)" stroke-linecap="round" stroke-width="1.5" style="flex: 0 0 auto; display: block;" viewbox="0 0 30 126" width="30"><path d="M0 19C16 19 14 63 30 63"></path><path d="M0 63H30"></path><path d="M0 107C16 107 14 63 30 63"></path></svg>
-<div data-r="eng-ai" style="flex: 0 0 auto; width: 92px; height: 92px; box-sizing: border-box; border-radius: 18px; background: oklch(0.9 0.2 122); color: rgb(24, 32, 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; text-align: center;"><svg data-r="eng-spark" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg><span style="font: 800 12.5px / 1.15 Archivo;">Chrona AI<br/>plans it</span></div>
-<svg data-r="eng-arrow" fill="none" height="14" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" style="flex: 0 0 auto; display: block;" viewbox="0 0 26 14" width="26"><path d="M1 7h22"></path><path d="M18 2l5 5-5 5"></path></svg>
-<div data-r="eng-out" style="flex: 0 1 150px; min-width: 0px; border: 1px solid oklch(0.9 0.2 122 / 0.4); background: oklch(0.9 0.2 122 / 0.06); border-radius: 12px; padding: 13px 14px;"><span style='display: inline-block; font: 700 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: rgb(24, 32, 3); background: oklch(0.9 0.2 122); padding: 5px 7px; border-radius: 5px;'>&lt;120s</span><div style="margin-top: 10px; font: 700 14px / 1.2 Archivo; color: rgb(242, 239, 232);">Invite sent</div><div style="margin-top: 3px; font: 400 12px / 1.35 Archivo; color: rgba(242, 239, 232, 0.6);">Plan lands on the calendar</div></div>
+<p class="cl-cap">Every loop drives the North Star, the share of invites sent through Chrona.</p>
 </div>
-<div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(242, 239, 232, 0.1); font: 400 13px / 1.55 Archivo; color: rgba(242, 239, 232, 0.6);">Conversational planning that turns intent into a sent invite, the moment that defines success.</div>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.cl-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var dot = wrap.querySelector('.cl-dot'), trails = [].slice.call(wrap.querySelectorAll('.cl-trail'));
+  var nodes = [].slice.call(wrap.querySelectorAll('.cl-n')), steps = [].slice.call(wrap.querySelectorAll('.cl-step'));
+  var R = 74, TRAIL = 80, SEG = 2300;       // radius, trail length (degrees), ms per node to node leg
+  var started = false, visible = false, raf = 0, last = 0, clock = 0, active = -1;
+  function frame(now) {
+    raf = 0;
+    if (!visible || document.hidden) return;
+    clock += Math.min(64, now - last); last = now;
+    var leg = clock / SEG, seg = Math.floor(leg) % 3, u = leg % 1;
+    // ease in and out of each node, so the dot lingers where it lights something
+    var e = u - Math.sin(2 * Math.PI * u) / (2 * Math.PI), th = (seg + e) * 120, rad = th * Math.PI / 180;
+    dot.setAttribute('cx', (100 + R * Math.sin(rad)).toFixed(2)); dot.setAttribute('cy', (100 - R * Math.cos(rad)).toFixed(2));
+    trails.forEach(function (t) { t.setAttribute('stroke-dasharray', TRAIL + ' ' + (360 - TRAIL)); t.setAttribute('stroke-dashoffset', (TRAIL - th).toFixed(1)); });
+    var a = Math.floor((((th + 18) % 360) / 120)) % 3;
+    if (a !== active) { active = a; nodes.forEach(function (n, i) { n.classList.toggle('on', i === a); }); steps.forEach(function (s, i) { s.classList.toggle('on', i === a); }); }
+    raf = requestAnimationFrame(frame);
+  }
+  function wake() { if (!raf && visible && !document.hidden && started) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible && es[0].intersectionRatio >= .4) started = true;
+    wake();
+  }, { threshold: [0, .4] }).observe(board);
+  document.addEventListener('visibilitychange', wake);
+})();
+</script>
+</div>
+<!-- Chrona: how it works, the engine diagram (shared diagram language, design/sections/VIZ-STYLE.md).
+     Three inputs (your week, circle free, social memory) feed the Chrona AI node, the decision, which ends in the outcome:
+     an invite sent in under 120s, with the plan on the calendar. Resting connectors are dashed; the path from the inputs
+     through the AI to the invite is lime, with packets travelling it while the board is in view. Markup is the finished
+     state, so the page is complete without JavaScript; the script resets to idle, lights the path stage by stage once
+     the board is 40% in view, then loops only while visible. Reduced motion keeps the finished state. Connectors are
+     fixed-size SVG, nothing is measured, so a shut drawer is fine. Below ~520px the engine stacks vertically.
+     Pairs with ai-chrona-loop.html: same top row, padding and caption row. -->
+<div class="ce-wrap">
+<style>
+.ce-wrap {
+  container-type: inline-size;
+  --ce-panel: #1a1b1f; --ce-node: #232429; --ce-tile: #2b2c32; --ce-line: rgba(255, 255, 255, .08);
+  --ce-ink: #f2f2f4; --ce-ink-2: #c2c3cb; --ce-ink-3: #8b8d98; --ce-edge: #4a4d57;
+  --ce-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%;
+}
+.ce-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--ce-panel); box-shadow: 0 0 0 1px var(--ce-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: Archivo, system-ui, sans-serif; color: var(--ce-ink); }
+.ce-top { margin-bottom: 18px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--ce-lime); }
+.ce-body { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; }
+
+/* one row: inputs, merge, AI, link, outcome */
+.ce-flow { width: 100%; display: grid; grid-template-columns: auto 36px auto 30px minmax(0, 1fr); align-items: center; }
+.ce-ins { display: grid; gap: 8px; }
+.ce-in { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 12px 0 8px; border-radius: 12px; background: var(--ce-node); box-shadow: 0 0 0 1px var(--ce-line); }
+.ce-chip { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--ce-tile); display: grid; place-items: center; color: var(--ce-ink-2); transition: color .35s; }
+.ce-chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ce-in b { font: 600 13px/1.2 Archivo, sans-serif; white-space: nowrap; }
+
+/* connectors: dashed resting line, lime lit path on top (pathLength 1 so it can be drawn in) */
+.ce-c { display: block; overflow: visible; }
+.ce-c.v { display: none; }
+.ce-base { fill: none; stroke: var(--ce-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
+.ce-g, .ce-l { fill: none; stroke: var(--ce-lime); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; transition: stroke-dashoffset .55s ease-out, opacity .25s; }
+.ce-l { stroke-width: 2.5; }
+.ce-g { stroke-width: 7; opacity: .13; }
+.ce-hd { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
+.ce-hd.b { stroke: var(--ce-edge); }
+.ce-hd.l { stroke: var(--ce-lime); stroke-width: 2.5; transition: opacity .25s; }
+.ce-pk { fill: var(--ce-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+
+/* the decision: node box with a lime ring and a lime icon */
+.ce-ai { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 12px; border-radius: 12px; background: var(--ce-node); text-align: center; transition: box-shadow .4s;
+  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-ai .ce-chip { color: var(--ce-lime); }
+.ce-ai b { font: 600 14px/1.25 Archivo, sans-serif; }
+
+/* the outcome: lime ring and a lime chip */
+.ce-out { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border-radius: 12px; background: var(--ce-node); min-width: 0; transition: box-shadow .4s;
+  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-tag { padding: 4px 7px; border-radius: 6px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); transition: color .35s, background-color .35s; }
+.ce-out b { font: 700 16px/1.2 Archivo, sans-serif; }
+.ce-out span { font: 400 13px/1.4 Archivo, sans-serif; color: var(--ce-ink-2); }
+
+.ce-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--ce-line); max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* idle (the script's start state): nothing lit yet; the stages light the path in order */
+.ce-wrap.run .ce-g, .ce-wrap.run .ce-l { stroke-dashoffset: 1; opacity: 0; }
+.ce-wrap.run .ce-hd.l { opacity: 0; }
+.ce-wrap.run .ce-ai, .ce-wrap.run .ce-out { box-shadow: 0 0 0 1px var(--ce-line); }
+.ce-wrap.run .ce-ai .ce-chip { color: var(--ce-ink-2); }
+.ce-wrap.run .ce-tag { color: var(--ce-ink-2); background: var(--ce-tile); }
+.ce-wrap.run.s1 .ce-k1 .ce-l, .ce-wrap.run.s3 .ce-k2 .ce-l { stroke-dashoffset: 0; opacity: 1; }
+.ce-wrap.run.s1 .ce-k1 .ce-g, .ce-wrap.run.s3 .ce-k2 .ce-g { stroke-dashoffset: 0; opacity: .13; }
+.ce-wrap.run.s1 .ce-k1 .ce-hd.l, .ce-wrap.run.s3 .ce-k2 .ce-hd.l { opacity: 1; }
+.ce-wrap.run.s2 .ce-ai { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s2 .ce-ai .ce-chip { color: var(--ce-lime); }
+.ce-wrap.run.s4 .ce-out { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s4 .ce-tag { color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); }
+
+/* narrow: the engine stacks, joined by short vertical connectors */
+@container (max-width: 520px) {
+  .ce-board { padding: 16px; }
+  .ce-flow { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .ce-c.h { display: none; }
+  .ce-c.v { display: block; justify-self: center; margin: 4px 0; }
+  .ce-ai { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 10px 12px; }
+  .ce-ai br { display: none; }
+  .ce-ai b { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .ce-wrap * { transition: none !important; animation: none !important; } }
+</style>
+<div aria-label="The Chrona engine: three inputs, your week, circle free and social memory, feed Chrona AI, which plans it. The result is an invite sent in under 120 seconds, with the plan landing on the calendar. Conversational planning that turns intent into a sent invite, the moment that defines success." class="ce-board" role="img">
+<div class="ce-top">HOW IT WORKS · THE ENGINE</div>
+<div class="ce-body">
+<div class="ce-flow">
+<div class="ce-ins">
+<div class="ce-in"><span class="ce-chip"><svg viewbox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg></span><b>Your week</b></div>
+<div class="ce-in"><span class="ce-chip"><svg viewbox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path></svg></span><b>Circle free</b></div>
+<div class="ce-in"><span class="ce-chip"><svg viewbox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"></path></svg></span><b>Social memory</b></div>
+</div>
+<svg aria-hidden="true" class="ce-c h ce-k1" height="148" viewbox="0 0 36 148" width="36">
+<g class="ce-ln"><path class="ce-base" d="M0 22C18 22 18 74 36 74"></path><path class="ce-g" d="M0 22C18 22 18 74 36 74" pathlength="1"></path><path class="ce-l" d="M0 22C18 22 18 74 36 74" pathlength="1"></path></g>
+<g class="ce-ln"><path class="ce-base" d="M0 74H36"></path><path class="ce-g" d="M0 74H36" pathlength="1"></path><path class="ce-l" d="M0 74H36" pathlength="1"></path></g>
+<g class="ce-ln"><path class="ce-base" d="M0 126C18 126 18 74 36 74"></path><path class="ce-g" d="M0 126C18 126 18 74 36 74" pathlength="1"></path><path class="ce-l" d="M0 126C18 126 18 74 36 74" pathlength="1"></path></g>
+<path class="ce-hd b" d="M31 70L36 74L31 78"></path><path class="ce-hd l" d="M31 70L36 74L31 78"></path>
+</svg>
+<svg aria-hidden="true" class="ce-c v ce-k1" height="28" viewbox="0 0 14 28" width="14">
+<g class="ce-ln"><path class="ce-base" d="M7 0V27"></path><path class="ce-g" d="M7 0V27" pathlength="1"></path><path class="ce-l" d="M7 0V27" pathlength="1"></path></g>
+<path class="ce-hd b" d="M3 23L7 27L11 23"></path><path class="ce-hd l" d="M3 23L7 27L11 23"></path>
+</svg>
+<div class="ce-ai"><span class="ce-chip"><svg viewbox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg></span><b>Chrona AI <br/>plans it</b></div>
+<svg aria-hidden="true" class="ce-c h ce-k2" height="14" viewbox="0 0 30 14" width="30">
+<g class="ce-ln"><path class="ce-base" d="M0 7H29"></path><path class="ce-g" d="M0 7H29" pathlength="1"></path><path class="ce-l" d="M0 7H29" pathlength="1"></path></g>
+<path class="ce-hd b" d="M24 3L29 7L24 11"></path><path class="ce-hd l" d="M24 3L29 7L24 11"></path>
+</svg>
+<svg aria-hidden="true" class="ce-c v ce-k2" height="28" viewbox="0 0 14 28" width="14">
+<g class="ce-ln"><path class="ce-base" d="M7 0V27"></path><path class="ce-g" d="M7 0V27" pathlength="1"></path><path class="ce-l" d="M7 0V27" pathlength="1"></path></g>
+<path class="ce-hd b" d="M3 23L7 27L11 23"></path><path class="ce-hd l" d="M3 23L7 27L11 23"></path>
+</svg>
+<div class="ce-out"><span class="ce-tag">&lt;120s</span><b>Invite sent</b><span>Plan lands on the calendar</span></div>
+</div>
+</div>
+<p class="ce-cap">Conversational planning that turns intent into a sent invite, the moment that defines success.</p>
+</div>
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.ce-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var NS = 'http://www.w3.org/2000/svg', HOLD = 6200, PERIOD = 1500;
+  var visible = false, played = false, raf = 0, timers = [], T0 = performance.now(), pk = [];
+  // packets ride the lit paths: one group per path, in the connector set that is showing (horizontal or stacked)
+  [].slice.call(wrap.querySelectorAll('.ce-ln')).forEach(function (g) {
+    var line = g.querySelector('.ce-l'), svg = g.ownerSVGElement, k = svg.classList.contains('ce-k1') ? 's1' : 's3';
+    [0, .5].forEach(function (phase) {
+      var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3'); c.setAttribute('class', 'ce-pk'); c.style.opacity = 0;
+      g.appendChild(c); pk.push({ c: c, line: line, len: line.getTotalLength(), phase: phase, svg: svg, k: k });
+    });
+  });
+  // the connector set that shows follows the container width; read it on resize only, never on parse (a shut drawer has no layout)
+  var shown = new Map();
+  function sync() { pk.forEach(function (p) { shown.set(p.svg, p.svg.getClientRects().length > 0); }); }
+  if ('ResizeObserver' in window) new ResizeObserver(sync).observe(board);
+
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  function stage(n) { wrap.classList.add('s' + n); }
+  function idle() { wrap.classList.add('run'); wrap.classList.remove('s1', 's2', 's3', 's4'); }
+  function play() {
+    clear(); idle(); played = true;
+    later(function () { stage(1); }, 400);
+    later(function () { stage(2); }, 1200);
+    later(function () { stage(3); }, 1900);
+    later(function () { stage(4); }, 2500);
+    later(replay, 2500 + HOLD);
+  }
+  function replay() { if (!visible || document.hidden) { played = false; return; } idle(); later(play, 600); }
+
+  function frame(now) {
+    raf = 0;
+    if (!visible || document.hidden) return;
+    pk.forEach(function (p) {
+      var on = shown.get(p.svg) && wrap.classList.contains(p.k);
+      if (!on) { p.c.style.opacity = 0; return; }
+      var u = ((now - T0) / PERIOD + p.phase) % 1, at = p.line.getPointAtLength(u * p.len);
+      p.c.setAttribute('cx', at.x); p.c.setAttribute('cy', at.y); p.c.style.opacity = Math.sin(Math.PI * u).toFixed(2);
+    });
+    raf = requestAnimationFrame(frame);
+  }
+  function wake() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame); }
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible) { sync(); if (!played && es[0].intersectionRatio >= .4) play(); }
+    wake();
+  }, { threshold: [0, .4] }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && visible && !played) { sync(); play(); } wake(); });
+})();
+</script>
 </div>
 </div>
 </div></div><button class="mk-close" type="button">Close the case study <span aria-hidden="true">↑</span></button></div></div></div></div></section><section class="mk-case" id="lab" style="border-top:1px solid rgba(242,239,232,.14)"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px;font:600 12px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;color:oklch(0.9 0.2 122)"><svg fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg><span>LAB / BUILT WITH AI</span></div><div style="font:500 11px/1 'IBM Plex Mono',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT</div></div><div class="mk-split flip"><div class="mk-split-text"><h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Shipping real products with AI, end to end.</h2><p class="mk-sub">A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.</p></div><figure class="mk-sv"><canvas aria-label="Line drawing: three panel-shaped layers (live data feeds, the 1-bit layout, and Face 1 of the e-ink panel as a wireframe: header band, four metric cards, today’s suggestion, recovery and footer stats). The lime HRV feed and the lime suggestion block land as the panel’s lime HRV status and suggestion title." data-stack="eink" role="img"></canvas></figure></div><button aria-controls="d-lab" aria-expanded="false" class="mk-toggle" type="button"><span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span aria-hidden="true" class="mk-t-open">Close</span></span><span class="mk-t-meta">2 min read</span><span aria-hidden="true" class="mk-t-icon"><svg fill="none" height="11" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 20 11" width="20"><path d="M1.5 1.5 10 9.5l8.5-8"></path></svg></span></button><div class="mk-drawer" id="d-lab"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body"><div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div><div class="mk-keys"><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:oklch(0.9 0.2 122)">24/7</div><div class="mk-key-l">LIVE ON GCP</div><p class="mk-key-c">Self-hosted, fetching fresh data every 30 minutes.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">1-BIT</div><div class="mk-key-l">800×480 E-INK RENDER</div><p class="mk-key-c">Dithered to one bit, rendered on fetch, not on request.</p></div><div class="mk-key"><div class="mk-key-n" data-m="count" style="color:#f2efe8">$0</div><div class="mk-key-l">CLOUD SUBSCRIPTIONS</div><p class="mk-key-c">Nothing to pay to keep it running.</p></div></div></div><div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div><ul class="mk-list"><li>Garmin Connect API: live biometrics, races, sleep and readiness, fetched on a schedule.</li><li>FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.</li><li>Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.</li><li>TRMNL DIY kit (ESP32) on the nightstand; everything behind it designed and built with Claude Code.</li></ul></div><div class="mk-block"><div style="margin-top: 48px;">
@@ -2646,26 +3483,83 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 <div style="margin-top: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 24px; align-items: stretch;">
 <!-- Garmin Daily Brief: architecture, data pipeline.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="background: rgb(15, 19, 25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122); margin-bottom: 22px;'>ARCHITECTURE · DATA PIPELINE</div>
-<div style="display: flex; flex-direction: column; gap: 0px;">
-<div style="display: flex; align-items: flex-start; gap: 14px;"><div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;"><span style='width: 30px; height: 30px; border-radius: 8px; background: oklch(0.9 0.2 122 / 0.1); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center; font: 700 11px / 1 "IBM Plex Mono", monospace;'>01</span><span style="width: 1px; flex: 1 1 0%; min-height: 16px; background: rgba(242, 239, 232, 0.16); margin: 4px 0px;"></span></div><div style="padding-bottom: 12px;"><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">Garmin Connect API</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Live biometrics, races, sleep &amp; readiness via an unofficial Python client.</div></div></div>
-<div style="display: flex; align-items: flex-start; gap: 14px;"><div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;"><span style='width: 30px; height: 30px; border-radius: 8px; background: oklch(0.9 0.2 122 / 0.1); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center; font: 700 11px / 1 "IBM Plex Mono", monospace;'>02</span><span style="width: 1px; flex: 1 1 0%; min-height: 16px; background: rgba(242, 239, 232, 0.16); margin: 4px 0px;"></span></div><div style="padding-bottom: 12px;"><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">FastAPI fetcher + SQLite cache</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Scheduled pulls, each endpoint wrapped in try/except; snapshots cached so a Garmin outage never blanks the display.</div></div></div>
-<div style="display: flex; align-items: flex-start; gap: 14px;"><div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;"><span style='width: 30px; height: 30px; border-radius: 8px; background: oklch(0.9 0.2 122 / 0.1); color: oklch(0.9 0.2 122); display: flex; align-items: center; justify-content: center; font: 700 11px / 1 "IBM Plex Mono", monospace;'>03</span><span style="width: 1px; flex: 1 1 0%; min-height: 16px; background: rgba(242, 239, 232, 0.16); margin: 4px 0px;"></span></div><div style="padding-bottom: 12px;"><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">Pillow renderer</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Draws an 800×480 canvas, then converts to 1-bit with Floyd–Steinberg dithering. Rendered on fetch, not on request.</div></div></div>
-<div style="display: flex; align-items: flex-start; gap: 14px;"><div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center;"><span style='width: 30px; height: 30px; border-radius: 8px; background: oklch(0.9 0.2 122); color: rgb(24, 32, 3); display: flex; align-items: center; justify-content: center; font: 700 11px / 1 "IBM Plex Mono", monospace;'>04</span></div><div><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">TRMNL BYOS → ESP32 e-ink</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Device polls <span style='font-family: "IBM Plex Mono", monospace; font-size: 11px; color: rgba(242, 239, 232, 0.75);'>/api/display</span>, downloads the pre-rendered BMP and blasts it to the panel over the home LAN.</div></div></div>
+     Four numbered steps (Garmin Connect API, FastAPI fetcher + SQLite cache, Pillow renderer, TRMNL BYOS to ESP32 e-ink)
+     on the shared board from design/sections/VIZ-STYLE.md: lime mono title in the head row, step numbers in tile chips,
+     steps joined by a dashed edge connector whose last segment (into the panel on the nightstand, the outcome) is lit lime.
+     Static: no script, so it is complete without JavaScript. Edited here; build_hifi.py reads this file in place of the captured block. -->
+<div class="gpp-wrap">
+<style>
+.gpp-wrap {
+  --gpp-panel: #1a1b1f; --gpp-node: #232429; --gpp-tile: #2b2c32; --gpp-line: rgba(255, 255, 255, .08);
+  --gpp-ink: #f2f2f4; --gpp-ink-2: #c2c3cb; --gpp-ink-3: #8b8d98; --gpp-edge: #4a4d57;
+  --gpp-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%; min-width: 0;
+}
+.gpp-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.gpp-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.gpp-head span:first-child { color: var(--gpp-lime); }
+.gpp-board { flex: 1 1 auto; border-radius: 14px; background: var(--gpp-panel); box-shadow: 0 0 0 1px var(--gpp-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 22px; font-family: Archivo, system-ui, sans-serif; color: var(--gpp-ink); }
+.gpp-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.gpp-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 14px; }
+.gpp-rail { display: flex; flex-direction: column; align-items: center; }
+.gpp-chip { flex: none; width: 28px; height: 28px; border-radius: 6px; background: var(--gpp-tile); display: flex; align-items: center; justify-content: center; font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--gpp-ink-2); }
+.gpp-step.out .gpp-chip { background: var(--gpp-lime); color: #182003; font-weight: 600; }
+/* resting connector: edge, 1.5px, dashed 4 6 */
+.gpp-seg { flex: 1 1 auto; width: 1.5px; min-height: 16px; margin: 6px 0; background: repeating-linear-gradient(180deg, var(--gpp-edge) 0 4px, transparent 4px 10px); }
+/* the lit path: the last hop, into the device */
+.gpp-seg.lit { width: 2.5px; background: var(--gpp-lime); box-shadow: 0 0 7px 2px oklch(0.9 0.2 122 / .13); border-radius: 2px; }
+.gpp-body { padding-bottom: 20px; min-width: 0; }
+.gpp-step:last-child .gpp-body { padding-bottom: 0; }
+.gpp-body h4 { margin: 4px 0 4px; font: 600 14px/1.3 Archivo, system-ui, sans-serif; color: var(--gpp-ink); }
+.gpp-body p { margin: 0; font: 400 13px/1.5 Archivo, system-ui, sans-serif; color: var(--gpp-ink-2); }
+.gpp-body code { font: 500 12px/1.4 'IBM Plex Mono', monospace; color: var(--gpp-ink); background: var(--gpp-tile); padding: 1px 6px; border-radius: 5px; }
+@media (max-width: 420px) { .gpp-board { padding: 18px 16px; } .gpp-step { column-gap: 12px; } }
+</style>
+<div class="gpp-head"><span>ARCHITECTURE · DATA PIPELINE</span></div>
+<div class="gpp-board">
+<ol class="gpp-steps">
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">01</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>Garmin Connect API</h4><p>Live biometrics, races, sleep &amp; readiness via an unofficial Python client.</p></div></li>
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">02</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>FastAPI fetcher + SQLite cache</h4><p>Scheduled pulls, each endpoint wrapped in try/except; snapshots cached so a Garmin outage never blanks the display.</p></div></li>
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">03</span><span class="gpp-seg lit"></span></div><div class="gpp-body"><h4>Pillow renderer</h4><p>Draws an 800×480 canvas, then converts to 1-bit with Floyd–Steinberg dithering. Rendered on fetch, not on request.</p></div></li>
+<li class="gpp-step out"><div class="gpp-rail"><span class="gpp-chip">04</span></div><div class="gpp-body"><h4>TRMNL BYOS → ESP32 e-ink</h4><p>Device polls <code>/api/display</code>, downloads the pre-rendered BMP and blasts it to the panel over the home LAN.</p></div></li>
+</ol>
 </div>
 </div>
 <!-- Garmin Daily Brief: live deployment on GCP.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
+     Three items (Compute Engine VM, APScheduler cron, self-healing and alerting) on the same board as the pipeline panel
+     (design/sections/VIZ-STYLE.md): lime mono title in the head row, a status line inside the board (lime dot with halo +
+     mono RUNNING), line icons in ink-2 inside tile chips. Static: no script, complete without JavaScript.
      Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="background: rgb(15, 19, 25); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 22px;"><span style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122);'>LIVE DEPLOYMENT · GCP</span><span style='display: inline-flex; align-items: center; gap: 6px; font: 700 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: rgb(52, 199, 123); border: 1px solid rgba(52, 199, 123, 0.4); padding: 5px 8px; border-radius: 100px;'><span style="width: 6px; height: 6px; border-radius: 50%; background: rgb(52, 199, 123);"></span>RUNNING</span></div>
-<div style="display: flex; flex-direction: column; gap: 14px;">
-<div style="display: flex; gap: 11px;"><svg fill="none" height="16" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="flex: 0 0 auto; margin-top: 2px;" viewbox="0 0 24 24" width="16"><rect height="8" rx="2" width="20" x="2" y="2"></rect><rect height="8" rx="2" width="20" x="2" y="14"></rect><line x1="6" x2="6.01" y1="6" y2="6"></line><line x1="6" x2="6.01" y1="18" y2="18"></line></svg><div><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">Compute Engine VM · Dockerized</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Ubuntu 24.04, Docker Compose. Rebuilds keep the SQLite + OAuth token volume intact.</div></div></div>
-<div style="display: flex; gap: 11px;"><svg fill="none" height="16" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="flex: 0 0 auto; margin-top: 2px;" viewbox="0 0 24 24" width="16"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg><div><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">APScheduler cron</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">Refreshes 04:00–22:00 WIB every 30 min; overnight the device sleeps and stretches its poll interval to save battery.</div></div></div>
-<div style="display: flex; gap: 11px;"><svg fill="none" height="16" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" style="flex: 0 0 auto; margin-top: 2px;" viewbox="0 0 24 24" width="16"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg><div><div style="font: 700 13px / 1.3 Archivo; color: rgb(242, 239, 232);">Self-healing &amp; alerting</div><div style="font: 400 12px / 1.45 Archivo; color: rgba(242, 239, 232, 0.55);">A 5-min heartbeat watches the device; if it goes silent past threshold, an outage is logged and an email alert fires via SMTP.</div></div></div>
+<div class="gpd-wrap">
+<style>
+.gpd-wrap {
+  --gpd-panel: #1a1b1f; --gpd-node: #232429; --gpd-tile: #2b2c32; --gpd-line: rgba(255, 255, 255, .08);
+  --gpd-ink: #f2f2f4; --gpd-ink-2: #c2c3cb; --gpd-ink-3: #8b8d98; --gpd-edge: #4a4d57;
+  --gpd-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%; min-width: 0;
+}
+.gpd-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.gpd-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.gpd-head span:first-child { color: var(--gpd-lime); }
+.gpd-board { flex: 1 1 auto; border-radius: 14px; background: var(--gpd-panel); box-shadow: 0 0 0 1px var(--gpd-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 22px; font-family: Archivo, system-ui, sans-serif; color: var(--gpd-ink); }
+.gpd-st { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--gpd-lime); }
+.gpd-st i { width: 8px; height: 8px; border-radius: 50%; background: var(--gpd-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.gpd-items { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 20px; }
+.gpd-item { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 14px; }
+.gpd-chip { width: 28px; height: 28px; border-radius: 6px; background: var(--gpd-tile); display: flex; align-items: center; justify-content: center; color: var(--gpd-ink-2); }
+.gpd-chip svg { width: 16px; height: 16px; display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.gpd-item h4 { margin: 4px 0 4px; font: 600 14px/1.3 Archivo, system-ui, sans-serif; color: var(--gpd-ink); }
+.gpd-item p { margin: 0; font: 400 13px/1.5 Archivo, system-ui, sans-serif; color: var(--gpd-ink-2); }
+@media (max-width: 420px) { .gpd-board { padding: 18px 16px; } .gpd-item { column-gap: 12px; } }
+</style>
+<div class="gpd-head"><span>LIVE DEPLOYMENT · GCP</span></div>
+<div class="gpd-board">
+<div class="gpd-st"><i></i>RUNNING</div>
+<ul class="gpd-items">
+<li class="gpd-item"><span class="gpd-chip"><svg aria-hidden="true" viewbox="0 0 24 24"><rect height="8" rx="2" width="20" x="2" y="2"></rect><rect height="8" rx="2" width="20" x="2" y="14"></rect><line x1="6" x2="6.01" y1="6" y2="6"></line><line x1="6" x2="6.01" y1="18" y2="18"></line></svg></span><div><h4>Compute Engine VM · Dockerized</h4><p>Ubuntu 24.04, Docker Compose. Rebuilds keep the SQLite + OAuth token volume intact.</p></div></li>
+<li class="gpd-item"><span class="gpd-chip"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M12 6v6l4 2"></path><circle cx="12" cy="12" r="10"></circle></svg></span><div><h4>APScheduler cron</h4><p>Refreshes 04:00–22:00 WIB every 30 min; overnight the device sleeps and stretches its poll interval to save battery.</p></div></li>
+<li class="gpd-item"><span class="gpd-chip"><svg aria-hidden="true" viewbox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"></path><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg></span><div><h4>Self-healing &amp; alerting</h4><p>A 5-min heartbeat watches the device; if it goes silent past threshold, an outage is logged and an email alert fires via SMTP.</p></div></li>
+</ul>
 </div>
 </div>
 </div>

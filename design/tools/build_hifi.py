@@ -462,6 +462,10 @@ def blocks(*els):
 
 kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
 
+# the Lumio eyebrow was blue; drawer labels are lime titles (design/sections/VIZ-STYLE.md)
+for sp in brd[3].find_all('span', string='LUMIO · DIGITAL SIGNAGE NETWORK'):
+    sp['style'] = sp['style'].replace('rgb(95, 176, 255)', 'oklch(0.9 0.2 122)')
+
 
 def panel(root, text):
     # the smallest framed element (a border or background in its style) holding the text

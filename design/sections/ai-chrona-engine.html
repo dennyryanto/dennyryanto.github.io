@@ -1,15 +1,175 @@
-<!-- Chrona: how it works, the engine diagram.
-     Extracted from the live site capture so it can be unified with the shared diagram language (design/sections/VIZ-STYLE.md).
-     Edited here; build_hifi.py reads this file in place of the captured block. -->
-<div style="background: rgb(20, 19, 16); border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 8px; padding: 26px 28px; display: flex; flex-direction: column;">
-<div style='font: 600 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.14em; color: oklch(0.9 0.2 122); margin-bottom: 20px;'>HOW IT WORKS · THE ENGINE</div>
-<div data-r="eng-flow" style="flex: 1 1 0%; display: flex; align-items: center; justify-content: center; gap: 8px;">
-<div data-r="eng-inputs" style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px;"><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><rect height="18" rx="2" width="18" x="3" y="4"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Your week</span></div><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Circle free</span></div><div style="display: flex; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid rgba(242, 239, 232, 0.12); border-radius: 9px; background: rgba(242, 239, 232, 0.03);"><svg fill="none" height="15" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="15"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"></path></svg><span style="font: 600 12px / 1.2 Archivo; color: rgb(242, 239, 232); white-space: nowrap;">Social memory</span></div></div>
-<svg data-r="eng-arrow2" fill="none" height="22" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" style="flex: 0 0 auto; display: none;" viewbox="0 0 14 22" width="14"><path d="M7 1v18"></path><path d="M2 14l5 5 5-5"></path></svg>
-<svg data-r="eng-conn" fill="none" height="126" stroke="oklch(0.9 0.2 122 / .45)" stroke-linecap="round" stroke-width="1.5" style="flex: 0 0 auto; display: block;" viewbox="0 0 30 126" width="30"><path d="M0 19C16 19 14 63 30 63"></path><path d="M0 63H30"></path><path d="M0 107C16 107 14 63 30 63"></path></svg>
-<div data-r="eng-ai" style="flex: 0 0 auto; width: 92px; height: 92px; box-sizing: border-box; border-radius: 18px; background: oklch(0.9 0.2 122); color: rgb(24, 32, 3); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; text-align: center;"><svg data-r="eng-spark" fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="22"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg><span style="font: 800 12.5px / 1.15 Archivo;">Chrona AI<br/>plans it</span></div>
-<svg data-r="eng-arrow" fill="none" height="14" stroke="oklch(0.9 0.2 122)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" style="flex: 0 0 auto; display: block;" viewbox="0 0 26 14" width="26"><path d="M1 7h22"></path><path d="M18 2l5 5-5 5"></path></svg>
-<div data-r="eng-out" style="flex: 0 1 150px; min-width: 0px; border: 1px solid oklch(0.9 0.2 122 / 0.4); background: oklch(0.9 0.2 122 / 0.06); border-radius: 12px; padding: 13px 14px;"><span style='display: inline-block; font: 700 10px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.08em; color: rgb(24, 32, 3); background: oklch(0.9 0.2 122); padding: 5px 7px; border-radius: 5px;'>&lt;120s</span><div style="margin-top: 10px; font: 700 14px / 1.2 Archivo; color: rgb(242, 239, 232);">Invite sent</div><div style="margin-top: 3px; font: 400 12px / 1.35 Archivo; color: rgba(242, 239, 232, 0.6);">Plan lands on the calendar</div></div>
+<!-- Chrona: how it works, the engine diagram (shared diagram language, design/sections/VIZ-STYLE.md).
+     Three inputs (your week, circle free, social memory) feed the Chrona AI node, the decision, which ends in the outcome:
+     an invite sent in under 120s, with the plan on the calendar. Resting connectors are dashed; the path from the inputs
+     through the AI to the invite is lime, with packets travelling it while the board is in view. Markup is the finished
+     state, so the page is complete without JavaScript; the script resets to idle, lights the path stage by stage once
+     the board is 40% in view, then loops only while visible. Reduced motion keeps the finished state. Connectors are
+     fixed-size SVG, nothing is measured, so a shut drawer is fine. Below ~520px the engine stacks vertically.
+     Pairs with ai-chrona-loop.html: same top row, padding and caption row. -->
+<div class="ce-wrap">
+<style>
+.ce-wrap {
+  container-type: inline-size;
+  --ce-panel: #1a1b1f; --ce-node: #232429; --ce-tile: #2b2c32; --ce-line: rgba(255, 255, 255, .08);
+  --ce-ink: #f2f2f4; --ce-ink-2: #c2c3cb; --ce-ink-3: #8b8d98; --ce-edge: #4a4d57;
+  --ce-lime: oklch(0.9 0.2 122);
+  display: flex; flex-direction: column; height: 100%;
+}
+.ce-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--ce-panel); box-shadow: 0 0 0 1px var(--ce-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: Archivo, system-ui, sans-serif; color: var(--ce-ink); }
+.ce-top { margin-bottom: 18px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--ce-lime); }
+.ce-body { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; }
+
+/* one row: inputs, merge, AI, link, outcome */
+.ce-flow { width: 100%; display: grid; grid-template-columns: auto 36px auto 30px minmax(0, 1fr); align-items: center; }
+.ce-ins { display: grid; gap: 8px; }
+.ce-in { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 12px 0 8px; border-radius: 12px; background: var(--ce-node); box-shadow: 0 0 0 1px var(--ce-line); }
+.ce-chip { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--ce-tile); display: grid; place-items: center; color: var(--ce-ink-2); transition: color .35s; }
+.ce-chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.ce-in b { font: 600 13px/1.2 Archivo, sans-serif; white-space: nowrap; }
+
+/* connectors: dashed resting line, lime lit path on top (pathLength 1 so it can be drawn in) */
+.ce-c { display: block; overflow: visible; }
+.ce-c.v { display: none; }
+.ce-base { fill: none; stroke: var(--ce-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
+.ce-g, .ce-l { fill: none; stroke: var(--ce-lime); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; transition: stroke-dashoffset .55s ease-out, opacity .25s; }
+.ce-l { stroke-width: 2.5; }
+.ce-g { stroke-width: 7; opacity: .13; }
+.ce-hd { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
+.ce-hd.b { stroke: var(--ce-edge); }
+.ce-hd.l { stroke: var(--ce-lime); stroke-width: 2.5; transition: opacity .25s; }
+.ce-pk { fill: var(--ce-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+
+/* the decision: node box with a lime ring and a lime icon */
+.ce-ai { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 12px; border-radius: 12px; background: var(--ce-node); text-align: center; transition: box-shadow .4s;
+  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-ai .ce-chip { color: var(--ce-lime); }
+.ce-ai b { font: 600 14px/1.25 Archivo, sans-serif; }
+
+/* the outcome: lime ring and a lime chip */
+.ce-out { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border-radius: 12px; background: var(--ce-node); min-width: 0; transition: box-shadow .4s;
+  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-tag { padding: 4px 7px; border-radius: 6px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); transition: color .35s, background-color .35s; }
+.ce-out b { font: 700 16px/1.2 Archivo, sans-serif; }
+.ce-out span { font: 400 13px/1.4 Archivo, sans-serif; color: var(--ce-ink-2); }
+
+.ce-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--ce-line); max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+/* idle (the script's start state): nothing lit yet; the stages light the path in order */
+.ce-wrap.run .ce-g, .ce-wrap.run .ce-l { stroke-dashoffset: 1; opacity: 0; }
+.ce-wrap.run .ce-hd.l { opacity: 0; }
+.ce-wrap.run .ce-ai, .ce-wrap.run .ce-out { box-shadow: 0 0 0 1px var(--ce-line); }
+.ce-wrap.run .ce-ai .ce-chip { color: var(--ce-ink-2); }
+.ce-wrap.run .ce-tag { color: var(--ce-ink-2); background: var(--ce-tile); }
+.ce-wrap.run.s1 .ce-k1 .ce-l, .ce-wrap.run.s3 .ce-k2 .ce-l { stroke-dashoffset: 0; opacity: 1; }
+.ce-wrap.run.s1 .ce-k1 .ce-g, .ce-wrap.run.s3 .ce-k2 .ce-g { stroke-dashoffset: 0; opacity: .13; }
+.ce-wrap.run.s1 .ce-k1 .ce-hd.l, .ce-wrap.run.s3 .ce-k2 .ce-hd.l { opacity: 1; }
+.ce-wrap.run.s2 .ce-ai { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s2 .ce-ai .ce-chip { color: var(--ce-lime); }
+.ce-wrap.run.s4 .ce-out { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s4 .ce-tag { color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); }
+
+/* narrow: the engine stacks, joined by short vertical connectors */
+@container (max-width: 520px) {
+  .ce-board { padding: 16px; }
+  .ce-flow { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+  .ce-c.h { display: none; }
+  .ce-c.v { display: block; justify-self: center; margin: 4px 0; }
+  .ce-ai { flex-direction: row; justify-content: flex-start; gap: 10px; padding: 10px 12px; }
+  .ce-ai br { display: none; }
+  .ce-ai b { text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .ce-wrap * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="ce-board" role="img" aria-label="The Chrona engine: three inputs, your week, circle free and social memory, feed Chrona AI, which plans it. The result is an invite sent in under 120 seconds, with the plan landing on the calendar. Conversational planning that turns intent into a sent invite, the moment that defines success.">
+  <div class="ce-top">HOW IT WORKS · THE ENGINE</div>
+  <div class="ce-body">
+    <div class="ce-flow">
+      <div class="ce-ins">
+        <div class="ce-in"><span class="ce-chip"><svg viewBox="0 0 24 24"><rect height="18" rx="2" width="18" x="3" y="4"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><b>Your week</b></div>
+        <div class="ce-in"><span class="ce-chip"><svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></span><b>Circle free</b></div>
+        <div class="ce-in"><span class="ce-chip"><svg viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.29 1.51 4.04 3 5.5l7 7z"/></svg></span><b>Social memory</b></div>
+      </div>
+
+      <svg class="ce-c h ce-k1" width="36" height="148" viewBox="0 0 36 148" aria-hidden="true">
+        <g class="ce-ln"><path class="ce-base" d="M0 22C18 22 18 74 36 74"/><path class="ce-g" pathLength="1" d="M0 22C18 22 18 74 36 74"/><path class="ce-l" pathLength="1" d="M0 22C18 22 18 74 36 74"/></g>
+        <g class="ce-ln"><path class="ce-base" d="M0 74H36"/><path class="ce-g" pathLength="1" d="M0 74H36"/><path class="ce-l" pathLength="1" d="M0 74H36"/></g>
+        <g class="ce-ln"><path class="ce-base" d="M0 126C18 126 18 74 36 74"/><path class="ce-g" pathLength="1" d="M0 126C18 126 18 74 36 74"/><path class="ce-l" pathLength="1" d="M0 126C18 126 18 74 36 74"/></g>
+        <path class="ce-hd b" d="M31 70L36 74L31 78"/><path class="ce-hd l" d="M31 70L36 74L31 78"/>
+      </svg>
+      <svg class="ce-c v ce-k1" width="14" height="28" viewBox="0 0 14 28" aria-hidden="true">
+        <g class="ce-ln"><path class="ce-base" d="M7 0V27"/><path class="ce-g" pathLength="1" d="M7 0V27"/><path class="ce-l" pathLength="1" d="M7 0V27"/></g>
+        <path class="ce-hd b" d="M3 23L7 27L11 23"/><path class="ce-hd l" d="M3 23L7 27L11 23"/>
+      </svg>
+
+      <div class="ce-ai"><span class="ce-chip"><svg viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg></span><b>Chrona AI <br>plans it</b></div>
+
+      <svg class="ce-c h ce-k2" width="30" height="14" viewBox="0 0 30 14" aria-hidden="true">
+        <g class="ce-ln"><path class="ce-base" d="M0 7H29"/><path class="ce-g" pathLength="1" d="M0 7H29"/><path class="ce-l" pathLength="1" d="M0 7H29"/></g>
+        <path class="ce-hd b" d="M24 3L29 7L24 11"/><path class="ce-hd l" d="M24 3L29 7L24 11"/>
+      </svg>
+      <svg class="ce-c v ce-k2" width="14" height="28" viewBox="0 0 14 28" aria-hidden="true">
+        <g class="ce-ln"><path class="ce-base" d="M7 0V27"/><path class="ce-g" pathLength="1" d="M7 0V27"/><path class="ce-l" pathLength="1" d="M7 0V27"/></g>
+        <path class="ce-hd b" d="M3 23L7 27L11 23"/><path class="ce-hd l" d="M3 23L7 27L11 23"/>
+      </svg>
+
+      <div class="ce-out"><span class="ce-tag">&lt;120s</span><b>Invite sent</b><span>Plan lands on the calendar</span></div>
+    </div>
+  </div>
+  <p class="ce-cap">Conversational planning that turns intent into a sent invite, the moment that defines success.</p>
 </div>
-<div style="margin-top: 22px; padding-top: 18px; border-top: 1px solid rgba(242, 239, 232, 0.1); font: 400 13px / 1.55 Archivo; color: rgba(242, 239, 232, 0.6);">Conversational planning that turns intent into a sent invite, the moment that defines success.</div>
+
+<script>
+(function () {
+  var wrap = document.currentScript.parentNode, board = wrap.querySelector('.ce-board');
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var NS = 'http://www.w3.org/2000/svg', HOLD = 6200, PERIOD = 1500;
+  var visible = false, played = false, raf = 0, timers = [], T0 = performance.now(), pk = [];
+  // packets ride the lit paths: one group per path, in the connector set that is showing (horizontal or stacked)
+  [].slice.call(wrap.querySelectorAll('.ce-ln')).forEach(function (g) {
+    var line = g.querySelector('.ce-l'), svg = g.ownerSVGElement, k = svg.classList.contains('ce-k1') ? 's1' : 's3';
+    [0, .5].forEach(function (phase) {
+      var c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3'); c.setAttribute('class', 'ce-pk'); c.style.opacity = 0;
+      g.appendChild(c); pk.push({ c: c, line: line, len: line.getTotalLength(), phase: phase, svg: svg, k: k });
+    });
+  });
+  // the connector set that shows follows the container width; read it on resize only, never on parse (a shut drawer has no layout)
+  var shown = new Map();
+  function sync() { pk.forEach(function (p) { shown.set(p.svg, p.svg.getClientRects().length > 0); }); }
+  if ('ResizeObserver' in window) new ResizeObserver(sync).observe(board);
+
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clear() { timers.forEach(clearTimeout); timers = []; }
+  function stage(n) { wrap.classList.add('s' + n); }
+  function idle() { wrap.classList.add('run'); wrap.classList.remove('s1', 's2', 's3', 's4'); }
+  function play() {
+    clear(); idle(); played = true;
+    later(function () { stage(1); }, 400);
+    later(function () { stage(2); }, 1200);
+    later(function () { stage(3); }, 1900);
+    later(function () { stage(4); }, 2500);
+    later(replay, 2500 + HOLD);
+  }
+  function replay() { if (!visible || document.hidden) { played = false; return; } idle(); later(play, 600); }
+
+  function frame(now) {
+    raf = 0;
+    if (!visible || document.hidden) return;
+    pk.forEach(function (p) {
+      var on = shown.get(p.svg) && wrap.classList.contains(p.k);
+      if (!on) { p.c.style.opacity = 0; return; }
+      var u = ((now - T0) / PERIOD + p.phase) % 1, at = p.line.getPointAtLength(u * p.len);
+      p.c.setAttribute('cx', at.x); p.c.setAttribute('cy', at.y); p.c.style.opacity = Math.sin(Math.PI * u).toFixed(2);
+    });
+    raf = requestAnimationFrame(frame);
+  }
+  function wake() { if (!raf && visible && !document.hidden) raf = requestAnimationFrame(frame); }
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible) { sync(); if (!played && es[0].intersectionRatio >= .4) play(); }
+    wake();
+  }, { threshold: [0, .4] }).observe(board);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && visible && !played) { sync(); play(); } wake(); });
+})();
+</script>
 </div>
