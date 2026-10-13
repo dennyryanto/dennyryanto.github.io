@@ -28,8 +28,7 @@
 .kds-edges .glow { stroke: var(--kds-lime); stroke-width: 7; opacity: .13; }
 .kds-dot { fill: var(--kds-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
 
-/* the three surfaces: the same offer as each org ships it, on dark stages so they sit quietly in the page;
-   the rate reads in ink (the darker blues fail contrast on dark), the button and swatch carry each team's blue */
+/* the three surfaces: the same offer as each org ships it; dark stages keep them quiet in the page, the card stays a light product UI */
 .kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
 .kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
@@ -49,11 +48,11 @@
 .kds-surf.off[data-org="mkt"] { --wd: 100%; --c: #5d6fd8; --cr: 18px; --br: 16px; --fw: 500; }
 .kds-ui { font-family: var(--f); font-stretch: var(--wd); transition: opacity .18s; }
 .kds-ui.swap { opacity: 0; }
-.kds-card { width: 100%; max-width: 230px; background: var(--kds-tile); border-radius: var(--cr); box-shadow: 0 0 0 1px rgba(255, 255, 255, .06); padding: 14px; transition: border-radius .5s; }
-.kds-card small { display: block; font-size: 11px; letter-spacing: .02em; color: var(--kds-ink-3); }
-.kds-card strong { display: block; margin-top: 3px; font-size: 15px; font-weight: var(--fw); color: var(--kds-ink); }
-.kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--kds-ink); letter-spacing: -.01em; }
-.kds-rate span { font-size: 12px; font-weight: 500; color: var(--kds-ink-3); }
+.kds-card { width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
+.kds-card small { display: block; font-size: 11px; letter-spacing: .02em; color: #667085; }
+.kds-card strong { display: block; margin-top: 3px; font-size: 15px; font-weight: var(--fw); color: #101828; }
+.kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--c); transition: color .5s; letter-spacing: -.01em; }
+.kds-rate span { font-size: 12px; font-weight: 500; color: #667085; }
 .kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
 
 /* the library: one source of tokens and components */
