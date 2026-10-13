@@ -833,6 +833,20 @@ everything, so "use efficient cache lifetimes" stays flagged. File names are
 content hashes, so a CDN with long caching could be put in front later.
 Minifying `stack.js` would save about 4KB, not worth a build dependency.
 
+## Section mockups (2026-10-13)
+
+One section at a time can be polished in isolation:
+
+- `SECTION=<case id> python3 design/tools/build_hifi.py <workdir>` writes
+  `<workdir>/section-<id>.html`, containing only that section with its case
+  study open.
+- The first one is Independent consulting (`SECTION=ai`), published at
+  https://claude.ai/artifact/9aoEWd4gAhPedgSMt6ACBE.
+- Its enterprise AI "decision desk" now lives in the repo as
+  `design/sections/ai-decision-desk.html`, the editable source that
+  `build_hifi.py` reads instead of the live-site capture. Chrona still comes
+  from the capture.
+
 ## Open decisions
 
 - **Cockpit fan placement**: top of the drawer (wireframe v2) or back in the
