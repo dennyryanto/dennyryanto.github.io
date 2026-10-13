@@ -1373,8 +1373,16 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kpr-link.run b { animation: kpr-x .45s linear; }
 @keyframes kpr-x { 0% { left: 0; opacity: 1; } 100% { left: 100%; opacity: 1; } }
 
-.kpr-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.kpr-cap { margin: 0 0 18px; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 .kpr-note { margin: 6px 0 0; max-width: 72ch; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: rgba(242, 239, 232, .45); }
+
+/* the tie to the funnel: what unblocking the funding step moved (lime: outcomes) */
+.kpr-impact { margin-top: 14px; }
+.kpr-ih { margin-bottom: 10px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kpr-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kpr-tile { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px; border-radius: 12px; background: var(--kpr-panel); box-shadow: 0 0 0 1px var(--kpr-line); }
+.kpr-tile b { font: 700 28px/1 Archivo, sans-serif; letter-spacing: -.01em; color: var(--kpr-lime); }
+.kpr-tile span { font: 400 13px/1.45 Archivo, sans-serif; color: var(--kpr-ink-2); }
 
 /* medium: the two lanes side by side, each flowing down */
 @container (max-width: 1060px) {
@@ -1394,10 +1402,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 @container (max-width: 620px) {
   .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 12px; }
   .kpr-lane { padding: 12px; }
+  .kpr-tiles { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .kpr-wrap *, .kpr-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
 <div class="kpr-head"><span>PLACEMENT ROUTING · BEFORE AND AFTER</span><span>ILLUSTRATIVE</span></div>
+<p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked a placement onto one payment rail, then a listener waited for the money. But money moves in Indonesia over several rails (bank virtual accounts, BI-FAST, RTGS), each with its own limits, fees and hours, and every bank adds its own caps. When the sender's bank blocked the transfer, the funds never came and the user sat locked out until the hold expired. The revamp routes first: it checks the amount, bank and time against every rail, shows one clear step, and locks nothing until the funds land.</p>
 <div aria-label="Placing Rp75,000,000 from a Mandiri account at 20:40. Before: checkout locked the placement onto a Permata virtual account, the bank app rejected the interbank payment for being over its Rp25M cap, the listener waited for funds that never arrived, and the user was locked out of new placements until the hold expired. After: a route check compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day, and RTGS needs Rp100M and closes at 15:00, so it picks BI-FAST, shows one clear step with nothing locked, the funds arrive in seconds and the deposit is active." class="kpr-board" role="img">
 <div class="kpr-lane before bad" data-lane="before">
 <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
@@ -1435,8 +1445,15 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div>
 </div>
-<p class="kpr-cap">Checkout used to lock a placement onto one payment rail, then wait for the money. When the sender's bank limit, fee or cut-off blocked the transfer, the funds never came and the user sat locked out until the hold expired. That was the funnel's drop-off. Routing now checks the amount, bank and time against every rail first, shows one clear step, and locks nothing until the funds land.</p>
-<p class="kpr-note">Limits follow published bank, BI-FAST and payment-gateway rules; they differ by bank and change over time.</p>
+<div aria-label="What the routing moved" class="kpr-impact">
+<div class="kpr-ih">WHAT IT MOVED · SEE THE FUNNEL BELOW</div>
+<div class="kpr-tiles">
+<div class="kpr-tile"><b>90%</b><span>of funded placements now complete: the Fund → Complete step, where placements used to stall</span></div>
+<div class="kpr-tile"><b>+12 pts</b><span>end-to-end deposit-funnel completion after the revamp</span></div>
+<div class="kpr-tile"><b>+16%</b><span>placement volume over the six months after launch, about 3% a month</span></div>
+</div>
+</div>
+<p class="kpr-note">The +12-point lift is actual; the step rate and volume are illustrative under NDA, as in the funnel below. Limits follow published bank, BI-FAST and payment-gateway rules; they differ by bank and change over time.</p>
 <script>
 (function () {
   var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kpr-board');
