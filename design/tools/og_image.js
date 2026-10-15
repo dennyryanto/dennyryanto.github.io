@@ -59,6 +59,20 @@ h1 span { color: ${LIME}; }
 </div>
 </body></html>`;
 
+// the AI-native aura on the card's edge, a lime-to-green light: a crisp ring over a soft halo. The still holds it at one
+// angle (--aura); the video turns it.
+const AURA_CSS = `
+@property --aura { syntax: '<angle>'; inherits: false; initial-value: 300deg; }
+.aura, .aura-halo { position: absolute; left: 56px; right: 56px; top: 58px; height: 620px; border-radius: 28px; pointer-events: none; }
+/* the ring: the gradient masked to the edge (the halo blurs its own ring, so the light stays on the edge, not on the glass) */
+.aura, .aura-halo > i { background: conic-gradient(from var(--aura), oklch(0.9 0.2 122), oklch(0.72 0.16 160) 20%, oklch(0.72 0.16 160 / 0) 36%,
+    oklch(0.9 0.2 122 / 0) 54%, oklch(0.72 0.16 160) 70%, oklch(0.9 0.2 122) 86%, oklch(0.9 0.2 122));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.aura { padding: 1.5px; z-index: 2; }
+.aura-halo { filter: blur(16px); }
+.aura-halo > i { position: absolute; inset: -6px; border-radius: 34px; padding: 10px; }
+`;
+
 // the video's build-in, layered over the card: every animation is paused and stepped frame by frame by the recorder
 const ANIM_CSS = `
 ${SEAL_CSS}
@@ -71,20 +85,12 @@ ${SEAL_CSS}
 .g1 { animation: fade 1.4s ease-out both, drift1 10s ease-in-out both; }
 .g2 { animation: fade 1.4s ease-out .2s both, drift2 10s ease-in-out both; }
 .g3 { animation: fade3 1.4s ease-out .4s both, drift3 10s ease-in-out both; }
-/* the AI-native aura: a lime-to-green light turning around the card's edge, a crisp ring over a soft halo; it rises with
-   the card and comes up to full as the certificates land */
-@property --aura { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-@keyframes aura-turn { to { --aura: 360deg; } }
+/* the aura rises with the card, comes up to full as the certificates land, and turns */
+.aura, .aura-halo { --dy: 90px; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both; }
+.aura { animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both, aura-turn 6s linear infinite; }
+.aura-halo > i { animation: aura-turn 6s linear infinite; }
+@keyframes aura-turn { from { --aura: 0deg; } to { --aura: 360deg; } }
 @keyframes aura-in { 0% { opacity: 0; } 40% { opacity: .35; } 100% { opacity: 1; } }
-.aura, .aura-halo { position: absolute; left: 56px; right: 56px; top: 58px; height: 620px; border-radius: 28px; pointer-events: none;
-  --dy: 90px; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both; }
-/* the ring: the gradient masked to the edge (the halo blurs its own ring, so the light stays on the edge, not on the glass) */
-.aura, .aura-halo > i { background: conic-gradient(from var(--aura), oklch(0.9 0.2 122), oklch(0.72 0.16 160) 20%, oklch(0.72 0.16 160 / 0) 36%,
-    oklch(0.9 0.2 122 / 0) 54%, oklch(0.72 0.16 160) 70%, oklch(0.9 0.2 122) 86%, oklch(0.9 0.2 122));
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
-.aura { padding: 1.5px; z-index: 2; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both, aura-turn 6s linear infinite; }
-.aura-halo { filter: blur(16px); }
-.aura-halo > i { position: absolute; inset: -6px; border-radius: 34px; padding: 10px; opacity: 1; animation: aura-turn 6s linear infinite; }
 .top { animation: fade .7s ease-out .2s both; }
 .card { --dy: 90px; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both; }
 .id > *, .row, .certs > div { animation: up .55s cubic-bezier(.2, .8, .3, 1) both; }
@@ -138,11 +144,12 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
 .certs { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
 .certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 Archivo, sans-serif; }
 .certs svg { width: 27px; height: 27px; flex: none; }
+${AURA_CSS}
 ${anim ? ANIM_CSS : ''}
 </style></head><body>
 <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="grain"></div>
 <div class="top"><span class="url">DENNYRYANTO.GITHUB.IO</span><svg viewBox="0 0 10 9" width="22" height="20" shape-rendering="crispEdges" style="opacity:.6"><g fill="#f2efe8">${rabbit}</g></svg></div>
-${anim ? '<div class="aura-halo"><i></i></div>' : ''}<div class="card">
+<div class="aura-halo"><i></i></div><div class="card">
   <div class="id">
     <img src="${HEADSHOT}" alt="">
     <b>Denny Ryanto</b>
@@ -155,7 +162,8 @@ ${anim ? '<div class="aura-halo"><i></i></div>' : ''}<div class="card">
     <div class="row"><i>BOARD</i><p>Commissioner, Dash &amp; Lumio</p></div>
     <div class="row"><i>CERTIFIED · ANTHROPIC 2026</i><div class="certs"><div>${anim ? goldSeal(27, '0.00') : SEAL}AI-Native SDLC Playbook</div><div>${anim ? goldSeal(27, '-0.45') : SEAL}Claude Code 101</div><div>${anim ? goldSeal(27, '-0.90') : SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
   </div>
-</div>${anim ? '\n<div class="aura"></div>' : ''}
+</div>
+<div class="aura"></div>
 </body></html>`;
 
 const VARIANT = process.argv[2] || 'card';

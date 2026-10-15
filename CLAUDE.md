@@ -16,7 +16,8 @@ Link previews (LinkedIn, Slack, X) use `assets/og-image.png`, rendered from the 
 page by `node design/tools/og_image.js`; re-run it after `build_site.py` when the
 headline or the key numbers change.
 `node design/tools/og_image.js video out.mp4` renders the same card as a 10s video for
-LinkedIn posts (build-in, spinning seals, AI aura on the edge); it is not part of the site.
+LinkedIn posts (build-in, spinning seals, the AI aura turning on the edge); it is not part of the
+site. The still shows the same aura, held at one angle.
 
 ## Design decisions
 
