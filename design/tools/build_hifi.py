@@ -157,7 +157,7 @@ for ch in list(card.contents):
     front.append(ch.extract())
 front['style'] = frame
 flip.append(soup("""<div class="ee-back" aria-hidden="true" style="%s">
-<div class="ee-eyebrow">EASTER EGG · 1 OF 1</div>
+<div class="ee-eyebrow">EASTER EGG · 1 OF 3</div>
 <div class="ee-title">You found it.</div>
 <p>Ten taps? Okay, you&rsquo;re officially curious. Here&rsquo;s something that&rsquo;s not on my CV: I&rsquo;m a huge sci-fi movie nerd.</p>
 <p>Long before I knew UI/UX was a job, I&rsquo;d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn&rsquo;t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
