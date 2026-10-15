@@ -8,9 +8,9 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 `design/AUDIT.md`). The old single-file bundle the content was taken from is kept
 at `design/source/legacy-index.html`.
 
-Colours: sources are written in the original warm theme (near-black, cream, lime);
-`design/tools/theme.py` maps them onto the current palette (Marshland neutrals, lime accent) when both build
-scripts write their output. Change the palette there, not in the sources.
+Colours: sources use the lime accent; `design/tools/theme.py` swaps it for the
+site's current accent when both build scripts write their output. Change the
+accent there, not in the sources.
 
 ## Design decisions
 

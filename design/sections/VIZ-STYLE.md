@@ -11,9 +11,7 @@ product's own look and keep their own colours. Only the frame and labels around 
 
 Declare them on the component's wrapper with its own prefix (`--xyz-panel`, ...), values exactly as here.
 
-These are the source values. The site's colour theme (`design/tools/theme.py`, the Marshland palette) maps the
-neutrals at build time: panel → `#1e2322`, node → 800 `#262b2a`, tile → `#2d3432`, ink → 50, ink-2 → 300, ink-3 → `#8b9a97`,
-edge → 600, grey mark → 500. Lime and amber stay. Write the source values here; don't hard-code the themed ones.
+The accent is written as lime here; `design/tools/theme.py` swaps it for the site's current accent at build time.
 
 | Token | Value | Use |
 |---|---|---|
