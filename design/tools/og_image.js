@@ -1,6 +1,6 @@
 // The link-preview image (LinkedIn, Slack, X): a 1200x630 card in the site's own type and colours, written to
 // assets/og-image.png. Fonts come from the built index.html's @font-face rules, so run build_site.py first.
-//   node design/tools/og_image.js [stats|card] [out.png]     (needs Playwright with its Chromium)
+//   node design/tools/og_image.js [card|stats] [out.png]     (needs Playwright with its Chromium; card is the default)
 // stats: the headline over the four key numbers. card: the profile card alone as frosted glass, identity left and
 // details right, running off the bottom edge.
 // build_site.py adds the og:image tags that point at it; re-run this when the headline or the numbers change.
@@ -108,7 +108,7 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
 </div>
 </body></html>`;
 
-const VARIANT = process.argv[2] || 'stats';
+const VARIANT = process.argv[2] || 'card';
 const OUT = path.resolve(process.argv[3] || path.join(ROOT, 'assets', 'og-image.png'));
 const html = VARIANT === 'card' ? CARD : STATS;
 

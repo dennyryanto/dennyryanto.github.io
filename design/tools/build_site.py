@@ -127,7 +127,7 @@ HEAD = '''<!doctype html>
 <meta property="og:image" content="https://dennyryanto.github.io/assets/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Denny Ryanto, Head / AVP Product Design: design leadership, measured in outcomes. −80% CS OPEX at LinkAja, +12 pts deposit funnel at Komunal, ~200K customers a month at Dash.">
+<meta property="og:image:alt" content="Profile card: Denny Ryanto, Head / AVP Product Design. 15+ years in digital product, product and AI design consultant, commissioner at Dash and Lumio, three Anthropic certificates.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://dennyryanto.github.io/assets/og-image.png">
 <link rel="canonical" href="https://dennyryanto.github.io/">
