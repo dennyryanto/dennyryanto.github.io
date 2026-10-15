@@ -73,6 +73,14 @@ for a in top.find_all('a'):
 for a in top.find_all('a', href='#work'):
     a['href'] = '#linkaja'
 
+def portable(html):
+    # The product screens are drawn at their real size (375px phones, 1024 / 1440px tablets and desktops) and scaled
+    # into their frames with scale(calc(100cqw * (1 / 375px))). Dividing a length by a length is typed arithmetic,
+    # which Safari does not support, so it dropped the transform and the screens did not show. tan(atan2(a, b)) gives
+    # the same unitless a / b and works in Safari 16.4+, Chrome and Firefox.
+    return re.sub(r'calc\(100cqw \* \(1 / (\d+(?:\.\d+)?)px\)\)', r'tan(atan2(100cqw, \1px))', html)
+
+
 def section(name):
     # a piece that lives in the repo (design/sections/<name>.html), edited there instead of in the capture
     return soup(open(os.path.join(HERE, '..', 'sections', name + '.html'), encoding='utf-8').read())
@@ -823,7 +831,7 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
-open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(theme.apply(out))
+open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(theme.apply(portable(out)))
 
 # ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------
 COMPONENT = os.environ.get('COMPONENT')
@@ -836,7 +844,7 @@ if COMPONENT:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(theme.apply(page))
+    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(theme.apply(portable(page)))
     print('component', COMPONENT, len(page), 'bytes')
 
 # ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
@@ -854,6 +862,6 @@ if SECTION:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', one).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(theme.apply(page))
+    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(theme.apply(portable(page)))
     print('section', SECTION, len(page), 'bytes')
 print('bytes', len(out), 'read times', re.findall(r'(\d+) min read', out))
