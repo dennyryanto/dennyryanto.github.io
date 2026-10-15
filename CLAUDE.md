@@ -9,7 +9,7 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 at `design/source/legacy-index.html`.
 
 Colours: sources use the lime accent; `design/tools/theme.py` swaps it for the
-site's current accent (aqua) when both build scripts write their output. Change the
+site's current accent when both build scripts write their output. Change the
 accent there, not in the sources.
 
 ## Design decisions
