@@ -271,7 +271,7 @@ INDEX = [
     ('linkaja', '−80%', 'CS OPEX', str(icons[0]), '01', 'LinkAja',
      'Customer-service cost after self-service replaced agent tickets for 70M users.'),
     ('komunal', '+12<span class="mk-unit">PTS</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal',
-     'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.'),
+     'A design and delivery transformation: one system, one sprint, and a deposit funnel that completes more often.'),
     ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash · Lumio',
      'Diners ordering through Dash each month, across 30+ restaurant chains.'),
     ('ai', '0→1', 'AI-NATIVE BUILDS', spark, '04', 'Independent',
@@ -438,7 +438,7 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 
 # what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
 # (all words, diagram labels included, at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
-READ = {'linkaja': 3, 'komunal': 6, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
+READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
 toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
@@ -455,14 +455,15 @@ BRIEF = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="cur
 FLASK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.31"/><path d="M14 9.3V1.99"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>'
 CASES = [
     dict(id='komunal', flip=True, n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
-         h2='Rebuilt how a regulated fintech ships design.',
-         sub='One shared design system for Product, Engineering and Marketing, and a redesigned deposit funnel that now completes about 12 points more often.',
+         h2='Transformed how a regulated fintech designs, plans and ships.',
+         sub='In 17 months I moved Product, Engineering and Marketing onto one design system, one release platform and one sprint, and used that footing to lift deposit-funnel completion by about 12 points.',
          stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('W→D', 'RELEASE CYCLE', False), ('1', 'SYSTEM · 3 ORGS', False)],
          alt='Line drawing: three phone-shaped layers (the design system, the deposit funnel, and the deposit screen as a wireframe). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
-         bullets=['Championed the move from the legacy Sanity platform to Framer for web components, cutting release cycles from weeks to days.',
-                  'Created the company’s first shared design system: one source of foundations, components and tokens across Product, Engineering and Marketing.',
-                  'Led UX audits and redesigns that lifted DepositoBPR deposit-funnel completion by roughly 12 percentage points.',
-                  'Put Marketing, Product and Engineering on one two-week sprint (one request form, one cut-off, shared ceremonies), and oversaw ISO / OJK compliance without slowing UX delivery.']),
+         # the transformation, one bullet per shift, in the order of the map at the top of the drawer
+         bullets=['Design system: created the company’s first shared system, one source of foundations, components and tokens across Product, Engineering and Marketing.',
+                  'Delivery: championed the move from the legacy Sanity platform to Framer for web components, cutting release cycles from weeks to days.',
+                  'Operating model: put Marketing, Product and Engineering on one two-week sprint (one request form, one cut-off, shared ceremonies), with ISO / OJK compliance kept in step.',
+                  'Product: led UX audits and a funding-flow redesign that lifted DepositoBPR deposit-funnel completion by roughly 12 percentage points.']),
     dict(id='board', scene='dash', n='03 / EXECUTIVE &amp; BOARD', role='DASH INOVASI ABADI · LUMIO INOVASI TECHNOLOGY · NOV 2016 – PRESENT', icon=BRIEF,
          h2='Board-level judgment, design-level craft.',
          sub='I founded and ran a B2B product company for eight years, and have sat on its board since 2021.',
@@ -535,9 +536,9 @@ for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 
     panel(root, text).replace_with(section(name))
 
 LIVE = {
-    # the design system story (design/sections/), the tooling migration (its old design-system card removed),
-    # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
-    'komunal': blocks(section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
+    # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
+    # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
+    'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
                       section('komunal-funnel'), section('komunal-shipped-flow')),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], section('board-governance')),   # captain + back office, Lumio, governance
@@ -605,7 +606,7 @@ ABOUT = {
     ('2016–24', 'Dash · Lumio'): 'The B2B product company I founded: Dash for restaurant ordering, Lumio for turning signage screens into revenue.',
     ('2021–', 'Dash · Lumio'): 'My board seat: strategy, governance, financial health and risk.',
     ('2021–23', 'LinkAja'): 'An Indonesian digital payments and e-wallet app used by 70M+ people.',
-    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech whose DepositoBPR platform lets people place deposits with rural banks.',
+    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech whose DepositoBPR platform lets people place deposits with rural banks. I led its design and delivery transformation.',
     ('2025–', 'Independent'): 'Product and AI design consulting for businesses and design teams.',
 }
 for row in career[1].find_all(recursive=False):
