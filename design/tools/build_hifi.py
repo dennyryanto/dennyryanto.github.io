@@ -87,6 +87,54 @@ for row in hero.find_all(attrs={'data-r': 'pc-row'}):
     label = row.find('div').get_text(strip=True)
     if label in ('BEFORE', 'FOCUS'):
         row.decompose()
+# "measured in outcomes.": each letter of the lime word rolls through a few digits and lands on its letter, left to
+# right, like the count-ups in the case studies. The markup is the finished word (split into letters only so the roll
+# can't shift the layout), and screen readers get the plain word. Reduced motion keeps it still.
+hero_h1 = hero.find(attrs={'data-r': 'hero-h1'})
+oc_letters = ''.join('<span class="ol">%s</span>' % ch for ch in 'outcomes')
+oc_word, oc_style, oc_script = [n for n in soup("""<span style="color: oklch(0.9 0.2 122);"><span class="oc"><span class="oc-sr">outcomes</span><span class="oc-l" aria-hidden="true">""" + oc_letters + """</span></span>.</span>
+<style>
+.oc { white-space: nowrap; }
+.oc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.ol { display: inline-block; position: relative; clip-path: inset(.07em -40% -.12em -40%); }
+.ol-s { display: block; position: relative; }
+.ol-d { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); display: flex; flex-direction: column; }
+.ol-d i { font-style: normal; display: block; height: .98em; line-height: .98; text-align: center; font-variant-numeric: tabular-nums; }
+</style>
+<script>
+(function () {
+  var word = document.querySelector('.oc-l'); if (!word || !word.animate) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ls = [].slice.call(word.querySelectorAll('.ol')), busy = false;
+  ls.forEach(function (l) {
+    var s = document.createElement('span'); s.className = 'ol-s';
+    while (l.firstChild) s.appendChild(l.firstChild);
+    var d = document.createElement('span'); d.className = 'ol-d'; s.appendChild(d); l.appendChild(s);
+  });
+  function roll() {
+    if (busy) return; busy = true;
+    ls.forEach(function (l, k) {
+      var s = l.firstChild, d = s.lastChild, n = 6 + k, html = '';
+      for (var j = 0; j < n; j++) html += '<i>' + Math.floor(Math.random() * 10) + '</i>';
+      d.innerHTML = html;
+      var a = s.animate([{ transform: 'translateY(' + (n * .98) + 'em)' }, { transform: 'translateY(0)' }],
+        { duration: 700 + k * 110, delay: 120 + k * 45, easing: 'cubic-bezier(.16, .84, .3, 1)', fill: 'backwards' });
+      if (k === ls.length - 1) a.onfinish = function () { busy = false; };
+    });
+  }
+  var played = false;
+  new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting && !played) { played = true; roll(); }
+  }, { threshold: .6 }).observe(word);
+  word.parentNode.addEventListener('pointerenter', roll);
+})();
+</script>""").contents if n.name]
+hero_h1.find('span').replace_with(oc_word)
+for t in hero_h1.find_all(string=lambda x: 'measured in' in x):   # keep the original break: "measured in" / "outcomes."
+    pre, post = t.split('measured in', 1)
+    t.replace_with(soup(pre + '<span style="white-space: nowrap;">measured in</span>' + post))
+hero_h1.insert_after(oc_script)
+hero_h1.insert_after(oc_style)
 head = base64.b64encode(open(os.path.join(S, 'unpacked/assets/92db9c4c-6c60-4494-a54f-0fdbf08a9132.webp'), 'rb').read()).decode()
 slot = hero.find('image-slot')
 img = hero.new_tag('img', src='data:image/webp;base64,' + head, alt='Denny Ryanto',
@@ -546,11 +594,11 @@ career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('ca
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
 # one line on what each company is, under the role in the timeline
 ABOUT = {
-    ('2011–16', 'Appsindo Technology'): 'A software house: an agency designing and building apps for retail, F&amp;B and entertainment brands.',
-    ('2016–24', 'Dash · Lumio'): 'My B2B product company: Dash for restaurant ordering, Lumio for revenue from signage networks.',
-    ('2021–', 'Dash · Lumio'): 'A board seat: strategy, governance, financial health and risk.',
-    ('2021–23', 'LinkAja'): 'An Indonesian digital payments app used by 70M+ people.',
-    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech behind DepositoBPR, for placing deposits with rural banks.',
+    ('2011–16', 'Appsindo Technology'): 'A software house and agency building apps for retail, F&amp;B and entertainment brands.',
+    ('2016–24', 'Dash · Lumio'): 'The B2B product company I founded: Dash for restaurant ordering, Lumio for turning signage screens into revenue.',
+    ('2021–', 'Dash · Lumio'): 'My board seat: strategy, governance, financial health and risk.',
+    ('2021–23', 'LinkAja'): 'An Indonesian digital payments and e-wallet app used by 70M+ people.',
+    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech whose DepositoBPR platform lets people place deposits with rural banks.',
     ('2025–', 'Independent'): 'Product and AI design consulting for businesses and design teams.',
 }
 for row in career[1].find_all(recursive=False):
@@ -572,8 +620,8 @@ bg_html = (
     '</button>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
-    '<p class="mk-context">Appsindo Technology is a software house, an agency that designs and builds apps for its clients. '
-    'Four of the client products I designed there:</p>' + str(earlier[1]) + '</div>' +
+    '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
+    'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
     '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'
