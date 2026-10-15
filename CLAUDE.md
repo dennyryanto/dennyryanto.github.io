@@ -12,6 +12,10 @@ Colours: sources use the lime accent; `design/tools/theme.py` swaps it for the
 site's current accent when both build scripts write their output. Change the
 accent there, not in the sources.
 
+Link previews (LinkedIn, Slack, X) use `assets/og-image.png`, rendered from the built
+page by `node design/tools/og_image.js`; re-run it after `build_site.py` when the
+headline or the key numbers change.
+
 ## Design decisions
 
 Before any design or layout work, read `design/AUDIT.md`. It holds the design
