@@ -78,7 +78,11 @@ def portable(html):
     # into their frames with scale(calc(100cqw * (1 / 375px))). Dividing a length by a length is typed arithmetic,
     # which Safari does not support, so it dropped the transform and the screens did not show. tan(atan2(a, b)) gives
     # the same unitless a / b and works in Safari 16.4+, Chrome and Firefox.
-    return re.sub(r'calc\(100cqw \* \(1 / (\d+(?:\.\d+)?)px\)\)', r'tan(atan2(100cqw, \1px))', html)
+    # Safari still sized them at about two thirds (it resolves the container units in the transform differently), so
+    # each scaled screen is also marked data-fit="<its width>" and the page script sets the exact scale from its frame's
+    # measured width (hifi_shell.html); the CSS stays as the fallback without JavaScript.
+    html = re.sub(r'calc\(100cqw \* \(1 / (\d+(?:\.\d+)?)px\)\)', r'tan(atan2(100cqw, \1px))', html)
+    return re.sub(r'<(div|span)\b(?![^>]*\bdata-fit=)([^>]*?tan\(atan2\(100cqw, (\d+(?:\.\d+)?)px\)\)[^>]*)>', r'<\1 data-fit="\3"\2>', html)
 
 
 def section(name):
