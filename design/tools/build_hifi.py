@@ -630,6 +630,124 @@ contact = soup(read('contact')).find()
 for a in contact.find_all('a'):
     if a.get('download') is not None:
         a['href'] = 'https://dennyryanto.github.io/denny-ryanto-resume.pdf'
+
+# ---------- easter egg: when the footer comes into view, a pixel crab (Claude) scuttles in along its top rule ----------
+# Claude Code's mascot, pixel for pixel from its startup logo (the block characters "▐▛███▜▌ / ▝▜█████▛▘ / ▘▘ ▝▝"):
+# each terminal quadrant is one tall pixel (1 x 2 units, 3px wide on screen). Tapping it walks through three lines in a
+# speech bubble; the next tap snaps its arms, throws the card egg's lime sparks and it runs off. It stands on the rule,
+# so nothing in the layout moves; it needs JS (hidden without it); reduced motion shows it already in place.
+CRAB_BODY = ['...XXXXXXXXXXXX...',
+             '...XXEXXXXXXEXX...',
+             '.AAXXXXXXXXXXXXAA.',
+             '...XXXXXXXXXXXX...']
+CRAB_LEGS = (['....X.X....X.X....'], ['.....X.X....X.X...'])
+
+
+def pixels(rows, y0=0, keep='X'):
+    return ''.join('<rect x="%d" y="%d" width="1" height="2"/>' % (x, 2 * (y0 + y))
+                   for y, row in enumerate(rows) for x, c in enumerate(row) if c in keep)
+
+
+CLAUDE_ORANGE = '#d77757'
+crab_svg = ('<svg class="cc-svg" viewBox="0 0 18 10" width="72" height="40" shape-rendering="crispEdges" aria-hidden="true">'
+            '<g fill="%s">%s</g>' % (CLAUDE_ORANGE, pixels(CRAB_BODY))
+            + '<g class="cc-claws" fill="%s">%s</g>' % (CLAUDE_ORANGE, pixels(CRAB_BODY, 0, 'A'))
+            + '<g class="cc-eyes" fill="#16150f">%s</g>' % pixels(CRAB_BODY, 0, 'E')
+            + ''.join('<g class="cc-legs cc-legs-%d" fill="%s">%s</g>' % (k, CLAUDE_ORANGE, pixels(legs, 4)) for k, legs in enumerate(CRAB_LEGS))
+            + '</svg>')
+contact['style'] = contact.get('style', '') + ' position: relative;'
+contact.append(Comment("""
+  Psst, code explorer. The little orange crab on this line is Claude, who built this site with me.
+  Scroll all the way down and tap it a few times.
+"""))
+for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="cc-bubble" role="status" aria-live="polite"></div>'
+                    '<button type="button" class="cc-crab" aria-label="Claude the crab. Tap to chat.">' + crab_svg + '</button></div></div>'
+                    """<style>
+.cc-track { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: min(1216px, 100%); height: 0; padding: 0 40px; box-sizing: border-box; pointer-events: none; }
+.cc { position: absolute; right: 40px; bottom: 0; }
+.cc-crab { display: block; padding: 0; border: 0; background: none; cursor: pointer; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+.cc-crab:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 4px; border-radius: 4px; }
+.cc-svg { display: block; overflow: visible; }
+.cc-legs-1 { visibility: hidden; }
+.cc.walk .cc-legs-0 { animation: cc-a .16s steps(1) infinite; }
+.cc.walk .cc-legs-1 { animation: cc-b .16s steps(1) infinite; }
+@keyframes cc-a { 0% { visibility: visible; } 50% { visibility: hidden; } }
+@keyframes cc-b { 0% { visibility: hidden; } 50% { visibility: visible; } }
+.cc.blink .cc-eyes { fill: #d77757; }
+.cc.snap .cc-claws { animation: cc-snap .32s steps(1) 2; }
+@keyframes cc-snap { 50% { transform: translateY(-2px); } }
+.cc-bubble { position: absolute; right: -6px; bottom: calc(100% + 12px); width: max-content; max-width: min(280px, calc(100vw - 40px)); padding: 10px 12px;
+  border-radius: 10px; background: #232429; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 16px 32px -16px rgba(0, 0, 0, .9);
+  font: 500 12px/1.5 'IBM Plex Mono', monospace; letter-spacing: .02em; color: #f2f2f4; text-align: left;
+  opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; }
+.cc-bubble::after { content: ''; position: absolute; right: 20px; top: 100%; border: 6px solid transparent; border-top-color: #232429; }
+.cc-bubble.on { opacity: 1; transform: none; pointer-events: auto; }
+.cc-bubble a { color: oklch(0.9 0.2 122); text-decoration: none; white-space: nowrap; }
+.cc-bubble a:hover { text-decoration: underline; }
+@media (max-width: 760px) { .cc-track { padding: 0 20px; } .cc { right: 20px; } }
+</style>
+<script>
+(function () {
+  var box = document.querySelector('.cc'), sec = document.getElementById('contact'); if (!box || !sec) return;
+  var crab = box.querySelector('.cc-crab'), bub = box.querySelector('.cc-bubble');
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, step = 0, gone = false, idle = null;
+  function px() { return Math.max(0, document.documentElement.scrollHeight - innerHeight).toLocaleString('en-US'); }
+  var LINES = [
+    function () { return 'Hi, I\\u2019m Claude. Denny and I built this site together.'; },
+    function () { return 'You scrolled ' + px() + 'px to get here. I walked it sideways.'; },
+    function () { return 'He brings the taste, I bring the claws. <a href="mailto:denny.ryanto@gmail.com">Say hi \\u2192</a>'; }
+  ];
+  function say(k) { bub.classList.remove('on'); setTimeout(function () { bub.innerHTML = LINES[k](); bub.classList.add('on'); }, bub.innerHTML ? 140 : 0); }
+  function walk(from, to, ms, done) {
+    if (reduce || !box.animate) { done && done(); return; }
+    box.classList.add('walk');
+    box.animate([{ transform: 'translateX(' + from + 'px)' }, { transform: 'translateX(' + to + 'px)' }], { duration: ms, easing: 'cubic-bezier(.35, .1, .4, 1)', fill: 'forwards' })
+      .onfinish = function () { box.classList.remove('walk'); done && done(); };
+  }
+  function life() {   // a blink every few seconds, a claw snap now and then
+    if (reduce) return;
+    idle = setInterval(function () {
+      box.classList.add('blink'); setTimeout(function () { box.classList.remove('blink'); }, 140);
+      if (Math.random() < .3) { box.classList.remove('snap'); void box.offsetWidth; box.classList.add('snap'); }
+    }, 3200);
+  }
+  function arrive() {
+    box.hidden = false;
+    var dist = box.getBoundingClientRect().right + 20;
+    walk(-dist, 0, Math.max(1600, dist / .45), function () { life(); setTimeout(function () { say(0); }, 300); });
+  }
+  function sparks() {
+    var r = crab.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (var i = 0; i < 24; i++) {
+      var d = document.createElement('i'); d.className = 'ee-spark' + (i % 3 ? '' : ' s');
+      var a = Math.PI * 2 * i / 24 + Math.random() * .3, ex = Math.cos(a), ey = Math.sin(a), dist = 50 + Math.random() * 90, s = .5 + Math.random() * .5;
+      var rot = 'rotate(' + (a * 180 / Math.PI + 90) + 'deg)';
+      d.style.left = cx + 'px'; d.style.top = cy + 'px'; document.body.appendChild(d);
+      d.animate([{ transform: 'translate(0,0) ' + rot + ' scale(' + s + ')', opacity: 1 },
+                 { transform: 'translate(' + ex * dist + 'px,' + (ey * dist + 20) + 'px) ' + rot + ' scale(.2)', opacity: 0 }],
+                { duration: 800 + Math.random() * 500, easing: 'cubic-bezier(.15,.6,.3,1)' }).onfinish = (function (el) { return function () { el.remove(); }; })(d);
+    }
+  }
+  function leave() {
+    gone = true; clearInterval(idle); bub.classList.remove('on');
+    if (reduce || !box.animate) { box.hidden = true; return; }
+    box.classList.remove('snap'); void box.offsetWidth; box.classList.add('snap'); sparks();
+    setTimeout(function () { walk(0, innerWidth - box.getBoundingClientRect().left + 20, 900, function () { box.hidden = true; }); }, 450);
+  }
+  crab.addEventListener('click', function () {
+    if (gone) return;
+    step += 1;
+    if (step < LINES.length) say(step); else leave();
+  });
+  bub.addEventListener('click', function (e) { if (!e.target.closest('a')) crab.click(); });
+  if (!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    if (es[0].isIntersecting) { io.disconnect(); arrive(); }
+  }, { threshold: .35 });
+  io.observe(sec);
+})();
+</script>""").contents):
+    contact.append(node)
 more_html += bg_html + str(contact)
 
 # ---------- type floor (audit F5): nothing under 11px, except text drawn inside SVG diagrams, which scales with them ----------
