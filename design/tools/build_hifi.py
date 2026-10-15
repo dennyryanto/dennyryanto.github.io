@@ -339,9 +339,10 @@ CONTEXT = {
     'CS OPEX': 'Customer-service cost after self-service replaced agent tickets.',
     'USERS · HOME REVAMP': 'People reached by the redesigned home screen.',
     'CASES AUTOMATED': 'Support cases now solved in the app, without an agent.',
-    'PTS · DEPOSIT FUNNEL': 'Deposit-funnel completion after UX audits and a redesign.',
-    'RELEASE CYCLE': 'Web releases went from weeks to days after the move to Framer.',
+    'PTS · DEPOSIT FUNNEL': 'Deposit-funnel completion after route-first funding and UX audits.',
+    'RELEASE CYCLE': 'Web releases went from weeks to days, shipped by design in Framer.',
     'SYSTEM · 3 ORGS': 'One design system shared by Product, Engineering and Marketing.',
+    'SPRINT · 3 DEPTS': 'Marketing, Product and Engineering on one two-week sprint.',
     'DASH CUSTOMERS / MO': 'Diners ordering through Dash every month.',
     'DASH CHAINS': 'Restaurant chains running on the Dash platform.',
     'LUMIO LOCATIONS': 'Signage locations on the Lumio network, and growing.',
@@ -459,7 +460,8 @@ CASES = [
     dict(id='komunal', flip=True, n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
          h2='Transformed how a regulated fintech designs, plans and ships.',
          sub='In 17 months I moved Product, Engineering and Marketing onto one design system, one release platform and one sprint, and used that footing to lift deposit-funnel completion by about 12 points.',
-         stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('W→D', 'RELEASE CYCLE', False), ('1', 'SYSTEM · 3 ORGS', False)],
+         # one number per shift: the outcome first, then the system, delivery and operating model in the map's order
+         stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('1', 'SYSTEM · 3 ORGS', False), ('W→D', 'RELEASE CYCLE', False), ('1', 'SPRINT · 3 DEPTS', False)],
          alt='Line drawing: three phone-shaped layers (the design system, the deposit funnel, and the deposit screen as a wireframe). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
          # the transformation, one bullet per shift, in the order of the map at the top of the drawer
          bullets=['Design system: created the company’s first shared system, one source of foundations, components and tokens across Product, Engineering and Marketing.',

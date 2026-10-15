@@ -76,16 +76,16 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-abouts { display: grid; gap: 8px; max-width: 54ch; padding-top: 16px; border-top: 1px solid var(--rule); }
 .mk-about { margin: 0; font: 400 14px/1.55 var(--display); color: var(--fg-3); text-wrap: pretty; }
 .mk-about b { font-weight: 600; color: var(--fg-2); }
-/* key numbers: a centred, full-width band of three equal columns */
+/* key numbers: a centred, full-width band of equal columns (three, or four for Komunal's four shifts) */
 .mk-keys-block > .mk-eyebrow { text-align: center; }
-.mk-keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
+.mk-keys { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); text-align: center; }
 .mk-key { padding: 40px 28px 36px; min-width: 0; }
 .mk-key + .mk-key { border-left: 1px solid var(--rule); }
 .mk-key-n { font: 800 clamp(44px, 5vw, 68px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; white-space: nowrap; }
 .mk-key-l { margin-top: 14px; font: 500 11px/1.45 var(--mono); letter-spacing: .14em; color: var(--fg-3); }
 .mk-key-c { margin: 10px auto 0; max-width: 30ch; font: 400 15px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
 @media (max-width: 700px) {
-  .mk-keys { grid-template-columns: minmax(0, 1fr); }
+  .mk-keys { grid-auto-flow: row; grid-template-columns: minmax(0, 1fr); }
   .mk-key { padding: 28px 8px; }
   .mk-key + .mk-key { border-left: 0; border-top: 1px solid var(--rule); }
   .mk-key-n { font-size: clamp(40px, 12vw, 52px); }
