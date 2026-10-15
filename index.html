@@ -2113,8 +2113,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
      what a sprint is for Marketing, Product and Engineering: one two-week timeline, one request form (ClickUp), one
      cut-off before planning, and planning, review and retro shared by all three, so requests, execution and delivery
      run in sync. Results are qualitative on purpose (no metrics). Markup is the final state of both lanes, so the page is
-     complete without JavaScript; the script plays "before" then "after" and loops while on screen. Reduced motion keeps
-     the final state. Timeline is illustrative. -->
+     complete without JavaScript; the script plays "before" then "after" once and holds the result, so there is time to
+     read it; it plays again only after the board has left the screen and come back. Reduced motion keeps the final state. Timeline is illustrative. -->
 <div class="kss-wrap">
 <style>
 .kss-wrap {
@@ -2259,13 +2259,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   if (!board || !board.animate) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   var before = board.querySelector('[data-lane="before"]'), after = board.querySelector('[data-lane="after"]');
-  var E = 'cubic-bezier(.2, .7, .2, 1)', timers = [], visible = false, running = false;
+  var E = 'cubic-bezier(.2, .7, .2, 1)', timers = [], running = false, armed = true;
   function q(el, s) { return [].slice.call(el.querySelectorAll(s)); }
   function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
   function hide(els) { els.forEach(function (e) { e.style.opacity = 0; }); }
   function pop(e, d) { e.animate([{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1.25)', offset: .6 }, { opacity: 1, transform: 'none' }], { duration: 420, delay: d || 0, easing: E, fill: 'both' }); }
   function play() {
-    running = true; timers.forEach(clearTimeout); timers = [];
+    running = true; armed = false; timers.forEach(clearTimeout); timers = [];
     // reset to the start of both lanes
     var hits = q(before, '.kss-hit'), bDone = q(before, '.kss-done'), queue = q(after, '.kss-q'), cut = after.querySelector('.kss-cut');
     var bars = q(after, '.kss-bar b'), aDone = q(after, '.kss-done'), cer = q(after, '.kss-cer span'), res = q(board, '.kss-r');
@@ -2284,11 +2284,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     at(t + 2150, function () { cer[1].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); aDone.forEach(function (d) { pop(d); }); });
     at(t + 2700, function () { res.forEach(function (r, i) { r.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: i * 140, easing: E, fill: 'both' }); }); });
     at(t + 2700 + 600, function () { [].concat(hits, bDone, queue, aDone, cer, res).forEach(function (e) { e.style.opacity = ''; e.getAnimations().forEach(function (a) { a.cancel(); }); }); running = false; });
-    at(t + 2700 + 4200, function () { if (visible && !document.hidden) play(); });
   }
   new IntersectionObserver(function (es) {
-    visible = es[0].isIntersecting && es[0].intersectionRatio >= .4;
-    if (visible && !running) play();
+    // play once per visit: hold the result while on screen, re-arm only once the board is fully off screen
+    if (!es[0].isIntersecting) { armed = true; return; }
+    if (es[0].intersectionRatio >= .4 && armed && !running) play();
   }, { threshold: [0, .4] }).observe(board);
 })();
 </script>
