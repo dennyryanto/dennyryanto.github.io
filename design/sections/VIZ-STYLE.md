@@ -11,7 +11,8 @@ product's own look and keep their own colours. Only the frame and labels around 
 
 Declare them on the component's wrapper with its own prefix (`--xyz-panel`, ...), values exactly as here.
 
-The accent is written as lime here; `design/tools/theme.py` swaps it for the site's current accent at build time.
+The accent is written as lime here; `design/tools/theme.py` swaps it for the site's current accent (aqua,
+`oklch(0.86 0.12 200)`) at build time.
 
 | Token | Value | Use |
 |---|---|---|
