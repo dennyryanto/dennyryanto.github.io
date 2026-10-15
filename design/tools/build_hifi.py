@@ -81,13 +81,15 @@ def section(name):
 # ---------- hero ----------
 hero = soup(read('hero'))
 p = hero.find('p')
-p.string = ('I lead product design where it moves the business. Across fintech, enterprise and consumer platforms '
-            'I’ve turned design strategy into P&L results: lower cost to serve, higher conversion, and platforms '
-            'used by tens of millions.')
+p.string = ('I lead product design and the transformations that make it stick. Across fintech, enterprise and consumer '
+            'platforms I’ve turned design strategy into P&L results and rebuilt how teams design, plan and ship: lower '
+            'cost to serve, higher conversion, and platforms used by tens of millions.')
 for row in hero.find_all(attrs={'data-r': 'pc-row'}):
     label = row.find('div').get_text(strip=True)
     if label in ('BEFORE', 'FOCUS'):
         row.decompose()
+    elif label == 'EXPERIENCE':
+        row.find(string=' in digital product').replace_with(' in digital product and transformation')
 # "measured in outcomes.": each letter of the lime word rolls through a few digits and lands on its letter, left to
 # right, like the count-ups in the case studies. The markup is the finished word (split into letters only so the roll
 # can't shift the layout), and screen readers get the plain word. Reduced motion keeps it still.
@@ -600,6 +602,9 @@ more_html = ''.join(case_section(c) for c in CASES)
 # ---------- background: the career timeline as its hero, earlier work and capabilities in a drawer that starts open ----------
 career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('capabilities')
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
+# transformation leadership leads the leadership capabilities (the Komunal case is told as one)
+for t in caps[0].find_all(string=lambda t: t.startswith('Product Strategy & Discovery')):
+    t.replace_with('Transformation Leadership · ' + t)
 # one line on what each company is, under the role in the timeline
 ABOUT = {
     ('2011–16', 'Appsindo Technology'): 'A software house and agency building apps for retail, F&amp;B and entertainment brands.',
