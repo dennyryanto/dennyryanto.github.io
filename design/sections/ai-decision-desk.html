@@ -283,9 +283,9 @@
     function () { var yes = sc.branch === 'true'; ports[yes ? 0 : 1].classList.add('chosen'); if (!yes) ports[1].classList.add('warn'); ports[yes ? 1 : 0].classList.add('passed'); },
     function () {}
   ];
-  // the run loops: it holds the finished state (with the data flowing) for HOLD ms, eases out, resets and runs the other case;
-  // it only replays on screen, and waits for the reader to come back otherwise
-  var HOLD = 5200, pending = false, timers = [];
+  // each run holds its finished state (with the data flowing) while on screen; once the canvas has left the screen and
+  // come back, it eases out, resets and runs the other case
+  var done = false, pending = false, timers = [];
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function clearAll() { timers.forEach(function (t) { if (t && t.iv) clearInterval(t.iv); else clearTimeout(t); }); timers = []; }
   function replay() {
@@ -309,7 +309,7 @@
         paths.forEach(function (p) { if (p.e[0] === n.id && lit(p.e)) show(p, 380); });
         if (i === order.length - 1) {
           runL.textContent = sc.branch === 'true' ? 'Ran in 2.4s' : 'Needs review';
-          later(function () { wrap.classList.add('live'); later(replay, HOLD); }, 400);
+          later(function () { wrap.classList.add('live'); done = true; }, 400);
         }
       }, t);
       t += 380;
@@ -342,7 +342,7 @@
 
   if (reduce || !('IntersectionObserver' in window)) return;
   idle();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(canvas);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(canvas);
   document.addEventListener('visibilitychange', function () { wake(); if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); draw(); idle(); play(); }

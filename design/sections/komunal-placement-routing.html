@@ -4,7 +4,7 @@
      customer service released them: the funnel's drop-off. After, routing checks amount, source bank and time against
      every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
      Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
-     plays "before" then "after", and loops (on screen only). Reduced motion keeps the final state.
+     plays "before" then "after" once and holds it (time to read); it replays only after the board has left the screen and come back. Reduced motion keeps the final state.
      Limits are illustrative, from published bank, BI-FAST and Xendit rules; they differ by bank and change over time. -->
 <div class="kpr-wrap">
 <style>
@@ -193,7 +193,7 @@
       k: function (k) { return l.querySelector('[data-k="' + k + '"]'); } };
   });
   var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail'));
-  var timers = [], HOLD = 5200, pending = false, ran = false, visible = false;
+  var timers = [], done = false, pending = false, ran = false, visible = false;
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function txt(scope, sel, s) { scope.querySelector(sel).textContent = s; }
 
@@ -243,7 +243,7 @@
     later(function () { on(n[3]); n[3].classList.add('wait'); A.st.textContent = 'Waiting on funds…'; }, t += 450);
     later(function () { n[3].classList.remove('wait'); txt(n[3], '.kpr-ls-t', 'Funds received'); txt(n[3], '.kpr-hold', 'Same day, before cut-off'); }, t += 900);
     later(function () { run(l[3]); }, t += 200);
-    later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed the same day'; later(replay, HOLD); }, t += 450);
+    later(function () { on(n[4]); n[4].classList.add('win'); A.el.classList.add('good'); A.st.textContent = 'Placed the same day'; done = true; }, t += 450);
   }
   function span(m) { var h = Math.floor(m / 60), r = m % 60; return h + 'h ' + (r < 10 ? '0' : '') + r + 'm'; }
   function replay() {
@@ -254,7 +254,7 @@
 
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   idle();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     // 40% of the board, or half the screen when the lanes stack taller than the screen

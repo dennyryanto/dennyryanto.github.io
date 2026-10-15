@@ -57,8 +57,12 @@ decoration: not every icon, arrow or border. It marks the result, the chosen pat
 
 Optional, but when a visual moves it follows the references:
 - Markup is the finished state, so the page is complete without JavaScript.
-- The script resets to the start state and plays once the board is at least 40% in view, then loops (or holds)
-  only while visible; pause when off screen or the tab is hidden.
+- The script resets to the start state and plays once the board is at least 40% in view; pause when off screen or
+  the tab is hidden.
+- Anything that shows, hides or changes text (labels, values, status lines, chat bubbles) plays once and holds its
+  finished state while on screen, so there is time to read it; it replays only after the board has left the screen
+  and come back (owner: "if it's related to text then it should be revised"). Purely graphic motion (packets on a
+  path, a dot circling, rain) may loop.
 - `prefers-reduced-motion: reduce` keeps the finished state, no animation.
 - No layout shift: heights never change while it plays. Self-contained `<style>` + `<script>` in the file,
   class prefix unique to the component, no globals, no libraries.

@@ -1,7 +1,7 @@
 <!-- Komunal: one design system for three orgs. Before, Product, Engineering and Marketing each shipped the same offer in
      their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
      Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
-     plays the library publishing to each surface, then loops (on screen only). Reduced motion keeps the "after" state.
+     plays the library publishing to each surface once and holds it; it replays only after the board has left the screen and come back. Reduced motion keeps the "after" state.
      The "before" differences are deliberately close (shades of one blue, one sans at different widths and weights,
      small radius differences): the drift was subtle, which is why it went unnoticed. -->
 <div class="kds-wrap">
@@ -168,7 +168,7 @@
     surfs.forEach(function (s) { setSurface(s, false, true); }); paths.forEach(hide);
     dots.forEach(function (k) { k.c.style.opacity = 0; }); statusT.textContent = BEFORE;
   }
-  var timers = [], HOLD = 5200, pending = false, ran = false;
+  var timers = [], done = false, pending = false, ran = false;
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function play() {
     timers.forEach(clearTimeout); timers = []; ran = true;
@@ -180,7 +180,7 @@
       later(function () { setSurface(s, true); }, t + 380);
       t += 650;
     });
-    later(function () { statusT.textContent = AFTER; wrap.classList.add('live'); later(replay, HOLD); }, t + 200);
+    later(function () { statusT.textContent = AFTER; wrap.classList.add('live'); done = true; }, t + 200);
   }
   function replay() {
     if (!visible || document.hidden) { pending = true; return; }
@@ -210,7 +210,7 @@
   var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   before();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
   document.addEventListener('visibilitychange', function () { wake(); if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); draw(); before(); play(); }
