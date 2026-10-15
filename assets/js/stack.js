@@ -8,7 +8,7 @@
 (function (root) {
   'use strict';
   var DEG = Math.PI / 180;
-  var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c' };
+  var PAL = { ink: '#182b39', line: '#cae0ed', line2: '#5f8299', lime: '#9bc7de' };
 
   // ---------- timing (seconds) ----------
   var STEP = 0.95, RISE = 0.45, DECIDE = 0.4, LIGHT = 0.42, CLIMB = 0.45;

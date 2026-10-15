@@ -1,6 +1,7 @@
 """Assemble the hi-fi mockup (opening, case 01 LinkAja in full, and the heroes of the other cases and labs) from the live site's rendered pieces."""
 import base64, json, re, sys, os
 from bs4 import BeautifulSoup, Comment
+import theme   # the colour theme (design/tools/theme.py), applied to every page written here
 
 S = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -797,7 +798,7 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
-open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
+open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(theme.apply(out))
 
 # ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------
 COMPONENT = os.environ.get('COMPONENT')
@@ -810,7 +811,7 @@ if COMPONENT:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(page)
+    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(theme.apply(page))
     print('component', COMPONENT, len(page), 'bytes')
 
 # ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
@@ -828,6 +829,6 @@ if SECTION:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', one).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(page)
+    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(theme.apply(page))
     print('section', SECTION, len(page), 'bytes')
 print('bytes', len(out), 'read times', re.findall(r'(\d+) min read', out))
