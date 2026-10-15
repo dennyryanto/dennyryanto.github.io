@@ -100,7 +100,7 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
     <div class="chips"><i>FINTECH</i><i>ENTERPRISE</i><i>CONSUMER</i></div>
   </div>
   <div class="rows">
-    <div class="row"><i>EXPERIENCE</i><p><b>15+ years</b> in digital product</p></div>
+    <div class="row"><i>EXPERIENCE</i><p><b>15+ years</b> in digital product and transformation</p></div>
     <div class="row"><i>NOW</i><p>Product &amp; AI design consultant</p></div>
     <div class="row"><i>BOARD</i><p>Commissioner, Dash &amp; Lumio</p></div>
     <div class="row"><i>CERTIFIED · ANTHROPIC 2026</i><div class="certs"><div>${SEAL}AI-Native SDLC Playbook</div><div>${SEAL}Claude Code 101</div><div>${SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
