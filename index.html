@@ -942,7 +942,55 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <div data-r="wrap hero-row" style="max-width: 1216px; margin: 0px auto; padding: 96px 40px 80px; display: flex; justify-content: space-between; gap: 64px; align-items: flex-start;">
 <div style="min-width: 0px;">
 <div style='font: 600 12px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.18em; color: oklch(0.9 0.2 122); margin-bottom: 30px;'>PORTFOLIO 2026 · HEAD / AVP, PRODUCT DESIGN</div>
-<h1 data-r="hero-h1" style="margin: 0px 0px 30px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 118%; font-size: 88px; line-height: 0.98; font-family: Archivo; letter-spacing: -0.025em; text-wrap: balance; max-width: 880px;">Design leadership, measured in <span style="color: oklch(0.9 0.2 122);">outcomes.</span></h1>
+<h1 data-r="hero-h1" style="margin: 0px 0px 30px; font-style: normal; font-variant: normal; font-size-adjust: none; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-weight: 800; font-stretch: 118%; font-size: 88px; line-height: 0.98; font-family: Archivo; letter-spacing: -0.025em; text-wrap: balance; max-width: 880px;">Design leadership, measured in <span style="color: oklch(0.9 0.2 122);"><span class="oc">outcomes<span aria-hidden="true" class="oc-m"><i class="oc-cap"></i><i class="oc-cap oc-cap-r"></i><i class="oc-tick"></i><i class="oc-bar"></i><span class="oc-read"><span class="oc-val"><b>−80%</b> CS OPEX</span></span></span></span>.</span></h1><style>
+.oc { position: relative; display: inline-block; }
+.oc-m { position: absolute; left: .03em; right: .03em; top: calc(100% - .02em); height: max(.11em, 7px); pointer-events: none; }
+.oc-m i { position: absolute; display: block; background: currentColor; }
+.oc-cap { left: 0; top: 0; bottom: 0; width: 2px; transform-origin: 50% 50%; }
+.oc-cap-r { left: auto; right: 0; }
+.oc-bar { left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; transform-origin: 0 50%; }
+.oc-tick { left: 0; right: 0; top: 50%; bottom: 0; background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 10%) !important; opacity: .45; }
+.oc-read { position: absolute; left: 50%; top: 50%; height: 16px; margin-top: -8px; padding: 0 7px; border-radius: 4px; overflow: hidden;
+  transform: translateX(-50%); background: oklch(0.9 0.2 122); color: #16150f;
+  font: 600 11px/16px 'IBM Plex Mono', monospace; letter-spacing: .1em; white-space: nowrap; }
+.oc-val { display: block; }
+.oc-val b { font-weight: 700; }
+</style><script>
+(function () {
+  var oc = document.querySelector('.oc'); if (!oc || !oc.animate) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var R = [['&minus;80%', 'CS OPEX'], ['+12 PTS', 'CONVERSION'], ['70M+', 'USERS'], ['~200K', 'CUSTOMERS / MO']];
+  var val = oc.querySelector('.oc-val'), i = 0, timer = null, seen = false, E = 'cubic-bezier(.2, .7, .2, 1)';
+  function set(k) { val.innerHTML = '<b>' + R[k][0] + '</b> ' + R[k][1]; }
+  function intro() {
+    oc.querySelectorAll('.oc-cap').forEach(function (c, n) {
+      c.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 260, delay: 250 + n * 640, easing: E, fill: 'backwards' });
+    });
+    oc.querySelector('.oc-bar').animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 640, delay: 420, easing: E, fill: 'backwards' });
+    oc.querySelector('.oc-tick').animate([{ opacity: 0 }, { opacity: .45 }], { duration: 500, delay: 900, fill: 'backwards' });
+    oc.querySelector('.oc-read').animate([{ transform: 'translateX(-50%) scale(0)' }, { transform: 'translateX(-50%) scale(1)' }],
+      { duration: 320, delay: 1050, easing: 'cubic-bezier(.3, 1.4, .5, 1)', fill: 'backwards' });
+  }
+  function step() {
+    var out = val.animate([{ transform: 'none', opacity: 1 }, { transform: 'translateY(-100%)', opacity: 0 }], { duration: 260, easing: 'ease-in' });
+    out.onfinish = function () {
+      i = (i + 1) % R.length; set(i);
+      val.animate([{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: E });
+    };
+  }
+  function run(on) {
+    clearInterval(timer); timer = null;
+    if (on && !document.hidden) timer = setInterval(step, 2600);
+  }
+  var visible = false;
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting;
+    if (visible && !seen) { seen = true; intro(); setTimeout(function () { run(visible); }, 1500); return; }
+    if (seen) run(visible);
+  }, { threshold: .4 }).observe(oc);
+  document.addEventListener('visibilitychange', function () { if (seen) run(visible); });
+})();
+</script>
 <p style="margin: 0px; max-width: 620px; font: 400 18px / 1.65 Archivo; color: rgba(242, 239, 232, 0.7);">I lead product design where it moves the business. Across fintech, enterprise and consumer platforms I’ve turned design strategy into P&amp;L results: lower cost to serve, higher conversion, and platforms used by tens of millions.</p>
 <a class="scp2" data-r="avail" href="#contact" style='margin-top: 34px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border: 1px solid rgba(242, 239, 232, 0.18); border-radius: 100px; font: 500 11px / 1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; color: rgba(242, 239, 232, 0.85);'>OPEN TO HEAD / AVP ROLES · JAKARTA</a>
 </div>
