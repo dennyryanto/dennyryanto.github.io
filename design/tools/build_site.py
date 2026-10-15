@@ -120,8 +120,8 @@ HEAD = '''<!doctype html>
 <title>Denny Ryanto · Head / AVP, Product Design</title>
 <meta name="description" content="Portfolio of Denny Ryanto: product design leadership across fintech, enterprise and consumer platforms, with measurable business outcomes.">
 <meta property="og:title" content="Denny Ryanto · Head / AVP, Product Design">
-<meta property="og:description" content="Design leadership, measured in outcomes: −80% customer-service OPEX at LinkAja, +12 pts deposit-funnel completion at Komunal, ~200K diners a month on Dash.">
-<meta name="twitter:description" content="Design leadership, measured in outcomes: −80% customer-service OPEX at LinkAja, +12 pts deposit-funnel completion at Komunal, ~200K diners a month on Dash.">
+<meta property="og:description" content="Product design leader building AI-native: multi-agent builds, enterprise AI that turns data into decisions, and design teams that ship with AI.">
+<meta name="twitter:description" content="Product design leader building AI-native: multi-agent builds, enterprise AI that turns data into decisions, and design teams that ship with AI.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dennyryanto.github.io/">
 <meta property="og:site_name" content="Denny Ryanto">
