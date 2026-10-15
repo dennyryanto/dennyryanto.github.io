@@ -436,9 +436,9 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
             + fig_html + '</div>' + toggle_html)
 
 
-# what each toggle promises: minutes to read the full case study, measured on the live site's sections
-# (words at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
-READ = {'linkaja': 3, 'komunal': 2, 'board': 4, 'ai': 2, 'lab': 2, 'lab-ui': 2}
+# what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
+# (all words, diagram labels included, at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
+READ = {'linkaja': 3, 'komunal': 6, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
 toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
@@ -462,7 +462,7 @@ CASES = [
          bullets=['Championed the move from the legacy Sanity platform to Framer for web components, cutting release cycles from weeks to days.',
                   'Created the company’s first shared design system: one source of foundations, components and tokens across Product, Engineering and Marketing.',
                   'Led UX audits and redesigns that lifted DepositoBPR deposit-funnel completion by roughly 12 percentage points.',
-                  'Oversaw ISO / OJK compliance workflows without slowing UX delivery; standardised sprint rituals and PRD templates.']),
+                  'Put Marketing, Product and Engineering on one two-week sprint (one request form, one cut-off, shared ceremonies), and oversaw ISO / OJK compliance without slowing UX delivery.']),
     dict(id='board', scene='dash', n='03 / EXECUTIVE &amp; BOARD', role='DASH INOVASI ABADI · LUMIO INOVASI TECHNOLOGY · NOV 2016 – PRESENT', icon=BRIEF,
          h2='Board-level judgment, design-level craft.',
          sub='I founded and ran a B2B product company for eight years, and have sat on its board since 2021.',
@@ -537,7 +537,7 @@ for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 
 LIVE = {
     # the design system story (design/sections/), the tooling migration (its old design-system card removed),
     # then why placements dropped off (placement routing, design/sections/) right before the funnel it lifted
-    'komunal': blocks(section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-placement-routing'),
+    'komunal': blocks(section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
                       section('komunal-funnel'), section('komunal-shipped-flow')),
     'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
                     brd[2], brd[3], section('board-governance')),   # captain + back office, Lumio, governance
