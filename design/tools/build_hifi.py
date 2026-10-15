@@ -87,61 +87,52 @@ for row in hero.find_all(attrs={'data-r': 'pc-row'}):
     label = row.find('div').get_text(strip=True)
     if label in ('BEFORE', 'FOCUS'):
         row.decompose()
-# "measured in outcomes.": a lime redline draws under the word like a design measurement, and its readout cycles
-# through the real results from the cases. Markup is the finished state (first readout); reduced motion keeps it still.
+# "measured in outcomes.": each letter of the lime word rolls through a few digits and lands on its letter, left to
+# right, like the count-ups in the case studies. The markup is the finished word (split into letters only so the roll
+# can't shift the layout), and screen readers get the plain word. Reduced motion keeps it still.
 hero_h1 = hero.find(attrs={'data-r': 'hero-h1'})
-oc_word, oc_style, oc_script = [n for n in soup("""<span style="color: oklch(0.9 0.2 122);"><span class="oc">outcomes<span class="oc-m" aria-hidden="true"><i class="oc-cap"></i><i class="oc-cap oc-cap-r"></i><i class="oc-tick"></i><i class="oc-bar"></i><span class="oc-read"><span class="oc-val"><b>&minus;80%</b> CS OPEX</span></span></span></span>.</span>
+oc_letters = ''.join('<span class="ol">%s</span>' % ch for ch in 'outcomes')
+oc_word, oc_style, oc_script = [n for n in soup("""<span style="color: oklch(0.9 0.2 122);"><span class="oc"><span class="oc-sr">outcomes</span><span class="oc-l" aria-hidden="true">""" + oc_letters + """</span></span>.</span>
 <style>
-.oc { position: relative; display: inline-block; }
-.oc-m { position: absolute; left: .03em; right: .03em; top: calc(100% - .02em); height: max(.11em, 7px); pointer-events: none; }
-.oc-m i { position: absolute; display: block; background: currentColor; }
-.oc-cap { left: 0; top: 0; bottom: 0; width: 2px; transform-origin: 50% 50%; }
-.oc-cap-r { left: auto; right: 0; }
-.oc-bar { left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; transform-origin: 0 50%; }
-.oc-tick { left: 0; right: 0; top: 50%; bottom: 0; background: repeating-linear-gradient(90deg, currentColor 0 1px, transparent 1px 10%) !important; opacity: .45; }
-.oc-read { position: absolute; left: 50%; top: 50%; height: 16px; margin-top: -8px; padding: 0 7px; border-radius: 4px; overflow: hidden;
-  transform: translateX(-50%); background: oklch(0.9 0.2 122); color: #16150f;
-  font: 600 11px/16px 'IBM Plex Mono', monospace; letter-spacing: .1em; white-space: nowrap; }
-.oc-val { display: block; }
-.oc-val b { font-weight: 700; }
+.oc { white-space: nowrap; }
+.oc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.ol { display: inline-block; position: relative; clip-path: inset(.07em -40% -.12em -40%); }
+.ol-s { display: block; position: relative; }
+.ol-d { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); display: flex; flex-direction: column; }
+.ol-d i { font-style: normal; display: block; height: .98em; line-height: .98; text-align: center; font-variant-numeric: tabular-nums; }
 </style>
 <script>
 (function () {
-  var oc = document.querySelector('.oc'); if (!oc || !oc.animate) return;
+  var word = document.querySelector('.oc-l'); if (!word || !word.animate) return;
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var R = [['&minus;80%', 'CS OPEX'], ['+12 PTS', 'CONVERSION'], ['70M+', 'USERS'], ['~200K', 'CUSTOMERS / MO']];
-  var val = oc.querySelector('.oc-val'), i = 0, timer = null, seen = false, E = 'cubic-bezier(.2, .7, .2, 1)';
-  function set(k) { val.innerHTML = '<b>' + R[k][0] + '</b> ' + R[k][1]; }
-  function intro() {
-    oc.querySelectorAll('.oc-cap').forEach(function (c, n) {
-      c.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: 260, delay: 250 + n * 640, easing: E, fill: 'backwards' });
+  var ls = [].slice.call(word.querySelectorAll('.ol')), busy = false;
+  ls.forEach(function (l) {
+    var s = document.createElement('span'); s.className = 'ol-s';
+    while (l.firstChild) s.appendChild(l.firstChild);
+    var d = document.createElement('span'); d.className = 'ol-d'; s.appendChild(d); l.appendChild(s);
+  });
+  function roll() {
+    if (busy) return; busy = true;
+    ls.forEach(function (l, k) {
+      var s = l.firstChild, d = s.lastChild, n = 6 + k, html = '';
+      for (var j = 0; j < n; j++) html += '<i>' + Math.floor(Math.random() * 10) + '</i>';
+      d.innerHTML = html;
+      var a = s.animate([{ transform: 'translateY(' + (n * .98) + 'em)' }, { transform: 'translateY(0)' }],
+        { duration: 700 + k * 110, delay: 120 + k * 45, easing: 'cubic-bezier(.16, .84, .3, 1)', fill: 'backwards' });
+      if (k === ls.length - 1) a.onfinish = function () { busy = false; };
     });
-    oc.querySelector('.oc-bar').animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 640, delay: 420, easing: E, fill: 'backwards' });
-    oc.querySelector('.oc-tick').animate([{ opacity: 0 }, { opacity: .45 }], { duration: 500, delay: 900, fill: 'backwards' });
-    oc.querySelector('.oc-read').animate([{ transform: 'translateX(-50%) scale(0)' }, { transform: 'translateX(-50%) scale(1)' }],
-      { duration: 320, delay: 1050, easing: 'cubic-bezier(.3, 1.4, .5, 1)', fill: 'backwards' });
   }
-  function step() {
-    var out = val.animate([{ transform: 'none', opacity: 1 }, { transform: 'translateY(-100%)', opacity: 0 }], { duration: 260, easing: 'ease-in' });
-    out.onfinish = function () {
-      i = (i + 1) % R.length; set(i);
-      val.animate([{ transform: 'translateY(100%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 320, easing: E });
-    };
-  }
-  function run(on) {
-    clearInterval(timer); timer = null;
-    if (on && !document.hidden) timer = setInterval(step, 2600);
-  }
-  var visible = false;
+  var played = false;
   new IntersectionObserver(function (es) {
-    visible = es[0].isIntersecting;
-    if (visible && !seen) { seen = true; intro(); setTimeout(function () { run(visible); }, 1500); return; }
-    if (seen) run(visible);
-  }, { threshold: .4 }).observe(oc);
-  document.addEventListener('visibilitychange', function () { if (seen) run(visible); });
+    if (es[0].isIntersecting && !played) { played = true; roll(); }
+  }, { threshold: .6 }).observe(word);
+  word.parentNode.addEventListener('pointerenter', roll);
 })();
 </script>""").contents if n.name]
 hero_h1.find('span').replace_with(oc_word)
+for t in hero_h1.find_all(string=lambda x: 'measured in' in x):   # keep the original break: "measured in" / "outcomes."
+    pre, post = t.split('measured in', 1)
+    t.replace_with(soup(pre + '<span style="white-space: nowrap;">measured in</span>' + post))
 hero_h1.insert_after(oc_script)
 hero_h1.insert_after(oc_style)
 head = base64.b64encode(open(os.path.join(S, 'unpacked/assets/92db9c4c-6c60-4494-a54f-0fdbf08a9132.webp'), 'rb').read()).decode()
