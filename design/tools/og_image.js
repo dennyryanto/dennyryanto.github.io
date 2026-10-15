@@ -1,8 +1,12 @@
 // The link-preview image (LinkedIn, Slack, X): a 1200x630 card in the site's own type and colours, written to
-// assets/og-image.png. Fonts come from the built index.html's @font-face rules, so run build_site.py first.
+// assets/og-image.png. Fonts (and, for the video, the gold certificate seals) come from the built index.html, so run
+// build_site.py first.
 //   node design/tools/og_image.js [card|stats] [out.png]     (needs Playwright with its Chromium; card is the default)
+//   node design/tools/og_image.js video [out.mp4]            (the card animated: 10s at 30fps, 1920x1008; needs ffmpeg)
+//   FRAMES=1,3.5,8 node design/tools/og_image.js video <dir> (just those moments, in seconds, as PNGs: for checking the motion)
 // stats: the headline over the four key numbers. card: the profile card alone as frosted glass, identity left and
-// details right, running off the bottom edge.
+// details right, running off the bottom edge. video: the same card building in (card, identity, rows, certificates)
+// with the certificate seals spinning as on the site, then holding; for posting on LinkedIn, not part of the site.
 // build_site.py adds the og:image tags that point at it; re-run this when the headline or the numbers change.
 const path = require('path'), fs = require('fs');
 const { chromium } = require(require('child_process').execSync('npm root -g').toString().trim() + '/playwright');
@@ -14,6 +18,11 @@ const faces = (site.match(/@font-face\s*{[^}]*}/g) || []).join('\n');
 // the accent as the built page uses it (theme.py has already run on index.html)
 const HEADSHOT = (site.match(/<img[^>]*alt="Denny Ryanto"[^>]*src="([^"]+)"/) || site.match(/<img[^>]*src="([^"]+)"[^>]*alt="Denny Ryanto"/) || [, ''])[1];
 const LIME = (site.match(/--lime:\s*([^;]+);/) || [, 'oklch(0.9 0.2 122)'])[1].trim();
+// the certificates' spinning gold seals, exactly as the site draws them (video only; the still keeps its flat seal)
+const SEAL_CSS = [...site.matchAll(/^\.gold-seal[^\n]*$/gm)].map(m => m[0]).join('\n') + '\n' +
+  [...site.matchAll(/@keyframes gold-(?:spin|shimmer) \{[\s\S]*?\n\}/g)].map(m => m[0]).join('\n');
+const goldSeal = (px, delay) => `<span aria-hidden="true" class="gold-seal" style="width:${px}px;height:${px}px;--spin-delay:${delay}s">` +
+  '<i class="gs-back"></i><i class="gs-edge" style="--z:-1px"></i><i class="gs-edge" style="--z:0px"></i><i class="gs-edge" style="--z:1px"></i><i class="gs-front"></i></span>';
 const RABBIT = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..'];
 const rabbit = RABBIT.map((r, y) => [...r].map((c, x) => c === 'X' ? `<rect x="${x}" y="${y}" width="1" height="1"/>` : '').join('')).join('');
 
@@ -50,8 +59,54 @@ h1 span { color: ${LIME}; }
 </div>
 </body></html>`;
 
+// the AI-native aura on the card's edge, a lime-to-green light: a crisp ring over a soft halo. The still holds it at one
+// angle (--aura); the video turns it.
+const AURA_CSS = `
+@property --aura { syntax: '<angle>'; inherits: false; initial-value: 300deg; }
+.aura, .aura-halo { position: absolute; left: 56px; right: 56px; top: 58px; height: 620px; border-radius: 28px; pointer-events: none; }
+/* the ring: the gradient masked to the edge (the halo blurs its own ring, so the light stays on the edge, not on the glass) */
+.aura, .aura-halo > i { background: conic-gradient(from var(--aura), oklch(0.9 0.2 122), oklch(0.72 0.16 160) 20%, oklch(0.72 0.16 160 / 0) 36%,
+    oklch(0.9 0.2 122 / 0) 54%, oklch(0.72 0.16 160) 70%, oklch(0.9 0.2 122) 86%, oklch(0.9 0.2 122));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+.aura { padding: 1.5px; z-index: 2; }
+.aura-halo { filter: blur(16px); }
+.aura-halo > i { position: absolute; inset: -6px; border-radius: 34px; padding: 10px; }
+`;
+
+// the video's build-in, layered over the card: every animation is paused and stepped frame by frame by the recorder
+const ANIM_CSS = `
+${SEAL_CSS}
+@keyframes up { from { opacity: 0; transform: translateY(var(--dy, 16px)); } to { opacity: 1; transform: none; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade3 { from { opacity: 0; } to { opacity: .22; } }
+@keyframes drift1 { from { translate: 0 0; } to { translate: 40px 20px; } }
+@keyframes drift2 { from { translate: 0 0; } to { translate: -36px -24px; } }
+@keyframes drift3 { from { translate: 0 0; } to { translate: 30px -16px; } }
+.g1 { animation: fade 1.4s ease-out both, drift1 10s ease-in-out both; }
+.g2 { animation: fade 1.4s ease-out .2s both, drift2 10s ease-in-out both; }
+.g3 { animation: fade3 1.4s ease-out .4s both, drift3 10s ease-in-out both; }
+/* the aura rises with the card, comes up to full as the certificates land, and turns */
+.aura, .aura-halo { --dy: 90px; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both; }
+.aura { animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both, aura-in 3.2s ease-out .6s both, aura-turn 6s linear infinite; }
+.aura-halo > i { animation: aura-turn 6s linear infinite; }
+@keyframes aura-turn { from { --aura: 0deg; } to { --aura: 360deg; } }
+@keyframes aura-in { 0% { opacity: 0; } 40% { opacity: .35; } 100% { opacity: 1; } }
+.top { animation: fade .7s ease-out .2s both; }
+.card { --dy: 90px; animation: up 1s cubic-bezier(.2, .8, .3, 1) .4s both; }
+.id > *, .row, .certs > div { animation: up .55s cubic-bezier(.2, .8, .3, 1) both; }
+.id > :nth-child(1) { animation-delay: 1.1s; } .id > :nth-child(2) { animation-delay: 1.3s; }
+.id > :nth-child(3) { animation-delay: 1.5s; } .id > :nth-child(4) { animation-delay: 1.7s; }
+.row:nth-child(1) { animation-delay: 1.6s; } .row:nth-child(2) { animation-delay: 1.85s; }
+.row:nth-child(3) { animation-delay: 2.1s; } .row:nth-child(4) { animation-delay: 2.35s; }
+.certs > div:nth-child(1) { animation-delay: 2.6s; } .certs > div:nth-child(2) { animation-delay: 2.8s; } .certs > div:nth-child(3) { animation-delay: 3s; }
+.gold-seal { animation-delay: calc(3.2s + var(--spin-delay, 0s)); }
+/* tighter rows than the still, so the certificates clear the bottom edge with room to spare */
+.row { padding: 16px 0 18px; }
+.certs { gap: 8px; }
+`;
+
 const SEAL = '<svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#e3b341"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#3a2a05" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-const CARD = `<!doctype html><html><head><meta charset="utf-8"><base href="file://${ROOT}/">
+const CARD = anim => `<!doctype html><html><head><meta charset="utf-8"><base href="file://${ROOT}/">
 <style>
 ${faces}
 * { box-sizing: border-box; margin: 0; }
@@ -89,10 +144,12 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
 .certs { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
 .certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 Archivo, sans-serif; }
 .certs svg { width: 27px; height: 27px; flex: none; }
+${AURA_CSS}
+${anim ? ANIM_CSS : ''}
 </style></head><body>
 <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="grain"></div>
 <div class="top"><span class="url">DENNYRYANTO.GITHUB.IO</span><svg viewBox="0 0 10 9" width="22" height="20" shape-rendering="crispEdges" style="opacity:.6"><g fill="#f2efe8">${rabbit}</g></svg></div>
-<div class="card">
+<div class="aura-halo"><i></i></div><div class="card">
   <div class="id">
     <img src="${HEADSHOT}" alt="">
     <b>Denny Ryanto</b>
@@ -103,23 +160,45 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
     <div class="row"><i>EXPERIENCE</i><p><b>15+ years</b> in digital product and transformation</p></div>
     <div class="row"><i>NOW</i><p>Product &amp; AI design consultant</p></div>
     <div class="row"><i>BOARD</i><p>Commissioner, Dash &amp; Lumio</p></div>
-    <div class="row"><i>CERTIFIED · ANTHROPIC 2026</i><div class="certs"><div>${SEAL}AI-Native SDLC Playbook</div><div>${SEAL}Claude Code 101</div><div>${SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
+    <div class="row"><i>CERTIFIED · ANTHROPIC 2026</i><div class="certs"><div>${anim ? goldSeal(27, '0.00') : SEAL}AI-Native SDLC Playbook</div><div>${anim ? goldSeal(27, '-0.45') : SEAL}Claude Code 101</div><div>${anim ? goldSeal(27, '-0.90') : SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
   </div>
 </div>
+<div class="aura"></div>
 </body></html>`;
 
 const VARIANT = process.argv[2] || 'card';
-const OUT = path.resolve(process.argv[3] || path.join(ROOT, 'assets', 'og-image.png'));
-const html = VARIANT === 'card' ? CARD : STATS;
+const video = VARIANT === 'video', FPS = 30, SECONDS = 10, SCALE = 1.6;   // 1920x1008: LinkedIn plays 1.91:1 as is
+const OUT = path.resolve(process.argv[3] || (video ? 'linkedin-card.mp4' : path.join(ROOT, 'assets', 'og-image.png')));
+const html = video ? CARD(true) : VARIANT === 'card' ? CARD(false) : STATS;
 
 (async () => {
   const b = await chromium.launch();
-  const p = await b.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
+  const p = await b.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: video ? SCALE : 1 });
   const tmp = path.join(ROOT, 'design', 'tools', '.og-image.html');
   fs.writeFileSync(tmp, html);
   await p.goto('file://' + tmp); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(200);
   const missing = await p.evaluate(() => ['Archivo', 'IBM Plex Mono'].filter(f => !document.fonts.check('800 20px "' + f + '"') && !document.fonts.check('500 20px "' + f + '"')));
-  await p.screenshot({ path: OUT });
+  if (!video) {
+    await p.screenshot({ path: OUT });
+  } else {
+    // step every animation (the build-in, the drifting glows, the spinning seals) to each frame's time, then encode
+    const dir = fs.mkdtempSync(path.join(require('os').tmpdir(), 'og-video-'));
+    await p.evaluate(() => document.getAnimations().forEach(a => a.pause()));
+    if (process.env.FRAMES) {
+      fs.mkdirSync(OUT, { recursive: true });
+      for (const t of process.env.FRAMES.split(',')) {
+        await p.evaluate(ms => document.getAnimations().forEach(a => { a.currentTime = ms; }), +t * 1000);
+        await p.screenshot({ path: path.join(OUT, 'frame-' + t + 's.png') });
+      }
+    }
+    for (let f = 0; f < (process.env.FRAMES ? 0 : FPS * SECONDS); f++) {
+      await p.evaluate(ms => document.getAnimations().forEach(a => { a.currentTime = ms; }), f * 1000 / FPS);
+      await p.screenshot({ path: path.join(dir, String(f).padStart(4, '0') + '.png') });
+    }
+    if (!process.env.FRAMES) require('child_process').execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-framerate', String(FPS), '-i', path.join(dir, '%04d.png'),
+      '-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', OUT]);
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
   fs.unlinkSync(tmp); await b.close();
   console.log(path.relative(ROOT, OUT) + ' written (' + VARIANT + ')', missing.length ? '(fonts missing: ' + missing.join(', ') + ')' : '(fonts ok)');
 })();
