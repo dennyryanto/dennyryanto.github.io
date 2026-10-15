@@ -453,6 +453,15 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     }, { threshold: .35 }).observe(stage);
   });
 
+  // ---- product screens: drawn at full size (data-fit = that width) and scaled to their frame's measured width. The CSS
+  //      scales them too, but Safari gets that ratio wrong, so the exact scale is set here and kept on resize ----
+  var fits = $$('[data-fit]');
+  if (fits.length && 'ResizeObserver' in window) {
+    var fitOne = function (el) { var w = el.parentElement.clientWidth; if (w) el.style.transform = 'scale(' + (w / +el.getAttribute('data-fit')) + ')'; };
+    var fitRO = new ResizeObserver(function (es) { es.forEach(function (e) { $$(':scope > [data-fit]', e.target).forEach(fitOne); }); });
+    fits.forEach(function (el) { fitOne(el); fitRO.observe(el.parentElement); });
+  }
+
   // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
   $$('canvas[data-stack]').forEach(function (c) {
     var phone = window.matchMedia('(max-width: 600px)').matches;
