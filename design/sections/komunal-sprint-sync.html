@@ -1,0 +1,198 @@
+<!-- Komunal: one sprint for three departments. Before, only Engineering ran sprints; Marketing and Product took feature
+     requests any day, by chat or DM, so asks landed mid-sprint and the design backlog was scattered. After, Denny defined
+     what a sprint is for Marketing, Product and Engineering: one two-week timeline, one request form (ClickUp), one
+     cut-off before planning, and planning, review and retro shared by all three, so requests, execution and delivery
+     run in sync. Results are qualitative on purpose (no metrics). Markup is the final state of both lanes, so the page is
+     complete without JavaScript; the script plays "before" then "after" and loops while on screen. Reduced motion keeps
+     the final state. Timeline is illustrative. -->
+<div class="kss-wrap">
+<style>
+.kss-wrap {
+  container-type: inline-size;
+  --kss-panel: #1a1b1f; --kss-node: #232429; --kss-tile: #2b2c32; --kss-line: rgba(255, 255, 255, .08);
+  --kss-ink: #f2f2f4; --kss-ink-2: #c2c3cb; --kss-ink-3: #8b8d98; --kss-edge: #4a4d57; --kss-mark: #6b6e78;
+  --kss-lime: oklch(0.9 0.2 122); --kss-amber: #fdb022;
+}
+.kss-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.kss-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kss-head span:first-child { color: var(--kss-lime); }
+.kss-ctx { margin: 0 0 18px; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+.kss-board { border-radius: 14px; background: var(--kss-panel); box-shadow: 0 0 0 1px var(--kss-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: Archivo, system-ui, sans-serif; color: var(--kss-ink); }
+.kss-lane { border-radius: 12px; padding: 14px 14px 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kss-line); min-width: 0; }
+.kss-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+.kss-tag { padding: 4px 8px; border-radius: 6px; background: var(--kss-tile); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kss-ink-2); }
+.kss-lh b { font: 600 14px/1.2 Archivo, sans-serif; }
+.kss-st { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; white-space: nowrap; }
+.kss-st i { width: 8px; height: 8px; border-radius: 50%; }
+.kss-bad .kss-st { color: var(--kss-amber); }
+.kss-bad .kss-st i { background: var(--kss-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
+.kss-good .kss-st { color: var(--kss-lime); }
+.kss-good .kss-st i { background: var(--kss-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+
+/* the timeline: department | intake | cut-off | two weeks | delivered */
+.kss-tl { display: grid; grid-template-columns: 96px 112px 14px minmax(0, 1fr) 40px; row-gap: 8px; align-items: center; }
+.kss-th { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kss-ink-3); }
+.kss-days { display: grid; grid-template-columns: repeat(10, 1fr); }
+.kss-days span { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kss-ink-3); text-align: center; }
+.kss-days span.wk { color: var(--kss-ink-2); }
+.kss-dept { font: 600 13px/1.2 Archivo, sans-serif; color: var(--kss-ink); }
+.kss-in { display: flex; align-items: center; gap: 4px; min-height: 26px; }
+.kss-ch { padding: 3px 6px; border-radius: 6px; background: rgba(253, 176, 34, .1); box-shadow: inset 0 0 0 1px rgba(253, 176, 34, .35); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kss-amber); }
+.kss-ch.ok { background: var(--kss-tile); box-shadow: inset 0 0 0 1px var(--kss-line); color: var(--kss-ink-2); }
+.kss-q { width: 10px; height: 10px; border-radius: 50%; background: var(--kss-ink-2); }
+.kss-track { position: relative; height: 26px; }
+.kss-track::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1.5px dashed var(--kss-edge); }
+.kss-bar { position: absolute; left: 0; right: 0; top: 4px; bottom: 4px; border-radius: 6px; background: var(--kss-tile); box-shadow: inset 0 0 0 1px var(--kss-line); overflow: hidden; }
+.kss-bar b { position: absolute; inset: 0; transform-origin: 0 50%; }
+.kss-bad .kss-bar b { background: var(--kss-mark); opacity: .55; }
+.kss-good .kss-bar b { background: oklch(0.9 0.2 122 / .22); box-shadow: inset 0 2px 0 var(--kss-lime); }
+.kss-hit { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--kss-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .18); }
+.kss-done { justify-self: center; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 700 12px/1 'IBM Plex Mono', monospace; }
+.kss-bad .kss-done { color: var(--kss-amber); box-shadow: inset 0 0 0 1.5px rgba(253, 176, 34, .6); }
+.kss-good .kss-done { color: #182003; background: var(--kss-lime); }
+.kss-done.muted { color: var(--kss-ink-3) !important; background: none !important; box-shadow: inset 0 0 0 1.5px var(--kss-edge) !important; }
+/* the cut-off: one lime rule through all three rows */
+.kss-cut { grid-column: 3; justify-self: center; width: 2.5px; height: 100%; min-height: 26px; background: var(--kss-lime); box-shadow: 0 0 7px oklch(0.9 0.2 122 / .5); border-radius: 2px; }
+.kss-cut.none { background: none; box-shadow: none; border-left: 1.5px dashed var(--kss-edge); width: 0; }
+/* ceremonies shared by all three rows */
+.kss-cer { grid-column: 4; position: relative; height: 18px; }
+.kss-cer span { position: absolute; top: 0; font: 500 11px/1.4 'IBM Plex Mono', monospace; color: var(--kss-ink-2); white-space: nowrap; }
+.kss-cer span:first-child { left: 0; } .kss-cer span:last-child { right: 0; }
+.kss-cer span::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--kss-ink-2); vertical-align: 1px; }
+.kss-note { grid-column: 2 / -1; font: 500 11px/1.4 'IBM Plex Mono', monospace; color: var(--kss-ink-3); }
+
+/* what it changed */
+.kss-res { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 12px; background: var(--kss-node); box-shadow: 0 0 0 1px var(--kss-line); }
+.kss-r { padding: 14px 16px; min-width: 0; }
+.kss-r + .kss-r { border-left: 1px solid var(--kss-line); }
+.kss-r b { display: flex; align-items: center; gap: 8px; font: 600 15px/1.3 Archivo, sans-serif; color: var(--kss-ink); }
+.kss-r b::before { content: ''; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--kss-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.kss-r p { margin: 6px 0 0 16px; font: 400 13px/1.5 Archivo, sans-serif; color: var(--kss-ink-2); }
+.kss-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+
+@container (max-width: 640px) {
+  .kss-tl { grid-template-columns: 74px 64px 12px minmax(0, 1fr) 30px; }
+  .kss-dept { font-size: 12px; }
+  .kss-days span:not(.wk) { visibility: hidden; }
+  .kss-ch { padding: 3px 4px; }
+  .kss-res { grid-template-columns: 1fr; }
+  .kss-th { font-size: 11px; letter-spacing: .04em; }
+  .kss-cer { grid-column: 1 / -1; height: auto; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 4px; }
+  .kss-cer span { position: static; }
+  .kss-cutnote { grid-column: 1 / -1 !important; }
+  .kss-r + .kss-r { border-left: 0; border-top: 1px solid var(--kss-line); }
+}
+@media (prefers-reduced-motion: reduce) { .kss-wrap * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="kss-head"><span>SPRINT SYNC · MARKETING, PRODUCT, ENGINEERING</span><span>TWO-WEEK SPRINTS · ILLUSTRATIVE</span></div>
+<p class="kss-ctx">Only Engineering ran sprints. Marketing and Product took feature requests any day, by chat or DM, so asks landed mid-sprint, the design backlog was scattered, and product managers and owners were swamped the same way. I defined what a sprint means for all three departments: one two-week timeline, one request form, one cut-off before planning, and the same ceremonies.</p>
+
+<div class="kss-board">
+  <div class="kss-lane kss-bad" data-lane="before">
+    <div class="kss-lh"><span class="kss-tag">BEFORE</span><b>Only Engineering runs sprints</b><span class="kss-st"><i></i>Requests land mid-sprint</span></div>
+    <div class="kss-tl">
+      <span></span><span class="kss-th">INTAKE</span><span></span>
+      <div class="kss-days"><span class="wk">W1</span><span>2</span><span>3</span><span>4</span><span>5</span><span class="wk">W2</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+      <span class="kss-th" style="text-align:center">DONE</span>
+
+      <span class="kss-dept">Marketing</span>
+      <div class="kss-in"><span class="kss-ch">CHAT</span></div>
+      <span class="kss-cut none"></span>
+      <div class="kss-track"><i class="kss-hit" style="left:14%"></i><i class="kss-hit" style="left:38%"></i><i class="kss-hit" style="left:66%"></i><i class="kss-hit" style="left:88%"></i></div>
+      <span class="kss-done">?</span>
+
+      <span class="kss-dept">Product</span>
+      <div class="kss-in"><span class="kss-ch">DM</span></div>
+      <span class="kss-cut none"></span>
+      <div class="kss-track"><i class="kss-hit" style="left:24%"></i><i class="kss-hit" style="left:47%"></i><i class="kss-hit" style="left:57%"></i><i class="kss-hit" style="left:79%"></i></div>
+      <span class="kss-done">?</span>
+
+      <span class="kss-dept">Engineering</span>
+      <div class="kss-in"><span class="kss-ch ok">TICKETS</span></div>
+      <span class="kss-cut none"></span>
+      <div class="kss-track"><div class="kss-bar"><b></b></div><i class="kss-hit" style="left:38%"></i><i class="kss-hit" style="left:66%"></i></div>
+      <span class="kss-done muted">✓</span>
+
+      <span class="kss-note">Asks arrive any day, any channel; the design backlog lives in chats and DMs.</span>
+    </div>
+  </div>
+
+  <div class="kss-lane kss-good" data-lane="after">
+    <div class="kss-lh"><span class="kss-tag">AFTER</span><b>One sprint, three departments</b><span class="kss-st"><i></i>Requests, execution and delivery in sync</span></div>
+    <div class="kss-tl">
+      <span></span><span class="kss-th">REQUEST FORM</span><span class="kss-th" style="text-align:center">✂</span>
+      <div class="kss-days"><span class="wk">W1</span><span>2</span><span>3</span><span>4</span><span>5</span><span class="wk">W2</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+      <span class="kss-th" style="text-align:center">DONE</span>
+
+      <span class="kss-dept">Marketing</span>
+      <div class="kss-in"><span class="kss-q"></span><span class="kss-q"></span><span class="kss-q"></span></div>
+      <span class="kss-cut" style="grid-row: 2 / span 3"></span>
+      <div class="kss-track"><div class="kss-bar"><b></b></div></div>
+      <span class="kss-done">✓</span>
+
+      <span class="kss-dept">Product</span>
+      <div class="kss-in"><span class="kss-q"></span><span class="kss-q"></span></div>
+      <div class="kss-track"><div class="kss-bar"><b></b></div></div>
+      <span class="kss-done">✓</span>
+
+      <span class="kss-dept">Engineering</span>
+      <div class="kss-in"><span class="kss-q"></span><span class="kss-q"></span><span class="kss-q"></span></div>
+      <div class="kss-track"><div class="kss-bar"><b></b></div></div>
+      <span class="kss-done">✓</span>
+
+      <span></span><span class="kss-note kss-cutnote" style="grid-column: 2 / 4">CUT-OFF</span>
+      <div class="kss-cer"><span>PLANNING</span><span>REVIEW · RETRO</span></div>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="kss-res">
+    <div class="kss-r"><b>Fewer mid-sprint requests</b><p>Asks wait for the next sprint instead of breaking the current one.</p></div>
+    <div class="kss-r"><b>Requests get prioritised</b><p>With a cut-off and a two-week wait, each department ranks what matters most.</p></div>
+    <div class="kss-r"><b>Healthier three-way talk</b><p>Marketing, Product and Engineering plan, review and retro together.</p></div>
+  </div>
+</div>
+<p class="kss-cap">One standard request form in ClickUp, a cut-off before sprint planning, and the same two-week sprint with planning, review and retro for all three departments, so everyone shares the same expectations on quality and delivery time.</p>
+
+<script>
+(function () {
+  var root = document.currentScript.parentNode, board = root.querySelector('.kss-board');
+  if (!board || !board.animate) return;
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var before = board.querySelector('[data-lane="before"]'), after = board.querySelector('[data-lane="after"]');
+  var E = 'cubic-bezier(.2, .7, .2, 1)', timers = [], visible = false, running = false;
+  function q(el, s) { return [].slice.call(el.querySelectorAll(s)); }
+  function at(ms, fn) { timers.push(setTimeout(fn, ms)); }
+  function hide(els) { els.forEach(function (e) { e.style.opacity = 0; }); }
+  function pop(e, d) { e.animate([{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1.25)', offset: .6 }, { opacity: 1, transform: 'none' }], { duration: 420, delay: d || 0, easing: E, fill: 'both' }); }
+  function play() {
+    running = true; timers.forEach(clearTimeout); timers = [];
+    // reset to the start of both lanes
+    var hits = q(before, '.kss-hit'), bDone = q(before, '.kss-done'), queue = q(after, '.kss-q'), cut = after.querySelector('.kss-cut');
+    var bars = q(after, '.kss-bar b'), aDone = q(after, '.kss-done'), cer = q(after, '.kss-cer span'), res = q(board, '.kss-r');
+    hide(hits); hide(bDone); hide(queue); hide(aDone); hide(cer); hide(res); cut.style.opacity = .15;
+    bars.forEach(function (b) { b.style.transform = 'scaleX(0)'; });
+    // before: asks land at random, some on Engineering's running sprint
+    hits.slice().sort(function () { return Math.random() - .5; }).forEach(function (h, i) { at(300 + i * 260, function () { pop(h); }); });
+    at(300 + hits.length * 260 + 200, function () { bDone.forEach(function (d) { pop(d); }); });
+    // after: the form fills, the cut-off closes, one sprint runs in all three rows, ceremonies, delivery
+    var t = 300 + hits.length * 260 + 900;
+    queue.forEach(function (d, i) { at(t + i * 120, function () { pop(d); }); });
+    t += queue.length * 120 + 400;
+    at(t, function () { cut.animate([{ opacity: .15 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }).onfinish = function () { cut.style.opacity = 1; }; });
+    at(t + 200, function () { cer[0].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); });
+    at(t + 300, function () { bars.forEach(function (b) { b.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 1800, easing: 'linear', fill: 'forwards' }).onfinish = function () { b.style.transform = ''; }; }); });
+    at(t + 2150, function () { cer[1].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); aDone.forEach(function (d) { pop(d); }); });
+    at(t + 2700, function () { res.forEach(function (r, i) { r.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: i * 140, easing: E, fill: 'both' }); }); });
+    at(t + 2700 + 600, function () { [].concat(hits, bDone, queue, aDone, cer, res).forEach(function (e) { e.style.opacity = ''; e.getAnimations().forEach(function (a) { a.cancel(); }); }); running = false; });
+    at(t + 2700 + 4200, function () { if (visible && !document.hidden) play(); });
+  }
+  new IntersectionObserver(function (es) {
+    visible = es[0].isIntersecting && es[0].intersectionRatio >= .4;
+    if (visible && !running) play();
+  }, { threshold: [0, .4] }).observe(board);
+})();
+</script>
+</div>
