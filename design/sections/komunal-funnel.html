@@ -3,7 +3,7 @@
      Funnel bars are grey with only "Complete" in lime; the Fund -> Complete step chip (90%) is lime because that is the step the
      placement routing fixed (see komunal-placement-routing above). Volume is a flat 2px lime line over a faint area.
      Markup is the final state, so the page is complete without JavaScript; the script resets to the start state and grows the
-     bars / draws the line once the board is 40% in view, then loops while on screen. Reduced motion keeps the final state.
+     bars / draws the line once the board is 40% in view, then holds; it replays only after the board has left the screen and come back. Reduced motion keeps the final state.
      Nothing is measured in script, so a shut drawer is fine. Volumes are illustrative under NDA; the +12-point lift is actual. -->
 <div class="kfl-wrap" style="margin-top: 24px;">
 <style>
@@ -157,7 +157,7 @@
 (function () {
   var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kfl-board');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  var HOLD = 5200, timers = [], visible = false, pending = false, ran = false;
+  var done = false, timers = [], visible = false, pending = false, ran = false;
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function clear() { timers.forEach(clearTimeout); timers = []; }
   // snap to the start state with no transition, so a replay never shows the bars shrinking
@@ -168,7 +168,7 @@
   function play() {
     ran = true; clear();
     later(function () { wrap.classList.remove('idle'); }, 60);
-    later(replay, 60 + HOLD);
+    done = true;
   }
   function replay() {
     if (!visible || document.hidden) { pending = true; return; }
@@ -176,7 +176,7 @@
     later(function () { idle(); board.style.opacity = 1; later(play, 300); }, 420);
   }
   idle();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } if (visible && pending) replay(); }, { threshold: 0 }).observe(board);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && pending) replay(); });
   var seen = new IntersectionObserver(function (es) {
     // 40% of the board, or half the screen when the lanes stack taller than the screen

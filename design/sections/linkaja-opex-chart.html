@@ -3,7 +3,7 @@
      the 100 mark, the last about a fifth of it, the -80% the callout reads). The bars are the grey context mark; lime marks
      the outcome only: the last bar, the trend line and the -80%.
      Markup is the finished state, so the page is complete without JavaScript; the script starts from empty, raises the bars,
-     draws the line, then loops (on screen only). Reduced motion keeps the finished state. Nothing is measured, so it
+     draws the line, then holds; it replays only after the board has left the screen and come back. Reduced motion keeps the finished state. Nothing is measured, so it
      is safe inside a drawer that is still shut. -->
 <div class="kop-wrap">
 <style>
@@ -100,19 +100,19 @@
 (function () {
   var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kop-board');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  var HOLD = 6000, timer = 0, visible = false, ran = false, pending = false;
+  var done = false, visible = false, ran = false, pending = false;
   function reset() { wrap.classList.add('kop-pre'); void board.offsetWidth; }
   function play() {
-    clearTimeout(timer); ran = true; pending = false;
+    ran = true; pending = false;
     reset(); wrap.classList.remove('kop-pre');
-    timer = setTimeout(replay, 2400 + HOLD);
+    done = true;
   }
   function replay() {
     if (!visible || document.hidden) { pending = true; return; }
     play();
   }
   reset();
-  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (visible && pending) play(); }, { threshold: 0 }).observe(board);
+  new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } if (visible && pending) play(); }, { threshold: 0 }).observe(board);
   document.addEventListener('visibilitychange', function () { if (!document.hidden && pending && visible) play(); });
   var seen = new IntersectionObserver(function (es) {
     if (es[0].isIntersecting && es[0].intersectionRatio >= .4 && !ran) { seen.disconnect(); play(); }

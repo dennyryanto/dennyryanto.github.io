@@ -2,7 +2,9 @@
      the bot resolves and what is escalated, a flat two-segment bar (lime = the outcome, the resolved share; grey = escalated, which is
      not a failure, so no red). Right: the two chat phones, product UI that keeps its own look (their markup is unchanged); only the board
      and the layout around them follow the diagram style. The ~72% / ~28% split is illustrative.
-     Markup is the finished state, so the page is complete without JavaScript; the script grows the bar on view, once.
+     Markup is the finished state, so the page is complete without JavaScript; the script grows the bar on view, once, and
+     starts the two chats then too: each plays its conversation once and holds it (the keyframes are made to hold in
+     build_hifi.py), and replays only after the board has left the screen and come back.
      Reduced motion keeps the finished state. Nothing is measured, so it is safe inside a shut drawer. -->
 <div class="kir-wrap">
 <style>
@@ -30,6 +32,7 @@
 .kir-labels span:first-child { flex: 72 1 0; padding-left: 2px; color: var(--kir-ink-2); }
 .kir-labels span:last-child { flex: 28 1 0; padding-left: 2px; }
 .kir-pre .kir-seg { transform: scaleX(0); transition: none; }
+.kir-wait [data-c] { animation-play-state: paused; }
 
 @container (max-width: 760px) {
   .kir-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 20px; gap: 24px; }
@@ -56,11 +59,16 @@
 (function () {
   var wrap = document.currentScript.parentNode, board = wrap.querySelector('.kir-board');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
-  wrap.classList.add('kir-pre');
-  var seen = new IntersectionObserver(function (es) {
-    if (es[0].isIntersecting && es[0].intersectionRatio >= .4) { seen.disconnect(); void board.offsetWidth; wrap.classList.remove('kir-pre'); }
-  }, { threshold: [0, .2, .4, .7] });
-  seen.observe(board);
+  var chats = [].slice.call(wrap.querySelectorAll('[data-c]')), armed = true;
+  wrap.classList.add('kir-pre', 'kir-wait');
+  new IntersectionObserver(function (es) {
+    var e = es[0];
+    if (!e.isIntersecting) { armed = true; return; }   // fully off screen: the chats replay on the next visit
+    if (!armed || (e.intersectionRatio < .4 && e.intersectionRect.height < innerHeight * .5)) return;
+    armed = false;
+    if (!wrap.classList.contains('kir-wait')) chats.forEach(function (c) { c.getAnimations().forEach(function (a) { a.cancel(); a.play(); }); });
+    void board.offsetWidth; wrap.classList.remove('kir-pre', 'kir-wait');
+  }, { threshold: [0, .2, .4, .5, .7] }).observe(board);
 })();
 </script>
 </div>

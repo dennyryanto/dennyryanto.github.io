@@ -806,6 +806,12 @@ def one_type(html):
 
 
 css = one_type(css)
+# the LinkAja chats play their conversation once and hold it, so there is time to read it, instead of clearing it every 14s;
+# linkaja-intent-routing.html starts them when the phones come into view (without JavaScript they play on load and hold)
+assert css.count('91% { opacity: 1; transform: none; }\n  96%, 100% { opacity: 0; transform: none; }') == 11
+css = css.replace('91% { opacity: 1; transform: none; }\n  96%, 100% { opacity: 0; transform: none; }', '91%, 100% { opacity: 1; transform: none; }')
+assert css.count('infinite normal both running chat-') == 13
+css = css.replace('infinite normal both running chat-', '1 normal both running chat-')
 for _ in range(3):   # a declaration can name more than one of them
     more_html, case_html, top_html, hero_html = one_type(more_html), one_type(case_html), one_type(top_html), one_type(hero_html)
 
