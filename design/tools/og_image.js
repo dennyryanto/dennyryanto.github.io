@@ -100,9 +100,6 @@ ${SEAL_CSS}
 .row:nth-child(3) { animation-delay: 2.1s; } .row:nth-child(4) { animation-delay: 2.35s; }
 .certs > div:nth-child(1) { animation-delay: 2.6s; } .certs > div:nth-child(2) { animation-delay: 2.8s; } .certs > div:nth-child(3) { animation-delay: 3s; }
 .gold-seal { animation-delay: calc(3.2s + var(--spin-delay, 0s)); }
-/* tighter rows than the still, so the certificates clear the bottom edge with room to spare */
-.row { padding: 16px 0 18px; }
-.certs { gap: 8px; }
 `;
 
 const SEAL = '<svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#e3b341"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#3a2a05" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -136,12 +133,12 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
 .chips i { font-style: normal; padding: 9px 14px; border-radius: 100px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.24); background: rgba(255,255,255,.05);
   font: 600 14px/1 'IBM Plex Mono', monospace; letter-spacing: .12em; }
 .rows { display: flex; flex-direction: column; }
-.row { padding: 22px 0 24px; border-top: 1px solid rgba(255,255,255,.13); }
+.row { padding: 16px 0 18px; border-top: 1px solid rgba(255,255,255,.13); }
 .row:first-child { padding-top: 4px; border-top: 0; }
 .row i { display: block; font: 500 15px/1 'IBM Plex Mono', monospace; font-style: normal; letter-spacing: .16em; color: rgba(242,239,232,.62); }
 .row p { margin-top: 10px; font: 400 34px/1.15 Archivo, sans-serif; letter-spacing: -.005em; }
 .row p b { color: ${LIME}; font-weight: 700; }
-.certs { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; }
+.certs { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
 .certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 Archivo, sans-serif; }
 .certs svg { width: 27px; height: 27px; flex: none; }
 ${AURA_CSS}
