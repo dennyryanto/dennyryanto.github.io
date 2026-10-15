@@ -9,7 +9,7 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 at `design/source/legacy-index.html`.
 
 Colours: sources are written in the original warm theme (near-black, cream, lime);
-`design/tools/theme.py` maps them onto the current palette (Blumine) when both build
+`design/tools/theme.py` maps them onto the current palette (Marshland neutrals, lime accent) when both build
 scripts write their output. Change the palette there, not in the sources.
 
 ## Design decisions
