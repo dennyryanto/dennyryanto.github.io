@@ -94,6 +94,9 @@ ${SEAL_CSS}
 .row:nth-child(3) { animation-delay: 2.1s; } .row:nth-child(4) { animation-delay: 2.35s; }
 .certs > div:nth-child(1) { animation-delay: 2.6s; } .certs > div:nth-child(2) { animation-delay: 2.8s; } .certs > div:nth-child(3) { animation-delay: 3s; }
 .gold-seal { animation-delay: calc(3.2s + var(--spin-delay, 0s)); }
+/* tighter rows than the still, so the certificates clear the bottom edge with room to spare */
+.row { padding: 16px 0 18px; }
+.certs { gap: 8px; }
 `;
 
 const SEAL = '<svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#e3b341"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#3a2a05" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
