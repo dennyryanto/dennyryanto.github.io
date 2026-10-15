@@ -603,11 +603,11 @@ career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('ca
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
 # one line on what each company is, under the role in the timeline
 ABOUT = {
-    ('2011–16', 'Appsindo Technology'): 'A software house: an agency designing and building apps for retail, F&amp;B and entertainment brands.',
-    ('2016–24', 'Dash · Lumio'): 'My B2B product company: Dash for restaurant ordering, Lumio for revenue from signage networks.',
-    ('2021–', 'Dash · Lumio'): 'A board seat: strategy, governance, financial health and risk.',
-    ('2021–23', 'LinkAja'): 'An Indonesian digital payments app used by 70M+ people.',
-    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech behind DepositoBPR, for placing deposits with rural banks.',
+    ('2011–16', 'Appsindo Technology'): 'A software house and agency building apps for retail, F&amp;B and entertainment brands.',
+    ('2016–24', 'Dash · Lumio'): 'The B2B product company I founded: Dash for restaurant ordering, Lumio for turning signage screens into revenue.',
+    ('2021–', 'Dash · Lumio'): 'My board seat: strategy, governance, financial health and risk.',
+    ('2021–23', 'LinkAja'): 'An Indonesian digital payments and e-wallet app used by 70M+ people.',
+    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech whose DepositoBPR platform lets people place deposits with rural banks.',
     ('2025–', 'Independent'): 'Product and AI design consulting for businesses and design teams.',
 }
 for row in career[1].find_all(recursive=False):
@@ -629,8 +629,8 @@ bg_html = (
     '</button>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
-    '<p class="mk-context">Appsindo Technology is a software house, an agency that designs and builds apps for its clients. '
-    'Four of the client products I designed there:</p>' + str(earlier[1]) + '</div>' +
+    '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
+    'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
     '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'
