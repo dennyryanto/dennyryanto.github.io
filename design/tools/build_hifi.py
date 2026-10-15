@@ -436,9 +436,9 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
             + fig_html + '</div>' + toggle_html)
 
 
-# what each toggle promises: minutes to read the full case study, measured on the live site's sections
-# (words at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
-READ = {'linkaja': 3, 'komunal': 2, 'board': 4, 'ai': 2, 'lab': 2, 'lab-ui': 2}
+# what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
+# (all words, diagram labels included, at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
+READ = {'linkaja': 3, 'komunal': 6, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
 toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
