@@ -1,6 +1,7 @@
 """Assemble the hi-fi mockup (opening, case 01 LinkAja in full, and the heroes of the other cases and labs) from the live site's rendered pieces."""
 import base64, json, re, sys, os
 from bs4 import BeautifulSoup, Comment
+import theme   # the colour theme (design/tools/theme.py), applied to every page written here
 
 S = sys.argv[1]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -156,7 +157,7 @@ for ch in list(card.contents):
     front.append(ch.extract())
 front['style'] = frame
 flip.append(soup("""<div class="ee-back" aria-hidden="true" style="%s">
-<div class="ee-eyebrow">EASTER EGG · 1 OF 1</div>
+<div class="ee-eyebrow">EASTER EGG · 1 OF 3</div>
 <div class="ee-title">You found it.</div>
 <p>Ten taps? Okay, you&rsquo;re officially curious. Here&rsquo;s something that&rsquo;s not on my CV: I&rsquo;m a huge sci-fi movie nerd.</p>
 <p>Long before I knew UI/UX was a job, I&rsquo;d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn&rsquo;t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
@@ -292,6 +293,12 @@ index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
 # ---------- clients & brands, right under the case index ----------
 clients = soup(read('clients'))
 client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
+# the white rabbit that roams the page (design/sections/egg-matrix.html places it at <!--RABBIT--> and moves it); 2px pixels
+RABBIT_ROWS = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..']
+RABBIT = ('<button type="button" class="mx-rabbit" tabindex="-1" aria-label="A white rabbit. Follow it.">'
+          '<svg viewBox="0 0 10 9" width="20" height="18" shape-rendering="crispEdges" aria-hidden="true">'
+          + '<g fill="#f2efe8">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'X') + '</g>'
+          + '<g fill="#161511">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'E') + '</g></svg></button>')
 clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap">'
                 '<div class="mk-clients-head"><span>Clients &amp; brands</span></div>'
                 '<div class="mk-clients-grid">' + client_logos + '</div></div></section>')
@@ -659,6 +666,8 @@ contact['style'] = contact.get('style', '') + ' position: relative;'
 contact.append(Comment("""
   Psst, code explorer. The little orange crab on this line is Claude, who built this site with me.
   Scroll all the way down and tap it a few times.
+
+  And if you'd rather type: press ~ (or tap the _ after PORTFOLIO 2026) and ask the right question.
 """))
 for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="cc-bubble" role="status" aria-live="polite"></div>'
                     '<button type="button" class="cc-crab" aria-label="Claude the crab. Tap to chat.">' + crab_svg + '</button></div></div>'
@@ -695,7 +704,8 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
   var LINES = [
     function () { return 'Hi, I\\u2019m Claude. Denny and I built this site together.'; },
     function () { return 'You scrolled ' + px() + 'px to get here. I walked it sideways.'; },
-    function () { return 'He brings the taste, I bring the claws. <a href="mailto:denny.ryanto@gmail.com">Say hi \\u2192</a>'; }
+    function () { return 'He brings the taste, I bring the claws. <a href="mailto:denny.ryanto@gmail.com">Say hi \\u2192</a>'; },
+    function () { window.dispatchEvent(new Event('mx-hint')); return 'Psst: there\\u2019s a terminal down here. Ask it the right question.'; }
   ];
   function say(k) { bub.classList.remove('on'); setTimeout(function () { bub.innerHTML = LINES[k](); bub.classList.add('on'); }, bub.innerHTML ? 140 : 0); }
   function walk(from, to, ms, done) {
@@ -748,7 +758,9 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
-more_html += bg_html + str(contact)
+for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
+    t.insert_after(soup('<button type="button" class="mx-cursor" aria-label="Open the terminal">_</button>').button)
+more_html += bg_html + str(contact) + str(section('egg-matrix')).replace('<!--RABBIT-->', RABBIT)
 
 # ---------- type floor (audit F5): nothing under 11px, except text drawn inside SVG diagrams, which scales with them ----------
 FONT_PX = re.compile(r'(font(?:-size)?\s*:[^;"]*?)(\d+(?:\.\d+)?)px')
@@ -797,7 +809,7 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
-open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(out)
+open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(theme.apply(out))
 
 # ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------
 COMPONENT = os.environ.get('COMPONENT')
@@ -810,7 +822,7 @@ if COMPONENT:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(page)
+    open(os.path.join(S, 'component-%s.html' % COMPONENT), 'w', encoding='utf-8').write(theme.apply(page))
     print('component', COMPONENT, len(page), 'bytes')
 
 # ---------- one section on its own, case study open, for polishing it in isolation: SECTION=ai ----------
@@ -828,6 +840,6 @@ if SECTION:
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', one).replace('/*STACK*/', STACK_JS))
-    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(page)
+    open(os.path.join(S, 'section-%s.html' % SECTION), 'w', encoding='utf-8').write(theme.apply(page))
     print('section', SECTION, len(page), 'bytes')
 print('bytes', len(out), 'read times', re.findall(r'(\d+) min read', out))

@@ -9,6 +9,7 @@ becomes its own file. No runtime, no bundle: the page renders without JavaScript
 drawer shows open), and JavaScript adds the drawers, the stacks and the motion.
 """
 import base64, hashlib, io, os, re, shutil, sys
+import theme   # the colour theme (design/tools/theme.py)
 from PIL import Image
 
 W, R = sys.argv[1], sys.argv[2]
@@ -95,8 +96,8 @@ shutil.copy(os.path.join(G, '6d0a4c1e-7b1f-4f5e-9a51-3c2f8e0b9a01.js'), os.path.
 shutil.copy(os.path.join(G, '6d0a4c1e-7b1f-4f5e-9a51-3c2f8e0b9a02.js'), os.path.join(A, 'js', 'ScrollTrigger.min.js'))
 page = page.replace('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', 'assets/js/gsap.min.js')
 page = page.replace('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', 'assets/js/ScrollTrigger.min.js')
-stack = open(os.path.join(here, '..', 'generative', 'stack.js'), encoding='utf-8').read()
-shutil.copy(os.path.join(here, '..', 'generative', 'stack.js'), os.path.join(A, 'js', 'stack.js'))
+stack = theme.apply(open(os.path.join(here, '..', 'generative', 'stack.js'), encoding='utf-8').read())   # as the hi-fi inlined it
+open(os.path.join(A, 'js', 'stack.js'), 'w', encoding='utf-8').write(stack)
 block = '<script>\n' + stack + '\n</script>'
 assert page.count(block) == 1, 'stack.js block not found'
 page = page.replace(block, '<script src="assets/js/stack.js"></script>')
@@ -128,13 +129,14 @@ HEAD = '''<!doctype html>
 '''
 HEAD = HEAD.replace('%%PRELOAD%%', ''.join('<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>\n' % u for u in dict.fromkeys(preload)).rstrip())
 site = HEAD + head.strip() + '\n</head>\n<body>\n<noscript>' + body.rstrip() + '\n</body>\n</html>\n'
+site = theme.apply(site)
 open(os.path.join(R, 'index.html'), 'w', encoding='utf-8').write(site)
 # the tab icon: three stacked slabs, the top one lime, after the exploded-layer diagrams
-open(os.path.join(A, 'favicon.svg'), 'w').write(
+open(os.path.join(A, 'favicon.svg'), 'w').write(theme.apply(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#161511"/>'
     '<g fill="none" stroke-width="1.6" stroke-linejoin="round"><path d="M6 21l10 5 10-5-10-5z" stroke="#f2efe8" opacity=".5"/>'
     '<path d="M6 16l10 5 10-5-10-5z" stroke="#f2efe8" opacity=".8"/></g>'
-    '<path d="M6 11l10 5 10-5-10-5z" fill="#c8f135"/></svg>\n')
+    '<path d="M6 11l10 5 10-5-10-5z" fill="#c8f135"/></svg>\n'))
 
 size = lambda p: sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(p) for f in fs)
 print('index.html %d KB, %d images %d KB, %d fonts %d KB (%d preloaded), js %d KB' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024,

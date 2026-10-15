@@ -8,6 +8,10 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 `design/AUDIT.md`). The old single-file bundle the content was taken from is kept
 at `design/source/legacy-index.html`.
 
+Colours: sources use the lime accent; `design/tools/theme.py` swaps it for the
+site's current accent when both build scripts write their output. Change the
+accent there, not in the sources.
+
 ## Design decisions
 
 Before any design or layout work, read `design/AUDIT.md`. It holds the design
