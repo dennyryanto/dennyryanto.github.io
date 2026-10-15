@@ -293,8 +293,14 @@ index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
 # ---------- clients & brands, right under the case index ----------
 clients = soup(read('clients'))
 client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
+# a white rabbit to follow (design/sections/egg-matrix.html opens the terminal from it); 2px pixels, hidden without JS
+RABBIT_ROWS = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..']
+RABBIT = ('<button type="button" class="mx-rabbit" aria-label="A white rabbit. Follow it.">'
+          '<svg viewBox="0 0 10 9" width="20" height="18" shape-rendering="crispEdges" aria-hidden="true">'
+          + '<g fill="#f2efe8">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'X') + '</g>'
+          + '<g fill="#161511">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'E') + '</g></svg></button>')
 clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap">'
-                '<div class="mk-clients-head"><span>Clients &amp; brands</span></div>'
+                '<div class="mk-clients-head"><span>Clients &amp; brands</span>' + RABBIT + '</div>'
                 '<div class="mk-clients-grid">' + client_logos + '</div></div></section>')
 
 # ---------- the Garmin glass cockpit: four screens for the fan, three close-ups ----------
@@ -660,6 +666,8 @@ contact['style'] = contact.get('style', '') + ' position: relative;'
 contact.append(Comment("""
   Psst, code explorer. The little orange crab on this line is Claude, who built this site with me.
   Scroll all the way down and tap it a few times.
+
+  And if you'd rather type: press ~ (or tap the _ after PORTFOLIO 2026) and ask the right question.
 """))
 for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="cc-bubble" role="status" aria-live="polite"></div>'
                     '<button type="button" class="cc-crab" aria-label="Claude the crab. Tap to chat.">' + crab_svg + '</button></div></div>'
@@ -696,7 +704,8 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
   var LINES = [
     function () { return 'Hi, I\\u2019m Claude. Denny and I built this site together.'; },
     function () { return 'You scrolled ' + px() + 'px to get here. I walked it sideways.'; },
-    function () { return 'He brings the taste, I bring the claws. <a href="mailto:denny.ryanto@gmail.com">Say hi \\u2192</a>'; }
+    function () { return 'He brings the taste, I bring the claws. <a href="mailto:denny.ryanto@gmail.com">Say hi \\u2192</a>'; },
+    function () { window.dispatchEvent(new Event('mx-hint')); return 'Psst: there\\u2019s a terminal down here. Ask it the right question.'; }
   ];
   function say(k) { bub.classList.remove('on'); setTimeout(function () { bub.innerHTML = LINES[k](); bub.classList.add('on'); }, bub.innerHTML ? 140 : 0); }
   function walk(from, to, ms, done) {
@@ -749,7 +758,9 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
-more_html += bg_html + str(contact)
+for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
+    t.insert_after(soup('<button type="button" class="mx-cursor" aria-label="Open the terminal">_</button>').button)
+more_html += bg_html + str(contact) + str(section('egg-matrix'))
 
 # ---------- type floor (audit F5): nothing under 11px, except text drawn inside SVG diagrams, which scales with them ----------
 FONT_PX = re.compile(r'(font(?:-size)?\s*:[^;"]*?)(\d+(?:\.\d+)?)px')
