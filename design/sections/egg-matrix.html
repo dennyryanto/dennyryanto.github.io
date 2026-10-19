@@ -12,6 +12,7 @@
   <div class="mxt-log" id="mxt-log" aria-live="polite"></div>
   <form class="mxt-row" id="mxt-form" autocomplete="off"><label for="mxt-in" class="mxt-ps">denny@portfolio:~$</label><input id="mxt-in" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="send"></form>
 </div>
+<div class="mxt-dim" aria-hidden="true"></div>
 <div class="mx" id="mx" hidden>
   <canvas class="mx-rain" aria-hidden="true"></canvas>
   <div class="mx-say">
@@ -39,9 +40,14 @@
 .mx-cursor:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
 
 .mxt { position: fixed; z-index: 9000; top: 0; left: 50%; width: min(760px, calc(100% - 24px)); transform: translateX(-50%); display: flex; flex-direction: column;
-  height: min(48vh, 400px); background: rgba(16, 15, 9, .97); border-radius: 0 0 12px 12px; box-shadow: 0 0 0 1px rgba(242, 239, 232, .14), 0 30px 60px -20px rgba(0, 0, 0, .9);
+  height: min(48vh, 400px); background: #100f09; border-radius: 0 0 12px 12px; box-shadow: 0 0 0 1px rgba(242, 239, 232, .14), 0 30px 60px -20px rgba(0, 0, 0, .9);
   font: 400 13px/1.55 'IBM Plex Mono', ui-monospace, monospace; color: #f2efe8; padding-top: env(safe-area-inset-top, 0px); }
 .mxt.open { animation: mxt-in .22s cubic-bezier(.2, .7, .2, 1); }
+/* the page dims behind the terminal for as long as it is open; it follows the terminal's hidden state, so every way of closing it clears the dim */
+.mxt-dim { position: fixed; inset: 0; z-index: 8990; display: none; background: rgba(0, 0, 0, .62); }
+.mxt:not([hidden]) + .mxt-dim { display: block; animation: mxt-dim .3s ease; }
+@keyframes mxt-dim { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .mxt.open, .mxt:not([hidden]) + .mxt-dim { animation: none; } }
 @keyframes mxt-in { from { transform: translate(-50%, -100%); } }
 .mxt-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid rgba(242, 239, 232, .1); font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: rgba(242, 239, 232, .55); }
 .mxt-x { border: 0; background: none; color: rgba(242, 239, 232, .6); font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; cursor: pointer; padding: 4px; }
@@ -138,6 +144,7 @@ html.mx-on .mx-pill, html.mx-on .mx-pill * { color: inherit !important; }
     else if (e.key === 'ArrowDown' && hist.length) { e.preventDefault(); hi = Math.min(hist.length, hi + 1); input.value = hist[hi] || ''; }
   });
   term.querySelector('.mxt-x').addEventListener('click', close);
+  term.nextElementSibling.addEventListener('click', function () { if (!busy) close(); });
   document.addEventListener('keydown', function (e) {
     var tgt = e.target, typing = tgt && (tgt.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(tgt.tagName));
     if (e.key === 'Escape') {
