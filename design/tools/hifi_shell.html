@@ -127,12 +127,30 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 @media (max-width: 600px) { .mk-clients-wrap { padding: 32px 24px 36px; } .mk-clients-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .mk-client { height: 64px; padding: 12px; } .mk-client img { max-height: 30px; } }
 @media (max-width: 480px) { .mk-clients-wrap { padding-inline: 16px; } }
 
+/* shipped screens (Komunal and LinkAja): lime header, one dark panel, phones in a centred row with numbered captions, a note below */
+.ksf-panel { min-height: 340px; background: #1a1b1f; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 26px; display: flex; flex-direction: column; }
+.ksf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+.ksf-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.ksf-head span:first-child { color: oklch(0.9 0.2 122); }
+.ksf-row { flex: 1 1 0%; display: flex; gap: 16px; align-items: flex-start; justify-content: center; }
+.ksf-step { flex: 1 1 0; min-width: 0; max-width: 236px; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.ksf-step > div { max-width: none !important; }
+.ksf-step figcaption { font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .04em; color: rgba(242, 239, 232, .6); text-align: center; }
+.ksf-step figcaption b { color: rgba(242, 239, 232, .9); font-weight: 600; }
+.ksf-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+@media (max-width: 760px) {
+  .ksf-panel { padding: 16px; }
+  .ksf-row { flex-wrap: wrap; gap: 20px 12px; }
+  .ksf-step { flex: 0 0 calc(50% - 6px); }
+}
 /* the Garmin glass cockpit fan: real screens stacked in depth; the front one swipes away every 4.5s while on screen */
 .mk-fan { position: relative; outline: none; }
 .mk-fan:focus-visible .mk-fan-stage { outline: 2px solid var(--lime); outline-offset: 4px; }
 .mk-fan-stage { position: relative; height: clamp(440px, 46vw, 620px); perspective: 1800px; perspective-origin: 25% 40%; overflow: hidden; touch-action: pan-y; }
 .mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(220px, 23vw, 330px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
-.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
+.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7), -18px 0 40px -12px rgba(0, 0, 0, .55); }
+/* screens further back are darkened, never see-through: an opaque screen under a black shade, so layers don't show through each other */
+.mk-fan-shade { position: absolute; inset: 0; border-radius: 22px; background: #000; opacity: 0; pointer-events: none; transition: opacity .9s ease; }
 .mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
 .mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
 .mk-fan-cap .n { font: 500 11px/1 var(--mono); letter-spacing: .14em; color: var(--lime); }
@@ -392,7 +410,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     function place(card, slot) {
       var dx = narrow() ? 26 : 62, dz = narrow() ? 110 : 170;
       card.style.transform = slot === 0 ? 'translateX(0) translateZ(0) rotateY(-8deg)' : 'translateX(' + (slot * dx) + '%) translateZ(' + (-slot * dz) + 'px) rotateY(-32deg)';
-      card.style.opacity = String(1 - slot * 0.2);
+      card.style.opacity = '1';
+      $('.mk-fan-shade', card).style.opacity = String(slot * 0.22);
       card.style.zIndex = String(n - slot);
     }
     function label() {
@@ -424,7 +443,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       label();
       setTimeout(function () {
         leaving.style.transition = 'none'; place(leaving, n - 1); leaving.style.opacity = '0';
-        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = String(1 - (n - 1) * 0.2);
+        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = '1';
       }, 600);
     }
     function tick() { if (!held && visible && !document.hidden) go(cur + 1); }

@@ -326,7 +326,7 @@ FAN = [('Home, at a glance', 'Grouped by the question you’re asking: recovery,
        ('Training, plan first', 'This week’s sessions, then the load behind them.')]
 fan_html = ('<div class="mk-fan" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Garmin Connect concept screens">'
             '<div class="mk-fan-stage">' + ''.join(
-                '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
+                '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"><i class="mk-fan-shade" aria-hidden="true"></i></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
             '</div><div class="mk-fan-foot"><div class="mk-fan-cap" aria-live="polite"></div><div class="mk-fan-ticks">' +
             ''.join('<button type="button" aria-label="Show %s"><i></i></button>' % t for t, _ in FAN) +
             '</div></div><script type="application/json" class="mk-fan-data">' + json.dumps(FAN) + '</script></div>')
@@ -414,6 +414,15 @@ def polish_phones(html):
 
 shots_html, n_shots = polish_phones(str(shots))
 assert n_shots == 4, n_shots
+# laid out like Komunal's shipped screens (.ksf-* in hifi_shell.html): lime header, one panel, numbered captions, a note below
+LA_STEPS = ['Onboarding', 'Active limit', 'Application status', 'Self-service FAQ']
+phones = [col.find(recursive=False) for col in soup(shots_html).find('div', attrs={'data-r': 'grid4'}).find_all(recursive=False)]
+assert len(phones) == len(LA_STEPS)
+shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE VOLUME</span><span>MYPAYLATER · SHIPPED FLOW</span></div>'
+              '<div class="ksf-panel"><div class="ksf-row" data-m="parallax">' + ''.join(
+                  '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (ph, i + 1, t) for i, (ph, t) in enumerate(zip(phones, LA_STEPS))) +
+              '</div></div><p class="ksf-cap">As shipped: activating, checking the limit, following an application and finding answers all happen in the app, '
+              'so none of them needs an agent.</p>')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
@@ -423,7 +432,7 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-
           '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-support-model')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-intent-routing')) + '</div>'
-          '<div class="mk-block">' + str(shots_head) + shots_html + '</div>'
+          '<div class="mk-block">' + shots_html + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
 

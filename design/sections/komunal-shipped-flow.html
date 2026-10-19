@@ -4,17 +4,7 @@
      bank and time, and the instructions screen locks nothing while it waits for the funds. Static markup, no script. -->
 <div class="ksf">
 <style>
-.ksf-panel { min-height: 340px; background: #1a1b1f; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 26px; display: flex; flex-direction: column; }
-.ksf-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
-.ksf-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
-.ksf-head span:first-child { color: oklch(0.9 0.2 122); }
-.ksf-row { flex: 1 1 0%; display: flex; gap: 16px; align-items: flex-start; justify-content: center; }
-.ksf-step { flex: 1 1 0; min-width: 0; max-width: 236px; margin: 0; display: flex; flex-direction: column; gap: 12px; }
-.ksf-step > div { max-width: none !important; }
-.ksf-step figcaption { font: 500 11px/1.4 'IBM Plex Mono', monospace; letter-spacing: .04em; color: rgba(242, 239, 232, .6); text-align: center; }
-.ksf-step figcaption b { color: rgba(242, 239, 232, .9); font-weight: 600; }
-.ksf-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
-
+/* the panel, header, row and captions are shared with LinkAja's shipped screens: .ksf-* in design/tools/hifi_shell.html */
 /* the two new screens, drawn on the shipped screens' 375 x 812 canvas and palette.
    type scale (canvas px): 26 amount · 17 screen title · 15 option / value · 13 body · 12 support · 11 caps label */
 .ksf .nav { display: flex; align-items: center; gap: 8px; padding: 14px 20px 0; color: #17213b; }
@@ -107,11 +97,6 @@
 .ksf .cdbar { margin-top: 11px; height: 4px; border-radius: 2px; background: #e2e7f2; overflow: hidden; }
 .ksf .cdbar i { display: block; height: 100%; width: 62%; border-radius: 2px; background: #3b5bdb; }
 
-@media (max-width: 760px) {
-  .ksf-panel { padding: 16px; }
-  .ksf-row { flex-wrap: wrap; gap: 20px 12px; }
-  .ksf-step { flex: 0 0 calc(50% - 6px); }
-}
 </style>
 <div class="ksf-head"><span>SHIPPED SCREEN + FLOW</span><span>DEPOSITOBPR · PRODUCT</span></div>
 <div class="ksf-panel">
