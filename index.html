@@ -4218,6 +4218,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mxt-dim { position: fixed; inset: 0; z-index: 8990; display: none; background: rgba(0, 0, 0, .62); }
 .mxt:not([hidden]) + .mxt-dim { display: block; animation: mxt-dim .3s ease; }
 @keyframes mxt-dim { from { opacity: 0; } }
+/* closing plays the same moves in reverse: the terminal slides back up while the dim fades out, then it is hidden */
+.mxt.closing { animation: mxt-out .2s cubic-bezier(.4, 0, 1, 1) forwards; }
+.mxt.closing + .mxt-dim { animation: mxt-undim .2s ease forwards; pointer-events: none; }
+@keyframes mxt-out { to { transform: translate(-50%, -100%); } }
+@keyframes mxt-undim { to { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .mxt.open, .mxt:not([hidden]) + .mxt-dim { animation: none; } }
 @keyframes mxt-in { from { transform: translate(-50%, -100%); } }
 .mxt-bar { display: flex; justify-content: space-between; align-items: center; padding: 8px 14px; border-bottom: 1px solid rgba(242, 239, 232, .1); font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: rgba(242, 239, 232, .55); }
@@ -4271,12 +4276,12 @@ html.mx-on .mx-pill, html.mx-on .mx-pill * { color: inherit !important; }
   root.classList.add('mx-ready');
 
   // ---------- the terminal ----------
-  var greeted = false, busy = false, hist = [], hi = 0, opener = null;
+  var greeted = false, busy = false, hist = [], hi = 0, opener = null, shut = 0, calmMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   function line(text, cls) { var d = document.createElement('div'); if (cls) d.className = cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
   function open(from) {
     if (busy) return;
-    opener = document.activeElement;
-    term.hidden = false; term.classList.remove('open'); void term.offsetWidth; term.classList.add('open');
+    if (shut) { clearTimeout(shut); shut = 0; } else opener = document.activeElement;
+    term.hidden = false; term.classList.remove('open', 'closing'); void term.offsetWidth; term.classList.add('open');
     if (!greeted) {
       greeted = true;
       var now = new Date();
@@ -4286,7 +4291,13 @@ html.mx-on .mx-pill, html.mx-on .mx-pill * { color: inherit !important; }
     } else if (from === 'rabbit') line('You followed the white rabbit.', 'c');
     setTimeout(function () { input.focus({ preventScroll: true }); }, 30);
   }
-  function close() { term.hidden = true; if (opener && opener.focus) opener.focus({ preventScroll: true }); }
+  function close() {
+    if (term.hidden || shut) return;
+    input.blur(); if (opener && opener.focus) opener.focus({ preventScroll: true });
+    if (calmMotion) { term.hidden = true; return; }
+    term.classList.remove('open'); term.classList.add('closing');
+    shut = setTimeout(function () { shut = 0; term.hidden = true; term.classList.remove('closing'); }, 200);
+  }
   var FILES = {
     'about.txt': 'I lead product design where it moves the business. 15+ years across fintech, enterprise and consumer platforms: lower cost to serve, higher conversion, and platforms used by tens of millions.',
     'contact.txt': 'denny.ryanto@gmail.com\nlinkedin.com/in/denny-ryanto'
@@ -4323,7 +4334,7 @@ html.mx-on .mx-pill, html.mx-on .mx-pill * { color: inherit !important; }
       else if (root.classList.contains('mx-on') && mx.hidden) leave();
       return;
     }
-    if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === '`' || e.key === '~')) { e.preventDefault(); if (term.hidden) open('key'); else close(); }
+    if (!typing && !e.metaKey && !e.ctrlKey && !e.altKey && (e.key === '`' || e.key === '~')) { e.preventDefault(); if (term.hidden || shut) open('key'); else close(); }
   });
   [].forEach.call(document.querySelectorAll('.mx-cursor'), function (b) { b.addEventListener('click', function () { open('cursor'); }); });
   // the white rabbit: shows up at a random spot anywhere on the page for a few seconds, hops, vanishes, and turns up
