@@ -326,7 +326,7 @@ FAN = [('Home, at a glance', 'Grouped by the question you’re asking: recovery,
        ('Training, plan first', 'This week’s sessions, then the load behind them.')]
 fan_html = ('<div class="mk-fan" tabindex="0" role="group" aria-roledescription="carousel" aria-label="Garmin Connect concept screens">'
             '<div class="mk-fan-stage">' + ''.join(
-                '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
+                '<figure class="mk-fan-card" data-i="%d"><img src="%s" alt="Concept screen: %s"><i class="mk-fan-shade" aria-hidden="true"></i></figure>' % (i, lab_imgs[i]['src'], t) for i, (t, _) in enumerate(FAN)) +
             '</div><div class="mk-fan-foot"><div class="mk-fan-cap" aria-live="polite"></div><div class="mk-fan-ticks">' +
             ''.join('<button type="button" aria-label="Show %s"><i></i></button>' % t for t, _ in FAN) +
             '</div></div><script type="application/json" class="mk-fan-data">' + json.dumps(FAN) + '</script></div>')

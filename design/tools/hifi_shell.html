@@ -132,7 +132,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-fan:focus-visible .mk-fan-stage { outline: 2px solid var(--lime); outline-offset: 4px; }
 .mk-fan-stage { position: relative; height: clamp(440px, 46vw, 620px); perspective: 1800px; perspective-origin: 25% 40%; overflow: hidden; touch-action: pan-y; }
 .mk-fan-card { position: absolute; margin: 0; left: 14%; top: 4%; width: clamp(220px, 23vw, 330px); aspect-ratio: 780 / 1688; transition: transform .9s cubic-bezier(.6, 0, .2, 1), opacity .9s ease; cursor: pointer; will-change: transform; }
-.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7); }
+.mk-fan-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 22px; border: 1px solid rgba(242, 239, 232, .14); box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .7), -18px 0 40px -12px rgba(0, 0, 0, .55); }
+/* screens further back are darkened, never see-through: an opaque screen under a black shade, so layers don't show through each other */
+.mk-fan-shade { position: absolute; inset: 0; border-radius: 22px; background: #000; opacity: 0; pointer-events: none; transition: opacity .9s ease; }
 .mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
 .mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
 .mk-fan-cap .n { font: 500 11px/1 var(--mono); letter-spacing: .14em; color: var(--lime); }
@@ -392,7 +394,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     function place(card, slot) {
       var dx = narrow() ? 26 : 62, dz = narrow() ? 110 : 170;
       card.style.transform = slot === 0 ? 'translateX(0) translateZ(0) rotateY(-8deg)' : 'translateX(' + (slot * dx) + '%) translateZ(' + (-slot * dz) + 'px) rotateY(-32deg)';
-      card.style.opacity = String(1 - slot * 0.2);
+      card.style.opacity = '1';
+      $('.mk-fan-shade', card).style.opacity = String(slot * 0.22);
       card.style.zIndex = String(n - slot);
     }
     function label() {
@@ -424,7 +427,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       label();
       setTimeout(function () {
         leaving.style.transition = 'none'; place(leaving, n - 1); leaving.style.opacity = '0';
-        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = String(1 - (n - 1) * 0.2);
+        void leaving.offsetWidth; leaving.style.transition = ''; leaving.style.opacity = '1';
       }, 600);
     }
     function tick() { if (!held && visible && !document.hidden) go(cur + 1); }
