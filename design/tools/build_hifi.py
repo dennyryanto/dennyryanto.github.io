@@ -314,6 +314,9 @@ index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
 
 # ---------- clients & brands, right under the case index ----------
 clients = soup(read('clients'))
+# Rainbow's raster logo carried a tagline and a filled box (which the white filter turned into a solid block): use the redrawn vector
+RAINBOW_SVG = open(os.path.join(HERE, '..', 'sections', 'logo-rainbow.svg'), encoding='utf-8').read()
+clients.find('img', alt='Rainbow logo')['src'] = 'data:image/svg+xml;base64,' + base64.b64encode(RAINBOW_SVG.encode('utf-8')).decode('ascii')
 client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
 # the white rabbit that roams the page (design/sections/egg-matrix.html places it at <!--RABBIT--> and moves it); 2px pixels
 RABBIT_ROWS = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..']
