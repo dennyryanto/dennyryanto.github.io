@@ -431,7 +431,7 @@ Owner's pick from the alternatives: A · Exploded layers. The terraces
   - `dash`: restaurant floor (a table) → menu (a dish) → order screen (lime
     send-to-kitchen bar and added item).
   - `eink`: data feeds (HRV) → the 1-bit layout's regions (today's
-    suggestion) → Face 1 exactly as `garmin-daily-brief` renders it
+    suggestion) → Face 1 exactly as `garmin-eink-dashboard` renders it
     (owner: "doesn't represent how the final e-ink display looks; check the
     other repo"). That means: the inverted header band (date, weather, AQI,
     status chip), four metric cards (label, big number, bar, status), Today's
