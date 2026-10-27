@@ -468,8 +468,7 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
 # corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
 ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home"><div class="mk-home-text"><p>Still the home screen I co-led the redesign of: balances and points up top, '
-    'four quick actions, a grid of services and a promo row, with Pay at the centre of the bar.</p></div>'
+    '<div class="mk-home"><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
     '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
