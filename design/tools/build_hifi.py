@@ -72,6 +72,9 @@ for a in top.find_all('a'):
         a['rel'] = 'noopener'
 for a in top.find_all('a', href='#work'):
     a['href'] = '#linkaja'
+top.find(attrs={'data-r': 'topbar'}).name = 'header'      # the banner landmark
+for n in top.find_all('nav'):
+    n['aria-label'] = 'Primary'
 
 def portable(html):
     # The product screens are drawn at their real size (375px phones, 1024 / 1440px tablets and desktops) and scaled
@@ -209,7 +212,7 @@ card.insert_after(soup("""<style>
   .ee-front > div:first-child { margin-bottom: 14px !important; }
 }
 @media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
-[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 2px oklch(0.9 0.2 122 / .6); border-radius: 18px; }
+[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 3px oklch(0.9 0.2 122); border-radius: 18px; }
 .ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
 .ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
@@ -798,6 +801,8 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
+contact.find(string='Let’s talk.').parent.attrs.update({'role': 'heading', 'aria-level': '2'})   # a heading for heading navigation, same look
+contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.name = 'footer'               # the contentinfo landmark
 for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
     t.insert_after(soup('<button type="button" class="mx-cursor" aria-label="Open the terminal">_</button>').button)
 more_html += bg_html + str(contact) + str(section('egg-matrix')).replace('<!--RABBIT-->', RABBIT)
@@ -810,13 +815,26 @@ def lift(decl):
     return FONT_PX.sub(lambda m: m.group(1) + ('11' if float(m.group(2)) < 11 else m.group(2)) + 'px', decl)
 
 
-def floor_type(html):
+FONT_SIZE = re.compile(r'(font-size\s*:\s*)([^;"]*)')
+FONT_SHORT = re.compile(r'(font\s*:[^;"]*?)(\d+(?:\.\d+)?)px')
+
+
+def rem(decl):
+    # type sizes follow the reader's browser font-size setting: 16px is 1rem, so nothing moves at the default
+    decl = FONT_SIZE.sub(lambda m: m.group(1) + re.sub(r'(\d+(?:\.\d+)?)px', lambda n: '%grem' % (float(n.group(1)) / 16), m.group(2)), decl)
+    return FONT_SHORT.sub(lambda m: m.group(1) + '%grem' % (float(m.group(2)) / 16), decl)
+
+
+def floor_type(html, to_rem=False):
     sp = BeautifulSoup(html, 'html.parser')
     n = 0
     for el in sp.find_all(style=True):
         if el.name == 'svg' or el.find_parent('svg'):
             continue
         new = lift(el['style'])
+        # the page's own text goes to rem; a mock-up (an image-role drawing or a scaled screen) keeps its px, as one unit
+        if to_rem and not (el.get('role') == 'img' or el.find_parent(attrs={'role': 'img'}) or el.get('data-fit') or el.find_parent(attrs={'data-fit': True})):
+            new = rem(new)
         if new != el['style']:
             el['style'] = new
             n += 1
@@ -824,11 +842,11 @@ def floor_type(html):
 
 
 css = lift(css)
-more_html, lifted = floor_type(more_html)
+more_html, lifted = floor_type(more_html, True)
 case_html, lifted2 = floor_type(case_html)
-top_html, lifted3 = floor_type(str(top))
-hero_html, lifted4 = floor_type(str(hero))
-print('type floor: lifted', lifted + lifted2 + lifted3 + lifted4, 'elements to 11px')
+top_html, lifted3 = floor_type(str(top), True)
+hero_html, lifted4 = floor_type(str(hero), True)
+print('type: floored to 11px and/or converted to rem on', lifted + lifted2 + lifted3 + lifted4, 'elements')
 
 # the mock-ups' own font families become Archivo, in the stylesheet and in inline styles alike
 def one_type(html):
@@ -848,6 +866,8 @@ for _ in range(3):   # a declaration can name more than one of them
     more_html, case_html, top_html, hero_html = one_type(more_html), one_type(case_html), one_type(top_html), one_type(hero_html)
 
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
+tpl = rem(tpl)
+more_html, case_html = [h.replace('<div class="mk-eyebrow">', '<div class="mk-eyebrow" role="heading" aria-level="3">') for h in (more_html, case_html)]
 out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', top_html)
           .replace('<!--__HERO__-->', hero_html)
