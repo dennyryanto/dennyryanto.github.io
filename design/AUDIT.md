@@ -841,9 +841,10 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 
 **Audit fixes**
 
-- **Stacks never read as empty.** Each stack draws the finished slabs at 20% (`GHOST` in `stack.js`) while it waits and
-  under the build. Build-on-arrival and the one-at-a-time queue are unchanged (review rule above). With JavaScript off the
-  empty canvases are hidden.
+- **Stacks: blank until their turn is accepted.** A faint ghost of the finished slabs, and a soft lime glow under each
+  stack, were tried and removed (owner: "the build should appear one step at a time, do not show the outlines of upcoming
+  build; preserve the original animation sequence"). The build sequence, build-on-arrival and the one-at-a-time queue are
+  exactly as before; a stack stays empty until its turn. With JavaScript off the empty canvases are hidden.
 - **Footnote contrast** (the Komunal routing note, .45 to .6) and a 3px full-strength ring on the profile card. The card
   always had a ring, on its inner `.ee-in`; the first audit misread it.
 - **Landmarks:** `header`, labelled primary nav, `main` around hero to contact, `footer`, a skip link, and real headings
@@ -856,11 +857,13 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 **Polish**
 
 - **Stacks** are larger (frame padding `[0.03, 0.05]`), bleed 40px toward the page edge, and use brighter secondary lines
-  (`line2` #9d9a92) and heavier strokes (`W / 900`). A soft lime ellipse under each one fades out inside the canvas.
+  (`line2` #9d9a92) and heavier strokes (`W / 900`). No glow or stage behind them.
 - **Toggle:** 15px label, and the meta line says what is inside (`TEASE` in `build_hifi.py`), in the body face.
 - **Type:** `--fg-2` .78, `--fg-3` .64; small labels 12px; the drawer's "KEY NUMBERS / WHAT I DID" kickers are
   sentence-case headings (`HEADINGS`); the case header line is the lime number plus the cream name.
-- **Drawers:** 64px between blocks. **Clients:** no tile fills, brighter marks, optical size per logo (`LOGO_SCALE`).
+- **Drawers:** 64px between blocks. **Clients:** no tile fills, brighter marks, optical size per logo (`LOGO_SCALE`), and the
+  logos cascade in once when the strip comes into view: the first row from the right, the second from the left, and so on
+  (owner, from a comment on the artifact). Reduced motion and no JavaScript leave them in place.
 - **A lead outcome numeral in each hero was tried and reverted** (owner: "put the metrics inside the case study, respect
   AUDIT.md"). Heroes stay clean: headline, one line, the stack. The numbers live in the drawer's Key numbers.
 

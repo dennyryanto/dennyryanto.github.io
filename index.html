@@ -950,7 +950,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-co-about { margin-top: 4px; font: 400 0.75rem/1.45 var(--display); color: rgba(242, 239, 232, .5); }
 .mk-context { margin: -6px 0 22px; max-width: 64ch; font: 400 0.9375rem/1.55 var(--display); color: var(--fg-2); }
 /* held back until the motion script takes over (see the script before the page) */
-.mk-pending .mk-split-text, .mk-pending .mk-case-hero > div, .mk-pending .mk-index [data-m~="count"] { opacity: 0; }
+.mk-pending .mk-split-text, .mk-pending .mk-case-hero > div, .mk-pending .mk-index [data-m~="count"], .mk-pending .mk-client { opacity: 0; }
 /* background: the degree as one quiet line */
 .mk-edu { font: 500 0.75rem/1.5 var(--mono); letter-spacing: .1em; color: var(--fg-2); }
 
@@ -4784,6 +4784,27 @@ html.mx-on .mx-pill, html.mx-on .mx-pill * { color: inherit !important; }
       gsap.from($$('.mk-case-hero > div, .mk-split-text', cs), { y: 24, opacity: 0, duration: .7, ease: 'power2.out', stagger: .12, clearProps: 'transform,opacity',
         scrollTrigger: { trigger: cs, start: 'top 75%', once: true } });
     });
+  }
+  // ---- clients & brands: the logos cascade in, row by row, from alternating sides ----
+  // the first row arrives from the right, the second from the left, and so on. Within a row they land in the order they
+  // travel (the right-hand end first for a row from the right), each row starting a beat after the one above it.
+  // The rows follow the grid as it is laid out (6, 4 or 3 across). Once, when the strip comes into view; reduced motion
+  // and no JavaScript leave every logo in place.
+  if (G) {
+    var cgrid = $('.mk-clients-grid');
+    if (cgrid) {
+      var logos = $$('.mk-client', cgrid), cols = Math.max(1, getComputedStyle(cgrid).gridTemplateColumns.split(' ').length);
+      var span = Math.min(180, window.innerWidth * 0.3);
+      logos.forEach(function (el, i) {
+        var row = Math.floor(i / cols), col = i % cols, fromRight = row % 2 === 0;
+        el._dir = fromRight ? 1 : -1;
+        el._delay = row * 0.42 + (fromRight ? cols - 1 - col : col) * 0.08;
+        gsap.set(el, { opacity: 0, x: el._dir * span });
+      });
+      ScrollTrigger.create({ trigger: cgrid, start: 'top 88%', once: true, onEnter: function () {
+        logos.forEach(function (el) { gsap.to(el, { opacity: 1, x: 0, duration: .85, delay: el._delay, ease: 'power3.out', clearProps: 'transform,opacity' }); });
+      } });
+    }
   }
   // GSAP now holds the opening, the case headers and the index numbers in their start state: let the page show
   document.documentElement.classList.remove('mk-pending');

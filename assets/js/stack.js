@@ -352,50 +352,33 @@
     if (this.palette) PAL = this.palette();
     try { this.draw(t); } finally { PAL = keep; }
   };
-  // a stack that has not been built yet (or is mid-build) shows the finished slabs faintly behind it, so a reader who scrolls
-  // past before its turn in the queue never meets an empty frame. No decisions, threads or lime: those come with the build.
-  var GHOST = 0.2;
   Renderer.prototype.draw = function (t) {
-    var g = this.cx, dpr = this.cv.width / this.W;
+    var S = this.S, g = this.cx, self = this, dpr = this.cv.width / this.W, L1 = 1.4 * this.lw, L2 = 0.8 * this.lw, n = S.layers.length, T = 0.12;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.globalAlpha = 1;
     // a canvas marked data-clear leaves its ground transparent, so the page behind it (the lab's grid) shows through
     if (this.cv.hasAttribute('data-clear')) g.clearRect(0, 0, this.W, this.H); else { g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H); }
-    // a soft pool of the accent under the stack: the stage the slabs stand on, with no frame or card around it
-    if (!this.palette) {
-      // an ellipse that fades out inside the frame, so no edge of the canvas shows
-      var c = hex(PAL.lime), r = Math.min(this.W * 0.46, this.H * 0.98), gl;
-      g.save(); g.translate(this.W * 0.5, this.H * 0.56); g.scale(1, 0.42);
-      gl = g.createRadialGradient(0, 0, 0, 0, 0, r);
-      gl.addColorStop(0, 'rgba(' + c.join(',') + ',0.06)'); gl.addColorStop(1, 'rgba(' + c.join(',') + ',0)');
-      g.fillStyle = gl; g.fillRect(-r, -r, 2 * r, 2 * r); g.restore();
-    }
     g.lineCap = 'round'; g.lineJoin = 'round';
-    if (t < this.END) this.layersAt(this.END, GHOST, true);
-    this.layersAt(t, 1, false);
-  };
-  Renderer.prototype.layersAt = function (t, A, ghost) {
-    var S = this.S, g = this.cx, self = this, L1 = 1.4 * this.lw, L2 = 0.8 * this.lw, n = S.layers.length, T = 0.12;
     var lit = function (k) { return flick(t - k * STEP - DECIDE); };
     var neutral = { fill: PAL.line2, stroke: PAL.line };
     S.layers.forEach(function (l, k) {
       var t0 = k * STEP; if (t < t0) return;
       var rise = ease((t - t0) / RISE), z = k * S.gap - 0.4 * (1 - rise), zt = z + T, top = k === n - 1;
       var on = function (x, y) { return function (a, b) { return self.P(x + a, y + b, zt); }; };
-      g.globalAlpha = rise * A;
+      g.globalAlpha = rise;
       self.box(0, 0, z, S.w, S.d, T, L1);
       if (top) self.ops(on(0, 0), chrome(S.device, S.w, S.d), L2, neutral);
       self.ops(on(0, 0), l.ops || [], L2, neutral);
-      if (!ghost) S.picks.forEach(function (p) {
+      S.picks.forEach(function (p) {
         if (p.k === k) { var u = lit(k); self.ops(on(p.at[0], p.at[1]), p.ops, L2, { fill: mix(PAL.line2, PAL.lime, u), stroke: mix(PAL.line, PAL.lime, u) }); }
         else if (p.k < k && !top) self.dot(self.P(p.at[0], p.at[1], zt), 2.6 * self.lw, PAL.lime); // a decision from below passing through
-        else if (top) { var a = lit(k); if (a > 0) { g.globalAlpha = rise * a; self.ops(on(p.at[0], p.at[1]), p.land, L2, { fill: PAL.lime, stroke: PAL.lime }); g.globalAlpha = rise * A; } }
+        else if (top) { var a = lit(k); if (a > 0) { g.globalAlpha = rise * a; self.ops(on(p.at[0], p.at[1]), p.land, L2, { fill: PAL.lime, stroke: PAL.lime }); g.globalAlpha = rise; } }
       });
       (l.blocks || []).slice().sort(function (a, b) { return self.depth(a[0] + a[2] / 2, a[1] + a[3] / 2) - self.depth(b[0] + b[2] / 2, b[1] + b[3] / 2); })
         .forEach(function (b) { self.box(b[0], b[1], zt, b[2], b[3], b[4], L1 * 0.85); });
-      g.globalAlpha = A;
+      g.globalAlpha = 1;
       // every decision made so far climbs straight up through the gap above this layer
-      if (top || ghost) return;
+      if (top) return;
       var climb = ease((t - t0 - DECIDE - LIGHT) / CLIMB), zn = (k + 1) * S.gap;
       if (climb > 0) S.picks.forEach(function (p) {
         if (p.k > k) return;
