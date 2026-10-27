@@ -1587,13 +1587,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 })();
 </script>
 </div>
-</div><div class="mk-block"><!-- LinkAja: intent routing in chat, in the shared diagram language (design/sections/VIZ-STYLE.md). Left: what share of chats
-     the bot resolves and what is escalated, a flat two-segment bar (lime = the outcome, the resolved share; grey = escalated, which is
-     not a failure, so no red). Right: the two chat phones, product UI that keeps its own look (their markup is unchanged); only the board
-     and the layout around them follow the diagram style. The ~72% / ~28% split is illustrative.
-     Markup is the finished state, so the page is complete without JavaScript; the script grows the bar on view, once, and
-     starts the two chats then too: each plays its conversation once and holds it (the keyframes are made to hold in
-     build_hifi.py), and replays only after the board has left the screen and come back.
+</div><div class="mk-block"><!-- LinkAja: intent routing in chat, in the shared diagram language (design/sections/VIZ-STYLE.md). Left: the lead line. Right: the two
+     chat phones, product UI that keeps its own look (their markup is unchanged); only the board and the layout around them follow
+     the diagram style. The ~72% / ~28% split is drawn once, in the support model above, so it is not repeated here (owner: execute
+     the trims from the infographic review).
+     Markup is the finished state, so the page is complete without JavaScript; the script starts the two chats when the board is
+     on view: each plays its conversation once and holds it (the keyframes are made to hold in build_hifi.py), and replays only
+     after the board has left the screen and come back.
      Reduced motion keeps the finished state. Nothing is measured, so it is safe inside a shut drawer. -->
 <div class="kir-wrap">
 <style>
@@ -1609,27 +1609,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kir-head { display: flex; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .kir-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
 .kir-head span:first-child { color: var(--kir-lime); }
-.kir-lead { margin: 0 0 24px; font: 400 16px/1.6 Archivo, sans-serif; color: var(--kir-ink-2); text-wrap: pretty; }
+.kir-lead { margin: 0; font: 400 16px/1.6 Archivo, sans-serif; color: var(--kir-ink-2); text-wrap: pretty; }
 
-/* the split: two flat segments, a 2px gap, rounded ends; widths are the shares */
-.kir-bar { display: flex; gap: 2px; height: 56px; }
-.kir-seg { display: flex; align-items: center; min-width: 0; padding: 0 16px; font: 700 24px/1 Archivo, sans-serif; letter-spacing: -.01em; transform-origin: 0 50%; transition: transform .8s cubic-bezier(.2, .8, .2, 1); }
-.kir-seg.ok { flex: 72 1 0; background: var(--kir-lime); color: #182003; border-radius: 10px 4px 4px 10px; }
-.kir-seg.esc { flex: 28 1 0; background: var(--kir-grey); color: var(--kir-ink); padding: 0 12px; font-size: 20px; border-radius: 4px 10px 10px 4px; transition-delay: .15s; }
-.kir-labels { display: flex; gap: 2px; margin-top: 10px; }
-.kir-labels span { min-width: 0; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kir-ink-3); }
-.kir-labels span:first-child { flex: 72 1 0; padding-left: 2px; color: var(--kir-ink-2); }
-.kir-labels span:last-child { flex: 28 1 0; padding-left: 2px; }
-.kir-pre .kir-seg { transform: scaleX(0); transition: none; }
 .kir-wait [data-c] { animation-play-state: paused; }
 
 @container (max-width: 760px) {
   .kir-board { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 20px; gap: 24px; }
-  .kir-lead { margin-bottom: 20px; }
-  .kir-bar { height: 48px; }
-  .kir-seg { font-size: 22px; padding: 0 12px; }
-  .kir-seg.esc { font-size: 18px; padding: 0 10px; }
-  .kir-labels span { letter-spacing: .06em; }
 }
 @media (prefers-reduced-motion: reduce) { .kir-wrap *, .kir-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
@@ -1637,8 +1622,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <div class="kir-left">
 <div class="kir-head"><span>INTENT ROUTING IN CHAT</span><span>ILLUSTRATIVE</span></div>
 <p class="kir-lead">Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.</p>
-<div aria-label="About 72 percent of chats are resolved by the chatbot and about 28 percent are escalated to an agent" class="kir-bar" role="img"><div class="kir-seg ok">~72%</div><div class="kir-seg esc">~28%</div></div>
-<div aria-hidden="true" class="kir-labels"><span>RESOLVED BY CHATBOT</span><span>ESCALATED</span></div>
 </div>
 <div data-r="route-phones" style="display: flex; gap: 20px; justify-content: center;"><div style="flex: 1 1 0px; min-width: 0px; max-width: 262px; display: flex; flex-direction: column;"><div style="background: linear-gradient(155deg, rgb(42, 42, 48), rgb(14, 14, 17)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.8) 0px 30px 56px -26px, rgba(255, 255, 255, 0.06) 0px 0px 0px 1px inset;"><div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(246, 247, 249);"><div data-fit="375" style='position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(tan(atan2(100cqw, 375px))); transform-origin: left top; font-family: "Archivo", -apple-system, sans-serif; display: flex; flex-direction: column;'><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 20, 25, 0.3); z-index: 9;"></div><div style="background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, rgb(232, 35, 43), rgb(179, 20, 28)); background-size: 16px 16px, auto; color: rgb(255, 255, 255); padding-bottom: 18px;"><div style="padding: 16px 30px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(255, 255, 255);"><span style="font-weight: 700; font-size: 15px;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewbox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg><span style='width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font: 800 15px / 1 "Archivo", sans-serif;'>LA</span><div><div style='font: 700 19px / 1.1 "Archivo", sans-serif; white-space: nowrap;'>LinkAja</div><div style='font: 500 13.5px / 1 "Archivo", sans-serif; opacity: 0.85; margin-top: 4px;'><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>Online</div></div></div></div><div style="flex: 1 1 0%; padding: 20px 18px 40px; display: flex; flex-direction: column; gap: 14px;"><div data-c="A1" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Limit PayLater saya kok belum naik?</div><div data-c="A2" style='flex: 0 0 auto; align-self: center; font: 700 11.5px / 1 "Archivo", sans-serif; letter-spacing: 0.08em; color: rgb(28, 122, 74); background: rgb(227, 244, 234); padding: 7px 11px; border-radius: 999px; white-space: nowrap;'>INTENT · LIMIT</div><div aria-hidden="true" class="chat-typing" data-c="TA" style="flex: 0 0 auto; align-self: flex-start; background: rgb(255, 255, 255); border-radius: 18px 18px 18px 5px; padding: 13px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px; display: flex; gap: 5px; align-items: center; overflow: hidden;"><i></i><i></i><i></i></div><div data-c="A3" style='flex: 0 0 auto; align-self: flex-start; max-width: 84%; background: rgb(255, 255, 255); color: rgb(28, 31, 36); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 18px 5px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;'>Limit kamu dievaluasi tiap bulan. Tagihan terakhir lunas tepat waktu, jadi kamu masuk evaluasi berikutnya.</div><div data-c="A4" style="flex: 0 0 auto; align-self: flex-start; width: 84%; box-sizing: border-box; background: rgb(255, 255, 255); border-radius: 14px; padding: 14px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;"><div style='font: 600 12px / 1 "Archivo", sans-serif; letter-spacing: 0.04em; color: rgb(107, 114, 128);'>LIMIT SAAT INI</div><div style='font: 800 25px / 1 "Archivo", sans-serif; color: rgb(28, 31, 36); margin-top: 8px;'>Rp3.750.000</div><div style="height: 6px; border-radius: 3px; background: rgb(241, 242, 244); margin-top: 12px;"><div style="width: 62%; height: 100%; border-radius: 3px; background: rgb(232, 35, 43);"></div></div></div><div data-c="A5" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Oke, makasih!</div><div data-c="A6" style='margin-top: auto; align-self: center; font: 700 13px / 1 "Archivo", sans-serif; color: rgb(28, 122, 74);'>✓ Selesai tanpa agen</div></div></div></div></div></div><div style="flex: 1 1 0px; min-width: 0px; max-width: 262px; display: flex; flex-direction: column;"><div style="background: linear-gradient(155deg, rgb(42, 42, 48), rgb(14, 14, 17)); border-radius: 24px; padding: 5px; box-shadow: rgba(0, 0, 0, 0.8) 0px 30px 56px -26px, rgba(255, 255, 255, 0.06) 0px 0px 0px 1px inset;"><div style="container-type: size; position: relative; aspect-ratio: 375 / 812; border-radius: 19px; overflow: hidden; background: rgb(246, 247, 249);"><div data-fit="375" style='position: absolute; top: 0px; left: 0px; width: 375px; height: 812px; transform: scale(tan(atan2(100cqw, 375px))); transform-origin: left top; font-family: "Archivo", -apple-system, sans-serif; display: flex; flex-direction: column;'><div style="position: absolute; bottom: 9px; left: 50%; transform: translateX(-50%); width: 134px; height: 5px; border-radius: 3px; background: rgba(20, 20, 25, 0.3); z-index: 9;"></div><div style="background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, rgb(232, 35, 43), rgb(179, 20, 28)); background-size: 16px 16px, auto; color: rgb(255, 255, 255); padding-bottom: 18px;"><div style="padding: 16px 30px 0px; display: flex; justify-content: space-between; align-items: center; color: rgb(255, 255, 255);"><span style="font-weight: 700; font-size: 15px;">9:41</span><span style="display: flex; align-items: center; gap: 7px;"><svg fill="currentColor" height="12" style="display: block;" viewbox="0 0 18 12" width="18"><rect height="5" rx="1" width="3" x="0" y="7"></rect><rect height="7.5" rx="1" width="3" x="5" y="4.5"></rect><rect height="10" rx="1" width="3" x="10" y="2"></rect><rect height="12" rx="1" width="3" x="15" y="0"></rect></svg><svg fill="none" height="12" stroke="currentColor" stroke-linecap="round" stroke-width="1.9" style="display: block;" viewbox="0 0 17 12" width="17"><path d="M1.6 4.6a10 10 0 0 1 13.8 0"></path><path d="M4.3 7.4a6 6 0 0 1 8.4 0"></path><circle cx="8.5" cy="10.3" fill="currentColor" r="1.35" stroke="none"></circle></svg><svg fill="none" height="12" style="display: block;" viewbox="0 0 26 12" width="26"><rect height="10" opacity=".45" rx="2.6" stroke="currentColor" stroke-width="1.3" width="21" x="1" y="1"></rect><rect fill="currentColor" height="6" rx="1.3" width="15" x="3" y="3"></rect><rect fill="currentColor" height="4" rx="1" width="1.8" x="23.5" y="4"></rect></svg></span></div><div style="padding: 18px 24px 0px; display: flex; align-items: center; gap: 12px;"><svg fill="none" height="22" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" style="display: block; flex: none; margin: 0 -2px 0 -6px;" viewbox="0 0 24 24" width="22"><path d="m15 18-6-6 6-6"></path></svg><span style='width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; font: 800 15px / 1 "Archivo", sans-serif;'>LA</span><div><div style='font: 700 19px / 1.1 "Archivo", sans-serif; white-space: nowrap;'>LinkAja</div><div style='font: 500 13.5px / 1 "Archivo", sans-serif; opacity: 0.85; margin-top: 4px;'><span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #5ee08f; margin-right: 6px; vertical-align: 1px;"></span>Online</div></div></div></div><div style="flex: 1 1 0%; padding: 20px 18px 40px; display: flex; flex-direction: column; gap: 14px;"><div data-c="B1" style='flex: 0 0 auto; align-self: flex-end; max-width: 78%; background: rgb(232, 35, 43); color: rgb(255, 255, 255); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 5px;'>Ada transaksi yang bukan saya</div><div data-c="B2" style='flex: 0 0 auto; align-self: center; font: 700 11.5px / 1 "Archivo", sans-serif; letter-spacing: 0.08em; color: rgb(179, 20, 28); background: rgb(253, 232, 232); padding: 7px 11px; border-radius: 999px; white-space: nowrap;'>INTENT · INDIKASI FRAUD</div><div aria-hidden="true" class="chat-typing" data-c="TB" style="flex: 0 0 auto; align-self: flex-start; background: rgb(255, 255, 255); border-radius: 18px 18px 18px 5px; padding: 13px 15px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px; display: flex; gap: 5px; align-items: center; overflow: hidden;"><i></i><i></i><i></i></div><div data-c="B3" style='flex: 0 0 auto; align-self: flex-start; max-width: 84%; background: rgb(255, 255, 255); color: rgb(28, 31, 36); font: 500 15.5px / 1.45 "Archivo", sans-serif; padding: 12px 15px; border-radius: 18px 18px 18px 5px; box-shadow: rgba(0, 0, 0, 0.06) 0px 1px 3px;'>Akun kamu sudah kami amankan sementara. Kami hubungkan ke agen sekarang.</div><div data-c="B4" style="flex: 0 0 auto; background: rgb(255, 255, 255); border: 1.5px solid rgb(244, 181, 183); border-radius: 14px; padding: 14px 15px;"><div style='font: 700 12px / 1 "Archivo", sans-serif; letter-spacing: 0.06em; color: rgb(179, 20, 28);'>DITERUSKAN KE AGEN</div><div style='font: 500 14px / 1.5 "Archivo", sans-serif; color: rgb(55, 65, 81); margin-top: 7px;'>Riwayat chat, transaksi terkait dan status akun ikut terkirim.</div></div><div data-c="B5" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;"><span style='flex: 0 0 auto; width: 38px; height: 38px; border-radius: 50%; background: rgb(253, 232, 232); color: rgb(179, 20, 28); display: flex; align-items: center; justify-content: center; font: 800 13px / 1 "Archivo", sans-serif;'>RN</span><span style='font: 600 14px / 1.35 "Archivo", sans-serif; color: rgb(28, 31, 36);'>Rina, agen keamanan<br/><span style="font-weight: 500; color: rgb(107, 114, 128);">bergabung ke chat</span></span></div></div></div></div></div></div></div>
 </div>
@@ -1858,7 +1841,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 </div>
 </div><div class="mk-block"><!-- Komunal: one design system for three orgs. Before, Product, Engineering and Marketing each shipped the same offer in
      their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
-     Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
+     The library is one slim row (header and token groups on a line) under the three surfaces (owner: execute the trims from the infographic review; the connectors still run up from its top edge). Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
      plays the library publishing to each surface once and holds it; it replays only after the board has left the screen and come back. Reduced motion keeps the "after" state.
      The "before" differences are deliberately close (shades of one blue, one sans at different widths and weights,
      small radius differences): the drift was subtle, which is why it went unnoticed. -->
@@ -1875,7 +1858,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
 .kds-head span:first-child { color: var(--kds-lime); }
 
-.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 34px; font-family: Archivo, system-ui, sans-serif; color: var(--kds-ink); }
+.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 22px; font-family: Archivo, system-ui, sans-serif; color: var(--kds-ink); }
 .kds-status { display: flex; align-items: center; gap: 10px; font: 500 12px/1.3 'IBM Plex Mono', monospace; color: var(--kds-ink-2); }
 .kds-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--kds-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); transition: background-color .3s, box-shadow .3s; }
 .kds-wrap.before .kds-status i { background: var(--kds-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
@@ -1890,11 +1873,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
 .kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
-.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--kds-line); }
+.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
 .kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-stage { flex: 1; display: grid; place-items: center; padding: 18px 14px; background: #202126; color: var(--kds-ink); min-height: 178px; }
-.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--kds-line); }
+.kds-stage { flex: 1; display: grid; place-items: center; padding: 10px 14px; background: #202126; color: var(--kds-ink); min-height: 156px; }
+.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-top: 1px solid var(--kds-line); }
 .kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
 .kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
 .kds-surf:not(.joined) .kds-tok { color: var(--kds-amber); background: rgba(253, 176, 34, .1); }
@@ -1920,19 +1903,19 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
 
 /* the library: one source of tokens and components */
-.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px 16px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 10px 14px; display: flex; align-items: center; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
 .kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
-.kds-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.kds-lh { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
 .kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
 .kds-lh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-groups { margin-top: 14px; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 12px; }
-.kds-g { padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
-.kds-g > small { display: block; margin-bottom: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
+.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 10px; }
+.kds-g { padding: 7px 10px 8px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-g > small { display: block; margin-bottom: 5px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
 .kds-sw { display: flex; gap: 5px; }
-.kds-sw i { flex: 1; height: 26px; border-radius: 6px; background: var(--c); }
+.kds-sw i { flex: 1; height: 20px; border-radius: 6px; background: var(--c); }
 .kds-type { display: flex; align-items: baseline; gap: 10px; font-family: Archivo, sans-serif; font-weight: 700; color: var(--kds-ink); }
 .kds-rad { display: flex; gap: 8px; align-items: center; }
-.kds-rad i { width: 24px; height: 24px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
+.kds-rad i { width: 20px; height: 20px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
 .kds-comp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .kds-comp span { padding: 6px 10px; border-radius: var(--ds-btn-r); font: 600 11px/1 Archivo, sans-serif; }
 .kds-comp .p { background: var(--ds-primary); color: #fff; }
@@ -1941,10 +1924,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 
 @media (max-width: 899px) {
   .kds-surfaces, .kds-groups { grid-template-columns: minmax(0, 1fr); }
+  .kds-lib { flex-direction: column; align-items: stretch; }
+  .kds-lh { max-width: none; }
+  .kds-groups { flex: none; }
   .kds-edges { display: none; }
   .kds-board { gap: 20px; }
   /* each stage keeps room for its taller look (before or after), so nothing below moves when the fonts swap */
-  .kds-stage { min-height: 170px; }
+  .kds-stage { min-height: 160px; }
   }
 @media (prefers-reduced-motion: reduce) { .kds-wrap *, .kds-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
@@ -1973,7 +1959,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <div class="kds-lh"><b>Komunal DS</b><small>one library for design, code and the website</small></div>
 <div class="kds-groups">
 <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#d0d5dd"></i></div></div>
-<div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:26px">Aa</span><span style="font-size:18px">Aa</span><span style="font-size:13px">Aa</span></div></div>
+<div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:22px">Aa</span><span style="font-size:16px">Aa</span><span style="font-size:12px">Aa</span></div></div>
 <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><i style="border-top-right-radius:4px"></i><i style="border-top-right-radius:10px"></i><i style="border-top-right-radius:16px"></i></div></div>
 <div class="kds-g"><small>BUTTON</small><div class="kds-comp"><span class="p">Primary</span></div></div>
 </div>
@@ -2146,7 +2132,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
      requests any day, by chat or DM, so asks landed mid-sprint and the design backlog was scattered. After, Denny defined
      what a sprint is for Marketing, Product and Engineering: one two-week timeline, one request form (ClickUp), one
      cut-off before planning, and planning, review and retro shared by all three, so requests, execution and delivery
-     run in sync. Results are qualitative on purpose (no metrics). Markup is the final state of both lanes, so the page is
+     run in sync. Results are qualitative on purpose (no metrics), carried by the caption (the opening paragraph and the three result tiles were folded into it, owner: execute the trims from the infographic review). Markup is the final state of both lanes, so the page is
      complete without JavaScript; the script plays "before" then "after" once and holds the result, so there is time to
      read it; it plays again only after the board has left the screen and come back. Reduced motion keeps the final state. Timeline is illustrative. -->
 <div class="kss-wrap">
@@ -2160,7 +2146,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kss-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .kss-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
 .kss-head span:first-child { color: var(--kss-lime); }
-.kss-ctx { margin: 0 0 18px; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
 .kss-board { border-radius: 14px; background: var(--kss-panel); box-shadow: 0 0 0 1px var(--kss-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: Archivo, system-ui, sans-serif; color: var(--kss-ink); }
 .kss-lane { border-radius: 12px; padding: 14px 14px 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kss-line); min-width: 0; }
@@ -2206,13 +2191,6 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kss-cer span::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--kss-ink-2); vertical-align: 1px; }
 .kss-note { grid-column: 2 / -1; font: 500 11px/1.4 'IBM Plex Mono', monospace; color: var(--kss-ink-3); }
 
-/* what it changed */
-.kss-res { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-radius: 12px; background: var(--kss-node); box-shadow: 0 0 0 1px var(--kss-line); }
-.kss-r { padding: 14px 16px; min-width: 0; }
-.kss-r + .kss-r { border-left: 1px solid var(--kss-line); }
-.kss-r b { display: flex; align-items: center; gap: 8px; font: 600 15px/1.3 Archivo, sans-serif; color: var(--kss-ink); }
-.kss-r b::before { content: ''; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--kss-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
-.kss-r p { margin: 6px 0 0 16px; font: 400 13px/1.5 Archivo, sans-serif; color: var(--kss-ink-2); }
 .kss-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
 @container (max-width: 640px) {
@@ -2220,17 +2198,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   .kss-dept { font-size: 12px; }
   .kss-days span:not(.wk) { visibility: hidden; }
   .kss-ch { padding: 3px 4px; }
-  .kss-res { grid-template-columns: 1fr; }
   .kss-th { font-size: 11px; letter-spacing: .04em; }
   .kss-cer { grid-column: 1 / -1; height: auto; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 4px; }
   .kss-cer span { position: static; }
   .kss-cutnote { grid-column: 1 / -1 !important; }
-  .kss-r + .kss-r { border-left: 0; border-top: 1px solid var(--kss-line); }
 }
 @media (prefers-reduced-motion: reduce) { .kss-wrap * { transition: none !important; animation: none !important; } }
 </style>
 <div class="kss-head"><span>SPRINT SYNC · MARKETING, PRODUCT, ENGINEERING</span><span>TWO-WEEK SPRINTS · ILLUSTRATIVE</span></div>
-<p class="kss-ctx">Only Engineering ran sprints. Marketing and Product took feature requests any day, by chat or DM, so asks landed mid-sprint, the design backlog was scattered, and product managers and owners were swamped the same way. I defined what a sprint means for all three departments: one two-week timeline, one request form, one cut-off before planning, and the same ceremonies.</p>
 <div class="kss-board">
 <div class="kss-lane kss-bad" data-lane="before">
 <div class="kss-lh"><span class="kss-tag">BEFORE</span><b>Only Engineering runs sprints</b><span class="kss-st"><i></i>Requests land mid-sprint</span></div>
@@ -2280,13 +2255,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <span></span>
 </div>
 </div>
-<div class="kss-res">
-<div class="kss-r"><b>Fewer mid-sprint requests</b><p>Asks wait for the next sprint instead of breaking the current one.</p></div>
-<div class="kss-r"><b>Requests get prioritised</b><p>With a cut-off and a two-week wait, each department ranks what matters most.</p></div>
-<div class="kss-r"><b>Healthier three-way talk</b><p>Marketing, Product and Engineering plan, review and retro together.</p></div>
 </div>
-</div>
-<p class="kss-cap">One standard request form in ClickUp, a cut-off before sprint planning, and the same two-week sprint with planning, review and retro for all three departments, so everyone shares the same expectations on quality and delivery time.</p>
+<p class="kss-cap">I defined what a sprint means for all three departments: one standard request form in ClickUp, a cut-off before sprint planning, and the same two-week sprint with planning, review and retro. Asks now wait for the next sprint instead of breaking the current one, each department ranks what matters most, and Marketing, Product and Engineering talk in the same rhythm.</p>
 <script>
 (function () {
   var root = document.currentScript.parentNode, board = root.querySelector('.kss-board');
@@ -2302,8 +2272,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     running = true; armed = false; timers.forEach(clearTimeout); timers = [];
     // reset to the start of both lanes
     var hits = q(before, '.kss-hit'), bDone = q(before, '.kss-done'), queue = q(after, '.kss-q'), cut = after.querySelector('.kss-cut');
-    var bars = q(after, '.kss-bar b'), aDone = q(after, '.kss-done'), cer = q(after, '.kss-cer span'), res = q(board, '.kss-r');
-    hide(hits); hide(bDone); hide(queue); hide(aDone); hide(cer); hide(res); cut.style.opacity = .15;
+    var bars = q(after, '.kss-bar b'), aDone = q(after, '.kss-done'), cer = q(after, '.kss-cer span');
+    hide(hits); hide(bDone); hide(queue); hide(aDone); hide(cer); cut.style.opacity = .15;
     bars.forEach(function (b) { b.style.transform = 'scaleX(0)'; });
     // before: asks land at random, some on Engineering's running sprint
     hits.slice().sort(function () { return Math.random() - .5; }).forEach(function (h, i) { at(300 + i * 260, function () { pop(h); }); });
@@ -2316,8 +2286,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     at(t + 200, function () { cer[0].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); });
     at(t + 300, function () { bars.forEach(function (b) { b.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: 1800, easing: 'linear', fill: 'forwards' }).onfinish = function () { b.style.transform = ''; }; }); });
     at(t + 2150, function () { cer[1].animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, fill: 'forwards' }); aDone.forEach(function (d) { pop(d); }); });
-    at(t + 2700, function () { res.forEach(function (r, i) { r.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: i * 140, easing: E, fill: 'both' }); }); });
-    at(t + 2700 + 600, function () { [].concat(hits, bDone, queue, aDone, cer, res).forEach(function (e) { e.style.opacity = ''; e.getAnimations().forEach(function (a) { a.cancel(); }); }); running = false; });
+    at(t + 2150 + 600, function () { [].concat(hits, bDone, queue, aDone, cer).forEach(function (e) { e.style.opacity = ''; e.getAnimations().forEach(function (a) { a.cancel(); }); }); running = false; });
   }
   new IntersectionObserver(function (es) {
     // play once per visit: hold the result while on screen, re-arm only once the board is fully off screen
@@ -2332,7 +2301,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
      account never upgraded to a higher tier), the funds never came and the user was locked out of new deposits until
      customer service released them: the funnel's drop-off. After, routing checks amount, source bank and time against
      every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
-     Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
+     The placement card is shown once above the two lanes (owner: execute the trims from the infographic review); the lanes' own copies of it are hidden. Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
      plays "before" then "after" once and holds it (time to read); it replays only after the board has left the screen and come back. Reduced motion keeps the final state.
      Limits are illustrative, from published bank, BI-FAST and Xendit rules; they differ by bank and change over time. -->
 <div class="kpr-wrap">
@@ -2360,7 +2329,11 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kpr-lane.good .kpr-st i { background: var(--kpr-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
 
 /* one flow: node, link, node, link … ; both lanes share the columns so the steps line up */
-.kpr-flow { display: grid; grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1.45fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
+.kpr-flow { display: grid; grid-template-columns: minmax(0, 2.1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
+/* the placement is the same in both lanes, so it is drawn once, above them (.kpr-shared); the lanes' own copies stay in the markup for the script's step order but are not shown */
+.kpr-flow > :nth-child(-n+2) { display: none; }
+.kpr-node.kpr-shared { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; padding: 10px 14px; }
+.kpr-node.kpr-shared b { font-size: 15px; }
 .kpr-node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 11px 12px; border-radius: 10px; background: var(--kpr-node); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; transition: opacity .35s, box-shadow .35s; }
 .kpr-node small { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kpr-ink-3); }
 .kpr-node b { display: flex; align-items: center; gap: 7px; font: 600 14px/1.25 Archivo, sans-serif; }
@@ -2399,6 +2372,13 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kpr-rail[data-v="ok"] b, .kpr-rail[data-v="ok"] i { color: var(--kpr-lime); }
 .kpr-rail[data-v="ok"] span { color: var(--kpr-ink-2); }
 .kpr-rail[data-v=""] i { color: transparent; }
+
+/* wide: the route check is the widest step, so each rail reads on one line (name, then its limit) */
+@container (min-width: 1061px) {
+  .kpr-rail { grid-template-columns: minmax(0, auto) minmax(0, 1fr) 14px; align-items: baseline; column-gap: 12px; padding: 5px 8px; }
+  .kpr-rail span { grid-column: 2; grid-row: 1; }
+  .kpr-rail i { grid-column: 3; grid-row: 1; align-self: baseline; }
+}
 
 /* links between steps: a line, and a packet that runs along it */
 .kpr-link { position: relative; align-self: center; height: 2px; margin: 0 4px; }
@@ -2443,11 +2423,10 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 @container (max-width: 620px) {
   .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 10px; }
   .kpr-lane { padding: 10px; }
-  /* compact: tighter steps, the after lane skips the placement it shares with before, tags sit in the corner */
+  /* compact: tighter steps, tags sit in the corner */
   .kpr-lh { margin-bottom: 8px; gap: 6px 8px; }
   .kpr-node { padding: 8px 10px; gap: 2px; }
   .kpr-node:not([data-k]) .m { display: none; }
-  .kpr-lane.after .kpr-flow > :nth-child(-n+2) { display: none; }
   .kpr-link { height: 12px; margin: 2px 0; }
   .kpr-out { position: absolute; top: 8px; right: 10px; margin: 0; }
   .kpr-chip { margin-top: 4px; }
@@ -2463,6 +2442,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 <div class="kpr-head"><span>PLACEMENT ROUTING · BEFORE AND AFTER</span><span>ILLUSTRATIVE</span></div>
 <p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked the amount and payment method, then waited for the money. When the sender's transfer limit blocked it (a low bank default, a forgotten cap or a basic-tier account), the funds never came, and the user was locked out until customer service stepped in. The revamp checks every rail first (VA, BI-FAST, RTGS) and locks nothing until the funds land.</p>
 <div aria-label="Placing Rp750,000,000 from a Mandiri account at 10:15. Before: checkout locked the placement onto a virtual account, the bank app rejected the transfer for being over the account's transfer limit (a low default, a forgotten cap or a basic-tier account), the listener waited for funds that never arrived, and the user was locked out of new deposits until customer service released them. After: a route check first flags that Rp750M is above the Rp500M where most accounts hit a cap, then compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day and BI-FAST at Rp250M a transfer, so it picks RTGS (Rp100M and up, before 15:00), shows one clear step with nothing locked and a prompt to confirm the account limit, the funds arrive the same day and the deposit is active." class="kpr-board" role="img">
+<div class="kpr-node kpr-shared"><small>PLACEMENT</small><b>Rp750,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 10:15</span></div>
 <div class="kpr-lane before bad" data-lane="before">
 <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
 <div class="kpr-flow">
@@ -2516,7 +2496,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     return { el: l, nodes: [].slice.call(l.querySelectorAll('.kpr-node')), links: [].slice.call(l.querySelectorAll('.kpr-link')), st: l.querySelector('.kpr-st-t'),
       k: function (k) { return l.querySelector('[data-k="' + k + '"]'); } };
   });
-  var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail'));
+  var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail')), P = wrap.querySelector('.kpr-shared');
   var timers = [], done = false, pending = false, ran = false, visible = false;
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function txt(scope, sel, s) { scope.querySelector(sel).textContent = s; }
@@ -2528,6 +2508,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
       L.nodes.forEach(function (n) { n.classList.add('idle'); n.classList.remove('fail', 'win', 'wait'); });
       L.links.forEach(function (k) { k.classList.remove('on', 'cut', 'run'); });
     });
+    P.classList.add('idle');
     rails.forEach(function (r) { r.setAttribute('data-v', ''); });
     txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp750M');
     txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Waited 0h 00m');
@@ -2540,7 +2521,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     timers.forEach(clearTimeout); timers = []; ran = true;
     var t = 500, n = B.nodes, l = B.links;   // each lane's own n and l: the timers fire after both are set up
     // before: placement, locked onto a Permata VA, the bank app refuses, the listener waits on money that never comes
-    later(function () { on(n[0]); B.st.textContent = 'Checking out…'; }, t);
+    later(function () { on(n[0]); on(P); B.st.textContent = 'Checking out…'; }, t);
     later(function () { run(l[0]); }, t += 450);
     later(function () { on(n[1]); B.st.textContent = 'Locked in at checkout'; }, t += 450);
     later(function () { run(l[1]); }, t += 600);

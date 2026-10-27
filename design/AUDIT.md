@@ -897,11 +897,16 @@ An options review ranked every drawer infographic by height against what it says
 The LinkAja OPEX chart is now a one-line strip (`linkaja-opex-chart.html`): the -80%, one lime line from month 1 (index 100)
 to month 12 (about 20), both ends labelled, 109px for the board (the block was 342px); it still draws in once on view. Only the
 known facts are drawn: the months between have no values. The Komunal tooling migration is a one-row band
-(`komunal-tooling-migration.html`): the same two cards, marks and colours on one row, 93px for the board (175px before). Still
-open from the review, not yet decided: Sprint sync (800px), Placement routing (914px, the placement card is drawn twice),
-One design system (642px, the height is its animation) and the ~72% / ~28% bar repeated in intent routing. Content mismatches
-flagged and not changed: Key numbers says OPEX -75% where the headline, chart and "What I did" say -80%, and ~68% automated
-where the support model says ~72%.
+(`komunal-tooling-migration.html`): the same two cards, marks and colours on one row, 93px for the board (175px before).
+The rest of the review's trims were then done (block heights at 1440px, before to after): Sprint sync 800 to 589 (the opening
+paragraph and the three result tiles are folded into the caption); One design system 642 to 523 (tighter cards, and the library
+is one slim row under the three surfaces rather than beside them, because its connectors run up from its top edge to each
+card); Placement routing 914 to 887 (the placement card is drawn once, above the two lanes, and the route check is wider with
+one line per rail; it is still tall because that step carries the content, and the "what it moved" tiles repeat the funnel
+below, which is the next cut if it should shrink further); Intent routing block unchanged in height (the phones set it) but
+the ~72% / ~28% bar is gone, so the split is drawn once, in the support model. Content: the figures were checked and agree
+(Key numbers, headline, chart and the support model say -80%, 70M+ and ~72%); an earlier note about -75% / 66M+ / ~68% came
+from reading Key numbers while its count-up was still running, and was wrong.
 
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.

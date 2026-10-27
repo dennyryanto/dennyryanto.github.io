@@ -1,6 +1,6 @@
 <!-- Komunal: one design system for three orgs. Before, Product, Engineering and Marketing each shipped the same offer in
      their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
-     Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
+     The library is one slim row (header and token groups on a line) under the three surfaces (owner: execute the trims from the infographic review; the connectors still run up from its top edge). Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
      plays the library publishing to each surface once and holds it; it replays only after the board has left the screen and come back. Reduced motion keeps the "after" state.
      The "before" differences are deliberately close (shades of one blue, one sans at different widths and weights,
      small radius differences): the drift was subtle, which is why it went unnoticed. -->
@@ -17,7 +17,7 @@
 .kds-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
 .kds-head span:first-child { color: var(--kds-lime); }
 
-.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 34px; font-family: Archivo, system-ui, sans-serif; color: var(--kds-ink); }
+.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 22px; font-family: Archivo, system-ui, sans-serif; color: var(--kds-ink); }
 .kds-status { display: flex; align-items: center; gap: 10px; font: 500 12px/1.3 'IBM Plex Mono', monospace; color: var(--kds-ink-2); }
 .kds-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--kds-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); transition: background-color .3s, box-shadow .3s; }
 .kds-wrap.before .kds-status i { background: var(--kds-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
@@ -32,11 +32,11 @@
 .kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
 .kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
-.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--kds-line); }
+.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
 .kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-stage { flex: 1; display: grid; place-items: center; padding: 18px 14px; background: #202126; color: var(--kds-ink); min-height: 178px; }
-.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; border-top: 1px solid var(--kds-line); }
+.kds-stage { flex: 1; display: grid; place-items: center; padding: 10px 14px; background: #202126; color: var(--kds-ink); min-height: 156px; }
+.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-top: 1px solid var(--kds-line); }
 .kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
 .kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
 .kds-surf:not(.joined) .kds-tok { color: var(--kds-amber); background: rgba(253, 176, 34, .1); }
@@ -62,19 +62,19 @@
 .kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
 
 /* the library: one source of tokens and components */
-.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px 16px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 10px 14px; display: flex; align-items: center; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
 .kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
-.kds-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.kds-lh { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
 .kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
 .kds-lh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-groups { margin-top: 14px; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 12px; }
-.kds-g { padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
-.kds-g > small { display: block; margin-bottom: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
+.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 10px; }
+.kds-g { padding: 7px 10px 8px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-g > small { display: block; margin-bottom: 5px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
 .kds-sw { display: flex; gap: 5px; }
-.kds-sw i { flex: 1; height: 26px; border-radius: 6px; background: var(--c); }
+.kds-sw i { flex: 1; height: 20px; border-radius: 6px; background: var(--c); }
 .kds-type { display: flex; align-items: baseline; gap: 10px; font-family: Archivo, sans-serif; font-weight: 700; color: var(--kds-ink); }
 .kds-rad { display: flex; gap: 8px; align-items: center; }
-.kds-rad i { width: 24px; height: 24px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
+.kds-rad i { width: 20px; height: 20px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
 .kds-comp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .kds-comp span { padding: 6px 10px; border-radius: var(--ds-btn-r); font: 600 11px/1 Archivo, sans-serif; }
 .kds-comp .p { background: var(--ds-primary); color: #fff; }
@@ -83,10 +83,13 @@
 
 @media (max-width: 899px) {
   .kds-surfaces, .kds-groups { grid-template-columns: minmax(0, 1fr); }
+  .kds-lib { flex-direction: column; align-items: stretch; }
+  .kds-lh { max-width: none; }
+  .kds-groups { flex: none; }
   .kds-edges { display: none; }
   .kds-board { gap: 20px; }
   /* each stage keeps room for its taller look (before or after), so nothing below moves when the fonts swap */
-  .kds-stage { min-height: 170px; }
+  .kds-stage { min-height: 160px; }
   }
 @media (prefers-reduced-motion: reduce) { .kds-wrap *, .kds-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
@@ -119,7 +122,7 @@
     <div class="kds-lh"><b>Komunal DS</b><small>one library for design, code and the website</small></div>
     <div class="kds-groups">
       <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#d0d5dd"></i></div></div>
-      <div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:26px">Aa</span><span style="font-size:18px">Aa</span><span style="font-size:13px">Aa</span></div></div>
+      <div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:22px">Aa</span><span style="font-size:16px">Aa</span><span style="font-size:12px">Aa</span></div></div>
       <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><i style="border-top-right-radius:4px"></i><i style="border-top-right-radius:10px"></i><i style="border-top-right-radius:16px"></i></div></div>
       <div class="kds-g"><small>BUTTON</small><div class="kds-comp"><span class="p">Primary</span></div></div>
     </div>
