@@ -505,7 +505,7 @@ def _pattern():
 # corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
 ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
+    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>The home-screen revamp I co-led for 70M+ users. At the time the goal was to refresh the design and unify the visual style, introducing updated icons and illustrations for a better user experience.</p><p>Dashboards and research drove it, and it improved the information architecture, clarity and engagement. It is still the design in the app today.</p></div>'
     '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
@@ -724,9 +724,18 @@ closeups_html = str(lui[2].find_all(recursive=False)[1])
 QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + str(lui_intro) + '</div>'
 
 
+# The lab has its own accent, instrument cyan (owner picked it from the lab colour options): lime stays for outcomes on the case
+# studies, and the lab has none to report. It is applied to the lab case's finished markup, and the canvases carry it as data-accent.
+LAB_OKLCH, LAB_HEX = '0.84 0.12 215', '#5bdefb'
+
+
+def lab_accent(h):
+    return re.sub(r'oklch\(0\.9[0-9]* 0\.2[0-9]* 122', 'oklch(' + LAB_OKLCH, h)
+
+
 def figure(c):
     if 'pair' not in c:
-        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear data-accent="' + LAB_HEX + '"' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
     # two stories in one section: side by side in the wide frame, stacked on phones
     cells = ''
     for p in c['pair']:
@@ -757,12 +766,13 @@ def case_section(c):
           '</div></div></div>')
     tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
     lab = c['id'] in SPEC
-    return (('' if c['id'] != 'lab' else LAB_BAND) +
+    out = (('' if c['id'] != 'lab' else LAB_BAND) +
             '<section id="' + c['id'] + '" class="mk-case' + (' mk-lab' if lab else '') + '" style="' + ('' if c['id'] == 'lab' else 'border-top:1px solid rgba(242,239,232,.14)') + '">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">' + meta
             + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
                if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
             + dr + '</div></section>')
+    return lab_accent(out) if lab else out
 
 
 more_html = ''.join(case_section(c) for c in CASES)
