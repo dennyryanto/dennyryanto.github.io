@@ -833,6 +833,84 @@ everything, so "use efficient cache lifetimes" stays flagged. File names are
 content hashes, so a CDN with long caching could be put in front later.
 Minifying `stack.js` would save about 4KB, not worth a build dependency.
 
+## Impeccable audit and polish round (2026-10-27)
+
+An audit of the built site with the Impeccable skill (15/20, no blockers), then a design critique (17/24) and a
+polish pass. Tracker: https://claude.ai/artifact/9gDuAXrcAVR92KQuDSsSXu. Preview: Portfolio Hi-Fi v2,
+https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
+
+**Audit fixes**
+
+- **Stacks: blank until their turn is accepted.** A faint ghost of the finished slabs, and a soft lime glow under each
+  stack, were tried and removed (owner: "the build should appear one step at a time, do not show the outlines of upcoming
+  build; preserve the original animation sequence"). The build sequence, build-on-arrival and the one-at-a-time queue are
+  exactly as before; a stack stays empty until its turn. With JavaScript off the empty canvases are hidden.
+- **Footnote contrast** (the Komunal routing note, .45 to .6) and a 3px full-strength ring on the profile card. The card
+  always had a ring, on its inner `.ee-in`; the first audit misread it.
+- **Landmarks:** `header`, labelled primary nav, `main` around hero to contact, `footer`, a skip link, and real headings
+  for "Let's talk" and the drawer titles (`role="heading"`).
+- **Touch targets:** the small mono links get 44px hit areas through `::after`; the Close controls are 44px tall.
+- **Escape** closes the case study the focus is in and hands focus back to its toggle.
+- **Type in rem** for the shell CSS and the page's own inline text (`rem()` in `build_hifi.py`). Product mock-ups and the
+  captured site CSS keep px, because they scale as drawings. About 327 px declarations remain.
+
+**Polish**
+
+- **Stacks** are larger (frame padding `[0.03, 0.05]`), bleed 40px toward the page edge, and use brighter secondary lines
+  (`line2` #9d9a92) and heavier strokes (`W / 900`). No glow or stage behind them.
+- **Toggle:** 15px label, and the meta line says what is inside (`TEASE` in `build_hifi.py`), in the body face.
+- **Type:** `--fg-2` .78, `--fg-3` .64; small labels 12px; the drawer's "KEY NUMBERS / WHAT I DID" kickers are
+  sentence-case headings (`HEADINGS`); the case header line is the lime number plus the cream name.
+- **Drawers:** 64px between blocks. **Clients:** no tile fills, brighter marks, optical size per logo (`LOGO_SCALE`), and the
+  logos cascade in once when the strip comes into view: the first row from the right, the second from the left, and so on
+  (owner, from a comment on the artifact). Reduced motion and no JavaScript leave them in place.
+- **A lead outcome numeral in each hero was tried and reverted** (owner: "put the metrics inside the case study, respect
+  AUDIT.md"). Heroes stay clean: headline, one line, the stack. The numbers live in the drawer's Key numbers.
+
+**Lab hero**
+
+- A "Lab" band (`LAB_BAND`) introduces the two personal builds ahead of the e-ink case. Its line is new copy, approved by the owner:
+  "Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day."
+- Each lab hero has a spec line (`SPEC`): hardware and design specs only, never outcomes, so the metrics stay inside.
+- A faint workbench grid sits behind both lab cases (`.mk-lab`). Their canvases take `data-clear` and draw on a
+  transparent ground so the grid shows through.
+
+**Drawer stage (one shared panel)**
+
+- The diagrams already shared one board (`design/sections/VIZ-STYLE.md`). The captured mock-ups and photos now sit on the
+  same board, with the same head row (lime title, note on the right): `stage()` and `.mk-board` in `build_hifi.py` and
+  the shell. Covered: Dash table app, captain app and back office, Lumio network and CMS, Chrona product, the two e-ink
+  faces, the shoe tracker (flush) and the cockpit fan (flush, so it runs off the bottom edge) and close-ups.
+- Nothing is boxed twice: the stage replaces the captured frames and captions, and product colours stay inside the screens.
+
+**Background:** the toggle and its Close buttons are gone (owner: "remove this entirely, since it's just a small row").
+Earlier work, capabilities and education are simply always open under the timeline; a drawer with no toggle still gets
+its scroll motion (`hifi_shell.html`). The owner confirmed this is how they want it (they like it as is).
+
+**LinkAja home screen (owner comments: "bring in the current LinkAja app screenshot, especially the home screen"; then
+"this looks nothing like the screens in the routing in chat. the image is low res, recreate if necessary. match the phone
+shells mockup").** A "Home screen · as it ships today" block sits after "What I did" in the LinkAja drawer. A cropped website render was too low-res and did not match the other phones, so the screen is recreated in HTML and CSS as `design/sections/linkaja-home.html`, in the same phone shell as the intent-routing chat and the shipped screens (375x812 canvas, scaled to fit). Owner direction on the next rounds: it should read as a showcase, but the first isometric version with rings, a red wash and glass plates was "too much", and showing two screens with the same contents was redundant. So the block is one phone shot as a true isometric close-up (CSS 3D with no perspective, `rotateX(54deg) rotateZ(-36deg)`, fourteen extrusion layers for the glass edge), bleeding off the bottom-right corner of a flush board with the caption on the left; no supergraphics or gradients, matching the Garmin cockpit glass. The "redrawn" remarks are dropped from the page. The screen's header carries a pale street-scene illustration (kiosk, elevated train, towers, a scooter), drawn as an inline SVG background after the one in the current app, and a headset agent icon, since the redesign introduced updated icons and illustrations. The board behind the phone carries a faint outline pattern of the redesign's icons and small illustrations (a kiosk, a scooter, sparkles), a few per cent white on the dark ground, tiled from an inline SVG (`_pattern()` in `build_hifi.py`) as a straight 4 x 3 lattice of upright motifs laid on the same isometric plane as the phone (`.mk-home-floor`, same `rotateX(54deg) rotateZ(-36deg)`), so its rows run at the phone's angle rather than scattered at random; the owner asked for this after the earlier supergraphics were judged too much, so keep it at this strength. The caption is deliberately short: "Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations." The layout follows the render on linkaja.id (retrieved 2026-10-27); the promo banner art is a placeholder, not LinkAja's. The caption ("Still the home screen I co-led the redesign of: ...") is new
+copy, so check it. To refresh, edit the markup in `linkaja-home.html`.
+
+**Infographic sizing (owner: "this section looks rather large for the information it holds ... let's see some design options").**
+An options review ranked every drawer infographic by height against what it says; the owner took the recommendations.
+The LinkAja OPEX chart is now a one-line strip (`linkaja-opex-chart.html`): the -80%, one lime line from month 1 (index 100)
+to month 12 (about 20), both ends labelled, 109px for the board (the block was 342px); it still draws in once on view. Only the
+known facts are drawn: the months between have no values. The Komunal tooling migration is a one-row band
+(`komunal-tooling-migration.html`): the same two cards, marks and colours on one row, 93px for the board (175px before).
+The rest of the review's trims were then done (block heights at 1440px, before to after): Sprint sync 800 to 589 (the opening
+paragraph and the three result tiles are folded into the caption); One design system 642 to 523 (tighter cards, and the library
+is one slim row under the three surfaces rather than beside them, because its connectors run up from its top edge to each
+card); Placement routing 914 to 887 (the placement card is drawn once, above the two lanes, and the route check is wider with
+one line per rail; it is still tall because that step carries the content, and the "what it moved" tiles repeat the funnel
+below, which is the next cut if it should shrink further); Intent routing block unchanged in height (the phones set it) but
+the ~72% / ~28% bar is gone, so the split is drawn once, in the support model. Content: the figures were checked and agree
+(Key numbers, headline, chart and the support model say -80%, 70M+ and ~72%); an earlier note about -75% / 66M+ / ~68% came
+from reading Key numbers while its count-up was still running, and was wrong.
+
+**Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
+(confirm it is lazy-loaded); no `robots.txt` or Person structured data.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:

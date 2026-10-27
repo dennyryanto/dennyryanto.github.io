@@ -72,6 +72,9 @@ for a in top.find_all('a'):
         a['rel'] = 'noopener'
 for a in top.find_all('a', href='#work'):
     a['href'] = '#linkaja'
+top.find(attrs={'data-r': 'topbar'}).name = 'header'      # the banner landmark
+for n in top.find_all('nav'):
+    n['aria-label'] = 'Primary'
 
 def portable(html):
     # The product screens are drawn at their real size (375px phones, 1024 / 1440px tablets and desktops) and scaled
@@ -209,7 +212,7 @@ card.insert_after(soup("""<style>
   .ee-front > div:first-child { margin-bottom: 14px !important; }
 }
 @media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
-[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 2px oklch(0.9 0.2 122 / .6); border-radius: 18px; }
+[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 3px oklch(0.9 0.2 122); border-radius: 18px; }
 .ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
 .ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
@@ -317,7 +320,8 @@ clients = soup(read('clients'))
 # Rainbow's raster logo carried a tagline and a filled box (which the white filter turned into a solid block): use the redrawn vector
 RAINBOW_SVG = open(os.path.join(HERE, '..', 'sections', 'logo-rainbow.svg'), encoding='utf-8').read()
 clients.find('img', alt='Rainbow logo')['src'] = 'data:image/svg+xml;base64,' + base64.b64encode(RAINBOW_SVG.encode('utf-8')).decode('ascii')
-client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
+LOGO_SCALE = {'MAP logo': 1.15, 'Jasamarga logo': 1.6, 'Summarecon logo': 1.35, 'Galeries Lafayette logo': 1.2, 'Genki Sushi logo': 1.5}
+client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s" style="--s:%s"></div>' % (im['src'], im.get('alt', ''), LOGO_SCALE.get(im.get('alt', ''), 1)) for im in clients.find_all('img'))
 # the white rabbit that roams the page (design/sections/egg-matrix.html places it at <!--RABBIT--> and moves it); 2px pixels
 RABBIT_ROWS = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..']
 RABBIT = ('<button type="button" class="mx-rabbit" tabindex="-1" aria-label="A white rabbit. Follow it.">'
@@ -401,6 +405,28 @@ def did_html(items):
 # LinkAja's bullets come from the live site's markup; keep only their text so they render like every other case
 la_did = [row.find_all('span')[-1].decode_contents() for row in bullets.find_all('div', recursive=False)]
 
+# ---------- one stage for every mock-up and photo in a drawer ----------
+# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, a hairline ring, a long shadow).
+# The captured product screens and photos get the same: a head row (lime title, a note on the right), the board, and nothing
+# framed twice. Product colours stay inside the screens.
+def drop_style(el, *props):
+    st = el.get('style', '')
+    for p in props:
+        st = re.sub(r'(^|;)\s*' + re.escape(p) + r'\s*:[^;]*', r'\1', st)
+    el['style'] = st.strip('; ')
+
+
+def stage(inner, head=None, intro='', flush=False):
+    h = ''
+    if head:
+        h = '<div class="mk-stagehead"><span>%s</span>%s</div>' % (head[0], ('<span>%s</span>' % head[1]) if len(head) > 1 and head[1] else '')
+    return '<div class="mk-stage">' + h + intro + '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div></div>'
+
+
+def spans(row):
+    return [s.get_text(strip=True) for s in row.find_all('span')]
+
+
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
           '<span class="mk-t-meta">%%READ%%</span>'
@@ -435,9 +461,58 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
               '</div></div><p class="ksf-cap">As shipped: activating, checking the limit, following an application and finding answers all happen in the app, '
               'so none of them needs an agent.</p>')
 
+
+# LinkAja's home screen as it ships today, redrawn in the same phone shell as the shipped screens and the routing chat
+# (design/sections/linkaja-home.html; layout from the current app, the render on linkaja.id retrieved 2026-10-27)
+# The board behind the phone carries a faint pattern of the redesign's icons and small illustrations (owner: "add icons and
+# illustrations on the background to emphasize visual refresh ... dark look, subtle patterns"): outline-only, a few per cent white.
+def _pattern():
+    import urllib.parse
+    ic = {
+        'receipt': '<path d="M5 3.5h10.5v15L13.7 17l-1.8 1.5L10 17l-1.8 1.5L6.5 17 5 18.5z"/><path d="M8.5 8h4.5M8.5 11.5h3"/>',
+        'phone': '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10 6h4"/>',
+        'ticket': '<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M5 9h14"/><circle cx="12" cy="14.5" r="2.6"/>',
+        'grid': '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>',
+        'bolt': '<path d="M13 3 6 13.5h5L10 21l8-11h-5z"/>',
+        'bus': '<rect x="4" y="4" width="16" height="13" rx="3"/><path d="M4 11h16M8 20v-3M16 20v-3"/><circle cx="8" cy="14" r=".8"/><circle cx="16" cy="14" r=".8"/>',
+        'pad': '<rect x="3" y="8" width="18" height="9" rx="4.5"/><path d="M8 10.5v4M6 12.5h4"/><circle cx="15.5" cy="12" r=".8"/><circle cx="17.5" cy="13.5" r=".8"/>',
+        'shield': '<path d="M12 3 5 6v5.5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9V6z"/><path d="m12 9 1 2 2.2.3-1.6 1.5.4 2.2L12 14l-2 1 .4-2.2L8.8 11.3 11 11z"/>',
+        'heart': '<path d="M12 20.5s-7-4.4-9.2-8.8A5.1 5.1 0 0 1 12 6.6a5.1 5.1 0 0 1 9.2 5.1C19 16.1 12 20.5 12 20.5z"/>',
+        'coin': '<circle cx="12" cy="12" r="8"/><path d="M10 8v8h4.5"/>',
+        'wallet': '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/>',
+        'qr': '<rect x="4" y="4" width="6" height="6" rx="1.2"/><rect x="14" y="4" width="6" height="6" rx="1.2"/><rect x="4" y="14" width="6" height="6" rx="1.2"/><path d="M14 14h2.5v2.5M20 14v6h-6"/>',
+    }
+    # a straight 4 x 3 lattice, one motif per 80-unit cell, all upright: the angle comes from laying the whole tile on the same
+    # isometric plane as the phone (.mk-home-floor), not from tilting individual icons
+    order = ['receipt', 'bolt', 'phone', 'pad', 'shield', 'KIOSK', 'coin', 'bus', 'wallet', 'SCOOTER', 'qr', 'grid']
+    out = ''
+    for i, k in enumerate(order):
+        cx, cy = 40 + (i % 4) * 80, 40 + (i // 4) * 80
+        if k == 'KIOSK':
+            out += '<g transform="translate(%d %d) scale(.85)"><path d="M2 14 7 5h26l5 9z"/><path d="M5 14v22M35 14v22M5 26h30"/><path d="M12 5v9M20 5v9M28 5v9"/></g>' % (cx - 17, cy - 15)
+        elif k == 'SCOOTER':
+            out += '<g transform="translate(%d %d) scale(.8)"><circle cx="9" cy="22" r="7"/><circle cx="43" cy="22" r="7"/><path d="M9 22h11l7-14h8M30 8l9 14M20 22l4-9h8"/></g>' % (cx - 21, cy - 14)
+        else:
+            out += '<g transform="translate(%d %d) scale(1.35)">%s</g>' % (cx - 16, cy - 16, ic[k])
+    # sparkles on the lattice crossings
+    out += ''.join('<path d="M%d %d l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z"/>' % (x - 1, y - 4.5) for x, y in ((80, 80), (240, 80), (160, 160), (320, 160), (80, 240), (240, 240)))
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240" fill="none" stroke="rgba(255,255,255,.075)" '
+           'stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' + out + '</svg>')
+    return "url('data:image/svg+xml," + urllib.parse.quote(svg, safe="/:=,;() ") + "')"
+
+
+# One phone, shot isometrically and close up, bleeding off the corner of a flush board (owner: "pick one ... can bleed to the
+# corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
+ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
+LA_HOME = stage(
+    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
+    '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
+    ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
+
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
+          '<div class="mk-block">' + LA_HOME + '</div>'
           # the diagrams live in design/sections/ so they share one design language (design/sections/VIZ-STYLE.md)
           '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
@@ -462,11 +537,41 @@ def about_html(cid):
     return ''.join('<p class="mk-about"><b>' + n + '</b> is ' + t + '</p>' for n, t in ABOUT_CO.get(cid, []))
 
 
+def meta_html(n, role):
+    # "01 / LinkAja": the number in lime, the name in cream; the role and dates on the right, readable rather than whispered
+    num, name = n.split(' / ', 1)
+    return ('<div class="mk-meta">'
+            '<div class="mk-meta-l"><span class="mk-meta-n">%s</span><span class="mk-meta-co">%s</span></div>'
+            '<div class="mk-meta-r">%s</div></div>' % (num, name, role))
+
+
+# what is inside each case study, said on its toggle
+TEASE = {'linkaja': 'Home screen today, OPEX chart, support model, intent routing, shipped screens',
+         'komunal': 'Transformation map, design system, sprint, routing, funnel, shipped flow',
+         'board': 'Dash ordering and back office, Lumio signage, governance',
+         'ai': 'Decision desk, Chrona product, habit loop, engine',
+         'lab': 'Faces, architecture, deployment, shoe tracker',
+         'lab-ui': 'Four screens, the question, close-ups'}
+
+
+# what the two lab builds are made of, one line under the description: specs, not outcomes (the numbers stay in the drawer)
+SPEC = {'lab': ['7.5″ e-ink panel', 'TRMNL DIY kit', 'ESP32'], 'lab-ui': ['4 concept screens', 'Dark glass', 'One pointer']}
+
+
+def spec_html(cid):
+    return ('<ul class="mk-spec">' + ''.join('<li>%s</li>' % t for t in SPEC[cid]) + '</ul>') if cid in SPEC else ''
+
+
+# the two lab cases share a band: personal builds, as opposed to the client work above them
+LAB_BAND = ('<div class="mk-lab-band"><div class="mk-lab-wrap"><div class="mk-lab-t" role="heading" aria-level="2">Lab</div>'
+            '<p>Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day.</p></div></div>')
+
+
 def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
     # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
     # under the hero, at the bottom of the section
     return ('<div class="mk-split' + (' flip' if flip else '') + '">'
-            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>'
+            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>' + spec_html(cid)
             + (('<div class="mk-abouts">' + about_html(cid) + '</div>') if cid in ABOUT_CO else '') + '</div>'
             + fig_html + '</div>' + toggle_html)
 
@@ -476,11 +581,11 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
-toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
+toggle = toggle.replace('%%READ%%', '%d min read · %s' % (READ['linkaja'], TEASE['linkaja']))
 case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
-    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
-    + str(meta)
+    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
+    + meta_html('01 / LINKAJA', meta.find_all('div', recursive=False)[1].get_text(strip=True))
     + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False, 'linkaja')
     + drawer +
     '</div></section>')
@@ -519,7 +624,7 @@ CASES = [
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
-    dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT', icon=FLASK,
+    dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2025 – PRESENT', icon=FLASK,
          h2='Shipping real products with AI, end to end.',
          sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
@@ -571,16 +676,45 @@ for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 
                          (lab_[2], 'DATA PIPELINE', 'lab-garmin-pipeline'), (lab_[2], 'LIVE DEPLOYMENT', 'lab-garmin-deploy')):
     panel(root, text).replace_with(section(name))
 
+# Dash: the customer table app (its caption becomes the head row)
+dash_col = brd[1].find_all(recursive=False)[1]
+cap = dash_col.find('span', attrs={'data-r': 'bleed-cap'})
+dash_title = [t.strip() for t in cap.get_text(strip=True).split('·')]
+cap.decompose()
+DASH_APP = stage(str(dash_col), (dash_title[0], dash_title[1] if len(dash_title) > 1 else ''))
+# Dash: the captain app and the back office, side by side on one board, each keeping its caption
+drop_style(brd[2], 'margin-top')
+DASH_TOOLS = stage(str(brd[2]), ('DASH · CAPTAIN APP AND BACK OFFICE',))
+# Lumio: the live network (photos), then the CMS, each on its own board
+l_head, l_grid, l_cap, l_cms = brd[3].find_all(recursive=False)[:4]
+l_t = spans(l_head)
+cms_cap = l_cms.find('span', recursive=False)   # the caption under the screen, not a span inside it
+cms_title = cms_cap.get_text(strip=True)
+cms_cap.decompose()
+drop_style(l_cms, 'margin-top')
+LUMIO = stage(str(l_grid) + str(l_cap), (l_t[0], l_t[1])) + stage(str(l_cms), (cms_title,))
+# Chrona: the product (phone and write-up) on a board under the engagement's head row; its two diagrams already are boards
+ch = ai_[3].find_all(recursive=False)
+c_t = spans(ch[0])
+drop_style(ch[1], 'margin-top')
+CHRONA = stage(str(ch[1]), (c_t[0], c_t[1])) + str(ch[2])
+# Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
+lk = lab_[2].find_all(recursive=False)
+g_t = spans(lk[0])
+shoe = lk[4]
+drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
+shoe['class'] = ['mk-board', 'flush']
+GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), intro=str(lk[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
+
 LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
     'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
                       section('komunal-funnel'), section('komunal-shipped-flow')),
-    'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
-                    brd[2], brd[3], section('board-governance')),   # captain + back office, Lumio, governance
+    'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
-    'ai': blocks(section('ai-decision-desk'), ai_[3]),
-    'lab': blocks(lab_[2]),                                 # Garmin Daily Brief: faces, architecture, shoe tracker
+    'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (str(section('ai-decision-desk')), CHRONA)),
+    'lab': '<div class="mk-block">' + GARMIN + '</div>',      # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
 lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
@@ -592,7 +726,7 @@ QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + 
 
 def figure(c):
     if 'pair' not in c:
-        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
     # two stories in one section: side by side in the wide frame, stacked on phones
     cells = ''
     for p in c['pair']:
@@ -604,9 +738,7 @@ def figure(c):
 
 def case_section(c):
     stats = keys_html(c['stats']) if c.get('stats') else ''
-    meta = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
-            f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
-            f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
+    meta = meta_html(c['n'], c['role'])
     h2 = ('<h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">' + c['h2'] + '</h2>')
     did = did_html(c['bullets'])
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
@@ -615,17 +747,19 @@ def case_section(c):
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
-          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>' + QUESTION +
-              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + str(lui_note) + '</div>') if c.get('fan') else '') +
+          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + stage(fan_html, flush=True) + '</div>' + QUESTION +
+              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + stage(closeups_html) + str(lui_note) + '</div>') if c.get('fan') else '') +
           # the cockpit concept has no outcome numbers to report (owner: "we don't need this")
           ('' if c.get('fan') else '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>') +
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
           + LIVE.get(c['id'], '') +
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
-    tog = tog.replace('%%READ%%', '%d min read' % READ[c['id']])
-    return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
-            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta
+    tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
+    lab = c['id'] in SPEC
+    return (('' if c['id'] != 'lab' else LAB_BAND) +
+            '<section id="' + c['id'] + '" class="mk-case' + (' mk-lab' if lab else '') + '" style="' + ('' if c['id'] == 'lab' else 'border-top:1px solid rgba(242,239,232,.14)') + '">'
+            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">' + meta
             + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
                if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
             + dr + '</div></section>')
@@ -633,7 +767,7 @@ def case_section(c):
 
 more_html = ''.join(case_section(c) for c in CASES)
 
-# ---------- background: the career timeline as its hero, earlier work and capabilities in a drawer that starts open ----------
+# ---------- background: the career timeline as its hero, then earlier work, capabilities and education, always open (no toggle) ----------
 career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('capabilities')
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
 # transformation leadership leads the leadership capabilities (the Komunal case is told as one)
@@ -654,24 +788,18 @@ for row in career[1].find_all(recursive=False):
     row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
-    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
+    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
     '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
     f'<div style="font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">BACKGROUND</div>'
     '<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">2011 – PRESENT</div></div>'
     '<h2 style="margin:0 0 36px;font:800 clamp(32px,3.4vw,44px)/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Fifteen years across four companies.</h2>'
     + str(career[1]) +
-    '<button type="button" class="mk-toggle" aria-expanded="true" aria-controls="d-background">'
-    '<span class="mk-t-label"><span class="mk-t-closed" aria-hidden="true">Show full background</span><span class="mk-t-open">Close</span></span>'
-    '<span class="mk-t-meta">Earlier work · capabilities · education</span>'
-    '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
-    '</button>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
     '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
     'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
-    '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'
     '</div></div></div></div></section>')
 contact = soup(read('contact')).find()
 for a in contact.find_all('a'):
@@ -798,6 +926,8 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
+contact.find(string='Let’s talk.').parent.attrs.update({'role': 'heading', 'aria-level': '2'})   # a heading for heading navigation, same look
+contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.name = 'footer'               # the contentinfo landmark
 for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
     t.insert_after(soup('<button type="button" class="mx-cursor" aria-label="Open the terminal">_</button>').button)
 more_html += bg_html + str(contact) + str(section('egg-matrix')).replace('<!--RABBIT-->', RABBIT)
@@ -810,13 +940,26 @@ def lift(decl):
     return FONT_PX.sub(lambda m: m.group(1) + ('11' if float(m.group(2)) < 11 else m.group(2)) + 'px', decl)
 
 
-def floor_type(html):
+FONT_SIZE = re.compile(r'(font-size\s*:\s*)([^;"]*)')
+FONT_SHORT = re.compile(r'(font\s*:[^;"]*?)(\d+(?:\.\d+)?)px')
+
+
+def rem(decl):
+    # type sizes follow the reader's browser font-size setting: 16px is 1rem, so nothing moves at the default
+    decl = FONT_SIZE.sub(lambda m: m.group(1) + re.sub(r'(\d+(?:\.\d+)?)px', lambda n: '%grem' % (float(n.group(1)) / 16), m.group(2)), decl)
+    return FONT_SHORT.sub(lambda m: m.group(1) + '%grem' % (float(m.group(2)) / 16), decl)
+
+
+def floor_type(html, to_rem=False):
     sp = BeautifulSoup(html, 'html.parser')
     n = 0
     for el in sp.find_all(style=True):
         if el.name == 'svg' or el.find_parent('svg'):
             continue
         new = lift(el['style'])
+        # the page's own text goes to rem; a mock-up (an image-role drawing or a scaled screen) keeps its px, as one unit
+        if to_rem and not (el.get('role') == 'img' or el.find_parent(attrs={'role': 'img'}) or el.get('data-fit') or el.find_parent(attrs={'data-fit': True})):
+            new = rem(new)
         if new != el['style']:
             el['style'] = new
             n += 1
@@ -824,11 +967,11 @@ def floor_type(html):
 
 
 css = lift(css)
-more_html, lifted = floor_type(more_html)
+more_html, lifted = floor_type(more_html, True)
 case_html, lifted2 = floor_type(case_html)
-top_html, lifted3 = floor_type(str(top))
-hero_html, lifted4 = floor_type(str(hero))
-print('type floor: lifted', lifted + lifted2 + lifted3 + lifted4, 'elements to 11px')
+top_html, lifted3 = floor_type(str(top), True)
+hero_html, lifted4 = floor_type(str(hero), True)
+print('type: floored to 11px and/or converted to rem on', lifted + lifted2 + lifted3 + lifted4, 'elements')
 
 # the mock-ups' own font families become Archivo, in the stylesheet and in inline styles alike
 def one_type(html):
@@ -848,6 +991,20 @@ for _ in range(3):   # a declaration can name more than one of them
     more_html, case_html, top_html, hero_html = one_type(more_html), one_type(case_html), one_type(top_html), one_type(hero_html)
 
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
+tpl = rem(tpl)
+HEADINGS = {'KEY NUMBERS': 'Key numbers', 'WHAT I DID': 'What I did', 'THE SCREENS': 'The screens', 'THE QUESTION': 'The question',
+            'THE INSTRUMENT CRAFT, UP CLOSE': 'The instrument craft, up close', 'CAPABILITIES': 'Capabilities', 'EDUCATION': 'Education',
+            'EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY': 'Earlier work <span class="mk-eb-meta">2011–2016 · Appsindo Technology</span>'}
+
+
+def headings(html):
+    for k, v in HEADINGS.items():
+        html = html.replace('<div class="mk-eyebrow">%s</div>' % k, '<div class="mk-eyebrow" role="heading" aria-level="3">%s</div>' % v)
+    assert '<div class="mk-eyebrow">' not in html, 'a drawer title is missing from HEADINGS'
+    return html
+
+
+more_html, case_html = headings(more_html), headings(case_html)
 out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', top_html)
           .replace('<!--__HERO__-->', hero_html)

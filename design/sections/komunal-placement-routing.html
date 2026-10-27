@@ -3,7 +3,7 @@
      account never upgraded to a higher tier), the funds never came and the user was locked out of new deposits until
      customer service released them: the funnel's drop-off. After, routing checks amount, source bank and time against
      every rail (Permata direct VA, Xendit bank VAs, BI-FAST, RTGS) before anything is locked, and shows one step.
-     Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
+     The placement card is shown once above the two lanes (owner: execute the trims from the infographic review); the lanes' own copies of it are hidden. Markup is the final state of both lanes, so the page is complete without JavaScript; the script starts from idle,
      plays "before" then "after" once and holds it (time to read); it replays only after the board has left the screen and come back. Reduced motion keeps the final state.
      Limits are illustrative, from published bank, BI-FAST and Xendit rules; they differ by bank and change over time. -->
 <div class="kpr-wrap">
@@ -31,7 +31,11 @@
 .kpr-lane.good .kpr-st i { background: var(--kpr-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
 
 /* one flow: node, link, node, link … ; both lanes share the columns so the steps line up */
-.kpr-flow { display: grid; grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1.45fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
+.kpr-flow { display: grid; grid-template-columns: minmax(0, 2.1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
+/* the placement is the same in both lanes, so it is drawn once, above them (.kpr-shared); the lanes' own copies stay in the markup for the script's step order but are not shown */
+.kpr-flow > :nth-child(-n+2) { display: none; }
+.kpr-node.kpr-shared { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; padding: 10px 14px; }
+.kpr-node.kpr-shared b { font-size: 15px; }
 .kpr-node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 11px 12px; border-radius: 10px; background: var(--kpr-node); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; transition: opacity .35s, box-shadow .35s; }
 .kpr-node small { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kpr-ink-3); }
 .kpr-node b { display: flex; align-items: center; gap: 7px; font: 600 14px/1.25 Archivo, sans-serif; }
@@ -71,6 +75,13 @@
 .kpr-rail[data-v="ok"] span { color: var(--kpr-ink-2); }
 .kpr-rail[data-v=""] i { color: transparent; }
 
+/* wide: the route check is the widest step, so each rail reads on one line (name, then its limit) */
+@container (min-width: 1061px) {
+  .kpr-rail { grid-template-columns: minmax(0, auto) minmax(0, 1fr) 14px; align-items: baseline; column-gap: 12px; padding: 5px 8px; }
+  .kpr-rail span { grid-column: 2; grid-row: 1; }
+  .kpr-rail i { grid-column: 3; grid-row: 1; align-self: baseline; }
+}
+
 /* links between steps: a line, and a packet that runs along it */
 .kpr-link { position: relative; align-self: center; height: 2px; margin: 0 4px; }
 .kpr-link::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, var(--kpr-edge) 0 4px, transparent 4px 8px); transition: background .3s; }
@@ -83,7 +94,7 @@
 @keyframes kpr-x { 0% { left: 0; opacity: 1; } 100% { left: 100%; opacity: 1; } }
 
 .kpr-cap { margin: 0 0 18px; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
-.kpr-note { margin: 6px 0 0; max-width: 72ch; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: rgba(242, 239, 232, .45); }
+.kpr-note { margin: 6px 0 0; max-width: 72ch; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: rgba(242, 239, 232, .6); }
 
 /* the tie to the funnel: what unblocking the funding step moved (lime: outcomes) */
 .kpr-impact { margin-top: 14px; }
@@ -114,11 +125,10 @@
 @container (max-width: 620px) {
   .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 10px; }
   .kpr-lane { padding: 10px; }
-  /* compact: tighter steps, the after lane skips the placement it shares with before, tags sit in the corner */
+  /* compact: tighter steps, tags sit in the corner */
   .kpr-lh { margin-bottom: 8px; gap: 6px 8px; }
   .kpr-node { padding: 8px 10px; gap: 2px; }
   .kpr-node:not([data-k]) .m { display: none; }
-  .kpr-lane.after .kpr-flow > :nth-child(-n+2) { display: none; }
   .kpr-link { height: 12px; margin: 2px 0; }
   .kpr-out { position: absolute; top: 8px; right: 10px; margin: 0; }
   .kpr-chip { margin-top: 4px; }
@@ -136,6 +146,7 @@
 <p class="kpr-cap">DepositoBPR's biggest leak was the funding step. Checkout locked the amount and payment method, then waited for the money. When the sender's transfer limit blocked it (a low bank default, a forgotten cap or a basic-tier account), the funds never came, and the user was locked out until customer service stepped in. The revamp checks every rail first (VA, BI-FAST, RTGS) and locks nothing until the funds land.</p>
 
 <div class="kpr-board" role="img" aria-label="Placing Rp750,000,000 from a Mandiri account at 10:15. Before: checkout locked the placement onto a virtual account, the bank app rejected the transfer for being over the account's transfer limit (a low default, a forgotten cap or a basic-tier account), the listener waited for funds that never arrived, and the user was locked out of new deposits until customer service released them. After: a route check first flags that Rp750M is above the Rp500M where most accounts hit a cap, then compares the amount, bank and time against every rail. Permata VA is capped at Rp25M, the Xendit Mandiri VA at Rp30M a day and BI-FAST at Rp250M a transfer, so it picks RTGS (Rp100M and up, before 15:00), shows one clear step with nothing locked and a prompt to confirm the account limit, the funds arrive the same day and the deposit is active.">
+  <div class="kpr-node kpr-shared"><small>PLACEMENT</small><b>Rp750,000,000</b><span>Deposito BPR · 12 months</span><span class="m">From Mandiri · 10:15</span></div>
 
   <div class="kpr-lane before bad" data-lane="before">
     <div class="kpr-lh"><span class="kpr-tag">BEFORE</span><b>Lock first, then wait</b><span class="kpr-st"><i></i><span class="kpr-st-t">Locked out · drop-off</span></span></div>
@@ -192,7 +203,7 @@
     return { el: l, nodes: [].slice.call(l.querySelectorAll('.kpr-node')), links: [].slice.call(l.querySelectorAll('.kpr-link')), st: l.querySelector('.kpr-st-t'),
       k: function (k) { return l.querySelector('[data-k="' + k + '"]'); } };
   });
-  var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail'));
+  var B = lanes[0], A = lanes[1], rails = [].slice.call(wrap.querySelectorAll('.kpr-rail')), P = wrap.querySelector('.kpr-shared');
   var timers = [], done = false, pending = false, ran = false, visible = false;
   function later(fn, ms) { var t = setTimeout(fn, ms); timers.push(t); return t; }
   function txt(scope, sel, s) { scope.querySelector(sel).textContent = s; }
@@ -204,6 +215,7 @@
       L.nodes.forEach(function (n) { n.classList.add('idle'); n.classList.remove('fail', 'win', 'wait'); });
       L.links.forEach(function (k) { k.classList.remove('on', 'cut', 'run'); });
     });
+    P.classList.add('idle');
     rails.forEach(function (r) { r.setAttribute('data-v', ''); });
     txt(B.k('bank'), '.kpr-bank-t', 'Sending Rp750M');
     txt(B.k('listen'), '.kpr-ls-t', 'Waiting for funds'); txt(B.k('listen'), '.kpr-hold', 'Waited 0h 00m');
@@ -216,7 +228,7 @@
     timers.forEach(clearTimeout); timers = []; ran = true;
     var t = 500, n = B.nodes, l = B.links;   // each lane's own n and l: the timers fire after both are set up
     // before: placement, locked onto a Permata VA, the bank app refuses, the listener waits on money that never comes
-    later(function () { on(n[0]); B.st.textContent = 'Checking out…'; }, t);
+    later(function () { on(n[0]); on(P); B.st.textContent = 'Checking out…'; }, t);
     later(function () { run(l[0]); }, t += 450);
     later(function () { on(n[1]); B.st.textContent = 'Locked in at checkout'; }, t += 450);
     later(function () { run(l[1]); }, t += 600);

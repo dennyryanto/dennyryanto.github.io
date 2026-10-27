@@ -8,7 +8,7 @@
 (function (root) {
   'use strict';
   var DEG = Math.PI / 180;
-  var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c' };
+  var PAL = { ink: '#161511', line: '#e4e1da', line2: '#9d9a92', lime: '#c8f23c' };
 
   // ---------- timing (seconds) ----------
   var STEP = 0.95, RISE = 0.45, DECIDE = 0.4, LIGHT = 0.42, CLIMB = 0.45;
@@ -248,7 +248,7 @@
     this.yaw = this.yaw0 = opts.yaw || 40; this.elev = this.elev0 = opts.elev || 26;
     // how far a reader may turn it: left/right in yaw, up/down in elevation
     this.turn = opts.turn || { yaw: 18, up: 16, down: 10 };
-    this.pad = opts.pad || [0.08, 0.16];
+    this.pad = opts.pad || [0.03, 0.05];
     this.palette = opts.palette || null; // optional: function returning { ink, line, line2, lime } as #rrggbb, read on every draw
     var n = this.S.layers.length;
     this.END = (n - 1) * STEP + DECIDE + LIGHT + 0.05;
@@ -259,7 +259,7 @@
     var r = this.cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
     this.W = Math.max(1, Math.round(r.width)); this.H = Math.max(1, Math.round(r.height));
     this.cv.width = Math.round(this.W * dpr); this.cv.height = Math.round(this.H * dpr);
-    this.lw = Math.max(0.7, this.W / 1100);
+    this.lw = Math.max(0.8, this.W / 900);
     this.fit();
   };
 
@@ -355,7 +355,9 @@
   Renderer.prototype.draw = function (t) {
     var S = this.S, g = this.cx, self = this, dpr = this.cv.width / this.W, L1 = 1.4 * this.lw, L2 = 0.8 * this.lw, n = S.layers.length, T = 0.12;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    g.globalAlpha = 1; g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
+    g.globalAlpha = 1;
+    // a canvas marked data-clear leaves its ground transparent, so the page behind it (the lab's grid) shows through
+    if (this.cv.hasAttribute('data-clear')) g.clearRect(0, 0, this.W, this.H); else { g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H); }
     g.lineCap = 'round'; g.lineJoin = 'round';
     var lit = function (k) { return flick(t - k * STEP - DECIDE); };
     var neutral = { fill: PAL.line2, stroke: PAL.line };
