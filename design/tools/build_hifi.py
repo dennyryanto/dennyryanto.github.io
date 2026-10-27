@@ -464,11 +464,42 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
 
 # LinkAja's home screen as it ships today, redrawn in the same phone shell as the shipped screens and the routing chat
 # (design/sections/linkaja-home.html; layout from the current app, the render on linkaja.id retrieved 2026-10-27)
+# The board behind the phone carries a faint pattern of the redesign's icons and small illustrations (owner: "add icons and
+# illustrations on the background to emphasize visual refresh ... dark look, subtle patterns"): outline-only, a few per cent white.
+def _pattern():
+    import urllib.parse
+    ic = {
+        'receipt': '<path d="M5 3.5h10.5v15L13.7 17l-1.8 1.5L10 17l-1.8 1.5L6.5 17 5 18.5z"/><path d="M8.5 8h4.5M8.5 11.5h3"/>',
+        'phone': '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10 6h4"/>',
+        'ticket': '<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M5 9h14"/><circle cx="12" cy="14.5" r="2.6"/>',
+        'grid': '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>',
+        'bolt': '<path d="M13 3 6 13.5h5L10 21l8-11h-5z"/>',
+        'bus': '<rect x="4" y="4" width="16" height="13" rx="3"/><path d="M4 11h16M8 20v-3M16 20v-3"/><circle cx="8" cy="14" r=".8"/><circle cx="16" cy="14" r=".8"/>',
+        'pad': '<rect x="3" y="8" width="18" height="9" rx="4.5"/><path d="M8 10.5v4M6 12.5h4"/><circle cx="15.5" cy="12" r=".8"/><circle cx="17.5" cy="13.5" r=".8"/>',
+        'shield': '<path d="M12 3 5 6v5.5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9V6z"/><path d="m12 9 1 2 2.2.3-1.6 1.5.4 2.2L12 14l-2 1 .4-2.2L8.8 11.3 11 11z"/>',
+        'heart': '<path d="M12 20.5s-7-4.4-9.2-8.8A5.1 5.1 0 0 1 12 6.6a5.1 5.1 0 0 1 9.2 5.1C19 16.1 12 20.5 12 20.5z"/>',
+        'coin': '<circle cx="12" cy="12" r="8"/><path d="M10 8v8h4.5"/>',
+        'wallet': '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/>',
+        'qr': '<rect x="4" y="4" width="6" height="6" rx="1.2"/><rect x="14" y="4" width="6" height="6" rx="1.2"/><rect x="4" y="14" width="6" height="6" rx="1.2"/><path d="M14 14h2.5v2.5M20 14v6h-6"/>',
+    }
+    spots = [('receipt', 20, 24, -8, 1.5), ('bolt', 148, 40, 6, 1.4), ('phone', 262, 14, -6, 1.5), ('pad', 40, 130, 8, 1.4),
+             ('shield', 150, 150, -10, 1.5), ('coin', 268, 120, 7, 1.4), ('bus', 24, 236, -6, 1.4), ('wallet', 140, 258, 8, 1.4),
+             ('qr', 262, 236, -8, 1.4), ('grid', 206, 78, 4, 1.1), ('ticket', 92, 62, 10, 1.1), ('heart', 96, 200, -8, 1.1)]
+    out = ''.join('<g transform="translate(%d %d) rotate(%d) scale(%s)">%s</g>' % (x, y, r, sc, ic[k]) for k, x, y, r, sc in spots)
+    # two small illustrations, in the same outline style: a kiosk with an awning, and a scooter
+    out += ('<g transform="translate(206 168) scale(1.1)"><path d="M2 14 7 5h26l5 9z"/><path d="M5 14v22M35 14v22M5 26h30"/><path d="M12 5v9M20 5v9M28 5v9"/></g>'
+            '<g transform="translate(8 306) scale(1.1)"><circle cx="9" cy="22" r="7"/><circle cx="43" cy="22" r="7"/><path d="M9 22h11l7-14h8M30 8l9 14M20 22l4-9h8"/></g>')
+    out += ''.join('<path d="M%d %d l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" transform="scale(.7)"/>' % (x, y) for x, y in ((300, 160), (150, 270), (40, 430), (330, 380)))
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="360" viewBox="0 0 320 360" fill="none" stroke="rgba(255,255,255,.065)" '
+           'stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' + out + '</svg>')
+    return "url('data:image/svg+xml," + urllib.parse.quote(svg, safe="/:=,;() ") + "')"
+
+
 # One phone, shot isometrically and close up, bleeding off the corner of a flush board (owner: "pick one ... can bleed to the
 # corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
 ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home"><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
+    '<div class="mk-home" style="background-image:' + _pattern() + '"><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
     '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
