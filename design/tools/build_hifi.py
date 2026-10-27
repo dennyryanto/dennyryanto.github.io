@@ -462,14 +462,13 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
               'so none of them needs an agent.</p>')
 
 
-# LinkAja's home screen as it ships today (cropped from the render on linkaja.id, retrieved 2026-10-27; image (c) LinkAja)
-LA_HOME_IMG = base64.b64encode(open(os.path.join(HERE, '..', 'sections', 'linkaja-home.webp'), 'rb').read()).decode()
+# LinkAja's home screen as it ships today, redrawn in the same phone shell as the shipped screens and the routing chat
+# (design/sections/linkaja-home.html; layout from the current app, the render on linkaja.id retrieved 2026-10-27)
 LA_HOME = stage(
-    '<div class="mk-home"><img src="data:image/webp;base64,' + LA_HOME_IMG + '" width="444" height="952" '
-    'alt="The LinkAja home screen as it ships today: balance and points cards, four quick actions, a grid of services, a promo row and the bottom bar with Pay in the centre.">'
+    '<div class="mk-home">' + str(section('linkaja-home')) +
     '<div class="mk-home-text"><p>Still the home screen I co-led the redesign of: balances and points up top, four quick actions, '
     'a grid of services and a promo row, with Pay at the centre of the bar.</p>'
-    '<p class="mk-home-src">Source: linkaja.id, retrieved 27 Oct 2026. Image © LinkAja.</p></div></div>',
+    '<p class="mk-home-src">Redrawn from the current app, October 2026.</p></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'))
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'

@@ -887,12 +887,15 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 Earlier work, capabilities and education are simply always open under the timeline; a drawer with no toggle still gets
 its scroll motion (`hifi_shell.html`).
 
-**LinkAja home screen (owner comment: "bring in the current LinkAja app screenshot, especially the home screen").** A
-"Home screen · as it ships today" block sits after "What I did" in the LinkAja drawer, on the shared board. The image is
-the screen cropped from the render on linkaja.id (retrieved 2026-10-27), saved as `design/sections/linkaja-home.webp`;
-the store screenshots were promo frames with other logos over the screen, so they were not used. The image is LinkAja's
-(c) and the block carries the source line. The caption ("Still the home screen I co-led the redesign of: ...") is new
-copy, so check it. To refresh the image, re-crop the screen from the website render and replace the file.
+**LinkAja home screen (owner comments: "bring in the current LinkAja app screenshot, especially the home screen"; then
+"this looks nothing like the screens in the routing in chat. the image is low res, recreate if necessary. match the phone
+shells mockup").** A "Home screen · as it ships today" block sits after "What I did" in the LinkAja drawer, on the shared
+board. A cropped website render was too low-res and did not match the other phones, so the screen is redrawn in HTML and
+CSS as `design/sections/linkaja-home.html`, in the same phone shell as the intent-routing chat and the shipped screens
+(375x812 canvas, scaled to fit). The layout follows the render on linkaja.id (retrieved 2026-10-27); the promo banner art
+is a placeholder, not LinkAja's. Because it is redrawn, there is no image asset and no third-party source line beyond
+"Redrawn from the current app, October 2026." The caption ("Still the home screen I co-led the redesign of: ...") is new
+copy, so check it. To refresh, edit the markup in `linkaja-home.html`.
 
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
