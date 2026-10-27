@@ -907,6 +907,15 @@ the ~72% / ~28% bar is gone, so the split is drawn once, in the support model. C
 (Key numbers, headline, chart and the support model say -80%, 70M+ and ~72%); an earlier note about -75% / 66M+ / ~68% came
 from reading Key numbers while its count-up was still running, and was wrong.
 
+**Lab accent (owner picked option A from the lab colour options).** The lab case studies (`lab`, `lab-ui`) use instrument cyan,
+`oklch(0.84 0.12 215)` / `#5bdefb` (11.6:1 on the page ground), instead of lime: lime marks outcomes on the case studies and the
+lab has none to report. It covers the "LAB" label and number, the stack canvases (via `data-accent` and the `palette` option that
+`stack.js` already had, so the other stacks keep lime), the drawer titles, key numbers, connectors and status dots, and the Garmin
+diagrams. Mechanics: `lab_accent()` in `build_hifi.py` swaps the lime literals in the lab cases' finished markup, and `.mk-lab`
+in `hifi_shell.html` re-points `--lime`. Neutrals, amber for problems, nav and every other case are unchanged. Known trade-off:
+the Garmin concept's own screens use a blue pointer; the frame cyan is lighter and greener, but they sit close in that drawer.
+If the site accent changes in `theme.py`, the lab stays cyan on purpose.
+
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
 

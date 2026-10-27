@@ -204,7 +204,7 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 88px 40px 0; display: grid; grid-template-columns: minmax(0, 4.7fr) minmax(0, 7.3fr); column-gap: 48px; align-items: end; }
 .mk-lab-t { font: 800 clamp(48px, 6vw, 84px)/.92 var(--display); font-stretch: 120%; letter-spacing: -.03em; color: var(--fg); }
 .mk-lab-wrap p { margin: 0 0 6px; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
-.mk-lab { position: relative; }
+.mk-lab { position: relative; --lime: oklch(0.84 0.12 215); }   /* the lab's own accent: instrument cyan, in step with LAB_OKLCH in build_hifi.py */
 .mk-lab::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(242, 239, 232, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(242, 239, 232, .04) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent); }
 .mk-lab > * { position: relative; z-index: 1; }
 .mk-spec { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); }
@@ -541,7 +541,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
   $$('canvas[data-stack]').forEach(function (c) {
     var phone = window.matchMedia('(max-width: 600px)').matches;
-    window.STACK && STACK.mount(c, { pad: phone ? [0.05, 0.03] : [0.06, 0.12] });
+    var acc = c.getAttribute('data-accent');   // the lab's canvases draw in its own accent; the others keep the site's
+    window.STACK && STACK.mount(c, { pad: phone ? [0.05, 0.03] : [0.06, 0.12],
+      palette: acc ? function () { return { ink: '#161511', line: '#e4e1da', line2: '#9d9a92', lime: acc }; } : null });
   });
 
   // ---- chart: bars grow and the trend line draws once on screen ----
