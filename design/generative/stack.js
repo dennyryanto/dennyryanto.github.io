@@ -358,7 +358,9 @@
   Renderer.prototype.draw = function (t) {
     var g = this.cx, dpr = this.cv.width / this.W;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    g.globalAlpha = 1; g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
+    g.globalAlpha = 1;
+    // a canvas marked data-clear leaves its ground transparent, so the page behind it (the lab's grid) shows through
+    if (this.cv.hasAttribute('data-clear')) g.clearRect(0, 0, this.W, this.H); else { g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H); }
     // a soft pool of the accent under the stack: the stage the slabs stand on, with no frame or card around it
     if (!this.palette) {
       // an ellipse that fades out inside the frame, so no edge of the canvas shows

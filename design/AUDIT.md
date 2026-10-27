@@ -833,6 +833,56 @@ everything, so "use efficient cache lifetimes" stays flagged. File names are
 content hashes, so a CDN with long caching could be put in front later.
 Minifying `stack.js` would save about 4KB, not worth a build dependency.
 
+## Impeccable audit and polish round (2026-10-27)
+
+An audit of the built site with the Impeccable skill (15/20, no blockers), then a design critique (17/24) and a
+polish pass. Tracker: https://claude.ai/artifact/9gDuAXrcAVR92KQuDSsSXu. Preview: Portfolio Hi-Fi v2,
+https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
+
+**Audit fixes**
+
+- **Stacks never read as empty.** Each stack draws the finished slabs at 20% (`GHOST` in `stack.js`) while it waits and
+  under the build. Build-on-arrival and the one-at-a-time queue are unchanged (review rule above). With JavaScript off the
+  empty canvases are hidden.
+- **Footnote contrast** (the Komunal routing note, .45 to .6) and a 3px full-strength ring on the profile card. The card
+  always had a ring, on its inner `.ee-in`; the first audit misread it.
+- **Landmarks:** `header`, labelled primary nav, `main` around hero to contact, `footer`, a skip link, and real headings
+  for "Let's talk" and the drawer titles (`role="heading"`).
+- **Touch targets:** the small mono links get 44px hit areas through `::after`; the Close controls are 44px tall.
+- **Escape** closes the case study the focus is in and hands focus back to its toggle.
+- **Type in rem** for the shell CSS and the page's own inline text (`rem()` in `build_hifi.py`). Product mock-ups and the
+  captured site CSS keep px, because they scale as drawings. About 327 px declarations remain.
+
+**Polish**
+
+- **Stacks** are larger (frame padding `[0.03, 0.05]`), bleed 40px toward the page edge, and use brighter secondary lines
+  (`line2` #9d9a92) and heavier strokes (`W / 900`). A soft lime ellipse under each one fades out inside the canvas.
+- **Toggle:** 15px label, and the meta line says what is inside (`TEASE` in `build_hifi.py`), in the body face.
+- **Type:** `--fg-2` .78, `--fg-3` .64; small labels 12px; the drawer's "KEY NUMBERS / WHAT I DID" kickers are
+  sentence-case headings (`HEADINGS`); the case header line is the lime number plus the cream name.
+- **Drawers:** 64px between blocks. **Clients:** no tile fills, brighter marks, optical size per logo (`LOGO_SCALE`).
+- **A lead outcome numeral in each hero was tried and reverted** (owner: "put the metrics inside the case study, respect
+  AUDIT.md"). Heroes stay clean: headline, one line, the stack. The numbers live in the drawer's Key numbers.
+
+**Lab hero**
+
+- A "Lab" band (`LAB_BAND`) introduces the two personal builds ahead of the e-ink case. Its line is new copy, so check it:
+  "Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day."
+- Each lab hero has a spec line (`SPEC`): hardware and design specs only, never outcomes, so the metrics stay inside.
+- A faint workbench grid sits behind both lab cases (`.mk-lab`). Their canvases take `data-clear` and draw on a
+  transparent ground so the grid shows through.
+
+**Drawer stage (one shared panel)**
+
+- The diagrams already shared one board (`design/sections/VIZ-STYLE.md`). The captured mock-ups and photos now sit on the
+  same board, with the same head row (lime title, note on the right): `stage()` and `.mk-board` in `build_hifi.py` and
+  the shell. Covered: Dash table app, captain app and back office, Lumio network and CMS, Chrona product, the two e-ink
+  faces, the shoe tracker (flush) and the cockpit fan (flush, so it runs off the bottom edge) and close-ups.
+- Nothing is boxed twice: the stage replaces the captured frames and captions, and product colours stay inside the screens.
+
+**Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
+(confirm it is lazy-loaded); no `robots.txt` or Person structured data.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:

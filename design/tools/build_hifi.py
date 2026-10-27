@@ -466,17 +466,6 @@ def about_html(cid):
     return ''.join('<p class="mk-about"><b>' + n + '</b> is ' + t + '</p>' for n, t in ABOUT_CO.get(cid, []))
 
 
-# each case's lead outcome, the same figure and label as its cell in the case index; the labs have none to report
-HERO_NUM = {cid: (num, label) for cid, num, label, *_ in INDEX}
-
-
-def hero_num(cid):
-    if cid not in HERO_NUM:
-        return ''
-    num, label = HERO_NUM[cid]
-    return '<div class="mk-hero-n"><div data-m="count" class="mk-hero-num">%s</div><div class="mk-hero-l">%s</div></div>' % (num, label)
-
-
 def meta_html(n, role):
     # "01 / LinkAja": the number in lime, the name in cream; the role and dates on the right, readable rather than whispered
     num, name = n.split(' / ', 1)
@@ -494,11 +483,24 @@ TEASE = {'linkaja': 'OPEX chart, support model, intent routing, shipped screens'
          'lab-ui': 'Four screens, the question, close-ups'}
 
 
+# what the two lab builds are made of, one line under the description: specs, not outcomes (the numbers stay in the drawer)
+SPEC = {'lab': ['7.5″ e-ink panel', 'TRMNL DIY kit', 'ESP32'], 'lab-ui': ['4 concept screens', 'Dark glass', 'One pointer']}
+
+
+def spec_html(cid):
+    return ('<ul class="mk-spec">' + ''.join('<li>%s</li>' % t for t in SPEC[cid]) + '</ul>') if cid in SPEC else ''
+
+
+# the two lab cases share a band: personal builds, as opposed to the client work above them
+LAB_BAND = ('<div class="mk-lab-band"><div class="mk-lab-wrap"><div class="mk-lab-t" role="heading" aria-level="2">Lab</div>'
+            '<p>Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day.</p></div></div>')
+
+
 def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
     # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
     # under the hero, at the bottom of the section
     return ('<div class="mk-split' + (' flip' if flip else '') + '">'
-            '<div class="mk-split-text">' + hero_num(cid) + h2_html + '<p class="mk-sub">' + sub_html + '</p>'
+            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>' + spec_html(cid)
             + (('<div class="mk-abouts">' + about_html(cid) + '</div>') if cid in ABOUT_CO else '') + '</div>'
             + fig_html + '</div>' + toggle_html)
 
@@ -603,16 +605,67 @@ for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 
                          (lab_[2], 'DATA PIPELINE', 'lab-garmin-pipeline'), (lab_[2], 'LIVE DEPLOYMENT', 'lab-garmin-deploy')):
     panel(root, text).replace_with(section(name))
 
+# ---------- one stage for every mock-up and photo in a drawer ----------
+# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, a hairline ring, a long shadow).
+# The captured product screens and photos get the same: a head row (lime title, a note on the right), the board, and nothing
+# framed twice. Product colours stay inside the screens.
+def drop_style(el, *props):
+    st = el.get('style', '')
+    for p in props:
+        st = re.sub(r'(^|;)\s*' + re.escape(p) + r'\s*:[^;]*', r'\1', st)
+    el['style'] = st.strip('; ')
+
+
+def stage(inner, head=None, intro='', flush=False):
+    h = ''
+    if head:
+        h = '<div class="mk-stagehead"><span>%s</span>%s</div>' % (head[0], ('<span>%s</span>' % head[1]) if len(head) > 1 and head[1] else '')
+    return '<div class="mk-stage">' + h + intro + '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div></div>'
+
+
+def spans(row):
+    return [s.get_text(strip=True) for s in row.find_all('span')]
+
+
+# Dash: the customer table app (its caption becomes the head row)
+dash_col = brd[1].find_all(recursive=False)[1]
+cap = dash_col.find('span', attrs={'data-r': 'bleed-cap'})
+dash_title = [t.strip() for t in cap.get_text(strip=True).split('·')]
+cap.decompose()
+DASH_APP = stage(str(dash_col), (dash_title[0], dash_title[1] if len(dash_title) > 1 else ''))
+# Dash: the captain app and the back office, side by side on one board, each keeping its caption
+drop_style(brd[2], 'margin-top')
+DASH_TOOLS = stage(str(brd[2]), ('DASH · CAPTAIN APP AND BACK OFFICE',))
+# Lumio: the live network (photos), then the CMS, each on its own board
+l_head, l_grid, l_cap, l_cms = brd[3].find_all(recursive=False)[:4]
+l_t = spans(l_head)
+cms_cap = l_cms.find('span', recursive=False)   # the caption under the screen, not a span inside it
+cms_title = cms_cap.get_text(strip=True)
+cms_cap.decompose()
+drop_style(l_cms, 'margin-top')
+LUMIO = stage(str(l_grid) + str(l_cap), (l_t[0], l_t[1])) + stage(str(l_cms), (cms_title,))
+# Chrona: the product (phone and write-up) on a board under the engagement's head row; its two diagrams already are boards
+ch = ai_[3].find_all(recursive=False)
+c_t = spans(ch[0])
+drop_style(ch[1], 'margin-top')
+CHRONA = stage(str(ch[1]), (c_t[0], c_t[1])) + str(ch[2])
+# Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
+lk = lab_[2].find_all(recursive=False)
+g_t = spans(lk[0])
+shoe = lk[4]
+drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
+shoe['class'] = ['mk-board', 'flush']
+GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), intro=str(lk[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
+
 LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
     'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
                       section('komunal-funnel'), section('komunal-shipped-flow')),
-    'board': blocks(brd[1].find_all(recursive=False)[1],    # the Dash table app (was beside the intro)
-                    brd[2], brd[3], section('board-governance')),   # captain + back office, Lumio, governance
+    'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
-    'ai': blocks(section('ai-decision-desk'), ai_[3]),
-    'lab': blocks(lab_[2]),                                 # Garmin Daily Brief: faces, architecture, shoe tracker
+    'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (str(section('ai-decision-desk')), CHRONA)),
+    'lab': '<div class="mk-block">' + GARMIN + '</div>',      # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
 lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
@@ -624,7 +677,7 @@ QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + 
 
 def figure(c):
     if 'pair' not in c:
-        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '" role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
     # two stories in one section: side by side in the wide frame, stacked on phones
     cells = ''
     for p in c['pair']:
@@ -645,8 +698,8 @@ def case_section(c):
            '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
-          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + fan_html + '</div>' + QUESTION +
-              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + closeups_html + str(lui_note) + '</div>') if c.get('fan') else '') +
+          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + stage(fan_html, flush=True) + '</div>' + QUESTION +
+              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + stage(closeups_html) + str(lui_note) + '</div>') if c.get('fan') else '') +
           # the cockpit concept has no outcome numbers to report (owner: "we don't need this")
           ('' if c.get('fan') else '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>') +
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
@@ -654,9 +707,11 @@ def case_section(c):
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
     tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
-    return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
+    lab = c['id'] in SPEC
+    return (('' if c['id'] != 'lab' else LAB_BAND) +
+            '<section id="' + c['id'] + '" class="mk-case' + (' mk-lab' if lab else '') + '" style="' + ('' if c['id'] == 'lab' else 'border-top:1px solid rgba(242,239,232,.14)') + '">'
             '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">' + meta
-            + (('<div class="mk-case-hero"><div class="mk-case-lead">' + hero_num(c['id']) + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
+            + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
                if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
             + dr + '</div></section>')
 
