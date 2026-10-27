@@ -869,7 +869,7 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 
 **Lab hero**
 
-- A "Lab" band (`LAB_BAND`) introduces the two personal builds ahead of the e-ink case. Its line is new copy, so check it:
+- A "Lab" band (`LAB_BAND`) introduces the two personal builds ahead of the e-ink case. Its line is new copy, approved by the owner:
   "Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day."
 - Each lab hero has a spec line (`SPEC`): hardware and design specs only, never outcomes, so the metrics stay inside.
 - A faint workbench grid sits behind both lab cases (`.mk-lab`). Their canvases take `data-clear` and draw on a
@@ -885,7 +885,7 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 
 **Background:** the toggle and its Close buttons are gone (owner: "remove this entirely, since it's just a small row").
 Earlier work, capabilities and education are simply always open under the timeline; a drawer with no toggle still gets
-its scroll motion (`hifi_shell.html`).
+its scroll motion (`hifi_shell.html`). The owner confirmed this is how they want it (they like it as is).
 
 **LinkAja home screen (owner comments: "bring in the current LinkAja app screenshot, especially the home screen"; then
 "this looks nothing like the screens in the routing in chat. the image is low res, recreate if necessary. match the phone
