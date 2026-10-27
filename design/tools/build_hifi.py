@@ -505,7 +505,7 @@ def _pattern():
 # corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
 ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
+    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>The home-screen revamp I co-led for 70M+ users. At the time the goal was to refresh the design and unify the visual style, introducing updated icons and illustrations for a better user experience.</p><p>Dashboards and research drove it, and it improved the information architecture, clarity and engagement. It is still the design in the app today.</p></div>'
     '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
