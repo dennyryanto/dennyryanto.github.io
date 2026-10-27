@@ -482,15 +482,21 @@ def _pattern():
         'wallet': '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/>',
         'qr': '<rect x="4" y="4" width="6" height="6" rx="1.2"/><rect x="14" y="4" width="6" height="6" rx="1.2"/><rect x="4" y="14" width="6" height="6" rx="1.2"/><path d="M14 14h2.5v2.5M20 14v6h-6"/>',
     }
-    spots = [('receipt', 20, 24, -8, 1.5), ('bolt', 148, 40, 6, 1.4), ('phone', 262, 14, -6, 1.5), ('pad', 40, 130, 8, 1.4),
-             ('shield', 150, 150, -10, 1.5), ('coin', 268, 120, 7, 1.4), ('bus', 24, 236, -6, 1.4), ('wallet', 140, 258, 8, 1.4),
-             ('qr', 262, 236, -8, 1.4), ('grid', 206, 78, 4, 1.1), ('ticket', 92, 62, 10, 1.1), ('heart', 96, 200, -8, 1.1)]
-    out = ''.join('<g transform="translate(%d %d) rotate(%d) scale(%s)">%s</g>' % (x, y, r, sc, ic[k]) for k, x, y, r, sc in spots)
-    # two small illustrations, in the same outline style: a kiosk with an awning, and a scooter
-    out += ('<g transform="translate(206 168) scale(1.1)"><path d="M2 14 7 5h26l5 9z"/><path d="M5 14v22M35 14v22M5 26h30"/><path d="M12 5v9M20 5v9M28 5v9"/></g>'
-            '<g transform="translate(8 306) scale(1.1)"><circle cx="9" cy="22" r="7"/><circle cx="43" cy="22" r="7"/><path d="M9 22h11l7-14h8M30 8l9 14M20 22l4-9h8"/></g>')
-    out += ''.join('<path d="M%d %d l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" transform="scale(.7)"/>' % (x, y) for x, y in ((300, 160), (150, 270), (40, 430), (330, 380)))
-    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="360" viewBox="0 0 320 360" fill="none" stroke="rgba(255,255,255,.065)" '
+    # a straight 4 x 3 lattice, one motif per 80-unit cell, all upright: the angle comes from laying the whole tile on the same
+    # isometric plane as the phone (.mk-home-floor), not from tilting individual icons
+    order = ['receipt', 'bolt', 'phone', 'pad', 'shield', 'KIOSK', 'coin', 'bus', 'wallet', 'SCOOTER', 'qr', 'grid']
+    out = ''
+    for i, k in enumerate(order):
+        cx, cy = 40 + (i % 4) * 80, 40 + (i // 4) * 80
+        if k == 'KIOSK':
+            out += '<g transform="translate(%d %d) scale(.85)"><path d="M2 14 7 5h26l5 9z"/><path d="M5 14v22M35 14v22M5 26h30"/><path d="M12 5v9M20 5v9M28 5v9"/></g>' % (cx - 17, cy - 15)
+        elif k == 'SCOOTER':
+            out += '<g transform="translate(%d %d) scale(.8)"><circle cx="9" cy="22" r="7"/><circle cx="43" cy="22" r="7"/><path d="M9 22h11l7-14h8M30 8l9 14M20 22l4-9h8"/></g>' % (cx - 21, cy - 14)
+        else:
+            out += '<g transform="translate(%d %d) scale(1.35)">%s</g>' % (cx - 16, cy - 16, ic[k])
+    # sparkles on the lattice crossings
+    out += ''.join('<path d="M%d %d l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z"/>' % (x - 1, y - 4.5) for x, y in ((80, 80), (240, 80), (160, 160), (320, 160), (80, 240), (240, 240)))
+    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240" fill="none" stroke="rgba(255,255,255,.075)" '
            'stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' + out + '</svg>')
     return "url('data:image/svg+xml," + urllib.parse.quote(svg, safe="/:=,;() ") + "')"
 
@@ -499,7 +505,7 @@ def _pattern():
 # corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
 ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home" style="background-image:' + _pattern() + '"><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
+    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>Still the design I co-led: a refresh that unified the visual style and introduced updated icons and illustrations.</p></div>'
     '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
     ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
