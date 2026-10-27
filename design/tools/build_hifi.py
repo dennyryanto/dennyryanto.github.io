@@ -553,7 +553,7 @@ CASES = [
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
-    dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2024 – PRESENT', icon=FLASK,
+    dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2025 – PRESENT', icon=FLASK,
          h2='Shipping real products with AI, end to end.',
          sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
