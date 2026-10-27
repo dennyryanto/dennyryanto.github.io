@@ -8,7 +8,7 @@
 (function (root) {
   'use strict';
   var DEG = Math.PI / 180;
-  var PAL = { ink: '#161511', line: '#d1cec8', line2: '#797772', lime: '#c8f23c' };
+  var PAL = { ink: '#161511', line: '#e4e1da', line2: '#9d9a92', lime: '#c8f23c' };
 
   // ---------- timing (seconds) ----------
   var STEP = 0.95, RISE = 0.45, DECIDE = 0.4, LIGHT = 0.42, CLIMB = 0.45;
@@ -248,7 +248,7 @@
     this.yaw = this.yaw0 = opts.yaw || 40; this.elev = this.elev0 = opts.elev || 26;
     // how far a reader may turn it: left/right in yaw, up/down in elevation
     this.turn = opts.turn || { yaw: 18, up: 16, down: 10 };
-    this.pad = opts.pad || [0.08, 0.16];
+    this.pad = opts.pad || [0.03, 0.05];
     this.palette = opts.palette || null; // optional: function returning { ink, line, line2, lime } as #rrggbb, read on every draw
     var n = this.S.layers.length;
     this.END = (n - 1) * STEP + DECIDE + LIGHT + 0.05;
@@ -259,7 +259,7 @@
     var r = this.cv.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
     this.W = Math.max(1, Math.round(r.width)); this.H = Math.max(1, Math.round(r.height));
     this.cv.width = Math.round(this.W * dpr); this.cv.height = Math.round(this.H * dpr);
-    this.lw = Math.max(0.7, this.W / 1100);
+    this.lw = Math.max(0.8, this.W / 900);
     this.fit();
   };
 
@@ -359,6 +359,15 @@
     var g = this.cx, dpr = this.cv.width / this.W;
     g.setTransform(dpr, 0, 0, dpr, 0, 0);
     g.globalAlpha = 1; g.fillStyle = PAL.ink; g.fillRect(0, 0, this.W, this.H);
+    // a soft pool of the accent under the stack: the stage the slabs stand on, with no frame or card around it
+    if (!this.palette) {
+      // an ellipse that fades out inside the frame, so no edge of the canvas shows
+      var c = hex(PAL.lime), r = Math.min(this.W * 0.46, this.H * 0.98), gl;
+      g.save(); g.translate(this.W * 0.5, this.H * 0.56); g.scale(1, 0.42);
+      gl = g.createRadialGradient(0, 0, 0, 0, 0, r);
+      gl.addColorStop(0, 'rgba(' + c.join(',') + ',0.06)'); gl.addColorStop(1, 'rgba(' + c.join(',') + ',0)');
+      g.fillStyle = gl; g.fillRect(-r, -r, 2 * r, 2 * r); g.restore();
+    }
     g.lineCap = 'round'; g.lineJoin = 'round';
     if (t < this.END) this.layersAt(this.END, GHOST, true);
     this.layersAt(t, 1, false);

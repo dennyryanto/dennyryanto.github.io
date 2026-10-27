@@ -320,7 +320,8 @@ clients = soup(read('clients'))
 # Rainbow's raster logo carried a tagline and a filled box (which the white filter turned into a solid block): use the redrawn vector
 RAINBOW_SVG = open(os.path.join(HERE, '..', 'sections', 'logo-rainbow.svg'), encoding='utf-8').read()
 clients.find('img', alt='Rainbow logo')['src'] = 'data:image/svg+xml;base64,' + base64.b64encode(RAINBOW_SVG.encode('utf-8')).decode('ascii')
-client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s"></div>' % (im['src'], im.get('alt', '')) for im in clients.find_all('img'))
+LOGO_SCALE = {'MAP logo': 1.15, 'Jasamarga logo': 1.6, 'Summarecon logo': 1.35, 'Galeries Lafayette logo': 1.2, 'Genki Sushi logo': 1.5}
+client_logos = ''.join('<div class="mk-client"><img src="%s" alt="%s" style="--s:%s"></div>' % (im['src'], im.get('alt', ''), LOGO_SCALE.get(im.get('alt', ''), 1)) for im in clients.find_all('img'))
 # the white rabbit that roams the page (design/sections/egg-matrix.html places it at <!--RABBIT--> and moves it); 2px pixels
 RABBIT_ROWS = ['..X.X.....', '..X.X.....', '..XXX.....', '.XXXXX....', '.XEXXX....', '..XXXXXX..', '.XXXXXXXX.', '.XXXXXXXXX', '..XX..XX..']
 RABBIT = ('<button type="button" class="mx-rabbit" tabindex="-1" aria-label="A white rabbit. Follow it.">'
@@ -465,11 +466,39 @@ def about_html(cid):
     return ''.join('<p class="mk-about"><b>' + n + '</b> is ' + t + '</p>' for n, t in ABOUT_CO.get(cid, []))
 
 
+# each case's lead outcome, the same figure and label as its cell in the case index; the labs have none to report
+HERO_NUM = {cid: (num, label) for cid, num, label, *_ in INDEX}
+
+
+def hero_num(cid):
+    if cid not in HERO_NUM:
+        return ''
+    num, label = HERO_NUM[cid]
+    return '<div class="mk-hero-n"><div data-m="count" class="mk-hero-num">%s</div><div class="mk-hero-l">%s</div></div>' % (num, label)
+
+
+def meta_html(n, role):
+    # "01 / LinkAja": the number in lime, the name in cream; the role and dates on the right, readable rather than whispered
+    num, name = n.split(' / ', 1)
+    return ('<div class="mk-meta">'
+            '<div class="mk-meta-l"><span class="mk-meta-n">%s</span><span class="mk-meta-co">%s</span></div>'
+            '<div class="mk-meta-r">%s</div></div>' % (num, name, role))
+
+
+# what is inside each case study, said on its toggle
+TEASE = {'linkaja': 'OPEX chart, support model, intent routing, shipped screens',
+         'komunal': 'Transformation map, design system, sprint, routing, funnel, shipped flow',
+         'board': 'Dash ordering and back office, Lumio signage, governance',
+         'ai': 'Decision desk, Chrona product, habit loop, engine',
+         'lab': 'Faces, architecture, deployment, shoe tracker',
+         'lab-ui': 'Four screens, the question, close-ups'}
+
+
 def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
     # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
     # under the hero, at the bottom of the section
     return ('<div class="mk-split' + (' flip' if flip else '') + '">'
-            '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>'
+            '<div class="mk-split-text">' + hero_num(cid) + h2_html + '<p class="mk-sub">' + sub_html + '</p>'
             + (('<div class="mk-abouts">' + about_html(cid) + '</div>') if cid in ABOUT_CO else '') + '</div>'
             + fig_html + '</div>' + toggle_html)
 
@@ -479,11 +508,11 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
-toggle = toggle.replace('%%READ%%', '%d min read' % READ['linkaja'])
+toggle = toggle.replace('%%READ%%', '%d min read · %s' % (READ['linkaja'], TEASE['linkaja']))
 case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
-    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
-    + str(meta)
+    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
+    + meta_html('01 / LINKAJA', meta.find_all('div', recursive=False)[1].get_text(strip=True))
     + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False, 'linkaja')
     + drawer +
     '</div></section>')
@@ -607,9 +636,7 @@ def figure(c):
 
 def case_section(c):
     stats = keys_html(c['stats']) if c.get('stats') else ''
-    meta = ('<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
-            f'<div style="display:flex;align-items:center;gap:10px;font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">{c["icon"]}<span>{c["n"]}</span></div>'
-            f'<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">{c["role"]}</div></div>')
+    meta = meta_html(c['n'], c['role'])
     h2 = ('<h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">' + c['h2'] + '</h2>')
     did = did_html(c['bullets'])
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
@@ -626,10 +653,10 @@ def case_section(c):
           + LIVE.get(c['id'], '') +
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
-    tog = tog.replace('%%READ%%', '%d min read' % READ[c['id']])
+    tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
     return ('<section id="' + c['id'] + '" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
-            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">' + meta
-            + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
+            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">' + meta
+            + (('<div class="mk-case-hero"><div class="mk-case-lead">' + hero_num(c['id']) + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
                if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
             + dr + '</div></section>')
 
@@ -657,7 +684,7 @@ for row in career[1].find_all(recursive=False):
     row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
-    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:88px 40px 72px">'
+    '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
     '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
     f'<div style="font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">BACKGROUND</div>'
     '<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">2011 – PRESENT</div></div>'
@@ -867,7 +894,19 @@ for _ in range(3):   # a declaration can name more than one of them
 
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
 tpl = rem(tpl)
-more_html, case_html = [h.replace('<div class="mk-eyebrow">', '<div class="mk-eyebrow" role="heading" aria-level="3">') for h in (more_html, case_html)]
+HEADINGS = {'KEY NUMBERS': 'Key numbers', 'WHAT I DID': 'What I did', 'THE SCREENS': 'The screens', 'THE QUESTION': 'The question',
+            'THE INSTRUMENT CRAFT, UP CLOSE': 'The instrument craft, up close', 'CAPABILITIES': 'Capabilities', 'EDUCATION': 'Education',
+            'EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY': 'Earlier work <span class="mk-eb-meta">2011–2016 · Appsindo Technology</span>'}
+
+
+def headings(html):
+    for k, v in HEADINGS.items():
+        html = html.replace('<div class="mk-eyebrow">%s</div>' % k, '<div class="mk-eyebrow" role="heading" aria-level="3">%s</div>' % v)
+    assert '<div class="mk-eyebrow">' not in html, 'a drawer title is missing from HEADINGS'
+    return html
+
+
+more_html, case_html = headings(more_html), headings(case_html)
 out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', top_html)
           .replace('<!--__HERO__-->', hero_html)
