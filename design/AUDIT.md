@@ -887,6 +887,13 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
 Earlier work, capabilities and education are simply always open under the timeline; a drawer with no toggle still gets
 its scroll motion (`hifi_shell.html`).
 
+**LinkAja home screen (owner comment: "bring in the current LinkAja app screenshot, especially the home screen").** A
+"Home screen · as it ships today" block sits after "What I did" in the LinkAja drawer, on the shared board. The image is
+the screen cropped from the render on linkaja.id (retrieved 2026-10-27), saved as `design/sections/linkaja-home.webp`;
+the store screenshots were promo frames with other logos over the screen, so they were not used. The image is LinkAja's
+(c) and the block carries the source line. The caption ("Still the home screen I co-led the redesign of: ...") is new
+copy, so check it. To refresh the image, re-crop the screen from the website render and replace the file.
+
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
 

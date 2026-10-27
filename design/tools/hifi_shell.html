@@ -188,6 +188,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-board.flush { padding: 0; overflow: hidden; }
 .mk-board.flush .mk-fan-foot { padding: 0 28px 22px; }
 @media (max-width: 600px) { .mk-board { padding: 14px; } .mk-board.flush .mk-fan-foot { padding: 0 14px 16px; } }
+.mk-home { display: grid; grid-template-columns: 270px minmax(0, 46ch); gap: 64px; align-items: center; justify-content: center; }
+.mk-home img { display: block; width: 100%; height: auto; border-radius: 6px 6px 34px 34px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .1), 0 24px 48px -24px rgba(0, 0, 0, .8); }
+.mk-home-text { display: grid; gap: 14px; max-width: 46ch; }
+.mk-home-text p { margin: 0; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+.mk-home-text .mk-home-src { font-size: 13px; line-height: 1.5; color: var(--fg-3); }
+@media (max-width: 860px) { .mk-home { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; } .mk-home img { max-width: 260px; } .mk-home-text { max-width: none; } }
 /* the lab: a band that introduces the two personal builds, a spec line in each hero, and a faint workbench grid behind them */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 88px 40px 0; display: grid; grid-template-columns: minmax(0, 4.7fr) minmax(0, 7.3fr); column-gap: 48px; align-items: end; }

@@ -405,6 +405,28 @@ def did_html(items):
 # LinkAja's bullets come from the live site's markup; keep only their text so they render like every other case
 la_did = [row.find_all('span')[-1].decode_contents() for row in bullets.find_all('div', recursive=False)]
 
+# ---------- one stage for every mock-up and photo in a drawer ----------
+# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, a hairline ring, a long shadow).
+# The captured product screens and photos get the same: a head row (lime title, a note on the right), the board, and nothing
+# framed twice. Product colours stay inside the screens.
+def drop_style(el, *props):
+    st = el.get('style', '')
+    for p in props:
+        st = re.sub(r'(^|;)\s*' + re.escape(p) + r'\s*:[^;]*', r'\1', st)
+    el['style'] = st.strip('; ')
+
+
+def stage(inner, head=None, intro='', flush=False):
+    h = ''
+    if head:
+        h = '<div class="mk-stagehead"><span>%s</span>%s</div>' % (head[0], ('<span>%s</span>' % head[1]) if len(head) > 1 and head[1] else '')
+    return '<div class="mk-stage">' + h + intro + '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div></div>'
+
+
+def spans(row):
+    return [s.get_text(strip=True) for s in row.find_all('span')]
+
+
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
           '<span class="mk-t-meta">%%READ%%</span>'
@@ -439,9 +461,21 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
               '</div></div><p class="ksf-cap">As shipped: activating, checking the limit, following an application and finding answers all happen in the app, '
               'so none of them needs an agent.</p>')
 
+
+# LinkAja's home screen as it ships today (cropped from the render on linkaja.id, retrieved 2026-10-27; image (c) LinkAja)
+LA_HOME_IMG = base64.b64encode(open(os.path.join(HERE, '..', 'sections', 'linkaja-home.webp'), 'rb').read()).decode()
+LA_HOME = stage(
+    '<div class="mk-home"><img src="data:image/webp;base64,' + LA_HOME_IMG + '" width="444" height="952" '
+    'alt="The LinkAja home screen as it ships today: balance and points cards, four quick actions, a grid of services, a promo row and the bottom bar with Pay in the centre.">'
+    '<div class="mk-home-text"><p>Still the home screen I co-led the redesign of: balances and points up top, four quick actions, '
+    'a grid of services and a promo row, with Pay at the centre of the bar.</p>'
+    '<p class="mk-home-src">Source: linkaja.id, retrieved 27 Oct 2026. Image © LinkAja.</p></div></div>',
+    ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'))
+
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
           '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
+          '<div class="mk-block">' + LA_HOME + '</div>'
           # the diagrams live in design/sections/ so they share one design language (design/sections/VIZ-STYLE.md)
           '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
@@ -475,7 +509,7 @@ def meta_html(n, role):
 
 
 # what is inside each case study, said on its toggle
-TEASE = {'linkaja': 'OPEX chart, support model, intent routing, shipped screens',
+TEASE = {'linkaja': 'Home screen today, OPEX chart, support model, intent routing, shipped screens',
          'komunal': 'Transformation map, design system, sprint, routing, funnel, shipped flow',
          'board': 'Dash ordering and back office, Lumio signage, governance',
          'ai': 'Decision desk, Chrona product, habit loop, engine',
@@ -604,28 +638,6 @@ def panel(root, text):
 for root, text, name in ((ai_[3], 'PRODUCT VISION', 'ai-chrona-loop'), (ai_[3], 'THE ENGINE', 'ai-chrona-engine'),
                          (lab_[2], 'DATA PIPELINE', 'lab-garmin-pipeline'), (lab_[2], 'LIVE DEPLOYMENT', 'lab-garmin-deploy')):
     panel(root, text).replace_with(section(name))
-
-# ---------- one stage for every mock-up and photo in a drawer ----------
-# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, a hairline ring, a long shadow).
-# The captured product screens and photos get the same: a head row (lime title, a note on the right), the board, and nothing
-# framed twice. Product colours stay inside the screens.
-def drop_style(el, *props):
-    st = el.get('style', '')
-    for p in props:
-        st = re.sub(r'(^|;)\s*' + re.escape(p) + r'\s*:[^;]*', r'\1', st)
-    el['style'] = st.strip('; ')
-
-
-def stage(inner, head=None, intro='', flush=False):
-    h = ''
-    if head:
-        h = '<div class="mk-stagehead"><span>%s</span>%s</div>' % (head[0], ('<span>%s</span>' % head[1]) if len(head) > 1 and head[1] else '')
-    return '<div class="mk-stage">' + h + intro + '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div></div>'
-
-
-def spans(row):
-    return [s.get_text(strip=True) for s in row.find_all('span')]
-
 
 # Dash: the customer table app (its caption becomes the head row)
 dash_col = brd[1].find_all(recursive=False)[1]
