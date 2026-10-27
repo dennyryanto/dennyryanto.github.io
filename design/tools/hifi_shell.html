@@ -188,14 +188,14 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-board.flush { padding: 0; overflow: hidden; }
 .mk-board.flush .mk-fan-foot { padding: 0 28px 22px; }
 @media (max-width: 600px) { .mk-board { padding: 14px; } .mk-board.flush .mk-fan-foot { padding: 0 14px 16px; } }
-.mk-home { --pw: 400px; position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; min-height: 560px; }
+.mk-home { --pw: 480px; position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; min-height: 600px; }
 .mk-home-text { padding: 40px 0 40px 44px; display: grid; max-width: 36ch; }
 .mk-home-text p { margin: 0; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .mk-iso { position: relative; align-self: stretch; min-height: 560px; overflow: hidden; }
-.mk-iso-world { position: absolute; left: 14%; top: 30%; width: var(--pw); aspect-ratio: 262 / 556; transform-style: preserve-3d; transform-origin: 0 0; transform: rotateX(54deg) rotateZ(-36deg); }
+.mk-iso-world { position: absolute; left: 0%; top: 28%; width: var(--pw); aspect-ratio: 262 / 556; transform-style: preserve-3d; transform-origin: 0 0; transform: rotateX(54deg) rotateZ(-36deg); }
 .mk-iso-world .lh-phone { position: absolute; inset: 0; width: 100% !important; max-width: none !important; }
 .mk-iso-edge { position: absolute; inset: 0; border-radius: 26px; background: linear-gradient(155deg, #2c2c33, #0d0d10); box-shadow: 0 0 0 1px rgba(255, 255, 255, .08) inset; }
-@media (max-width: 860px) { .mk-home { --pw: 250px; grid-template-columns: minmax(0, 1fr); min-height: 0; } .mk-home-text { max-width: none; padding: 28px 28px 8px; } .mk-iso { min-height: 400px; } .mk-iso-world { left: 10%; top: 26%; } }
+@media (max-width: 860px) { .mk-home { --pw: 260px; grid-template-columns: minmax(0, 1fr); min-height: 0; } .mk-home-text { max-width: none; padding: 28px 28px 8px; } .mk-iso { min-height: 400px; } .mk-iso-world { left: 2%; top: 24%; } }
 /* the lab: a band that introduces the two personal builds, a spec line in each hero, and a faint workbench grid behind them */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 88px 40px 0; display: grid; grid-template-columns: minmax(0, 4.7fr) minmax(0, 7.3fr); column-gap: 48px; align-items: end; }
