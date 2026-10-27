@@ -188,11 +188,27 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-board.flush { padding: 0; overflow: hidden; }
 .mk-board.flush .mk-fan-foot { padding: 0 28px 22px; }
 @media (max-width: 600px) { .mk-board { padding: 14px; } .mk-board.flush .mk-fan-foot { padding: 0 14px 16px; } }
-.mk-home { display: grid; grid-template-columns: 262px minmax(0, 46ch); gap: 64px; align-items: center; justify-content: center; }
-.mk-home-text { display: grid; gap: 14px; max-width: 46ch; }
+.mk-home { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px 48px; align-items: center; padding: 28px 44px 28px 0; overflow: hidden; border-radius: 14px; background: radial-gradient(120% 90% at 18% 10%, #26272d 0, #1a1b1f 55%, #15161a 100%); }
+/* supergraphics: oversized concentric rings and two soft colour washes, kept to a few per cent so they read as depth */
+.mk-sg { position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(60% 70% at 8% 100%, rgba(227, 30, 36, .16), transparent 70%),
+    radial-gradient(45% 55% at 100% 0, rgba(255, 255, 255, .05), transparent 70%),
+    repeating-radial-gradient(circle at 24% 62%, transparent 0 46px, rgba(255, 255, 255, .045) 46px 47px); 
+  -webkit-mask-image: radial-gradient(90% 100% at 30% 60%, #000 30%, transparent 100%); mask-image: radial-gradient(90% 100% at 30% 60%, #000 30%, transparent 100%); }
+.mk-sg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, .035) 38.2%, transparent 52%); }
+.mk-iso { perspective: 1800px; display: flex; justify-content: center; min-height: 480px; }
+.mk-iso-world { position: relative; width: 262px; height: 556px; transform-style: preserve-3d; transform: translate(70px, 6px) rotateX(56deg) rotateZ(-34deg); }
+.mk-iso-phone { position: absolute; inset: 0; transform-style: preserve-3d; }
+.mk-iso-phone .lh-phone { position: absolute; inset: 0; max-width: none !important; }
+.mk-iso-edge { position: absolute; inset: 0; border-radius: 24px; background: linear-gradient(155deg, #2c2c33, #0d0d10); box-shadow: 0 0 0 1px rgba(255, 255, 255, .06) inset; }
+.mk-iso-plate { position: absolute; inset: -26px; border-radius: 40px; border: 1px solid rgba(255, 255, 255, .16); background: linear-gradient(160deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .02)); }
+.mk-iso-plate.p1 { transform: translateZ(-34px); }
+.mk-iso-plate.p2 { inset: -46px; border-radius: 54px; border-color: rgba(255, 255, 255, .09); background: linear-gradient(160deg, rgba(227, 30, 36, .12), rgba(255, 255, 255, .01)); transform: translateZ(-76px); }
+.mk-iso-shadow { position: absolute; inset: 14px; border-radius: 40px; background: rgba(0, 0, 0, .6); filter: blur(22px); transform: translateZ(-96px) translate(26px, 26px); }
+.mk-home-text { position: relative; display: grid; gap: 14px; max-width: 40ch; }
 .mk-home-text p { margin: 0; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
-.mk-home-text .mk-home-src { font-size: 13px; line-height: 1.5; color: var(--fg-3); }
-@media (max-width: 860px) { .mk-home { grid-template-columns: minmax(0, 1fr); gap: 24px; justify-items: center; } .mk-home .lh-phone { max-width: 262px; } .mk-home-text { max-width: none; } }
+@media (max-width: 860px) { .mk-home { grid-template-columns: minmax(0, 1fr); padding: 14px 20px 28px; } .mk-iso { min-height: 360px; } .mk-iso-world { transform: translate(0, -20px) rotateX(56deg) rotateZ(-34deg) scale(.6); } .mk-home-text { max-width: none; } }
 /* the lab: a band that introduces the two personal builds, a spec line in each hero, and a faint workbench grid behind them */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 88px 40px 0; display: grid; grid-template-columns: minmax(0, 4.7fr) minmax(0, 7.3fr); column-gap: 48px; align-items: end; }
