@@ -464,15 +464,14 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
 
 # LinkAja's home screen as it ships today, redrawn in the same phone shell as the shipped screens and the routing chat
 # (design/sections/linkaja-home.html; layout from the current app, the render on linkaja.id retrieved 2026-10-27)
-# Plain dark board, like the cockpit fan: the phone shell front-on, and the same phone turned to an angled side profile
-# (CSS 3D, extrusion layers give the glass its edge). No supergraphics.
-ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 10))
+# One phone, shot isometrically and close up, bleeding off the corner of a flush board (owner: "pick one ... can bleed to the
+# corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
+ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
 LA_HOME = stage(
-    '<div class="mk-home"><div class="mk-duo">' + str(section('linkaja-home')) +
-    '<div class="mk-side" aria-hidden="true"><div class="mk-side-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>'
-    '<div class="mk-home-text"><p>Still the home screen I co-led the redesign of: balances and points up top, four quick actions, '
-    'a grid of services and a promo row, with Pay at the centre of the bar.</p></div></div>',
-    ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'))
+    '<div class="mk-home"><div class="mk-home-text"><p>Still the home screen I co-led the redesign of: balances and points up top, '
+    'four quick actions, a grid of services and a promo row, with Pay at the centre of the bar.</p></div>'
+    '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
+    ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
