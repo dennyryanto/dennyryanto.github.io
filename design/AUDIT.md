@@ -883,6 +883,10 @@ https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo. Shipped as PR #37.
   faces, the shoe tracker (flush) and the cockpit fan (flush, so it runs off the bottom edge) and close-ups.
 - Nothing is boxed twice: the stage replaces the captured frames and captions, and product colours stay inside the screens.
 
+**Background:** the toggle and its Close buttons are gone (owner: "remove this entirely, since it's just a small row").
+Earlier work, capabilities and education are simply always open under the timeline; a drawer with no toggle still gets
+its scroll motion (`hifi_shell.html`).
+
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
 

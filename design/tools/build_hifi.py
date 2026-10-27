@@ -718,7 +718,7 @@ def case_section(c):
 
 more_html = ''.join(case_section(c) for c in CASES)
 
-# ---------- background: the career timeline as its hero, earlier work and capabilities in a drawer that starts open ----------
+# ---------- background: the career timeline as its hero, then earlier work, capabilities and education, always open (no toggle) ----------
 career, earlier, caps = live_kids('career'), live_kids('earlier'), live_kids('capabilities')
 edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates live only in the profile card
 # transformation leadership leads the leadership capabilities (the Komunal case is told as one)
@@ -745,18 +745,12 @@ bg_html = (
     '<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">2011 – PRESENT</div></div>'
     '<h2 style="margin:0 0 36px;font:800 clamp(32px,3.4vw,44px)/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Fifteen years across four companies.</h2>'
     + str(career[1]) +
-    '<button type="button" class="mk-toggle" aria-expanded="true" aria-controls="d-background">'
-    '<span class="mk-t-label"><span class="mk-t-closed" aria-hidden="true">Show full background</span><span class="mk-t-open">Close</span></span>'
-    '<span class="mk-t-meta">Earlier work · capabilities · education</span>'
-    '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
-    '</button>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
     '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
     'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
-    '<button type="button" class="mk-close">Close the background <span aria-hidden="true">↑</span></button>'
     '</div></div></div></div></section>')
 contact = soup(read('contact')).find()
 for a in contact.find_all('a'):

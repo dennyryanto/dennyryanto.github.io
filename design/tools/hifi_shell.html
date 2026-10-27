@@ -310,6 +310,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
   var opener = {};
   $$('.mk-case').forEach(function (cs) {
     var btn = $('.mk-toggle', cs), drawer = $('.mk-drawer', cs), inner = $('.mk-drawer-inner', cs), revealed = false, moved = false;
+    // a drawer with no toggle (Background) is always open: it only needs its scroll motion
+    if (drawer && !btn) { if (drawer.classList.contains('open') && G) liveMotion(drawer, true); return; }
     if (!btn || !drawer) return;
     var blocks = $$('.mk-block', cs);
     // closed drawers ship un-inert, so the content is reachable without JavaScript; with it, closed means inert
