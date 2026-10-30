@@ -195,9 +195,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-home-text { position: relative; padding: 40px 0 40px 44px; display: grid; gap: 14px; max-width: 42ch; }
 .mk-home-text p { margin: 0; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .mk-iso { position: relative; align-self: stretch; min-height: 560px; overflow: hidden; }
-.mk-iso-world { position: absolute; left: 0%; top: 28%; width: var(--pw); aspect-ratio: 262 / 556; transform-style: preserve-3d; transform-origin: 0 0; transform: rotateX(54deg) rotateZ(-36deg); }
+.mk-iso-world { position: absolute; left: 0%; top: 28%; width: var(--pw); aspect-ratio: 1 / 2.0814; transform-style: preserve-3d; transform-origin: 0 0; transform: rotateX(54deg) rotateZ(-36deg); }
 .mk-iso-world .lh-phone { position: absolute; inset: 0; width: 100% !important; max-width: none !important; }
-.mk-iso-edge { position: absolute; inset: 0; border-radius: 26px; background: linear-gradient(155deg, #2c2c33, #0d0d10); box-shadow: 0 0 0 1px rgba(255, 255, 255, .08) inset; }
+.mk-iso-edge { position: absolute; inset: 0; border-radius: 12% / 5.6%; background: linear-gradient(155deg, #6b6b73, #2a2a30 45%, #121216); box-shadow: 0 0 0 1px rgba(255, 255, 255, .14) inset; }
+/* a phone has body: the shell is a titanium rim round a thick black bezel (measured in the phone's own width, so it holds at 480 and 260 px), and the edge is about 9% of the width deep */
+.mk-iso-world .lh-phone > div:first-child { padding: 3.6% !important; border-radius: 12% / 5.6% !important; background: linear-gradient(135deg, #9a9aa2 0%, #45454c 22%, #d3d3d9 40%, #54545b 58%, #2a2a30 78%, #8a8a92 100%) !important; box-shadow: 0 0 0 1px rgba(0, 0, 0, .6), rgba(0, 0, 0, .8) 0 30px 56px -26px !important; }
+.mk-iso-world .lh-phone > div:first-child > div { border-radius: 9% / 4.2% !important; box-shadow: 0 0 0 calc(var(--pw) * .022) #050506, 0 0 0 calc(var(--pw) * .024) rgba(255, 255, 255, .08) !important; }
 @media (max-width: 860px) { .mk-home { --pw: 260px; grid-template-columns: minmax(0, 1fr); min-height: 0; } .mk-home-text { max-width: none; padding: 28px 28px 8px; } .mk-iso { min-height: 400px; } .mk-iso-world { left: 2%; top: 24%; } }
 /* the lab: a band that introduces the two personal builds, a spec line in each hero, and a faint workbench grid behind them */
 .mk-lab-band { border-top: 1px solid var(--rule); }
