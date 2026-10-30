@@ -919,6 +919,71 @@ If the site accent changes in `theme.py`, the lab stays cyan on purpose.
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
 
+## Lab: Acme Deposito entry, brief (2026-10-27)
+
+Planned, not built. Source repo: `dennyryanto/acme-deposito` (private; only
+`design/showcase/` may be copied into this public repo).
+
+**Shape.** The Lab becomes a fixed-size shelf on the home page (the two current
+features plus a compact "More from the Lab" index of equal-height cards), and
+each further entry gets its own page, e.g. `/lab/acme-deposito/`. At most 3
+entries are promoted to full sections on the home page; the owner picks them.
+Budget about 3MB of images per entry, keep video off the repo (git history keeps
+every binary version). GitHub Pages limits: published site 1GB, repo 1GB
+recommended, 100MB per file, 100GB/month soft bandwidth, 10 builds/hour soft.
+The site is about 6MB and `.git` 49MB at this point.
+
+**Thesis.** A proving ground where AI helps rapid design iteration on a newly
+launched product (iPhone Duo): show the speed, and the calls that stayed the
+owner's. One entry, not two: the phone and the Duo build are one story, with the
+Duo as the point (layout follows window width, never device model).
+
+**What it must show** (all from the repo): four option rounds (deposit card,
+matures card, maturity timeline, timeline lens) with the pick marked; screens
+A1, A1c, A2, A2b, A3 (bilyet certificate), Foundations, type study; the six
+Duo poses (closed, tent, open flat split, book, open portrait, laptop) and the
+compact components; the dated decisions log (24 and 26 Oct) and the rules
+Claude Code works under (`PRODUCT.md`, `CLAUDE.md`).
+
+**Beauty shots, isometric like the LinkAja home screen** (same recipe: no
+perspective, `rotateX(54deg) rotateZ(-36deg)`, extrusion layers, flush dark
+board):
+1. Hero, a **wider shot** than the LinkAja one: iPhone and iPhone Duo as one
+   family, the same deposits going from one column to split view.
+2. The six Duo poses as a row or stack, the open flat split largest.
+3. Close-ups: gold-glass action, bilyet certificate, timeline lens, Duo rail.
+4. Iteration contact sheet: the option rounds, chosen direction marked.
+
+**Rules.** Device frames are drawn in CSS; Apple's frame PNGs and HIG images in
+`docs/apple-reference/` are never published. Labelled a concept (fictional Acme
+Bank; Duo as Apple's announced foldable, not a shipped device). No outcome
+metrics. The entry page keeps Acme's gold on black; Lab cyan stays on the shelf
+card only.
+
+**Findings that shape the claims** (checked 2026-10-27, corrected later the same day):
+- There is **no app**: no `package.json`, no Expo config, no TS/Swift on `main`. Expo and React Native appear only as the
+  planned stack in `docs/DEPOSITO_HANDOFF.md`. Copy must say "concept", never "app" or "built".
+- Git history on `main` (5 commits, all 26 Oct 2026, about 8.5 hours) only records packaging the handoff bundle. The design
+  work started earlier: the demo clock is 21 Oct, the wireframe canvas was created 24 Oct, the Duo decisions are dated 24 and
+  26 Oct. Use "five days, 21 to 26 Oct" only if the owner confirms it.
+- **Finished Duo boards exist** (earlier note said otherwise): `design/duo-finished/*.dc.html` (closed, closed detail, tent,
+  open split, book, laptop, open portrait) on the acme-deposito PR #1 branch (`claude/focused-lamport-g4rkn3`, draft). `main`
+  only has the grey wireframes. The CSS isometric mocks in the "Acme Deposito Hero" artifact approximate these screens.
+- **Real 3D renders exist**, made by the acme-deposito cloud session for an 8-page LinkedIn carousel ("iPhone Duo x Time
+  deposit concept", 1080 x 1350, not in git): three.js with Apple's iPhone Duo glTF model, the finished boards as emissive
+  screen textures, transparent 2160 x 2700 PNG/WebP per shot. Poses: closed, book, tent, open flat, laptop, open portrait,
+  half open, plus a hands cover. The book and laptop folds are real, which the CSS mocks cannot do. Sources (`duo/web/index.html`,
+  `shoot.cjs`, `deck.py`) are only in that session's container. `media/linkedin-carousel.pdf` on `main` is a different, earlier
+  12-page post by the owner, with flattened images, and is not reusable.
+- **Licence:** the model is Apple's asset, not under the MIT licence of the Duo Studio repo it came from; the slides credit
+  "iPhone Duo model (c) Apple, via Duo Studio". The kit and HIG images in `docs/apple-reference/` are private reference only.
+  Do not commit or publish the renders on the public site until the owner has checked Apple's terms; if they go up, keep the
+  credit visible. The cover is an AI-generated hands photo with screens composited in; a public page must say so.
+- Plan: use the 3D renders for the hero and the pose shots, resized to about 1080 wide (budget about 3MB), and keep the CSS
+  isometric versions only as the fallback. Re-render the Duo screens from the finished boards if the CSS versions are kept.
+- The Duo kit values come from Apple's iOS & iPadOS 27 Figma kit, offline copy in `docs/apple-reference/iphone-duo/`. The Duo
+  status bar is the time over a "levels" icon (open battery ring, Wi-Fi inside, four signal dots), 48 x 83 at 12pt in.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:
