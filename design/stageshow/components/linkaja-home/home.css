@@ -241,7 +241,7 @@
     color: #fff;
   }
   .lh-ban--1 { --b0: #d3202a; --b1: #ef5a2a; }
-  .lh-ban--2 { --b0: #ef5a2a; --b1: #f4a83a; }
+  .lh-ban--2 { --b0: #dc3a1f; --b1: #f2802b; }
   .lh-ban--3 { --b0: #9d1a2b; --b1: #e8232b; }
   /* The two discs are drawn into the banner's own background, opaque where they overlap */
   .lh-ban {
@@ -254,9 +254,20 @@
   }
   .lh-ban__h { position: absolute; left: 18px; top: 22px; font: 800 20px/1.2 var(--ss-font); }
   .lh-ban__s { position: absolute; left: 18px; top: 96px; font: 500 14px/1 var(--ss-font); opacity: 0.92; }
-  .lh-pl { display: block; height: 14px; border-radius: 7px; background: rgba(255, 255, 255, 0.9); }
-  .lh-pl--s { height: 9px; border-radius: 5px; background: rgba(255, 255, 255, 0.6); }
-  .lh-ban__lines { position: absolute; left: 18px; top: 34px; display: grid; gap: 12px; }
+  /* Banners 2 and 3 are invented placeholders: flat shapes in the banner's own colours (art.ts), no mark. */
+  .lh-ban--2, .lh-ban--3 { background-repeat: no-repeat; background-size: 342px 140px, auto; }
+  .lh-ban__badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--b0);
+  }
   .lh-ban__tile {
     position: absolute;
     right: 30px;

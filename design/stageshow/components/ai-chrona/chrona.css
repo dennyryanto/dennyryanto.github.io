@@ -1,3 +1,7 @@
+/* The aura glow: a registered angle that turns, read by a conic gradient */
+@property --cr-aura { syntax: '<angle>'; inherits: false; initial-value: 63deg; }
+@keyframes cr-aura-turn { from { --cr-aura: 0deg; } to { --cr-aura: 360deg; } }
+
 /* All rules belong to this example. The stage sits on the page's board ground.
    Coral lives inside the phone's screen; the lime is the outcome beside it. */
 .cr {
@@ -46,6 +50,33 @@
     font-weight: 600;
     letter-spacing: 0.08em;
     line-height: 1.2;
+  }
+
+  /* The aura: a coral light turning round the card's edge. The ring is the conic gradient masked to a 1.5px edge;
+     the halo is a thicker copy of it, blurred, behind the card (so it shows outside the edge only). Both are
+     absolute inside a wrapper that is the card's box: no layout, no text covered. */
+  .cr-aura { position: relative; }
+  .cr-aura__ring, .cr-aura__halo > i {
+    background: conic-gradient(from var(--cr-aura), rgba(212, 85, 46, 0) 0%, rgba(212, 85, 46, 0) 52%, #d4552e 82%, #ec7b52 95%, rgba(236, 123, 82, 0) 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: cr-aura-turn 7s linear infinite;
+    animation-play-state: running;
+  }
+  .cr-aura__ring { position: absolute; inset: 0; z-index: 2; border-radius: 26px; padding: 1.5px; pointer-events: none; transition: opacity 0.9s ease; }
+  .cr-aura__halo { position: absolute; inset: 0; z-index: 0; border-radius: 26px; filter: blur(11px); pointer-events: none; transition: opacity 0.9s ease; }
+  .cr-aura__halo > i { position: absolute; inset: -4px; border-radius: 30px; padding: 8px; }
+  .cr-aura > .cr-card { z-index: 1; }
+  /* Settled: the invite is sent, the card has done its job. Halo off, the ring dim, and the light holds where it is. */
+  .cr-aura[data-aura='rest'] .cr-aura__halo { opacity: 0; }
+  .cr-aura[data-aura='rest'] .cr-aura__ring { opacity: 0.5; }
+  .cr-aura[data-aura='rest'] .cr-aura__ring, .cr-aura[data-aura='rest'] .cr-aura__halo > i { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) {
+    .cr-aura__ring, .cr-aura__halo > i { animation: none; --cr-aura: 63deg; }
+    /* held at one angle, and it keeps its full light: the still is the only frame these viewers get */
+    .cr-aura[data-aura='rest'] .cr-aura__ring { opacity: 1; }
+    .cr-aura[data-aura='rest'] .cr-aura__halo { opacity: 0.8; }
   }
 
   /* The magic-moment card: the one object that grows */

@@ -1,7 +1,8 @@
 import { Phone, Stage, type Act } from '../../kit'
-import { Bus, Gamepad2, Gift, Headset, Heart, House, LayoutGrid, Mail, MoveRight, Plus, ReceiptText, ScanLine, Send, ShieldCheck, ShoppingBag, Smartphone, TicketPercent, Ticket, User, Wifi, Zap, FileText } from 'lucide-react'
+import { Bus, Check, Gamepad2, Headset, Heart, House, LayoutGrid, Mail, MoveRight, Plus, ReceiptText, ScanLine, Send, ShieldCheck, ShoppingBag, Smartphone, Ticket, User, Wallet, Wifi, Zap, FileText } from 'lucide-react'
 import './home.css'
 import { STREET } from './street'
+import { BILLS, COINS } from './art'
 import type { Meta } from '../plan'
 
 export const meta: Meta = {
@@ -16,7 +17,7 @@ export const meta: Meta = {
   notes: [
     ['One phone, one calm loop.', 'The screen is the shipped home as it stands: street illustration and headset in the header, balances, the four quick actions, the service grid, the promo area. The only thing that moves is the promo carousel, advancing the way a banner area does on its own, with the page dots following. After the third banner it comes round to the first, so nothing runs backwards.'],
     ['What replaces the old block.', 'The isometric phone, its extruded edge and the faint icon pattern on the board are gone: the phone is flat, and the page ground is the board. The product colour (LinkAja red) stays inside the screen.'],
-    ['Placeholder banners.', 'The existing mockup drew one banner, "Bayar apa aja & di mana aja", and flagged its art as a placeholder. The second and third banners have no copy in the source, so they are plain art with a placeholder line pair. Give them real banners if the owner has them.'],
+    ['Invented placeholder banners.', 'The existing mockup drew one banner, "Bayar apa aja & di mana aja", and its art was a placeholder. The second ("Isi saldo kapan aja, langsung dari HP") and the third ("Semua tagihan di satu tempat") are invented by me at the owner\'s request, in the same voice and layout, with generic claims only: no figures, prices, dates or partners, and no brand mark. They are placeholders for the owner to replace with the real banners.'],
     ['Checked.', 'The rehearsal gate at both widths; reduced motion shows the screen on its first banner. Not checked: frame rate on a real phone, and the loop inside the built page.'],
   ],
 }
@@ -31,7 +32,8 @@ export const meta: Meta = {
 // Real strings (all from the existing mockup): Hai, Linka Jadid; Saldo Kamu
 // Rp1.000.000; AKHLAK Poin 150.000; MyPaylater Aktifkan; the four quick actions;
 // the eight services (Baru on Kirim ke E-Wallet); Spesial Hanya Untukmu!; the
-// first banner; the five tabs.
+// first banner; the five tabs. Banners 2 and 3 are invented placeholders (generic
+// copy, no figures or partners) for the owner to replace.
 
 type S = { i: number }
 const initial: S = { i: 0 }
@@ -188,22 +190,32 @@ export default function LinkAjaHome() {
                     <ShoppingBag size={26} strokeWidth={1.8} />
                   </span>
                 </div>
-                <div className="lh-ban lh-ban--2">
-                  <span className="lh-ban__lines">
-                    <span className="lh-pl" style={{ width: 168 }} />
-                    <span className="lh-pl lh-pl--s" style={{ width: 112 }} />
+                <div className="lh-ban lh-ban--2" style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(COINS)}"), linear-gradient(115deg, var(--b0), var(--b1))` }}>
+                  <span className="lh-ban__h">
+                    Isi saldo kapan aja,
+                    <br />
+                    langsung dari HP
                   </span>
+                  <span className="lh-ban__s">top up jadi gampang</span>
                   <span className="lh-ban__tile">
-                    <Gift size={26} strokeWidth={1.8} />
+                    <Wallet size={26} strokeWidth={1.8} />
+                    <span className="lh-ban__badge">
+                      <Plus size={11} strokeWidth={3.4} />
+                    </span>
                   </span>
                 </div>
-                <div className="lh-ban lh-ban--3">
-                  <span className="lh-ban__lines">
-                    <span className="lh-pl" style={{ width: 150 }} />
-                    <span className="lh-pl lh-pl--s" style={{ width: 96 }} />
+                <div className="lh-ban lh-ban--3" style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(BILLS)}"), linear-gradient(115deg, var(--b0), var(--b1))` }}>
+                  <span className="lh-ban__h">
+                    Semua tagihan
+                    <br />
+                    di satu tempat
                   </span>
+                  <span className="lh-ban__s">dari listrik sampai internet</span>
                   <span className="lh-ban__tile">
-                    <TicketPercent size={26} strokeWidth={1.8} />
+                    <ReceiptText size={26} strokeWidth={1.8} />
+                    <span className="lh-ban__badge">
+                      <Check size={11} strokeWidth={3.4} />
+                    </span>
                   </span>
                 </div>
                 <div className="lh-ban lh-ban--1" aria-hidden>

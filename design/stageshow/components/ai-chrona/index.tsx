@@ -19,6 +19,7 @@ export const meta: Meta = {
   notes: [
     ['One phone, one story.', 'The Today screen opens on its AI card: Aulia turns 30 on Saturday and the crew looks free. One tap on the card\'s own button drafts the plan inside the card (the time from the circle\'s free window, the message written out word by word), and a second tap sends it. This replaces the still screenshot with its static overlay.'],
     ['The outcome sits outside the phone.', 'Coral stays inside the app\'s screens. The lime is the card beside the phone: Invite sent, in under 120 seconds, plan on the calendar, joined to the Send button by a leader. It is the engine diagram\'s outcome, shown where it happens.'],
+    ['The aura glow.', 'The old live card wore an animated overlay, a coral light travelling round its edge. It is rebuilt in CSS on the AI card only: a crisp 1.5px coral ring over a soft blurred halo, both driven by a conic gradient whose angle is a registered property turning once every 7s. It is on from the first frame, runs while the card waits on the person, and settles once the invite is sent (dimmer ring, no halo, held at its angle). Reduced motion shows it held at one angle. The lime outcome card is unchanged.'],
     ['Phone column.', 'The compact design keeps the same phone, a little larger in points, and moves the outcome card onto the phone\'s lower margin (over the calendar filler) with a short leader from the button.'],
     ['Not from the live mock.', 'The live screen has no place for the brunch and no draft message. The message is written from the card\'s own words (Aulia turns 30, Saturday, 11:00 to 13:00); there is no place row. The four faces are cropped from the live screenshot.'],
   ],
@@ -30,7 +31,10 @@ export const meta: Meta = {
 // and the button becomes Send invite; a second tap sends it. The payoff holds:
 // Invite sent, and beside the phone the outcome in the engine's words, an
 // invite sent in under 120 seconds, the plan on the calendar, tied to the
-// button by a leader. The loop resets around its anchor: the outcome card and
+// button by a leader. The card wears the old mock's aura glow, a coral light
+// turning round its edge (a conic ring over a blurred halo); it runs while the
+// card is waiting on the person, and settles (dims, halo off, held at its angle)
+// once the invite is sent, because the card has done its job. The loop resets around its anchor: the outcome card and
 // leader leave, the draft closes up and the button goes back to its first
 // state, while the header, the card and its people stay.
 //
@@ -129,6 +133,8 @@ export default function Chrona() {
                   <span>· 2026</span>
                   <i>TODAY</i>
                 </div>
+                <div className="cr-aura" data-aura={s.btn === 'sent' ? 'rest' : 'on'}>
+                <span className="cr-aura__halo" aria-hidden><i /></span>
                 <div className="cr-card" data-target="card" data-open={s.open || undefined}>
                   <div className="cr-eyebrow">
                     <Sparkles size={18} {...IC} />
@@ -167,6 +173,8 @@ export default function Chrona() {
                       }}
                     />
                   </div>
+                </div>
+                <span className="cr-aura__ring" aria-hidden />
                 </div>
                 <div className="cr-hours">
                   <div><span>00.00</span><i /></div>

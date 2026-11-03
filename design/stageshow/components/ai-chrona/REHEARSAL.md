@@ -24,6 +24,15 @@ Film:
 - `manual: same-box content change: ss-connector`: looked at in the exit and the arrival frames; the leader draws on after the card has settled, as meant.
 - `loop seam: cursor does not end where it starts`: fixed by moving the finger to rest at the end of the script.
 
+Aura glow (added later, at the owner's request): the old live card wore an animated coral light round its edge (`assets/img/4b0231e1fab5f6f6.webp`, 165 frames; read at frames 0, 20, 40 ... 164: a coral arc
+about half the perimeter long, soft tail, travelling clockwise, with a faint halo outside the edge). Rebuilt in CSS on the AI card only: a registered `@property --cr-aura` angle animated 0 to 360deg every 7s, read by a
+conic gradient that is a 1.5px masked ring above the card and, blurred 11px and thicker, a halo behind it (shows outside the edge only; absolute inside a wrapper that is the card's box, so no layout and no text
+covered). Coral `#d4552e` / `#ec7b52`, never lime. On from the first frame. It settles when the button reads Invite sent: the halo fades out, the ring dims to 50% and the turning pauses where it is (the card has done
+its job; the lime outcome card takes over), and it resumes when the button resets to its first state at the loop's exit. Loop beats and timing unchanged (about 13s). Reduced motion: no animation, held at 63deg
+(the light on the upper left of the card), and the settled state keeps its full ring and 80% halo, because the still is the only frame those viewers get. Checked on the peach card at 700 and 390, at several points
+of the loop (opening, drafting, send, settled) and in the reduced-motion poster at both widths. Film: no new line at either width (390 `rehearsal passed`; wide only the framing line above). Not checked: the aura's cost
+on a low-end phone (the blur repaints as the angle turns), and `@property` in browsers without it (the ring then sits at its initial angle, static).
+
 Review: the fresh-eye review (`references/review.md`) was not run in this session.
 
 Assumptions: the live screen has no place for the brunch and no drafted message. The message is written from the card's own words and the free window (Laurens 11:00–13:00),
