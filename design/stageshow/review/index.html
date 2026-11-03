@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Stageshow Components</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+</head>
+<body>
+<main class="rv">
+  <header class="rv-top">
+    <p class="rv-eyebrow">Stageshow rebuild</p>
+    <h1>Portfolio UI components</h1>
+    <p class="rv-lead">Every product mockup on the site, redrawn with the Stageshow kit and looping. This page collects them as they pass review. Approved ones get ported into the build later.</p>
+  </header>
+
+  <div class="rv-bar" role="toolbar" aria-label="Preview controls">
+    <div class="rv-seg" role="group" aria-label="Preview width">
+      <button type="button" id="w-desk" aria-pressed="true">Desktop</button>
+      <button type="button" id="w-phone" aria-pressed="false">Phone</button>
+    </div>
+    <button type="button" id="replay" class="rv-btn">Replay</button>
+    <p class="rv-count"><b>1</b> of 26 rebuilt</p>
+  </div>
+
+  <section id="linkaja-routing" class="rv-case" aria-labelledby="lr-title">
+    <div class="rv-frame" id="lr-frame">
+      <div class="rv-board">
+        <div class="rv-left">
+          <div class="rv-head"><span id="lr-title">INTENT ROUTING IN CHAT</span><span>ILLUSTRATIVE</span></div>
+          <p class="rv-copy">Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.</p>
+        </div>
+        <div class="rv-stage" id="lr-stage" aria-label="Looping demo: a resolved limit question, then a fraud report routed to a security agent"></div>
+      </div>
+    </div>
+    <div class="rv-notes">
+      <h2>LinkAja · Intent routing</h2>
+      <ul>
+        <li><b>One phone, one story.</b> The resolved limit question opens the loop. The fraud report arrives, is classified, and is handed to a person. This replaces the two phones side by side.</li>
+        <li><b>The consequence is shown where it lands.</b> The case drops into the agent queue with its chat history, transactions and account status attached. A leader ties it to the agent who joins the chat.</li>
+        <li><b>Checked.</b> The rehearsal gate passes at the desktop width and at the 390px phone column. Reduced motion shows the finished frame.</li>
+        <li><b>Not checked.</b> Frame rate on a real phone, and the loop inside the built site.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="rv-queue" aria-labelledby="q-title">
+    <h2 id="q-title">Still to rebuild</h2>
+    <div class="rv-groups">
+      <div><h3>LinkAja</h3><ul><li>Support model</li><li>Problem and fix</li><li>Home screen as it ships</li><li>OPEX chart</li></ul></div>
+      <div><h3>Komunal</h3><ul><li>Shipped flow</li><li>Placement routing</li><li>Sprint sync</li><li>Design system</li><li>Deposit funnel</li><li>Tooling migration</li><li>Transformation</li></ul></div>
+      <div><h3>Dash · Lumio</h3><ul><li>Table app</li><li>Captain app and back office</li><li>Lumio network and CMS</li><li>Governance</li><li>Board matrix</li></ul></div>
+      <div><h3>Independent</h3><ul><li>Decision desk</li><li>Chrona product</li><li>Habit loop</li><li>Engine</li></ul></div>
+      <div><h3>Lab</h3><ul><li>E-ink faces</li><li>Garmin pipeline</li><li>Garmin deployment</li><li>Shoe tracker</li><li>Cockpit screens</li></ul></div>
+    </div>
+  </section>
+</main>
+<script type="module" src="./main.tsx"></script>
+</body>
+</html>

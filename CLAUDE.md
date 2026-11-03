@@ -28,3 +28,9 @@ expanded by default), open questions, and how the real site was built.
 
 Mockups live in `design/mockups/`; tooling to unpack the old bundle, grab its
 sections and rebuild the hi-fi and the site lives in `design/tools/`.
+
+## Stageshow rebuilds (in progress)
+
+`design/stageshow/` holds the product mockups being redrawn with the Stageshow kit, collected on
+`design/mockups/stageshow-components.html` (`python3 design/stageshow/build_review.py`). Not shipped yet: finished
+designs get ported into the build sources after review. See `design/stageshow/README.md`.
