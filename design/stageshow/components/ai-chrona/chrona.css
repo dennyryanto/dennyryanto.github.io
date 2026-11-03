@@ -21,7 +21,7 @@
   }
 
   /* Phone: inset a gutter from the top and left, off the bottom */
-  .cr-phone { position: absolute; left: 56px; top: 28px; }
+  .cr-phone { position: absolute; left: 56px; top: -137px; }   /* cropped inside the content below the header, with the date row whole, so the phone is not as long */
   & .ss-stage[data-layout='compact'] .cr-phone { left: 16px; top: -90px; }
   .cr-phone .ss-phone__content { background: var(--cr-bg); color: var(--cr-ink); overflow: hidden; }
 
@@ -135,7 +135,7 @@
   .cr-hours i { display: block; height: 64px; border-radius: 16px; background: #e9e5e2; }
 
   /* The outcome beside the phone: lime, on the page's ground (never inside the app's screen) */
-  .cr-sat-slot { position: absolute; left: 366px; top: 470px; width: 190px; }
+  .cr-sat-slot { position: absolute; left: 366px; top: 295px; width: 190px; }
   & .ss-stage[data-layout='compact'] .cr-sat-slot { left: 40px; right: 40px; top: auto; bottom: 12px; width: auto; }
   & .ss-stage[data-layout='compact'] .cr-sat__row { display: none; }
   .cr-sat {

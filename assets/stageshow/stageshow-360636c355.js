@@ -8609,7 +8609,7 @@ function Tf() {
     Er,
     {
       width: 640,
-      height: 660,
+      height: 480,
       compact: { below: 560, width: 358, height: 570 },
       initial: Lf,
       poster: zf,
