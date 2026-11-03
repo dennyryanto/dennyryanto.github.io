@@ -8609,7 +8609,7 @@ function Tf() {
     Er,
     {
       width: 640,
-      height: 480,
+      height: 500,
       compact: { below: 560, width: 358, height: 570 },
       initial: Lf,
       poster: zf,
@@ -8621,7 +8621,7 @@ function Tf() {
       children: (a, c, u) => {
         const p = u === "wide", v = c("btn"), x = c("sat");
         return /* @__PURE__ */ l.jsxs(l.Fragment, { children: [
-          /* @__PURE__ */ l.jsx(Ar, { width: p ? 330 : 326, className: "cr-phone", children: /* @__PURE__ */ l.jsxs("div", { className: "cr-app", children: [
+          /* @__PURE__ */ l.jsx(Ar, { width: p ? 330 : 326, className: "cr-phone", style: p ? { top: a.open ? -130 : 14 } : void 0, children: /* @__PURE__ */ l.jsxs("div", { className: "cr-app", children: [
             /* @__PURE__ */ l.jsxs("header", { className: "cr-head", children: [
               /* @__PURE__ */ l.jsxs("span", { className: "cr-bell", children: [
                 /* @__PURE__ */ l.jsx(l1, { size: 21, ...Nr }),

@@ -16,7 +16,7 @@ export const meta: Meta = {
   lead: 'Chrona is a social calendar app for people who want to see their friends more often and spend less time planning it. It reads your week and your circle’s availability, then drafts the plan in one tap.',
   layout: 'split',
   stageWidth: 640,
-  sizes: { wide: [640, 480], compact: [358, 570], below: 560 },
+  sizes: { wide: [640, 500], compact: [358, 570], below: 560 },
   notes: [
     ['One phone, one story.', 'The Today screen opens on its AI card: Aulia turns 30 on Saturday and the crew looks free. One tap on the card\'s own button drafts the plan inside the card (the time from the circle\'s free window, the message written out word by word), and a second tap sends it. This replaces the still screenshot with its static overlay.'],
     ['The outcome sits outside the phone.', 'Coral stays inside the app\'s screens. The lime is the card beside the phone: Invite sent, in under 120 seconds, plan on the calendar, joined to the Send button by a leader. It is the engine diagram\'s outcome, shown where it happens.'],
@@ -102,7 +102,7 @@ export default function Chrona() {
   return (
     <Stage<S>
       width={640}
-      height={480}
+      height={500}
       compact={{ below: 560, width: 358, height: 570 }}
       initial={initial}
       poster={poster}
@@ -118,7 +118,7 @@ export default function Chrona() {
         const sat = rect('sat')
         return (
           <>
-            <Phone width={wide ? 330 : 326} className="cr-phone">
+            <Phone width={wide ? 330 : 326} className="cr-phone" style={wide ? { top: s.open ? -130 : 14 } : undefined}>
               <div className="cr-app">
                 <header className="cr-head">
                   <span className="cr-bell"><Bell size={21} {...IC} /><i /></span>
