@@ -29,8 +29,9 @@ expanded by default), open questions, and how the real site was built.
 Mockups live in `design/mockups/`; tooling to unpack the old bundle, grab its
 sections and rebuild the hi-fi and the site lives in `design/tools/`.
 
-## Stageshow rebuilds (in progress)
+## Stageshow demos
 
-`design/stageshow/` holds the product mockups being redrawn with the Stageshow kit, collected on
-`design/mockups/stageshow-components.html` (`python3 design/stageshow/build_review.py`). Not shipped yet: finished
-designs get ported into the build sources after review. See `design/stageshow/README.md`.
+Five mock-ups on the site are looping React demos from `design/stageshow/` (LinkAja routing chat and home screen, Komunal shipped
+flow, the decision desk, Chrona). Edit them there, not in `index.html`; `build_hifi.py` places them and `build_site.py` bundles them
+into `assets/stageshow/`. Needs `npm install --ignore-scripts` in `design/stageshow` once. How they load, what was decided and the
+rebuild steps are in `design/AUDIT.md` ("Stageshow demos in the site") and `design/stageshow/README.md`.

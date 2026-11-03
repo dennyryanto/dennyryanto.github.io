@@ -41,3 +41,5 @@ Unresolved: the promo copy of banners 2 and 3 is invented and should be replaced
 Not checked: frame rate on a real phone, the loop inside the built page, the light theme, Indonesian text at a larger system font size, the review page at 1120 wide beside its caption.
 
 Owner request after review: the Bayar button shows the QRIS logo instead of a generic scan icon. Source: Wikimedia Commons, "QRIS logo.svg" (retrieved 2026-11-03), cropped to the mark, editor metadata removed, shown white on the red button at 44px wide. Trademark of its owner; replace with the official asset if available. Not re-gated after this change (one image inside an existing button).
+
+Note after the site port: the wide design (400) is below `compact.below` (560), so the stage always draws the compact (358) design; the film runs above were taken in that state. See design/AUDIT.md, "Stageshow demos in the site".

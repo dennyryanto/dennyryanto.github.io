@@ -16,6 +16,7 @@ export const meta: Meta = {
   lead: 'Chrona is a social calendar app for people who want to see their friends more often and spend less time planning it. It reads your week and your circle’s availability, then drafts the plan in one tap.',
   layout: 'split',
   stageWidth: 640,
+  sizes: { wide: [640, 660], compact: [358, 570], below: 560 },
   notes: [
     ['One phone, one story.', 'The Today screen opens on its AI card: Aulia turns 30 on Saturday and the crew looks free. One tap on the card\'s own button drafts the plan inside the card (the time from the circle\'s free window, the message written out word by word), and a second tap sends it. This replaces the still screenshot with its static overlay.'],
     ['The outcome sits outside the phone.', 'Coral stays inside the app\'s screens. The lime is the card beside the phone: Invite sent, in under 120 seconds, plan on the calendar, joined to the Send button by a leader. It is the engine diagram\'s outcome, shown where it happens.'],

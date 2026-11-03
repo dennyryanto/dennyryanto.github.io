@@ -1,26 +1,31 @@
-# Stageshow component rebuilds
+# Stageshow demos
 
-The portfolio's product mockups redrawn with the [Stageshow](https://benji.org/stageshow) kit (MIT, by Benji Taylor), one looping demo at a time.
-This folder is a staging area: the finished designs are collected on a review page, and ported into `design/tools/build_hifi.py` and
-`design/tools/hifi_shell.html` after approval. The site itself is still generated; nothing here is shipped yet.
+Product mock-ups from the portfolio, redrawn with the [Stageshow](https://benji.org/stageshow) kit (MIT, by Benji Taylor) as looping
+React demos. Five are live on the site (see `design/AUDIT.md`, "Stageshow demos in the site"); the rest were dropped or are on hold.
 
 ```
-kit/           the Stageshow kit, vendored from the skill (kit/LICENSE)
-components/    one folder per rebuilt component: index.tsx, a stylesheet, REHEARSAL.md
-review/        the review page (static HTML, React only draws the stages)
-build_review.py  bundles review/ and writes design/mockups/stageshow-components.html
+kit/                  the Stageshow kit, vendored from the skill (kit/LICENSE)
+components/<id>/      one folder per demo: index.tsx (default export + meta), a stylesheet, REHEARSAL.md
+components/plan.ts    the list of mock-ups and the Meta type
+site/main.tsx         the entry the site bundle is built from; maps each placeholder id to its component
+site/posters/         the finished frame of each demo, WebP, shown until the demo loads and without JavaScript
+vite.site.config.ts   the site bundle (one module, one stylesheet)
+review/, build_review.py   the review page, design/mockups/stageshow-components.html
+harness/              a direct route for filming one component (?capture=<id>)
+BRIEF.md              the brief the agents followed
 ```
-
-Build the review page:
 
 ```bash
 cd design/stageshow
 npm install --ignore-scripts
-python3 build_review.py
+python3 build_posters.py   # when a demo's finished frame changed
+python3 build_review.py    # the review page
 ```
 
-Work on a component with the skill's playground and film tools: install the skill into `.claude/skills/stageshow`
-(`npx skills add benjitaylor/skills --skill stageshow`, or clone `benjitaylor/skills`), copy the component folder into its `examples/`, run
-`node scripts/film.mjs "<playground>/?capture=<name>" --gate`, and copy it back. The skill's SKILL.md and `references/` hold the rules each film line enforces.
+The site build (`design/tools/build_hifi.py` and `build_site.py`) reads each demo's `meta` and posters, builds the bundle and copies it
+to `assets/stageshow/`. See the AUDIT section for how it loads.
 
-Status is on the review page. Rules from `design/AUDIT.md` carry over: lime marks outcomes only, product colours stay inside screens, nothing under 11px.
+To work on a demo, install the skill into `.claude/skills/stageshow` (it is committed; run `npm install --ignore-scripts` there for
+its film tools) and film it through the harness (`node scripts/film.mjs "<harness url>/?capture=<id>" --gate`). The skill's
+`references/` hold the rules each film line enforces. Rules from `design/AUDIT.md` carry over: lime marks outcomes only, product colours
+stay inside screens, nothing under 11px.

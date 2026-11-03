@@ -35,3 +35,5 @@ Assumptions:
 Unresolved: the placeholder bars on the Artha card (minimum amount and place), which the owner should replace with real values if there are any. The instructions screen is the densest: it is full to its foot.
 
 Not checked: frame rate on a real phone, the loop inside the built page, the light theme, Indonesian text at a larger system font size, the typed amount against a real keyboard (no keyboard is drawn).
+
+Note after the site port: the wide design (400) is below `compact.below` (560), so the stage always draws the compact (358) design; the film runs above were taken in that state. See design/AUDIT.md, "Stageshow demos in the site".

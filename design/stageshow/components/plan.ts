@@ -45,6 +45,8 @@ export interface Meta {
   layout: 'split' | 'full'
   /** The stage's design width, which sets the stage column in split layout. */
   stageWidth: number
+  /** The stage's two designs, as passed to <Stage>: wide, and compact below `below` px of container width. The site build reserves this space before the demo loads. */
+  sizes: { wide: [number, number]; compact: [number, number]; below: number }
   /** Short review notes: [bold lead-in, sentence]. Include what was checked and what was not. */
   notes: [string, string][]
 }

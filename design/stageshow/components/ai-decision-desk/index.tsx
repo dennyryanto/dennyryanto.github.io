@@ -13,6 +13,7 @@ export const meta: Meta = {
   lead: 'A weekly replenishment run: four siloed sources are cleaned and reconciled, an LLM scores demand against lead time, and only a high-confidence call reaches the operator, ready to approve.',
   layout: 'full',
   stageWidth: 1064,
+  sizes: { wide: [1064, 520], compact: [358, 560], below: 640 },
   notes: [
     ['One run is the story.', 'The workflow canvas runs once, left to right: each node lights, does its work and ticks. The confidence reaches 0.86, clears the 0.80 threshold, and the decision card rises in with its confidence bar and Approve. The lime is the decision only: the chosen branch, the card and Approve.'],
     ['What changed from the section.', 'The loop plays the confident run only (the low-confidence run to the planner needs a second scene and would take the loop past 16 seconds). The decision card gains the confidence bar the brief asked for, drawn from the 0.86 and 0.80 the source already has. The orange letter badge became a plain icon and the sparkle on the LLM step became a trend icon. The lit path is the builder\'s blue; lime is kept for the outcome.'],

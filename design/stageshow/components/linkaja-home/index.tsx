@@ -15,6 +15,7 @@ export const meta: Meta = {
   lead: 'The home-screen revamp I co-led for 70M+ users. At the time the goal was to refresh the design and unify the visual style, introducing updated icons and illustrations for a better user experience. Dashboards and research drove it, and it improved the information architecture, clarity and engagement. It is still the design in the app today.',
   layout: 'split',
   stageWidth: 400,
+  sizes: { wide: [358, 718], compact: [358, 718], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
   notes: [
     ['One phone, one calm loop.', 'The screen is the shipped home as it stands: street illustration and headset in the header, balances, the four quick actions, the service grid, the promo area. The only thing that moves is the promo carousel, advancing the way a banner area does on its own, with the page dots following. After the third banner it comes round to the first, so nothing runs backwards.'],
     ['What replaces the old block.', 'The isometric phone, its extruded edge and the faint icon pattern on the board are gone: the phone is flat, and the page ground is the board. The product colour (LinkAja red) stays inside the screen.'],
