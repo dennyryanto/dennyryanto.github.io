@@ -10,11 +10,11 @@
     --lr-muted: #6b7280;
     --lr-ok: #1c7a4a;
     --lr-h: 380px;
-    --lr-b: 30px;
+    --lr-b: -16px;
   }
 
-  /* The phone runs off both the top and the bottom of the stage; the composer
-     stays whole, a gutter above the bottom edge */
+  /* The phone runs off the top of the stage and ends whole at the bottom, with its
+     rounded shell and home indicator in view */
   .lr-phone {
     position: absolute;
     bottom: calc(var(--lr-b) * -1);
@@ -85,7 +85,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin: 0 14px 56px;
+    margin: 0 14px 36px;
   }
   .lr-field {
     flex: 1;
