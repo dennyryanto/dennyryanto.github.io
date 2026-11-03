@@ -180,14 +180,14 @@ export default function LinkAjaRouting() {
             </Phone>
             {wide && (
               <div className="lr-queue">
-                <div className="lr-queue__head">Antrean agen</div>
+                <div className="lr-queue__head">Agent queue</div>
                 <Row lead={<Avatar plain size={28} />} title={<Bar w={92} h={8} />} subtitle={<Bar w={64} h={6} tone={2} />} pad={0} />
                 <Row lead={<Avatar plain size={28} />} title={<Bar w={78} h={8} />} subtitle={<Bar w={52} h={6} tone={2} />} pad={0} />
                 <Collapse open={s.queue} reveal="drop">
                   <div className="lr-case" data-target="case">
-                    <Row lead={<Avatar name="Rina" size={28} />} title="Indikasi fraud" subtitle="Rina menangani" pad={0} />
+                    <Row lead={<Avatar name="Rina" size={28} />} title="Fraud suspected" subtitle="Handled by Rina" pad={0} />
                     <div className="lr-att">
-                      {['Riwayat chat', 'Transaksi', 'Status akun'].map((t, i) => (
+                      {["Chat history", "Transactions", "Account status"].map((t, i) => (
                         <div key={t} className="lr-att__row" data-on={s.att > i || undefined}>
                           <Check on={s.att > i} size={14} />
                           {t}
