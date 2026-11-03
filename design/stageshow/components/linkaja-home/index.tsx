@@ -1,5 +1,6 @@
 import { Phone, Stage, type Act } from '../../kit'
-import { Bus, Check, Gamepad2, Headset, Heart, House, LayoutGrid, Mail, MoveRight, Plus, ReceiptText, ScanLine, Send, ShieldCheck, ShoppingBag, Smartphone, Ticket, User, Wallet, Wifi, Zap, FileText } from 'lucide-react'
+import { Bus, Check, Gamepad2, Headset, Heart, House, LayoutGrid, Mail, MoveRight, Plus, ReceiptText, Send, ShieldCheck, ShoppingBag, Smartphone, Ticket, User, Wallet, Wifi, Zap, FileText } from 'lucide-react'
+import qris from './qris.svg'
 import './home.css'
 import { STREET } from './street'
 import { BILLS, COINS } from './art'
@@ -17,6 +18,7 @@ export const meta: Meta = {
   notes: [
     ['One phone, one calm loop.', 'The screen is the shipped home as it stands: street illustration and headset in the header, balances, the four quick actions, the service grid, the promo area. The only thing that moves is the promo carousel, advancing the way a banner area does on its own, with the page dots following. After the third banner it comes round to the first, so nothing runs backwards.'],
     ['What replaces the old block.', 'The isometric phone, its extruded edge and the faint icon pattern on the board are gone: the phone is flat, and the page ground is the board. The product colour (LinkAja red) stays inside the screen.'],
+    ['The Bayar button carries the QRIS mark.', 'The scan icon is replaced by the QRIS logo (Bank Indonesia\'s payment standard mark), taken from Wikimedia Commons ("QRIS logo.svg"), cropped to the mark without its tagline and shown in white. Swap in the official asset if you have it; the mark belongs to its owner.'],
     ['Invented placeholder banners.', 'The existing mockup drew one banner, "Bayar apa aja & di mana aja", and its art was a placeholder. The second ("Isi saldo kapan aja, langsung dari HP") and the third ("Semua tagihan di satu tempat") are invented by me at the owner\'s request, in the same voice and layout, with generic claims only: no figures, prices, dates or partners, and no brand mark. They are placeholders for the owner to replace with the real banners.'],
     ['Checked.', 'The rehearsal gate at both widths; reduced motion shows the screen on its first banner. Not checked: frame rate on a real phone, and the loop inside the built page.'],
   ],
@@ -253,7 +255,7 @@ export default function LinkAjaHome() {
               )}
             </nav>
             <span className="lh-fab">
-              <ScanLine size={26} strokeWidth={2} />
+              <img className="lh-qris" src={qris} alt="QRIS" />
             </span>
           </div>
         </Phone>

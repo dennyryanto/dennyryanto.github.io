@@ -42,3 +42,5 @@ there is no place row, and the "plan on the calendar" and "in under 120 seconds"
 Unresolved: the phone's coral is sampled by eye from the live screenshot (#d4552e), not read from the app's tokens. The tab bar and "New plan" button of the live screen are cropped off the bottom.
 
 Not checked: frame rate and touch on a real phone, the loop inside the built page, other themes, system font scaling, the fresh-eye review.
+
+Owner request after review: removed the 3px coral line along the top of the AI card (`.cr-card::before`). Kept the dim settled aura ring after the invite is sent, as built (the owner chose it over switching it off). Not re-gated after this change (one decorative rule removed).

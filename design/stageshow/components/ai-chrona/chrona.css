@@ -88,7 +88,6 @@
     box-shadow: 0 0 0 1px rgba(212, 85, 46, 0.22), 0 10px 26px -12px rgba(120, 50, 30, 0.35);
     overflow: hidden;
   }
-  .cr-card::before { content: ''; position: absolute; left: 14%; right: 14%; top: 0; height: 3px; border-radius: 0 0 3px 3px; background: var(--cr-coral); opacity: 0.8; }
   .cr-eyebrow { display: flex; align-items: center; gap: 8px; color: var(--cr-ink); font-size: 15px; font-weight: 600; letter-spacing: 0.1em; line-height: 1.2; }
   .cr-eyebrow svg { color: var(--cr-coral); flex: none; }
   .cr-eyebrow em { margin-left: auto; display: grid; place-items: center; width: 34px; height: 34px; margin-top: -6px; border-radius: 50%; box-shadow: inset 0 0 0 1px #d8cdc7; color: var(--cr-ink-2); }

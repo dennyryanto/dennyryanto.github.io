@@ -39,3 +39,5 @@ with the real banners; `meta.notes` says so. Banner 2's gradient is a little dee
 Unresolved: the promo copy of banners 2 and 3 is invented and should be replaced by real banners. Banner lines are the one place where bars sit where the eye lands.
 
 Not checked: frame rate on a real phone, the loop inside the built page, the light theme, Indonesian text at a larger system font size, the review page at 1120 wide beside its caption.
+
+Owner request after review: the Bayar button shows the QRIS logo instead of a generic scan icon. Source: Wikimedia Commons, "QRIS logo.svg" (retrieved 2026-11-03), cropped to the mark, editor metadata removed, shown white on the red button at 44px wide. Trademark of its owner; replace with the official asset if available. Not re-gated after this change (one image inside an existing button).

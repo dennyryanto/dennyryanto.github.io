@@ -320,6 +320,7 @@
   .lh-tab svg { display: block; flex: none; }
   .lh-tab[data-on] { color: var(--lh-red); font-weight: 700; }
   .lh-tab__gap { display: block; width: 24px; height: 24px; }
+  .lh-qris { display: block; width: 44px; height: auto; filter: brightness(0) invert(1); }
   .lh-fab {
     position: absolute;
     bottom: 46px;
