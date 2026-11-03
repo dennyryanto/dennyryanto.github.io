@@ -68,7 +68,7 @@ function Queue() {
   const left = PLAN.filter((p) => !built.has(p.id))
   return (
     <>
-      <h2 id="q-title">Still to rebuild</h2>
+      <h2 id="q-title">On hold</h2>
       <div className="rv-groups">
         {CASES.map((c) => {
           const items = left.filter((p) => p.case === c)
@@ -87,4 +87,4 @@ function Queue() {
 createRoot(document.getElementById('cases')!).render(<StrictMode><App /></StrictMode>)
 createRoot(document.getElementById('queue')!).render(<StrictMode><Queue /></StrictMode>)
 const count = document.getElementById('count')
-if (count) count.innerHTML = `<b>${built.size}</b> of ${PLAN.length} rebuilt`
+if (count) count.innerHTML = `<b>${built.size}</b> rebuilt · ${PLAN.length - built.size} diagrams on hold`

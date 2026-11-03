@@ -1,6 +1,9 @@
-// The 25 mockups, in site order. A component is "built" when
-// components/<id>/index.tsx exists and exports `meta`. Wave 1 is product UI;
-// wave 2 is the infographics (design/sections/VIZ-STYLE.md), held until wave 1 is reviewed.
+// The mockups still in play, in site order. A component is "built" when
+// components/<id>/index.tsx exists and exports `meta`. The owner kept five of the
+// wave 1 product-UI rebuilds (the LinkAja routing chat and home screen, the Komunal
+// shipped flow, the enterprise AI decision desk and Chrona) and dropped the Dash,
+// Lumio and Lab ones; those keep their current mockups on the site. Wave 2 is the
+// infographics (design/sections/VIZ-STYLE.md), on hold.
 export const CASES = ['LinkAja', 'Komunal', 'Dash · Lumio', 'Independent', 'Lab'] as const
 export type CaseName = (typeof CASES)[number]
 
@@ -17,17 +20,11 @@ export const PLAN: { id: string; case: CaseName; title: string; wave: 1 | 2 }[] 
   { id: 'komunal-design-system', case: 'Komunal', title: 'Design system', wave: 2 },
   { id: 'komunal-funnel', case: 'Komunal', title: 'Deposit funnel', wave: 2 },
   { id: 'komunal-tooling-migration', case: 'Komunal', title: 'Tooling migration', wave: 2 },
-  { id: 'dash-table-app', case: 'Dash · Lumio', title: 'Dash table app', wave: 1 },
-  { id: 'dash-captain-backoffice', case: 'Dash · Lumio', title: 'Captain app and back office', wave: 1 },
-  { id: 'lumio-network-cms', case: 'Dash · Lumio', title: 'Lumio network and CMS', wave: 1 },
   { id: 'board-governance', case: 'Dash · Lumio', title: 'Governance', wave: 2 },
   { id: 'ai-decision-desk', case: 'Independent', title: 'Decision desk', wave: 1 },
   { id: 'ai-chrona', case: 'Independent', title: 'Chrona product', wave: 1 },
   { id: 'ai-chrona-loop', case: 'Independent', title: 'Habit loop', wave: 2 },
   { id: 'ai-chrona-engine', case: 'Independent', title: 'Engine', wave: 2 },
-  { id: 'lab-eink-faces', case: 'Lab', title: 'E-ink faces', wave: 1 },
-  { id: 'lab-shoe-tracker', case: 'Lab', title: 'Shoe tracker', wave: 1 },
-  { id: 'lab-cockpit-screens', case: 'Lab', title: 'Cockpit screens', wave: 1 },
   { id: 'lab-garmin-pipeline', case: 'Lab', title: 'Garmin pipeline', wave: 2 },
   { id: 'lab-garmin-deploy', case: 'Lab', title: 'Garmin deployment', wave: 2 },
 ]
