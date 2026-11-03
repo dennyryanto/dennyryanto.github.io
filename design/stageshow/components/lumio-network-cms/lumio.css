@@ -1,0 +1,114 @@
+/* All rules belong to this example. The stage sits on the page's board ground. */
+.lm {
+  & .ss-stage {
+    overflow: hidden;
+    background: var(--lm-ground, #1a1b1f);
+    --ss-accent: oklch(0.9 0.2 122);
+    --ss-font: Archivo, system-ui, -apple-system, sans-serif;
+    --lm-blue: #2892fe;
+    --lm-ink: #1b2637;
+    --lm-mute: #8895ac;
+    --lm-line: #e7eaef;
+  }
+
+  /* The CMS: a real window, its sidebar the product's navy. The page is light. */
+  .lm-win {
+    --ss-chrome: #fff;
+    --ss-surface: #f5f7fb;
+    --ss-line: #eaedf2;
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    width: 720px;
+    height: 570px;
+    box-shadow: var(--ss-shadow-hero);
+  }
+  & .ss-stage[data-layout='compact'] .lm-win { left: 16px; top: 16px; width: 420px; height: 238px; }
+  & .ss-stage[data-layout='compact'] .lm-grid { grid-template-columns: repeat(2, 152px); }
+  & .ss-stage[data-layout='compact'] .lm-tile__c { white-space: normal; }
+  .lm-win .ss-window__side { background: #0c1a33; border-right-color: rgba(255, 255, 255, 0.08); }
+  .lm-win .lm-body { background: #f5f7fb; overflow: hidden; }
+  .lm-win .ss-window__title { color: var(--lm-ink); font-family: var(--ss-font); font-weight: 800; }
+  .lm-win .ss-window__heading { color: var(--lm-ink); font-family: var(--ss-font); }
+
+  .lm-side { display: flex; flex: 1; flex-direction: column; min-height: 0; color: #fff; font-family: var(--ss-font); }
+  .lm-side__logo { padding: 6px 14px 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+  .lm-side__logo img { display: block; height: 22px; width: auto; }
+  .lm-side nav { display: grid; align-content: start; gap: 2px; flex: 1; padding: 10px 8px; }
+  .lm-side nav > span { position: relative; display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; color: #8895ac; font-size: 12px; font-weight: 600; line-height: 1.3; }
+  .lm-side nav > span[data-on] { background: #12315c; color: #5fb0ff; font-weight: 700; }
+  .lm-side nav > span[data-on]::before { content: ''; position: absolute; left: 0; top: 7px; bottom: 7px; width: 3px; border-radius: 2px; background: var(--lm-blue); }
+  .lm-side__me { display: flex; align-items: center; gap: 9px; padding: 12px 14px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 12px; }
+  .lm-side__me > span:last-child { flex: 1; }
+  .lm-side__me b { display: block; font-weight: 700; line-height: 1.3; }
+  .lm-side__me i { display: block; color: #7e889b; font-size: 11px; font-style: normal; line-height: 1.3; }
+  .lm-side__av { display: grid; flex: none; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #1c2e4e; color: #7fbaf5; font-size: 11px; font-weight: 800; }
+
+  .lm-head { display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--ss-font); white-space: nowrap; }
+  .lm-head b { color: var(--lm-ink); font-size: 15px; font-weight: 800; }
+  .lm-head i { color: var(--lm-mute); font-size: 11px; font-style: normal; font-weight: 600; }
+  .lm-actions { display: inline-flex; gap: 8px; }
+  .lm-btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1.5px solid #d7dee7; border-radius: 7px; color: #5b6676; font-family: var(--ss-font); font-size: 11px; font-weight: 700; line-height: 1.3; }
+  .lm-btn[data-primary] { border-color: var(--lm-blue); background: var(--lm-blue); color: #fff; font-weight: 800; }
+
+  .lm-page { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: 12px; padding: 16px 28px 16px 16px; font-family: var(--ss-font); }
+  .lm-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+  .lm-stats > div { padding: 10px 12px 11px; border: 1px solid var(--lm-line); border-radius: 10px; background: #fff; }
+  .lm-stats em { display: block; color: var(--lm-mute); font-size: 11px; font-style: normal; font-weight: 700; letter-spacing: 0.03em; line-height: 1.3; max-width: 90px; }
+  .lm-stats b { display: block; margin-top: 4px; color: var(--lm-ink); font-size: 20px; font-weight: 800; line-height: 1.2; }
+  .lm-stats b[data-blue] { color: var(--lm-blue); }
+  .lm-stats small { margin-left: 5px; color: #22a565; font-size: 12px; font-weight: 700; }
+
+  .lm-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    & .ss-stage[data-layout='compact'] .lm-page { padding: 12px; }
+  .lm-tile { overflow: hidden; border: 1px solid var(--lm-line); border-radius: 10px; background: #fff; transition: box-shadow 0.25s ease, border-color 0.25s ease, scale 0.15s ease; will-change: transform; }
+  .lm-tile[data-sel] { border-color: var(--lm-blue); box-shadow: 0 0 0 2px var(--lm-blue); }
+  .lm-tile[data-pressed] { scale: 0.985; }
+  .lm-tile__img { position: relative; height: 78px; }
+  .lm-tile__img img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .lm-online { position: absolute; left: 11px; top: 8px; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 999px; background: rgba(255, 255, 255, 0.95); color: #22a565; font-size: 11px; font-weight: 800; letter-spacing: 0.04em; line-height: 1.2; }
+  .lm-online i { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
+  .lm-tile__t { padding: 9px 11px 10px; }
+  .lm-tile__n { display: block; }
+  .lm-tile__n b { overflow: hidden; color: var(--lm-ink); font-size: 12px; font-weight: 800; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+    .lm-res { position: absolute; right: 8px; top: 8px; padding: 3px 7px; border-radius: 6px; background: rgba(0, 0, 0, 0.55); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; line-height: 1.2; }
+  .lm-tile__c { margin-top: 2px; overflow: hidden; color: #5b6676; font-size: 11px; font-weight: 600; line-height: 1.3; text-overflow: ellipsis; white-space: nowrap; }
+  .lm-tile__u { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+  .lm-tile__u span { flex: 1; height: 5px; border-radius: 3px; background: #edf0f4; }
+  .lm-tile__u span i { display: block; height: 100%; border-radius: 3px; background: var(--lm-blue); }
+  .lm-tile__u b { color: var(--lm-ink); font-size: 11px; font-weight: 700; line-height: 1.3; }
+
+  /* The screens: location photos at the real picture's ratio, off the right edge */
+  .lm-loc {
+    position: absolute;
+    left: 734px;
+    width: 400px;
+    overflow: hidden;
+    border: 1px solid rgba(242, 239, 232, 0.14);
+    border-radius: 10px;
+    background: #000;
+    box-shadow: var(--ss-shadow-ground);
+    transition: scale 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    will-change: transform;
+  }
+  .lm-loc--1 { top: 24px; }
+  .lm-loc--2 { top: 229px; left: 772px; }
+  .lm-loc--3 { top: 434px; left: 810px; }
+  & .ss-stage[data-layout='compact'] .lm-loc { left: 16px; top: 270px; width: 420px; }
+  .lm-loc__scene { position: relative; aspect-ratio: 460 / 222; }
+  .lm-loc__scene > img { display: block; width: 100%; height: 100%; }
+  .lm-ov { position: absolute; overflow: hidden; border-radius: 1px; }
+  .lm-ov img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: opacity 0.9s ease; }
+  .lm-ov img + img { opacity: 0; }
+  .lm-ov[data-b] img + img { opacity: 1; }
+  .lm-live { position: absolute; left: 14px; top: 10px; display: inline-flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 999px; background: rgba(0, 0, 0, 0.55); color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; line-height: 1.2; }
+  .lm-live i { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: lm-dot 1.6s ease-out infinite; }
+  .lm-loc__t { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 14px 12px; background: linear-gradient(to top, rgba(0, 0, 0, 0.88), transparent); }
+  .lm-loc__t b { display: block; color: #fff; font-size: 15px; font-weight: 700; line-height: 1.2; }
+  .lm-loc__t code { display: block; margin-top: 4px; color: rgba(255, 255, 255, 0.6); font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; line-height: 1.2; }
+}
+
+@keyframes lm-dot {
+  0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  100% { box-shadow: 0 0 0 7px rgba(34, 197, 94, 0); }
+}
