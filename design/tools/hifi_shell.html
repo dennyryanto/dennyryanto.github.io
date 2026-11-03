@@ -188,17 +188,25 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .mk-board.flush { padding: 0; overflow: hidden; }
 .mk-board.flush .mk-fan-foot { padding: 0 28px 22px; }
 @media (max-width: 600px) { .mk-board { padding: 14px; } .mk-board.flush .mk-fan-foot { padding: 0 14px 16px; } }
-.mk-home { --pw: 480px; position: relative; display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; min-height: 600px; }
-.mk-home { overflow: hidden; }
-/* the pattern lies on the same isometric plane as the phone, so its rows run at the phone's angle */
-.mk-home-floor { position: absolute; left: -60%; right: -60%; top: -170%; bottom: -170%; pointer-events: none; background-size: 480px 360px; transform: rotateX(54deg) rotateZ(-36deg); }
-.mk-home-text { position: relative; padding: 40px 0 40px 44px; display: grid; gap: 14px; max-width: 42ch; }
-.mk-home-text p { margin: 0; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
-.mk-iso { position: relative; align-self: stretch; min-height: 560px; overflow: hidden; }
-.mk-iso-world { position: absolute; left: 0%; top: 28%; width: var(--pw); aspect-ratio: 262 / 556; transform-style: preserve-3d; transform-origin: 0 0; transform: rotateX(54deg) rotateZ(-36deg); }
-.mk-iso-world .lh-phone { position: absolute; inset: 0; width: 100% !important; max-width: none !important; }
-.mk-iso-edge { position: absolute; inset: 0; border-radius: 26px; background: linear-gradient(155deg, #2c2c33, #0d0d10); box-shadow: 0 0 0 1px rgba(255, 255, 255, .08) inset; }
-@media (max-width: 860px) { .mk-home { --pw: 260px; grid-template-columns: minmax(0, 1fr); min-height: 0; } .mk-home-text { max-width: none; padding: 28px 28px 8px; } .mk-iso { min-height: 400px; } .mk-iso-world { left: 2%; top: 24%; } }
+/* Stageshow demos (design/stageshow): a placeholder holds the space and shows the finished frame until the demo code loads,
+   the first time a case study that has one opens (and for good without JavaScript). build_hifi.py adds one rule set per demo
+   for its two designs; the wide one shows from the demo's own width threshold up. */
+.ss-mount { container-type: inline-size; min-width: 0; }
+.ss-frame { position: relative; width: 100%; margin-inline: auto; }
+.ss-poster { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.ss-poster-compact { display: none; }
+.ss-box { container-type: inline-size; }
+.ss-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, var(--sw)); gap: 32px 48px; align-items: center; }
+.ss-lead { margin: 0; max-width: 44ch; font: 400 1rem/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
+.ss-lead-full { max-width: 72ch; margin-bottom: 24px; }
+.ss-chrona { display: grid; grid-template-columns: minmax(0, 640px) minmax(0, 1fr); gap: 32px 56px; align-items: center; }
+@container (max-width: 860px) { .ss-split { grid-template-columns: minmax(0, 1fr); gap: 24px; } .ss-lead { max-width: none; } }
+@container (max-width: 940px) { .ss-chrona { grid-template-columns: minmax(0, 1fr); } }
+/* on a phone the demo gets the full 358px column it was designed for: the board's side padding moves onto the text */
+@media (max-width: 600px) {
+  .mk-board:has(> .ss-box) { padding-inline: 0; }
+  .ss-lead, .ss-chrona > div:last-child { padding-inline: 16px; }
+}
 /* the lab: a band that introduces the two personal builds, a spec line in each hero, and a faint workbench grid behind them */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 88px 40px 0; display: grid; grid-template-columns: minmax(0, 4.7fr) minmax(0, 7.3fr); column-gap: 48px; align-items: end; }
@@ -373,6 +381,23 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
     a.addEventListener('click', function () { if (opener[a.dataset.open]) opener[a.dataset.open](true); });
   });
   if (opener[location.hash.slice(1)]) opener[location.hash.slice(1)](true);
+  // ---- Stageshow demos: their code (one module, one stylesheet) loads the first time a case study that holds one opens ----
+  (function () {
+    var cfg = { js: '%%SS_JS%%', css: '%%SS_CSS%%' }, loading;
+    function boot(scope) {
+      var els = $$('[data-ss]:not(.ss-ready)', scope);
+      if (!els.length) return;
+      if (!loading) {
+        var link = document.createElement('link');
+        link.rel = 'stylesheet'; link.href = cfg.css;
+        var styled = new Promise(function (done) { link.onload = link.onerror = done; });
+        document.head.appendChild(link);
+        loading = Promise.all([import('./' + cfg.js), styled]).then(function (r) { return r[0]; });
+      }
+      loading.then(function (m) { els.forEach(function (el) { if (!el.classList.contains('ss-ready')) m.mount(el); }); }).catch(function (e) { console.error('Stageshow demos did not load', e); });
+    }
+    $$('.mk-drawer').forEach(function (d) { d.addEventListener('mk-open', function () { boot(d); }); if (d.classList.contains('open')) boot(d); });
+  })();
   if (G) liveMotion(document, true);
 
   // ---- drawer reveal: blocks rise in as they enter the view ----

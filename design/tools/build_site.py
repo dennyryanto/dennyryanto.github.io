@@ -8,7 +8,7 @@ under a content hash, GSAP is served from <repo>/assets/js/ instead of a CDN, an
 becomes its own file. No runtime, no bundle: the page renders without JavaScript (every
 drawer shows open), and JavaScript adds the drawers, the stacks and the motion.
 """
-import base64, hashlib, io, os, re, shutil, sys
+import base64, hashlib, io, os, re, shutil, subprocess, sys
 import theme   # the colour theme (design/tools/theme.py)
 from PIL import Image
 
@@ -17,7 +17,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 page = open(os.path.join(W, 'portfolio-hifi.html'), encoding='utf-8').read()
 
 A = os.path.join(R, 'assets')
-for d in ('img', 'js', 'fonts'):
+for d in ('img', 'js', 'fonts', 'stageshow'):
     shutil.rmtree(os.path.join(A, d), ignore_errors=True)
     os.makedirs(os.path.join(A, d))
 
@@ -102,6 +102,25 @@ block = '<script>\n' + stack + '\n</script>'
 assert page.count(block) == 1, 'stack.js block not found'
 page = page.replace(block, '<script src="assets/js/stack.js"></script>')
 
+# ---- the Stageshow demos (design/stageshow): one lazy ES module and one stylesheet, loaded when a case study that holds one opens ----
+SSDIR = os.path.join(here, '..', 'stageshow')
+assert os.path.isdir(os.path.join(SSDIR, 'node_modules')), 'run `npm install --ignore-scripts` in design/stageshow first'
+subprocess.run(['npx', 'vite', 'build', '--config', 'vite.site.config.ts'], cwd=SSDIR, check=True, stdout=subprocess.DEVNULL)
+built = os.path.join(SSDIR, '.build-site')
+ss_names = {}
+for f in sorted(os.listdir(built)):
+    raw = open(os.path.join(built, f), 'rb').read()
+    if f.endswith(('.js', '.css')):   # the accent follows theme.py here too; the name carries the content hash
+        raw = theme.apply(raw.decode('utf-8')).encode('utf-8')
+        stem, ext = os.path.splitext(f)
+        f2 = '%s-%s%s' % (stem, hashlib.sha1(raw).hexdigest()[:10], ext)
+        ss_names[ext] = f2
+    else:
+        f2 = f
+    open(os.path.join(A, 'stageshow', f2), 'wb').write(raw)
+page = page.replace('%%SS_JS%%', 'assets/stageshow/' + ss_names['.js']).replace('%%SS_CSS%%', 'assets/stageshow/' + ss_names['.css'])
+assert '%%SS_' not in page
+
 # ---- images load as they come near the view (most sit in closed drawers); the headshot loads at once ----
 page = re.sub(r'<img (?![^>]*\bloading=)(?![^>]*alt="Denny Ryanto")', '<img loading="lazy" decoding="async" ', page)
 
@@ -149,5 +168,5 @@ open(os.path.join(A, 'favicon.svg'), 'w').write(theme.apply(
     '<path d="M6 11l10 5 10-5-10-5z" fill="#c8f135"/></svg>\n'))
 
 size = lambda p: sum(os.path.getsize(os.path.join(dp, f)) for dp, _, fs in os.walk(p) for f in fs)
-print('index.html %d KB, %d images %d KB, %d fonts %d KB (%d preloaded), js %d KB' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024,
-      len(fonts), size(os.path.join(A, 'fonts')) // 1024, len(dict.fromkeys(preload)), size(os.path.join(A, 'js')) // 1024))
+print('index.html %d KB, %d images %d KB, %d fonts %d KB (%d preloaded), js %d KB, stageshow %d KB (lazy)' % (len(site.encode()) // 1024, len(seen), size(os.path.join(A, 'img')) // 1024,
+      len(fonts), size(os.path.join(A, 'fonts')) // 1024, len(dict.fromkeys(preload)), size(os.path.join(A, 'js')) // 1024, size(os.path.join(A, 'stageshow')) // 1024))

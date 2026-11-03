@@ -427,6 +427,71 @@ def spans(row):
     return [s.get_text(strip=True) for s in row.find_all('span')]
 
 
+# ---------- Stageshow demos (design/stageshow) ----------
+# Five mock-ups are looping React demos rebuilt with the Stageshow kit: LinkAja's routing chat and home screen, the Komunal shipped
+# flow, the enterprise AI decision desk and Chrona. Their code is one lazy bundle (design/stageshow/vite.site.config.ts; build_site.py
+# copies it to assets/stageshow/). Here each gets a placeholder holding its space, with the finished frame (a poster, from
+# design/stageshow/build_posters.py) inside it: the page is complete without JavaScript, and nothing shifts when the demo loads.
+# The page's script mounts the demo the first time its case study opens. Copy, sizes and heads come from the component's own meta.
+import html as _html
+SS = os.path.join(HERE, '..', 'stageshow')
+SS_LABELS = {
+    'linkaja-routing': 'Demo: a limit question is resolved in chat, then a fraud report is routed to a security agent and lands in the agent queue',
+    'linkaja-home': 'Demo: the LinkAja home screen as it ships today, with its promo banners advancing',
+    'komunal-shipped-flow': 'Demo: a deposit placed in the DepositoBPR app, from the product list to the success screen',
+    'ai-decision-desk': 'Demo: an enterprise AI workflow run, from four data sources to a reorder decision ready to approve',
+    'ai-chrona': 'Demo: Chrona drafts and sends a birthday brunch plan in two taps',
+}
+SS_RULES = []
+
+
+def ss_meta(id):
+    src = open(os.path.join(SS, 'components', id, 'index.tsx'), encoding='utf-8').read()
+
+    def text(key):
+        m = re.search(r'\b' + key + r": '((?:[^'\\]|\\.)*)'", src)
+        return re.sub(r'\\(.)', r'\1', m.group(1)) if m else None
+    sz = re.search(r'sizes: \{ wide: \[(\d+), (\d+)\], compact: \[(\d+), (\d+)\], below: (\d+) \}', src)
+    assert sz, 'no sizes in the meta of ' + id
+    w, h, cw, ch_, below = map(int, sz.groups())
+    return dict(head=text('head'), note=text('note') or 'ILLUSTRATIVE', lead=text('lead'), wide=(w, h), compact=(cw, ch_), below=below,
+                stage_w=int(re.search(r'stageWidth: (\d+)', src).group(1)))
+
+
+def ss_mount(id):
+    m = ss_meta(id)
+
+    def poster(kind, size):
+        f = os.path.join(SS, 'site', 'posters', '%s-%s.webp' % (id, kind))
+        if not os.path.exists(f):
+            return ''
+        data = base64.b64encode(open(f, 'rb').read()).decode()
+        return '<img class="ss-poster ss-poster-%s" alt="" width="%d" height="%d" src="data:image/webp;base64,%s">' % (kind, size[0], size[1], data)
+    wide, compact = poster('wide', m['wide']), poster('compact', m['compact'])
+    assert compact, 'run design/stageshow/build_posters.py: no poster for ' + id
+    sel = '.ss-mount[data-ss="%s"]' % id
+    frame = lambda w, h: '%s .ss-frame { max-width: %dpx; aspect-ratio: %d / %d; }' % (sel, w, w, h)
+    if wide:
+        SS_RULES.append(frame(*m['wide']))
+        SS_RULES.append('@container (max-width: %.2fpx) { %s %s .ss-poster-wide { display: none; } %s .ss-poster-compact { display: block; } }'
+                        % (m['below'] - .02, frame(*m['compact']), sel, sel))
+    else:   # a stage whose wide design is narrower than its threshold only ever draws the compact one
+        SS_RULES.append(frame(*m['compact']))
+        SS_RULES.append('%s .ss-poster-compact { display: block; }' % sel)
+    return ('<div class="ss-mount" data-ss="%s" role="img" aria-label="%s"><div class="ss-frame">%s%s</div></div>'
+            % (id, _html.escape(SS_LABELS[id], quote=True), wide, compact))
+
+
+def ss_stage(id, full=False):
+    m = ss_meta(id)
+    lead = _html.escape(m['lead'])
+    if full:
+        inner = '<div class="ss-box"><p class="ss-lead ss-lead-full">%s</p>%s</div>' % (lead, ss_mount(id))
+    else:
+        inner = '<div class="ss-box"><div class="ss-split" style="--sw:%dpx"><p class="ss-lead">%s</p>%s</div></div>' % (m['stage_w'], lead, ss_mount(id))
+    return stage(inner, (_html.escape(m['head']), _html.escape(m['note'])))
+
+
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
           '<span class="mk-t-meta">%%READ%%</span>'
@@ -462,52 +527,9 @@ shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE 
               'so none of them needs an agent.</p>')
 
 
-# LinkAja's home screen as it ships today, redrawn in the same phone shell as the shipped screens and the routing chat
-# (design/sections/linkaja-home.html; layout from the current app, the render on linkaja.id retrieved 2026-10-27)
-# The board behind the phone carries a faint pattern of the redesign's icons and small illustrations (owner: "add icons and
-# illustrations on the background to emphasize visual refresh ... dark look, subtle patterns"): outline-only, a few per cent white.
-def _pattern():
-    import urllib.parse
-    ic = {
-        'receipt': '<path d="M5 3.5h10.5v15L13.7 17l-1.8 1.5L10 17l-1.8 1.5L6.5 17 5 18.5z"/><path d="M8.5 8h4.5M8.5 11.5h3"/>',
-        'phone': '<rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10 6h4"/>',
-        'ticket': '<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M5 9h14"/><circle cx="12" cy="14.5" r="2.6"/>',
-        'grid': '<rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/>',
-        'bolt': '<path d="M13 3 6 13.5h5L10 21l8-11h-5z"/>',
-        'bus': '<rect x="4" y="4" width="16" height="13" rx="3"/><path d="M4 11h16M8 20v-3M16 20v-3"/><circle cx="8" cy="14" r=".8"/><circle cx="16" cy="14" r=".8"/>',
-        'pad': '<rect x="3" y="8" width="18" height="9" rx="4.5"/><path d="M8 10.5v4M6 12.5h4"/><circle cx="15.5" cy="12" r=".8"/><circle cx="17.5" cy="13.5" r=".8"/>',
-        'shield': '<path d="M12 3 5 6v5.5c0 4.2 3 7.6 7 9 4-1.4 7-4.8 7-9V6z"/><path d="m12 9 1 2 2.2.3-1.6 1.5.4 2.2L12 14l-2 1 .4-2.2L8.8 11.3 11 11z"/>',
-        'heart': '<path d="M12 20.5s-7-4.4-9.2-8.8A5.1 5.1 0 0 1 12 6.6a5.1 5.1 0 0 1 9.2 5.1C19 16.1 12 20.5 12 20.5z"/>',
-        'coin': '<circle cx="12" cy="12" r="8"/><path d="M10 8v8h4.5"/>',
-        'wallet': '<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/>',
-        'qr': '<rect x="4" y="4" width="6" height="6" rx="1.2"/><rect x="14" y="4" width="6" height="6" rx="1.2"/><rect x="4" y="14" width="6" height="6" rx="1.2"/><path d="M14 14h2.5v2.5M20 14v6h-6"/>',
-    }
-    # a straight 4 x 3 lattice, one motif per 80-unit cell, all upright: the angle comes from laying the whole tile on the same
-    # isometric plane as the phone (.mk-home-floor), not from tilting individual icons
-    order = ['receipt', 'bolt', 'phone', 'pad', 'shield', 'KIOSK', 'coin', 'bus', 'wallet', 'SCOOTER', 'qr', 'grid']
-    out = ''
-    for i, k in enumerate(order):
-        cx, cy = 40 + (i % 4) * 80, 40 + (i // 4) * 80
-        if k == 'KIOSK':
-            out += '<g transform="translate(%d %d) scale(.85)"><path d="M2 14 7 5h26l5 9z"/><path d="M5 14v22M35 14v22M5 26h30"/><path d="M12 5v9M20 5v9M28 5v9"/></g>' % (cx - 17, cy - 15)
-        elif k == 'SCOOTER':
-            out += '<g transform="translate(%d %d) scale(.8)"><circle cx="9" cy="22" r="7"/><circle cx="43" cy="22" r="7"/><path d="M9 22h11l7-14h8M30 8l9 14M20 22l4-9h8"/></g>' % (cx - 21, cy - 14)
-        else:
-            out += '<g transform="translate(%d %d) scale(1.35)">%s</g>' % (cx - 16, cy - 16, ic[k])
-    # sparkles on the lattice crossings
-    out += ''.join('<path d="M%d %d l1.4 3.4 3.4 1.4 -3.4 1.4 -1.4 3.4 -1.4 -3.4 -3.4 -1.4 3.4 -1.4z"/>' % (x - 1, y - 4.5) for x, y in ((80, 80), (240, 80), (160, 160), (320, 160), (80, 240), (240, 240)))
-    svg = ('<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240" fill="none" stroke="rgba(255,255,255,.075)" '
-           'stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' + out + '</svg>')
-    return "url('data:image/svg+xml," + urllib.parse.quote(svg, safe="/:=,;() ") + "')"
-
-
-# One phone, shot isometrically and close up, bleeding off the corner of a flush board (owner: "pick one ... can bleed to the
-# corner of the container"). CSS 3D with no perspective, so it is a true isometric; extrusion layers give the glass its edge.
-ISO_EDGE = ''.join('<i class="mk-iso-edge" style="transform:translateZ(-%dpx)"></i>' % z for z in range(1, 15))
-LA_HOME = stage(
-    '<div class="mk-home"><i class="mk-home-floor" aria-hidden="true" style="background-image:' + _pattern() + '"></i><div class="mk-home-text"><p>The home-screen revamp I co-led for 70M+ users. At the time the goal was to refresh the design and unify the visual style, introducing updated icons and illustrations for a better user experience.</p><p>Dashboards and research drove it, and it improved the information architecture, clarity and engagement. It is still the design in the app today.</p></div>'
-    '<div class="mk-iso"><div class="mk-iso-world">' + ISO_EDGE + str(section('linkaja-home')) + '</div></div></div>',
-    ('LINKAJA · HOME SCREEN', 'AS IT SHIPS TODAY'), flush=True)
+# LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
+LA_HOME = ss_stage('linkaja-home')
+LA_ROUTING = ss_stage('linkaja-routing')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
           '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
@@ -517,7 +539,7 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-
           '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
           '<div class="mk-block">' + str(section('linkaja-support-model')) + '</div>'
-          '<div class="mk-block">' + str(section('linkaja-intent-routing')) + '</div>'
+          '<div class="mk-block">' + LA_ROUTING + '</div>'
           '<div class="mk-block">' + shots_html + '</div>'
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
@@ -697,7 +719,13 @@ LUMIO = stage(str(l_grid) + str(l_cap), (l_t[0], l_t[1])) + stage(str(l_cms), (c
 ch = ai_[3].find_all(recursive=False)
 c_t = spans(ch[0])
 drop_style(ch[1], 'margin-top')
-CHRONA = stage(str(ch[1]), (c_t[0], c_t[1])) + str(ch[2])
+fig = ch[1].find('figure')
+assert fig is not None and ch[1].get('data-r') == 'stack2', 'the Chrona product block changed shape'
+fig.replace_with(soup(ss_mount('ai-chrona')))
+del ch[1]['data-r']
+ch[1]['class'] = ['ss-chrona']
+ch[1]['style'] = ''
+CHRONA = stage('<div class="ss-box">' + str(ch[1]) + '</div>', (c_t[0], c_t[1])) + str(ch[2])
 # Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
 lk = lab_[2].find_all(recursive=False)
 g_t = spans(lk[0])
@@ -710,10 +738,10 @@ LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
     'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
-                      section('komunal-funnel'), section('komunal-shipped-flow')),
+                      section('komunal-funnel'), ss_stage('komunal-shipped-flow')),
     'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
-    'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (str(section('ai-decision-desk')), CHRONA)),
+    'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (ss_stage('ai-decision-desk', full=True), CHRONA)),
     'lab': '<div class="mk-block">' + GARMIN + '</div>',      # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
@@ -991,6 +1019,7 @@ def one_type(html):
 
 
 css = one_type(css)
+css += '\n/* Stageshow demo placeholders (ss_mount) */\n' + '\n'.join(SS_RULES) + '\n'
 # the LinkAja chats play their conversation once and hold it, so there is time to read it, instead of clearing it every 14s;
 # linkaja-intent-routing.html starts them when the phones come into view (without JavaScript they play on load and hold)
 assert css.count('91% { opacity: 1; transform: none; }\n  96%, 100% { opacity: 0; transform: none; }') == 11

@@ -1,0 +1,339 @@
+/* All rules belong to this demo. The stage sits on the page's board ground; LinkAja's red stays inside the screen. */
+.lh {
+  & .ss-stage {
+    overflow: hidden;
+    background: var(--lh-ground, #1a1b1f);
+    --ss-accent: oklch(0.9 0.2 122);
+    --ss-font: Archivo, system-ui, -apple-system, sans-serif;
+    --lh-red: #e8232b;
+    --lh-ink: #1c1f24;
+    --lh-muted: #4b5563;
+    --lh-ground-screen: #f6f7f9;
+  }
+
+  /* One phone, whole, one gutter from the top and the foot */
+  .lh-phone {
+    position: absolute;
+    top: 24px;
+    left: 30px;
+  }
+  & .ss-stage[data-layout='compact'] .lh-phone {
+    top: 16px;
+    left: 16px;
+  }
+
+  /* The screen, laid out in true points (402 wide); the Phone scales it */
+  .lh-app {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    font-family: var(--ss-font);
+    background: linear-gradient(180deg, #eceff5 0, var(--lh-ground-screen) 170px);
+    color: var(--lh-ink);
+    letter-spacing: 0;
+  }
+  .lh-street {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 402px;
+    height: 172px;
+    background-size: 402px 172px;
+    background-repeat: no-repeat;
+  }
+
+  .lh-top {
+    position: absolute;
+    top: 68px;
+    right: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .lh-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    padding-left: 8px;
+    border-radius: 13px;
+    background: var(--lh-red);
+    color: #fff;
+    font: italic 800 13.5px/1 var(--ss-font);
+  }
+  .lh-icons { display: flex; gap: 10px; }
+  .lh-ibtn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 13px;
+    background: #fff;
+    color: var(--lh-red);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+
+  .lh-hero {
+    position: absolute;
+    top: 134px;
+    right: 20px;
+    left: 20px;
+    height: 118px;
+    padding: 20px 0 0 12px;
+    overflow: hidden;
+    border-radius: 17px;
+    color: #fff;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, #e8232b, #b3141c);
+    background-size: 16px 16px, auto;
+  }
+  .lh-hero__hi { margin-left: 8px; font: 700 16px/1 var(--ss-font); }
+  .lh-hero__cards { display: flex; gap: 8px; margin-top: 12px; }
+  .lh-bal {
+    flex: none;
+    display: grid;
+    gap: 9px;
+    width: 122px;
+    padding: 11px 8px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  .lh-bal:first-child { width: 128px; }
+  .lh-bal__k { font: 500 13px/1 var(--ss-font); color: var(--lh-ink); white-space: nowrap; }
+  .lh-bal__v {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font: 800 14px/1 var(--ss-font);
+    color: var(--lh-ink);
+    white-space: nowrap;
+  }
+  .lh-bal__v--cta { color: var(--lh-red); }
+  .lh-go {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--lh-red);
+    color: #fff;
+  }
+  .lh-coin {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #f4b740;
+    box-shadow: inset 0 0 0 1.5px #e69a1c;
+  }
+
+  .lh-quick {
+    position: absolute;
+    top: 264px;
+    right: 20px;
+    left: 20px;
+    display: flex;
+    padding: 14px 4px 12px;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+  .lh-quick__i {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    font: 500 14px/1.15 var(--ss-font);
+    color: var(--lh-ink);
+    white-space: nowrap;
+  }
+  .lh-quick__ic { position: relative; display: block; height: 28px; }
+  .lh-quick__ic svg { display: block; }
+  .lh-badge {
+    position: absolute;
+    right: -5px;
+    bottom: -3px;
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--lh-red);
+    color: #fff;
+  }
+
+  .lh-grid {
+    position: absolute;
+    top: 366px;
+    right: 20px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px 4px;
+  }
+  .lh-svc {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    text-align: center;
+  }
+  .lh-svc__ic {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
+  }
+  .lh-svc__ic svg { display: block; }
+  .lh-svc__l { max-width: 80px; font: 500 14px/1.15 var(--ss-font); color: var(--lh-muted); }
+  .lh-nb { white-space: nowrap; }
+  .lh-rp {
+    padding: 5px 6px;
+    border-radius: 6px;
+    background: #a9e3d9;
+    font: 800 15px/1 var(--ss-font);
+  }
+  .lh-new {
+    position: absolute;
+    top: -7px;
+    right: -6px;
+    padding: 3px 5px;
+    border-radius: 5px;
+    background: var(--lh-red);
+    color: #fff;
+    font: 700 13.5px/1 var(--ss-font);
+  }
+
+  .lh-promo__title {
+    position: absolute;
+    top: 568px;
+    left: 20px;
+    font: 800 19px/1.2 var(--ss-font);
+  }
+  .lh-promo {
+    position: absolute;
+    top: 602px;
+    left: 20px;
+    right: 0;
+    height: 140px;
+    overflow: hidden;
+  }
+  .lh-track {
+    display: flex;
+    gap: 10px;
+    height: 100%;
+    will-change: transform;
+    transition: transform 0.9s cubic-bezier(0.45, 0, 0.1, 1);
+  }
+  .lh-ban {
+    position: relative;
+    flex: none;
+    width: 342px;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    color: #fff;
+  }
+  .lh-ban--1 { --b0: #d3202a; --b1: #ef5a2a; }
+  .lh-ban--2 { --b0: #dc3a1f; --b1: #f2802b; }
+  .lh-ban--3 { --b0: #9d1a2b; --b1: #e8232b; }
+  /* The two discs are drawn into the banner's own background, opaque where they overlap */
+  .lh-ban {
+    --da: color-mix(in srgb, #fff 13%, var(--b1));
+    --db: color-mix(in srgb, #fff 17%, var(--b1));
+    background:
+      radial-gradient(circle 52px at 260px 128px, var(--db) 51.4px, transparent 52px),
+      radial-gradient(circle 80px at 288px 48px, var(--da) 79.4px, transparent 80px),
+      linear-gradient(115deg, var(--b0), var(--b1));
+  }
+  .lh-ban__h { position: absolute; left: 18px; top: 22px; font: 800 20px/1.2 var(--ss-font); }
+  .lh-ban__s { position: absolute; left: 18px; top: 96px; font: 500 14px/1 var(--ss-font); opacity: 0.92; }
+  /* Banners 2 and 3 are invented placeholders: flat shapes in the banner's own colours (art.ts), no mark. */
+  .lh-ban--2, .lh-ban--3 { background-repeat: no-repeat; background-size: 342px 140px, auto; }
+  .lh-ban__badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--b0);
+  }
+  .lh-ban__tile {
+    position: absolute;
+    right: 30px;
+    top: 48px;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background: color-mix(in srgb, #fff 26%, var(--b1));
+  }
+
+  .lh-dots {
+    position: absolute;
+    top: 756px;
+    left: 20px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .lh-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 3px;
+    background: #d1d5db;
+    transition: width 0.5s cubic-bezier(0.45, 0, 0.1, 1), background-color 0.4s ease;
+  }
+  .lh-dot[data-on] { width: 20px; background: var(--lh-red); }
+
+  .lh-tabs {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    height: 88px;
+    padding: 15px 6px 0;
+    background: #fff;
+    box-shadow: 0 -6px 18px -10px rgba(0, 0, 0, 0.25);
+  }
+  .lh-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #6b7280;
+    font: 500 13px/1 var(--ss-font);
+  }
+  .lh-tab svg { display: block; flex: none; }
+  .lh-tab[data-on] { color: var(--lh-red); font-weight: 700; }
+  .lh-tab__gap { display: block; width: 24px; height: 24px; }
+  .lh-qris { display: block; width: 44px; height: auto; filter: brightness(0) invert(1); }
+  .lh-fab {
+    position: absolute;
+    bottom: 46px;
+    left: 50%;
+    translate: -50% 0;
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 17px;
+    background: var(--lh-red);
+    box-shadow: 0 8px 16px -6px rgba(232, 35, 43, 0.7);
+    color: #fff;
+  }
+  .lh-tab--pay { gap: 6px; font-weight: 700; }
+}

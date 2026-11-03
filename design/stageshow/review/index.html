@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Stageshow Components</title>
+<meta name="claude:viewport-fit-sides" content="cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" />
+</head>
+<body>
+<main class="rv">
+  <header class="rv-top">
+    <p class="rv-eyebrow">Stageshow rebuild</p>
+    <h1>Portfolio UI components</h1>
+    <p class="rv-lead">Product mockups from the site, redrawn with the Stageshow kit and looping. These five are the ones kept after review, and they are live on the site. The infographics are on hold.</p>
+  </header>
+
+  <div class="rv-bar" role="toolbar" aria-label="Preview controls">
+    <div class="rv-seg" role="group" aria-label="Preview width">
+      <button type="button" id="w-desk" aria-pressed="true">Desktop</button>
+      <button type="button" id="w-phone" aria-pressed="false">Phone</button>
+    </div>
+    <button type="button" id="replay" class="rv-btn">Replay</button>
+    <p class="rv-count" id="count" aria-live="polite"></p>
+  </div>
+
+  <div id="cases" class="rv-cases"></div>
+  <section class="rv-queue" id="queue" aria-labelledby="q-title"></section>
+</main>
+<script type="module" src="./main.tsx"></script>
+</body>
+</html>

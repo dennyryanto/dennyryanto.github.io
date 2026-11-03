@@ -919,6 +919,57 @@ If the site accent changes in `theme.py`, the lab stays cyan on purpose.
 **Still open:** the remaining px font sizes; two console warnings from GSAP ("target not found"); one 815KB image
 (confirm it is lazy-loaded); no `robots.txt` or Person structured data.
 
+## Stageshow demos in the site (2026-11-03)
+
+Five product mock-ups are now looping React demos built with the [Stageshow](https://benji.org/stageshow) kit (MIT), in
+`design/stageshow/`. They replace the sections they were rebuilt from.
+
+| Demo (`design/stageshow/components/<id>`) | Where | Replaces |
+|---|---|---|
+| `linkaja-routing` | LinkAja drawer | `sections/linkaja-intent-routing.html` (two chat phones) |
+| `linkaja-home` | LinkAja drawer | `sections/linkaja-home.html` (the isometric phone) |
+| `komunal-shipped-flow` | Komunal drawer | `sections/komunal-shipped-flow.html` (four screens side by side) |
+| `ai-decision-desk` | Independent drawer | `sections/ai-decision-desk.html` |
+| `ai-chrona` | Independent drawer | the Chrona screenshot with its animated overlay (the write-up beside it stays) |
+
+The replaced `sections/` files stay in the repo for reference; `build_hifi.py` no longer reads them.
+
+**Owner decisions from review**
+- Kept these five; the Dash, Lumio and Lab rebuilds were dropped (those keep their current mock-ups), and the infographics
+  (wave 2: OPEX chart, funnel, support model, tooling migration, the Garmin pipeline and so on) are on hold.
+- Komunal: the added BPR Artha Sejahtera card and the plain building glyph in place of the bank marks are fine.
+- Chrona: the drafted message and the free window are fine. The **aura glow** is kept (the old animated overlay, a coral light
+  travelling round the AI card's edge, rebuilt in CSS as a ring over a halo). After the invite is sent the ring stays dim, so the
+  card still reads as the AI's. The bold coral line along the top of the card is gone.
+- LinkAja home: promo banners 2 and 3 are invented placeholders (generic copy, no figures) to replace with the real ones. The
+  Bayar button carries the QRIS logo (Wikimedia Commons "QRIS logo.svg", cropped to the mark, white); swap in the official asset.
+- LinkAja routing: the agent queue card is in English (an agent-side surface); the phone stays in Indonesian.
+
+**How they are built into the page**
+- `design/stageshow/vite.site.config.ts` bundles the five into one ES module plus one stylesheet (about 123KB and 22KB gzipped;
+  the kit's brand-mark registry is stubbed out). `build_site.py` runs it, applies `theme.py` to the output, names the files by
+  content hash and copies them to `assets/stageshow/`.
+- `build_hifi.py` puts a placeholder (`ss_mount()`) where each demo goes: a box with the demo's aspect ratio for both its designs,
+  holding the finished frame as a poster (`design/stageshow/build_posters.py`, WebP files in `site/posters/`). Copy, heads and
+  sizes are read from each component's `meta`.
+- The page's script loads the bundle the first time a case study that holds a demo opens (also on a deep link), then mounts each
+  placeholder in it. Nothing loads before that, so the first load did not get heavier; without JavaScript the posters stand in
+  and the page still reads in full.
+- Measured on the built page, mobile profile at 4x CPU slowdown, median of three, before and after: FCP 344 and 324ms, LCP 372
+  and 328ms, total blocking time 1100 and 510ms, layout shift 0 and 0, `index.html` 587KB and 476KB (the old Chrona screenshot
+  and the isometric home block are gone). Opening a case study adds one stylesheet and one module request.
+- Phones get the 358px column the compact designs were drawn for: the board's side padding moves onto the text
+  (`.mk-board:has(> .ss-box)` in `hifi_shell.html`).
+
+**Quirk to know about.** `kit/stage.tsx` picks the layout from the width of its fit box, which is capped at the wide design's
+width. `linkaja-home` and `komunal-shipped-flow` have a 400px wide design under a 560px threshold, so they always draw their
+compact (358px) design; their `meta.sizes` say so and they ship one poster. The review lines in their REHEARSAL.md were taken in
+that state.
+
+**Changing a demo.** Edit it in `design/stageshow/components/<id>/`, run `python3 design/stageshow/build_posters.py` if its
+finished frame changed, then rebuild (below). The review page `design/mockups/stageshow-components.html`
+(`python3 design/stageshow/build_review.py`) shows the same components outside the site.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:
@@ -981,6 +1032,8 @@ those before continuing. Resume from here.
 ## Technical notes for whoever picks this up
 
 - **Rebuilding the site.**
+  0. Once: `cd design/stageshow && npm install --ignore-scripts` (the Stageshow demos are bundled with Vite). After changing a
+     demo's finished frame, `python3 design/stageshow/build_posters.py`.
   1. Serve the repo: `python3 -m http.server 8765`.
   2. Grab the live sections from `design/source/legacy-index.html`. For a
      fresh work directory, unpack the bundle there first (`unpack.py`), since
@@ -991,7 +1044,7 @@ those before continuing. Resume from here.
   3. `python3 design/tools/build_hifi.py <workdir>` assembles the page; it
      writes `<workdir>/portfolio-hifi.html`, the hi-fi artifact.
   4. `python3 design/tools/build_site.py <workdir> .` writes `index.html` and
-     `assets/`.
+     `assets/` (including `assets/stageshow/`, built from `design/stageshow`).
 
   `build_hifi.py` reads `stack.js` and `hifi_shell.html` from the repo; only
   the captures come from the work directory. Copy or edit content in the
