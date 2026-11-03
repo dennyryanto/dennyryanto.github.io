@@ -1,5 +1,23 @@
 import { Avatar, Bar, Check, Collapse, Connector, Icon, Phone, Row, Stage, Stamp, Thread, Bubble, type Act } from '../../kit'
 import './routing.css'
+import type { Meta } from '../plan'
+
+export const meta: Meta = {
+  id: 'linkaja-routing',
+  case: 'LinkAja',
+  title: 'Intent routing',
+  head: 'INTENT ROUTING IN CHAT',
+  note: 'ILLUSTRATIVE',
+  lead: 'Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.',
+  layout: 'split',
+  stageWidth: 598,
+  notes: [
+    ['One phone, one story.', 'The chat builds message by message. A limit question is classified and resolved without an agent. Then the fraud report arrives, is classified, and is handed to a person. This replaces the two phones side by side.'],
+    ['The consequence is shown where it lands.', 'The case drops into the agent queue with its chat history, transactions and account status attached. A leader ties it to the agent who joins the chat.'],
+    ['Checked.', 'The rehearsal gate passes at the 390px phone column. At the desktop width its only finding is the phone side gutters against its 16px bottom gutter, which comes from keeping the shell whole. Reduced motion shows the finished chat.'],
+    ['Not checked.', 'Frame rate on a real phone, and the loop inside the built site.'],
+  ],
+}
 
 // LinkAja intent routing in chat. The chat is built message by message, so the
 // viewer has the context before the sensitive case arrives: a limit question
