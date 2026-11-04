@@ -8064,7 +8064,7 @@ function df() {
     }
   );
 }
-const ff = { step: 0, cover: !1, focus: !1, n: 0, warn: !1, rails: !1, cta: !1, sec: 17112, found: !1, total: 0 }, hf = { step: 2, cover: !0, focus: !0, n: 9, warn: !0, rails: !0, cta: !0, sec: 17108, found: !0, total: 7905e5 }, Ti = { wide: { x: 660, y: 690 }, compact: { x: 200, y: 690 } }, pf = "750000000", mf = [
+const ff = { step: 0, cover: !1, focus: !1, n: 0, warn: !1, rails: !1, cta: !1, sec: 17112, found: !1, total: 0 }, hf = { step: 2, cover: !0, focus: !0, n: 9, warn: !0, rails: !0, cta: !0, sec: 17108, found: !0, total: 7905e5 }, Ti = { wide: { x: 620, y: 650 }, compact: { x: 200, y: 690 } }, pf = "750000000", mf = [
   ["Pick a product", "A tap on BPR Artha Sejahtera opens the amount screen."],
   ["Enter the amount", "It is checked as it is typed: over Rp500 jt raises a warning."],
   ["One rail recommended", "RTGS fits Rp750 jt and the other three drop out. Nothing is locked while it waits for the funds."],
@@ -8137,9 +8137,9 @@ function xf() {
   return /* @__PURE__ */ l.jsx(
     Er,
     {
-      width: 860,
-      height: 755,
-      compact: { below: 640, width: 358, height: 718 },
+      width: 820,
+      height: 731,
+      compact: { below: 620, width: 358, height: 718 },
       initial: ff,
       poster: hf,
       script: gf,
@@ -8150,8 +8150,8 @@ function xf() {
       children: (a, c, u) => {
         const p = Vo(pf.slice(0, a.n)), v = Math.floor(a.sec / 3600), x = Math.floor(a.sec % 3600 / 60), S = a.sec % 60, E = u !== "compact", C = vf(a);
         return /* @__PURE__ */ l.jsxs(l.Fragment, { children: [
-          E && /* @__PURE__ */ l.jsx("ol", { className: "kd-steps", children: mf.map(([L, M], B) => /* @__PURE__ */ l.jsxs("li", { className: "kd-step", "data-state": B < C ? "done" : B === C ? "on" : "next", "data-last": B === 3 || void 0, children: [
-            /* @__PURE__ */ l.jsx("span", { className: "kd-step__n", children: B < C || B === 3 && C === 3 ? /* @__PURE__ */ l.jsx(tn, { size: 18, strokeWidth: 2.8 }) : B + 1 }),
+          E && /* @__PURE__ */ l.jsx("ol", { className: "kd-rail", children: mf.map(([L, M], B) => /* @__PURE__ */ l.jsxs("li", { className: "kd-beat", "data-state": B < C ? "done" : B === C ? "on" : "next", "data-last": B === 3 || void 0, children: [
+            /* @__PURE__ */ l.jsx("span", { className: "kd-beat__n", children: B < C || B === 3 && C === 3 ? /* @__PURE__ */ l.jsx(tn, { size: 18, strokeWidth: 2.8 }) : B + 1 }),
             /* @__PURE__ */ l.jsx("b", { children: L }),
             /* @__PURE__ */ l.jsx("p", { children: M })
           ] }, L)) }),

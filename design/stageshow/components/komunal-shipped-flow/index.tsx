@@ -11,8 +11,8 @@ export const meta: Meta = {
   note: 'DEPOSITOBPR · PRODUCT',
   lead: 'As shipped: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.',
   layout: 'full',
-  stageWidth: 860,
-  sizes: { wide: [860, 755], compact: [358, 718], below: 640 },
+  stageWidth: 820,
+  sizes: { wide: [820, 731], compact: [358, 718], below: 620 },
   notes: [
     ['One phone, four screens.', 'The four screens that were side by side are one continuous flow: a product is picked from the list, the amount is entered and checked, the one rail that fits is recommended, the instructions wait for the funds, and the success screen arrives as the payoff. The loop closes when the success screen is dismissed over the list.'],
     ['What carries the story.', 'The amount is typed, the warning and the rail verdict appear because of it (RTGS is recommended, the other three leave the list as unavailable for Rp750 jt), the countdown ticks while nothing is locked, and the funds are detected without a tap. The success screen counts its total up.'],
@@ -52,7 +52,7 @@ type S = {
 const initial: S = { step: 0, cover: false, focus: false, n: 0, warn: false, rails: false, cta: false, sec: 17112, found: false, total: 0 }
 const poster: S = { step: 2, cover: true, focus: true, n: 9, warn: true, rails: true, cta: true, sec: 17108, found: true, total: 790500000 }
 
-const REST = { wide: { x: 660, y: 690 }, compact: { x: 200, y: 690 } }
+const REST = { wide: { x: 620, y: 650 }, compact: { x: 200, y: 690 } }
 const DIGITS = '750000000'
 
 // The flow's four beats, beside the phone on the wide design: each lights up as the demo reaches it and the last (the outcome) is lime
@@ -196,9 +196,9 @@ function Product({ min, term, rate, tag, bank, sub, target, bars }: { min?: stri
 export default function KomunalFlow() {
   return (
     <Stage<S>
-      width={860}
-      height={755}
-      compact={{ below: 640, width: 358, height: 718 }}
+      width={820}
+      height={731}
+      compact={{ below: 620, width: 358, height: 718 }}
       initial={initial}
       poster={poster}
       script={script}
@@ -217,10 +217,10 @@ export default function KomunalFlow() {
         return (
           <>
           {wide && (
-            <ol className="kd-steps">
+            <ol className="kd-rail">
               {STEPS.map(([t, d], i) => (
-                <li key={t} className="kd-step" data-state={i < now ? 'done' : i === now ? 'on' : 'next'} data-last={i === 3 || undefined}>
-                  <span className="kd-step__n">{i < now || (i === 3 && now === 3) ? <Tick size={18} strokeWidth={2.8} /> : i + 1}</span>
+                <li key={t} className="kd-beat" data-state={i < now ? 'done' : i === now ? 'on' : 'next'} data-last={i === 3 || undefined}>
+                  <span className="kd-beat__n">{i < now || (i === 3 && now === 3) ? <Tick size={18} strokeWidth={2.8} /> : i + 1}</span>
                   <b>{t}</b>
                   <p>{d}</p>
                 </li>
