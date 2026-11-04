@@ -24,6 +24,64 @@
     top: 16px;
     left: 16px;
   }
+  & .ss-stage:not([data-layout='compact']) .kd-phone {
+    left: auto;
+    right: 30px;
+  }
+
+  /* The four beats beside the phone (wide design only), on the page's ground like the Chrona outcome card */
+  .kd-steps {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 400px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .kd-step {
+    position: relative;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    column-gap: 18px;
+    padding-bottom: 38px;
+    color: var(--ss-text);
+    opacity: 0.6;
+    transition: opacity 0.45s ease;
+  }
+  .kd-step[data-last] { padding-bottom: 0; }
+  .kd-step[data-state='done'] { opacity: 0.8; }
+  .kd-step[data-state='on'] { opacity: 1; }
+  .kd-step::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 42px;
+    bottom: 6px;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--ss-line);
+  }
+  .kd-step[data-last]::before { display: none; }
+  .kd-step__n {
+    grid-row: 1 / span 2;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px var(--ss-text);
+    font: 500 15px/1 'IBM Plex Mono', ui-monospace, monospace;
+    transition: background 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .kd-step[data-state='on'] .kd-step__n { background: var(--ss-text-strong); color: #17181c; box-shadow: none; }
+  .kd-step[data-last][data-state='on'] .kd-step__n { background: var(--ss-accent); color: #1a2300; }
+  .kd-step b { align-self: end; color: var(--ss-text-strong); font-size: 20px; font-weight: 600; line-height: 1.25; }
+  .kd-step p { grid-column: 2; margin: 6px 0 0; font-size: 15px; line-height: 1.5; }
 
   /* The screens, laid out in true points (402 wide); the Phone scales them */
   .kd-app {

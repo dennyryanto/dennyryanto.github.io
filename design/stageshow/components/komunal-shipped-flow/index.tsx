@@ -10,9 +10,9 @@ export const meta: Meta = {
   head: 'SHIPPED SCREEN + FLOW',
   note: 'DEPOSITOBPR · PRODUCT',
   lead: 'As shipped: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.',
-  layout: 'split',
-  stageWidth: 400,
-  sizes: { wide: [358, 718], compact: [358, 718], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
+  layout: 'full',
+  stageWidth: 860,
+  sizes: { wide: [860, 755], compact: [358, 718], below: 640 },
   notes: [
     ['One phone, four screens.', 'The four screens that were side by side are one continuous flow: a product is picked from the list, the amount is entered and checked, the one rail that fits is recommended, the instructions wait for the funds, and the success screen arrives as the payoff. The loop closes when the success screen is dismissed over the list.'],
     ['What carries the story.', 'The amount is typed, the warning and the rail verdict appear because of it (RTGS is recommended, the other three leave the list as unavailable for Rp750 jt), the countdown ticks while nothing is locked, and the funds are detected without a tap. The success screen counts its total up.'],
@@ -52,8 +52,17 @@ type S = {
 const initial: S = { step: 0, cover: false, focus: false, n: 0, warn: false, rails: false, cta: false, sec: 17112, found: false, total: 0 }
 const poster: S = { step: 2, cover: true, focus: true, n: 9, warn: true, rails: true, cta: true, sec: 17108, found: true, total: 790500000 }
 
-const REST = { x: 200, y: 690 }
+const REST = { wide: { x: 660, y: 690 }, compact: { x: 200, y: 690 } }
 const DIGITS = '750000000'
+
+// The flow's four beats, beside the phone on the wide design: each lights up as the demo reaches it and the last (the outcome) is lime
+const STEPS = [
+  ['Pick a product', 'A tap on BPR Artha Sejahtera opens the amount screen.'],
+  ['Enter the amount', 'It is checked as it is typed: over Rp500 jt raises a warning.'],
+  ['One rail recommended', 'RTGS fits Rp750 jt and the other three drop out. Nothing is locked while it waits for the funds.'],
+  ['Deposit active', 'The funds are detected on their own and the deposit starts.'],
+]
+const activeStep = (s: S) => (s.found || s.cover ? 3 : s.step === 2 ? 2 : s.step === 1 ? 1 : 0)
 
 const group = (digits: string) => digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
 const two = (n: number) => String(n).padStart(2, '0')
@@ -104,7 +113,7 @@ async function script(a: Act<S>) {
   a.put({ cover: false })
   await a.wait(550)
   await a.snap({ total: 0 })
-  await a.move(REST)
+  await a.move(a.layout === 'wide' ? REST.wide : REST.compact)
   await a.wait(150)
 }
 
@@ -187,9 +196,9 @@ function Product({ min, term, rate, tag, bank, sub, target, bars }: { min?: stri
 export default function KomunalFlow() {
   return (
     <Stage<S>
-      width={400}
+      width={860}
       height={755}
-      compact={{ below: 560, width: 358, height: 718 }}
+      compact={{ below: 640, width: 358, height: 718 }}
       initial={initial}
       poster={poster}
       script={script}
@@ -203,7 +212,21 @@ export default function KomunalFlow() {
         const h = Math.floor(s.sec / 3600)
         const m = Math.floor((s.sec % 3600) / 60)
         const sec = s.sec % 60
+        const wide = layout !== 'compact'
+        const now = activeStep(s)
         return (
+          <>
+          {wide && (
+            <ol className="kd-steps">
+              {STEPS.map(([t, d], i) => (
+                <li key={t} className="kd-step" data-state={i < now ? 'done' : i === now ? 'on' : 'next'} data-last={i === 3 || undefined}>
+                  <span className="kd-step__n">{i < now || (i === 3 && now === 3) ? <Tick size={18} strokeWidth={2.8} /> : i + 1}</span>
+                  <b>{t}</b>
+                  <p>{d}</p>
+                </li>
+              ))}
+            </ol>
+          )}
           <Phone width={layout === 'compact' ? 326 : 340} className="kd-phone">
             <div className="kd-app">
               {/* 1 · Product list */}
@@ -468,6 +491,7 @@ export default function KomunalFlow() {
               </section>
             </div>
           </Phone>
+          </>
         )
       }}
     </Stage>

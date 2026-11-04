@@ -486,7 +486,8 @@ def ss_stage(id, full=False):
     m = ss_meta(id)
     lead = _html.escape(m['lead'])
     if full:
-        inner = '<div class="ss-box"><p class="ss-lead ss-lead-full">%s</p>%s</div>' % (lead, ss_mount(id))
+        # the lead lines up with the stage's left edge (the stage is centred on the board)
+        inner = '<div class="ss-box"><div style="max-width:%dpx;margin-inline:auto"><p class="ss-lead ss-lead-full">%s</p></div>%s</div>' % (m['stage_w'], lead, ss_mount(id))
     else:
         inner = '<div class="ss-box"><div class="ss-split" style="--sw:%dpx"><p class="ss-lead">%s</p>%s</div></div>' % (m['stage_w'], lead, ss_mount(id))
     return stage(inner, (_html.escape(m['head']), _html.escape(m['note'])))
@@ -738,7 +739,7 @@ LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
     'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
-                      section('komunal-funnel'), ss_stage('komunal-shipped-flow')),
+                      section('komunal-funnel'), ss_stage('komunal-shipped-flow', full=True)),
     'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
     'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (ss_stage('ai-decision-desk', full=True), CHRONA)),
