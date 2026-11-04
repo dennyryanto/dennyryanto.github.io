@@ -1,5 +1,5 @@
 import { Avatar, Collapse, Connector, Phone, Spinner, Stage, States, Stream, type Act } from '../../kit'
-import { ArrowRight, Bell, CalendarCheck, Check, Send, Sparkles, X } from 'lucide-react'
+import { Activity, ArrowRight, Bell, CalendarCheck, CalendarDays, Check, ChevronLeft, ChevronRight, Mail, Plus, Send, Sparkles, Users, X } from 'lucide-react'
 import './chrona.css'
 import type { Meta } from '../plan'
 import aulia from './aulia.webp'
@@ -131,8 +131,10 @@ export default function Chrona() {
                   <span>Month</span>
                 </div>
                 <div className="cr-date">
+                  <ChevronLeft size={20} strokeWidth={2} className="cr-chev" />
                   <b>Wed, Oct 7</b>
                   <span>· 2026</span>
+                  <ChevronRight size={20} strokeWidth={2} className="cr-chev" />
                   <i>TODAY</i>
                 </div>
                 <div className="cr-aura" data-aura={s.btn === 'sent' ? 'rest' : 'on'}>
@@ -184,6 +186,19 @@ export default function Chrona() {
                   ))}
                 </div>
               </div>
+              <div className="cr-fab" data-hide={s.open || undefined}><Plus size={22} strokeWidth={2.2} />New plan</div>
+              <nav className="cr-tabs" aria-hidden>
+                <span data-on><CalendarDays size={26} strokeWidth={1.9} />Today</span>
+                <span><Users size={26} strokeWidth={1.9} />Circle</span>
+                <span className="cr-tabs__mid">
+                  <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden>
+                    <path d="M31 14.5a13 13 0 1 0 0 11" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
+                    <path d="M20 20h6" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
+                  </svg>
+                </span>
+                <span><Mail size={26} strokeWidth={1.9} />Invites</span>
+                <span><Activity size={26} strokeWidth={1.9} />Pulse</span>
+              </nav>
             </Phone>
             <div className="cr-sat-slot" style={wide ? { top: Math.max(0, btn.y + btn.height / 2 - 118) } : undefined}>
               <Collapse open={s.sat} reveal="drop">

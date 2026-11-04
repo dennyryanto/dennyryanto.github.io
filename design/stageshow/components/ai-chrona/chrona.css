@@ -129,6 +129,29 @@
   .cr-btn[data-state='plan'] .cr-btn__l svg { color: var(--cr-coral); }
   .cr-btn__l svg { flex: none; }
 
+  .cr-chev { flex: none; color: var(--cr-ink-2); }
+  .cr-date { gap: 8px; }
+  .cr-date .cr-chev:first-child { margin-right: 4px; }
+
+  /* The app's floating tab bar (Today, Circle, the Chrona button, Invites, Pulse) and its New plan button */
+  .cr-tabs {
+    position: absolute; left: 20px; right: 20px; bottom: 18px; height: 70px;
+    display: grid; grid-template-columns: 1fr 1fr 84px 1fr 1fr; align-items: center;
+    border-radius: 28px; background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 6px 22px rgba(60, 30, 20, 0.14), 0 0 0 1px rgba(60, 30, 20, 0.04);
+  }
+  .cr-tabs span { display: grid; justify-items: center; gap: 4px; color: var(--cr-ink-2); font-size: 14px; font-weight: 500; line-height: 1.1; }
+  .cr-tabs span[data-on] { color: var(--cr-coral-ink); }
+  .cr-tabs__mid { position: relative; align-self: start; width: 66px; height: 66px; margin: -20px auto 0; border-radius: 50%; place-items: center; background: var(--cr-coral); box-shadow: 0 0 0 5px #fff, 0 0 0 10px #f6dfd6, 0 8px 18px rgba(212, 85, 46, 0.35); }
+  .cr-fab {
+    position: absolute; right: 22px; bottom: 112px; display: inline-flex; align-items: center; gap: 8px;
+    height: 54px; padding: 0 22px 0 16px; border-radius: 18px; background: var(--cr-tint); color: var(--cr-coral-ink);
+    font-size: 17px; font-weight: 600; box-shadow: 0 4px 14px rgba(60, 30, 20, 0.1);
+    transition: opacity 0.3s ease;
+  }
+  .cr-fab[data-hide] { opacity: 0; }
+  & .ss-stage[data-layout='compact'] .cr-tabs, & .ss-stage[data-layout='compact'] .cr-fab { display: none; }
+
   .cr-hours { display: grid; gap: 10px; margin-top: 20px; }
   .cr-hours div { display: grid; grid-template-columns: 52px 1fr; gap: 10px; align-items: start; }
   .cr-hours span { color: var(--cr-ink-2); font: 500 14px/1.2 'IBM Plex Mono', ui-monospace, monospace; }
