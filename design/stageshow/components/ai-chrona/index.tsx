@@ -1,5 +1,5 @@
 import { Avatar, Collapse, Connector, Phone, Spinner, Stage, States, Stream, type Act } from '../../kit'
-import { Activity, ArrowRight, Bell, CalendarCheck, CalendarDays, Check, ChevronLeft, ChevronRight, Mail, Plus, Send, Sparkles, Users, X } from 'lucide-react'
+import { ArrowRight, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, Send, Sparkles, X } from 'lucide-react'
 import './chrona.css'
 import type { Meta } from '../plan'
 import aulia from './aulia.webp'
@@ -186,18 +186,38 @@ export default function Chrona() {
                   ))}
                 </div>
               </div>
-              <div className="cr-fab" data-hide={s.open || undefined}><Plus size={22} strokeWidth={2.2} />New plan</div>
+              {/* The app's own bottom bar and New plan button (chrona/mockups/index.html: .TabBar, .TodayFab) */}
+              <div className="cr-fab" data-hide={s.open || undefined}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 5v14M5 12h14" /></svg>
+                <span>New plan</span>
+              </div>
               <nav className="cr-tabs" aria-hidden>
-                <span data-on><CalendarDays size={26} strokeWidth={1.9} />Today</span>
-                <span><Users size={26} strokeWidth={1.9} />Circle</span>
-                <span className="cr-tabs__mid">
-                  <svg viewBox="0 0 40 40" width="40" height="40" aria-hidden>
-                    <path d="M31 14.5a13 13 0 1 0 0 11" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
-                    <path d="M20 20h6" stroke="#fff" strokeWidth="5" strokeLinecap="round" />
-                  </svg>
+                <span data-on>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+                  Today
                 </span>
-                <span><Mail size={26} strokeWidth={1.9} />Invites</span>
-                <span><Activity size={26} strokeWidth={1.9} />Pulse</span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="8" r="3.5" /><circle cx="17" cy="10" r="2.5" /><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5" /><path d="M14.5 20c0-2 1.7-3.5 3.5-3.5s3.5 1.5 3.5 3.5" /></svg>
+                  Circle
+                </span>
+                <span className="cr-tabs__fab">
+                  <i>
+                    <svg viewBox="0 0 100 100" aria-hidden>
+                      <rect width="100" height="100" fill="#D2592F" />
+                      <circle cx="50" cy="50" r="28" fill="#DD7E5A" />
+                      <circle cx="50" cy="50" r="15" fill="#fff" />
+                      <rect x="50" y="45" width="50" height="10" fill="#fff" />
+                    </svg>
+                  </i>
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M3 8l9 6 9-6" /></svg>
+                  Invites
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6" /></svg>
+                  Pulse
+                </span>
               </nav>
             </Phone>
             <div className="cr-sat-slot" style={wide ? { top: Math.max(0, btn.y + btn.height / 2 - 118) } : undefined}>

@@ -133,22 +133,29 @@
   .cr-date { gap: 8px; }
   .cr-date .cr-chev:first-child { margin-right: 4px; }
 
-  /* The app's floating tab bar (Today, Circle, the Chrona button, Invites, Pulse) and its New plan button */
+  /* The app's bottom bar and its New plan button, as drawn in the Chrona mockup (.TabBar, .TodayFab, the C-Mark FAB).
+     Labels are 13px, not the app's 10px: the screen is scaled to ~0.87 here and nothing may render under 11px. */
   .cr-tabs {
-    position: absolute; left: 20px; right: 20px; bottom: 18px; height: 70px;
-    display: grid; grid-template-columns: 1fr 1fr 84px 1fr 1fr; align-items: center;
-    border-radius: 28px; background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 6px 22px rgba(60, 30, 20, 0.14), 0 0 0 1px rgba(60, 30, 20, 0.04);
+    position: absolute; left: 16px; right: 16px; bottom: 14px; height: 64px; z-index: 5;
+    display: grid; grid-template-columns: repeat(5, 1fr); align-items: center;
+    border-radius: 22px; background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(18px);
+    border: 1px solid rgba(217, 212, 205, 0.7);
+    box-shadow: 0 12px 28px -10px rgba(36, 26, 21, 0.18);
   }
-  .cr-tabs span { display: grid; justify-items: center; gap: 4px; color: var(--cr-ink-2); font-size: 14px; font-weight: 500; line-height: 1.1; }
-  .cr-tabs span[data-on] { color: var(--cr-coral-ink); }
-  .cr-tabs__mid { position: relative; align-self: start; width: 66px; height: 66px; margin: -20px auto 0; border-radius: 50%; place-items: center; background: var(--cr-coral); box-shadow: 0 0 0 5px #fff, 0 0 0 10px #f6dfd6, 0 8px 18px rgba(212, 85, 46, 0.35); }
+  .cr-tabs > span { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 0; color: #6b645c; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; line-height: 1.2; }
+  .cr-tabs > span[data-on] { color: #a8401d; }
+  .cr-tabs > span:not(.cr-tabs__fab) svg { width: 22px; height: 22px; }
+  /* the centre button is the C-Mark itself, cropped to a circle (the round edge is the C's outer curve) */
+  .cr-tabs__fab { transform: translateY(-14px); }
+  .cr-tabs__fab i { display: block; width: 58px; height: 58px; box-sizing: border-box; border: 4px solid #f7f6f4; border-radius: 50%; overflow: hidden; box-shadow: 0 8px 22px rgba(194, 74, 53, 0.3), 0 0 0 5px rgba(194, 74, 53, 0.07); }
+  .cr-tabs__fab svg { display: block; width: 100%; height: 100%; }
   .cr-fab {
-    position: absolute; right: 22px; bottom: 112px; display: inline-flex; align-items: center; gap: 8px;
-    height: 54px; padding: 0 22px 0 16px; border-radius: 18px; background: var(--cr-tint); color: var(--cr-coral-ink);
-    font-size: 17px; font-weight: 600; box-shadow: 0 4px 14px rgba(60, 30, 20, 0.1);
+    position: absolute; right: 20px; bottom: 92px; z-index: 4; display: flex; align-items: center; height: 52px; padding: 0 18px 0 14px;
+    border-radius: 16px; border: 1px solid #f7ddd3; background: #fbefea; color: #a8401d; box-shadow: 0 4px 12px rgba(36, 26, 21, 0.08);
     transition: opacity 0.3s ease;
   }
+  .cr-fab svg { width: 24px; height: 24px; flex: none; }
+  .cr-fab span { margin-left: 7px; font-size: 15px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; }
   .cr-fab[data-hide] { opacity: 0; }
   & .ss-stage[data-layout='compact'] .cr-tabs, & .ss-stage[data-layout='compact'] .cr-fab { display: none; }
 
