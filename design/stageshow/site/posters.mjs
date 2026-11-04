@@ -6,7 +6,7 @@ import { execSync } from 'node:child_process'
 const { chromium } = createRequire(import.meta.url)(execSync('npm root -g').toString().trim() + '/playwright')
 // [viewport for the wide design, viewport for the compact one]: a stage uses its wide design from `below` px of container width up
 const IDS = {
-  'linkaja-routing': [640, 358], 'linkaja-home': [600, 358], 'komunal-shipped-flow': [600, 358],
+  'linkaja-routing': [640, 358], 'linkaja-home': [600, 358], 'komunal-shipped-flow': [900, 358],
   'ai-decision-desk': [1100, 358], 'ai-chrona': [700, 358],
 }
 ;(async () => {

@@ -27,7 +27,7 @@ Film:
 Aura glow (added later, at the owner's request): the old live card wore an animated coral light round its edge (`assets/img/4b0231e1fab5f6f6.webp`, 165 frames; read at frames 0, 20, 40 ... 164: a coral arc
 about half the perimeter long, soft tail, travelling clockwise, with a faint halo outside the edge). Rebuilt in CSS on the AI card only: a registered `@property --cr-aura` angle animated 0 to 360deg every 7s, read by a
 conic gradient that is a 1.5px masked ring above the card and, blurred 11px and thicker, a halo behind it (shows outside the edge only; absolute inside a wrapper that is the card's box, so no layout and no text
-covered). Coral `#d4552e` / `#ec7b52`, never lime. On from the first frame. It settles when the button reads Invite sent: the halo fades out, the ring dims to 50% and the turning pauses where it is (the card has done
+covered). Coral from the app's own tokens (the ring is the AISurface gradient: `--ai-act-500` `#C24A35` and `--now` `#D2592F`), never lime. On from the first frame. It settles when the button reads Invite sent: the halo fades out, the ring dims to 50% and the turning pauses where it is (the card has done
 its job; the lime outcome card takes over), and it resumes when the button resets to its first state at the loop's exit. Loop beats and timing unchanged (about 13s). Reduced motion: no animation, held at 63deg
 (the light on the upper left of the card), and the settled state keeps its full ring and 80% halo, because the still is the only frame those viewers get. Checked on the peach card at 700 and 390, at several points
 of the loop (opening, drafting, send, settled) and in the reduced-motion poster at both widths. Film: no new line at either width (390 `rehearsal passed`; wide only the framing line above). Not checked: the aura's cost
@@ -39,7 +39,7 @@ Assumptions: the live screen has no place for the brunch and no drafted message.
 there is no place row, and the "plan on the calendar" and "in under 120 seconds" strings come from the engine diagram's caption. The four faces are cropped from the live screenshot
 (`assets/img/726fc9bd995db237.webp`), ring included, at 2x; they are the faces the live mock already shows.
 
-Unresolved: the phone's coral is sampled by eye from the live screenshot (#d4552e), not read from the app's tokens. The tab bar and "New plan" button of the live screen are cropped off the bottom.
+The phone's colours are the app's real tokens, read from the Chrona repo (`mockups/index.html` :root): `--paper`, the `--ink` ramp and the `--ai-act` ramp; the card is the `.AISurface` treatment (`#FDFBFA` with faint coral clouds, held still). The tab bar, the C-Mark button and New plan follow `.TabBar` / `.TodayFab`; labels are 13px, not 10px, so nothing renders under 11px.
 
 Not checked: frame rate and touch on a real phone, the loop inside the built page, other themes, system font scaling, the fresh-eye review.
 

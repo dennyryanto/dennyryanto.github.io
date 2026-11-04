@@ -1,5 +1,5 @@
 import { Avatar, Collapse, Connector, Phone, Spinner, Stage, States, Stream, type Act } from '../../kit'
-import { ArrowRight, Bell, CalendarCheck, Check, Send, Sparkles, X } from 'lucide-react'
+import { ArrowRight, Bell, CalendarCheck, Check, ChevronLeft, ChevronRight, Send, Sparkles, X } from 'lucide-react'
 import './chrona.css'
 import type { Meta } from '../plan'
 import aulia from './aulia.webp'
@@ -16,7 +16,7 @@ export const meta: Meta = {
   lead: 'Chrona is a social calendar app for people who want to see their friends more often and spend less time planning it. It reads your week and your circle’s availability, then drafts the plan in one tap.',
   layout: 'split',
   stageWidth: 640,
-  sizes: { wide: [640, 660], compact: [358, 570], below: 560 },
+  sizes: { wide: [560, 790], compact: [358, 570], below: 540 },
   notes: [
     ['One phone, one story.', 'The Today screen opens on its AI card: Aulia turns 30 on Saturday and the crew looks free. One tap on the card\'s own button drafts the plan inside the card (the time from the circle\'s free window, the message written out word by word), and a second tap sends it. This replaces the still screenshot with its static overlay.'],
     ['The outcome sits outside the phone.', 'Coral stays inside the app\'s screens. The lime is the card beside the phone: Invite sent, in under 120 seconds, plan on the calendar, joined to the Send button by a leader. It is the engine diagram\'s outcome, shown where it happens.'],
@@ -96,14 +96,14 @@ const PEOPLE = [
 ]
 
 const IC = { strokeWidth: 2 }
-const REST = { wide: { x: 600, y: 330 }, compact: { x: 342, y: 330 } }
+const REST = { wide: { x: 500, y: 560 }, compact: { x: 342, y: 330 } }
 
 export default function Chrona() {
   return (
     <Stage<S>
-      width={640}
-      height={660}
-      compact={{ below: 560, width: 358, height: 570 }}
+      width={560}
+      height={790}
+      compact={{ below: 540, width: 358, height: 570 }}
       initial={initial}
       poster={poster}
       script={script}
@@ -118,7 +118,7 @@ export default function Chrona() {
         const sat = rect('sat')
         return (
           <>
-            <Phone width={wide ? 330 : 326} className="cr-phone">
+            <Phone width={wide ? 360 : 326} className="cr-phone">
               <div className="cr-app">
                 <header className="cr-head">
                   <span className="cr-bell"><Bell size={21} {...IC} /><i /></span>
@@ -131,8 +131,10 @@ export default function Chrona() {
                   <span>Month</span>
                 </div>
                 <div className="cr-date">
+                  <ChevronLeft size={20} strokeWidth={2} className="cr-chev" />
                   <b>Wed, Oct 7</b>
                   <span>· 2026</span>
+                  <ChevronRight size={20} strokeWidth={2} className="cr-chev" />
                   <i>TODAY</i>
                 </div>
                 <div className="cr-aura" data-aura={s.btn === 'sent' ? 'rest' : 'on'}>
@@ -179,10 +181,44 @@ export default function Chrona() {
                 <span className="cr-aura__ring" aria-hidden />
                 </div>
                 <div className="cr-hours">
-                  <div><span>00.00</span><i /></div>
-                  <div><span>01.00</span><i /></div>
+                  {['00.00', '01.00', '02.00', '03.00', '04.00', '05.00'].map((h) => (
+                    <div key={h}><span>{h}</span><i /></div>
+                  ))}
                 </div>
               </div>
+              {/* The app's own bottom bar and New plan button (chrona/mockups/index.html: .TabBar, .TodayFab) */}
+              <div className="cr-fab" data-hide={s.open || undefined}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 5v14M5 12h14" /></svg>
+                <span>New plan</span>
+              </div>
+              <nav className="cr-tabs" aria-hidden>
+                <span data-on>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="3" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+                  Today
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="8" r="3.5" /><circle cx="17" cy="10" r="2.5" /><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5" /><path d="M14.5 20c0-2 1.7-3.5 3.5-3.5s3.5 1.5 3.5 3.5" /></svg>
+                  Circle
+                </span>
+                <span className="cr-tabs__fab">
+                  <i>
+                    <svg viewBox="0 0 100 100" aria-hidden>
+                      <rect width="100" height="100" fill="#D2592F" />
+                      <circle cx="50" cy="50" r="28" fill="#DD7E5A" />
+                      <circle cx="50" cy="50" r="15" fill="#fff" />
+                      <rect x="50" y="45" width="50" height="10" fill="#fff" />
+                    </svg>
+                  </i>
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="3" /><path d="M3 8l9 6 9-6" /></svg>
+                  Invites
+                </span>
+                <span>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6" /></svg>
+                  Pulse
+                </span>
+              </nav>
             </Phone>
             <div className="cr-sat-slot" style={wide ? { top: Math.max(0, btn.y + btn.height / 2 - 118) } : undefined}>
               <Collapse open={s.sat} reveal="drop">
