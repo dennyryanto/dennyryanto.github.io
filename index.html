@@ -1847,12 +1847,12 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
 .kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
-.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--kds-line); }
+.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
 .kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
 .kds-stage { flex: 1; display: grid; place-items: center; padding: 14px; background: #202126; color: var(--kds-ink); min-height: 226px; }
-.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-top: 1px solid var(--kds-line); }
-.kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
+.kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 14px; border-top: 1px solid var(--kds-line); }
+.kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 5px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
 .kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
 .kds-surf:not(.joined) .kds-tok { color: var(--kds-amber); background: rgba(253, 176, 34, .1); }
 
@@ -1870,9 +1870,9 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-ui { font-family: var(--fb); transition: opacity .18s; }
 .kds-ui.swap { opacity: 0; }
 /* the offer card, drawn as the app draws a product: the minimum amount in blue on a tinted band, the rate in green, pill tags */
-.kds-card { position: relative; width: 100%; max-width: 250px; background: #fff; border-radius: var(--cr); box-shadow: 0 0 0 1.5px var(--ds-line); overflow: visible; transition: border-radius .5s; }
-.kds-bank { display: block; padding: 12px 14px 0; font: 600 12px/1.3 var(--fb); color: var(--ds-grey); }
-.kds-band { margin: 8px 0 0; padding: 8px 14px 10px; background: var(--ds-band); }
+.kds-card { position: relative; display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 250px; padding: 14px; background: #fff; border-radius: var(--cr); box-shadow: 0 0 0 1.5px var(--ds-line); overflow: visible; transition: border-radius .5s; }
+.kds-bank { display: block; font: 600 12px/1.3 var(--fb); color: var(--ds-grey); }
+.kds-band { margin: 0 -14px; padding: 12px 14px; background: var(--ds-band); }
 .kds-amt { display: block; font: var(--hw) 18px/1.3 var(--fh); color: var(--c); transition: color .5s; }
 .kds-amt-s { display: block; font: 500 11px/1.3 var(--fb); color: var(--ds-grey); }
 .kds-kv { display: flex; gap: 22px; margin-top: 6px; }
@@ -1880,20 +1880,20 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .kds-kv small { font: 700 11px/1.3 var(--fb); color: var(--ds-grey); }
 .kds-kv b { font: var(--hw) 14px/1.3 var(--fh); color: var(--ds-ink); }
 .kds-kv b.g { color: var(--ds-green); }
-.kds-chips { display: flex; gap: 6px; padding: 10px 14px 0; }
+.kds-chips { display: flex; gap: 6px; }
 .kds-chip { padding: 3px 10px; border-radius: var(--cr-chip); background: var(--ds-tint); color: var(--c); font: 600 11px/1.4 var(--fb); transition: color .5s, border-radius .5s; }
-.kds-btn { margin: 10px 14px 14px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font: 600 13px/1.3 var(--fh); transition: background-color .5s, border-radius .5s; }
+.kds-btn { display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font: 600 13px/1.3 var(--fh); transition: background-color .5s, border-radius .5s; }
 .kds-surf:not(.off) .kds-btn { background: var(--ds-grad); }
 
 /* the library: one source of tokens and components */
-.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 12px 14px; display: flex; align-items: center; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px; display: flex; align-items: stretch; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
 .kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
-.kds-lh { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
+.kds-lh { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
 .kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
 .kds-lh small { font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
 .kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.9fr 1.05fr .85fr 1.15fr; gap: 10px; }
-.kds-g { padding: 8px 10px 9px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
-.kds-g > small { display: block; margin-bottom: 7px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
+.kds-g { display: grid; align-content: space-between; row-gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-g > small { display: block; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
 .kds-sw { display: flex; gap: 6px; }
 .kds-sw > span { flex: 1; min-width: 0; display: grid; gap: 4px; }
 .kds-sw i { display: block; height: 22px; border-radius: 7px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
