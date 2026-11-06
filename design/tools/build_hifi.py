@@ -112,15 +112,19 @@ def section(name):
 # ---------- hero ----------
 hero = soup(read('hero'))
 p = hero.find('p')
-p.string = ('I lead product design and the transformations that make it stick. Across fintech, enterprise and consumer '
-            'platforms I’ve turned design strategy into P&L results and rebuilt how teams design, plan and ship: lower '
-            'cost to serve, higher conversion, and platforms used by tens of millions.')
+# one sentence (content budget, AUDIT.md "Leaner copy pass"): the claim, not the whole CV
+p.string = ('I lead product design and the transformations that make it stick: lower cost to serve, '
+            'higher conversion, and platforms used by tens of millions.')
 for row in hero.find_all(attrs={'data-r': 'pc-row'}):
     label = row.find('div').get_text(strip=True)
-    if label in ('BEFORE', 'FOCUS'):
+    # BOARD is told in the timeline and Dash · Lumio's case; BEFORE and FOCUS were dropped earlier
+    if label in ('BEFORE', 'FOCUS', 'BOARD'):
         row.decompose()
     elif label == 'EXPERIENCE':
         row.find(string=' in digital product').replace_with(' in digital product and transformation')
+# the FINTECH / ENTERPRISE / CONSUMER chips repeat the line above
+for tags in hero.find_all(attrs={'data-r': 'pc-tags'}):
+    tags.decompose()
 # the certificates' issuer line shows Anthropic's own wordmark (from @lobehub/icons-static-svg, cropped to the letters), then the year
 ANTHROPIC_WORDMARK = ('<svg role="img" aria-label="Anthropic" viewBox="2 2 178.6 20" height="9" width="80" fill="currentColor" style="display: block; flex: none;">'
                       '<path d="%s"></path></svg>')
@@ -310,14 +314,14 @@ spark = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="cu
 # a quiet index: a small heading, then per case the number, what it measures and one line of context
 INDEX = [
     ('linkaja', '−80%', 'CS OPEX', str(icons[0]), '01', 'LinkAja',
-     'Customer-service cost after self-service replaced agent tickets for 70M users.'),
+     'Support cost after self-service replaced agent tickets.'),
     ('komunal', '+12<span class="mk-unit">PTS</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal',
-     'A design and delivery transformation: one system, one sprint, and a deposit funnel that completes more often.'),
+     'One system, one sprint, a funnel that converts.'),
     ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash · Lumio',
-     'Diners ordering through Dash each month, across 30+ restaurant chains.'),
+     'Diners ordering through Dash, across 30+ chains.'),
     ('ai', '0→1', 'AI-NATIVE BUILDS', spark, '04', 'Independent',
-     'Products taken from concept to working software with multi-agent Claude Code.'),
-]
+     'Concepts to working software with multi-agent Claude Code.'),
+]   # one line each, 8 words at most: the number and its label already say it (content budget, AUDIT.md)
 idx_cells = []
 for i, (cid, num, label, icon, n, co, ctx) in enumerate(INDEX):
     idx_cells.append(
@@ -378,14 +382,14 @@ SV_ALT = ('Line drawing: three phone-shaped layers (support tickets, intents, an
 STACK_JS = open(os.path.join(HERE, '..', 'generative', 'stack.js'), encoding='utf-8').read()
 
 # key numbers: a centred band of three, each with the number, what it measures and one line of context
-CONTEXT = {
-    'CS OPEX': 'Customer-service cost after self-service replaced agent tickets.',
-    'USERS · HOME REVAMP': 'People reached by the redesigned home screen.',
-    'CASES AUTOMATED': 'Support cases now solved in the app, without an agent.',
-    'PTS · DEPOSIT FUNNEL': 'Deposit-funnel completion after route-first funding and UX audits.',
-    'RELEASE CYCLE': 'Web releases went from weeks to days, shipped by design in Framer.',
-    'SYSTEM · 3 ORGS': 'One design system shared by Product, Engineering and Marketing.',
-    'SPRINT · 3 DEPTS': 'Marketing, Product and Engineering on one two-week sprint.',
+CONTEXT = {   # a clause each: the "What I did" list under them carries the full sentence
+    'CS OPEX': 'Support cost after self-service replaced tickets.',
+    'USERS · HOME REVAMP': 'Reached by the redesigned home screen.',
+    'CASES AUTOMATED': 'Solved in the app, without an agent.',
+    'PTS · DEPOSIT FUNNEL': 'Funnel completion after route-first funding.',
+    'RELEASE CYCLE': 'Web releases, now shipped by design.',
+    'SYSTEM · 3 ORGS': 'Shared by Product, Engineering and Marketing.',
+    'SPRINT · 3 DEPTS': 'One two-week sprint for all three.',
     'DASH CUSTOMERS / MO': 'Diners ordering through Dash every month.',
     'DASH CHAINS': 'Restaurant chains running on the Dash platform.',
     'LUMIO LOCATIONS': 'Signage locations on the Lumio network, and growing.',
@@ -408,8 +412,7 @@ def keys_html(stats):
 STATS = [('−80%', 'CS OPEX', True), ('70M+', 'USERS · HOME REVAMP', False), ('~72%', 'CASES AUTOMATED', False)]
 stats_html = keys_html(STATS)
 
-sub = ('Security and account issues could only be fixed by an agent, so support cost grew with every new user. '
-       'Self-service flows and intent routing broke that link.')
+sub = 'Self-service flows and intent routing broke the link between every new user and a new support ticket.'
 
 
 
@@ -548,11 +551,12 @@ assert n_shots == 4, n_shots
 LA_STEPS = ['Onboarding', 'Active limit', 'Application status', 'Self-service FAQ']
 phones = [col.find(recursive=False) for col in soup(shots_html).find('div', attrs={'data-r': 'grid4'}).find_all(recursive=False)]
 assert len(phones) == len(LA_STEPS)
+# two of the four are enough (content budget): the limit and the application status are the questions that used to become tickets
+LA_KEEP = (1, 2)
 shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE VOLUME</span><span>MYPAYLATER · SHIPPED FLOW</span></div>'
               '<div class="ksf-panel"><div class="ksf-row" data-m="parallax">' + ''.join(
-                  '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (ph, i + 1, t) for i, (ph, t) in enumerate(zip(phones, LA_STEPS))) +
-              '</div></div><p class="ksf-cap">As shipped: activating, checking the limit, following an application and finding answers all happen in the app, '
-              'so none of them needs an agent.</p>')
+                  '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (phones[k], n + 1, LA_STEPS[k]) for n, k in enumerate(LA_KEEP)) +
+              '</div></div><p class="ksf-cap">As shipped: checking the limit and following an application both happen in the app, so neither needs an agent.</p>')
 
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
@@ -565,7 +569,7 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-
           '<div class="mk-block">' + LA_HOME + '</div>'
           # the diagrams live in design/sections/ so they share one design language (design/sections/VIZ-STYLE.md)
           '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
-          '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
+          # linkaja-problem-fix is left out: the hero line and the support model below already tell it (content budget)
           '<div class="mk-block">' + str(section('linkaja-support-model')) + '</div>'
           '<div class="mk-block">' + LA_ROUTING + '</div>'
           '<div class="mk-block">' + shots_html + '</div>'
@@ -575,11 +579,13 @@ drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-
 
 
 # who each company is, in a line under the hero's description (the labs and the independent work need none)
+# The only place the page says what these three companies are (the timeline below keeps just role and dates for them), and
+# without figures: 70M+, 30+ and 150+ are in the headline and the key numbers.
 ABOUT_CO = {
-    'linkaja': [('LinkAja', 'an Indonesian digital payments and e-wallet app used by 70M+ people.')],
-    'komunal': [('Komunal Indonesia', 'a regulated fintech. Its DepositoBPR platform lets people place deposits with rural banks.')],
-    'board': [('Dash', 'a restaurant ordering platform: table, kitchen, captain and back-office apps, live across 30+ chains.'),
-              ('Lumio', 'a cloud platform that gives digital-signage owners business metrics and sells their screen time, across 150+ locations.')],
+    'linkaja': [('LinkAja', 'an Indonesian e-wallet and digital payments app.')],
+    'komunal': [('Komunal Indonesia', 'a regulated fintech whose DepositoBPR platform places deposits with rural banks.')],
+    'board': [('Dash', 'a restaurant ordering platform: table, kitchen, captain and back-office apps.'),
+              ('Lumio', 'a cloud platform that turns digital-signage screens into revenue.')],
 }
 
 
@@ -597,8 +603,8 @@ def meta_html(n, role):
 
 # what is inside each case study, said on its toggle
 TEASE = {'linkaja': 'Home screen today, OPEX chart, support model, intent routing, shipped screens',
-         'komunal': 'Transformation map, design system, sprint, routing, funnel, shipped flow',
-         'board': 'Dash ordering and back office, Lumio signage, governance',
+         'komunal': 'Design system, placement routing, funnel, shipped flow',
+         'board': 'Dash ordering and back office, Lumio signage',
          'ai': 'Decision desk, Chrona product, habit loop, engine',
          'lab': 'Faces, architecture, deployment, shoe tracker',
          'lab-ui': 'Four screens, the question, close-ups'}
@@ -628,7 +634,7 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 
 # what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
 # (all words, diagram labels included, at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
-READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
+READ = {'linkaja': 2, 'komunal': 5, 'board': 3, 'ai': 3, 'lab': 2, 'lab-ui': 2}   # rescaled after the content-budget pass (was 3, 7, 4, 3, 3, 2)
 
 
 toggle = toggle.replace('%%READ%%', '%d min read · %s' % (READ['linkaja'], TEASE['linkaja']))
@@ -646,7 +652,7 @@ FLASK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="cur
 CASES = [
     dict(id='komunal', flip=True, n='02 / KOMUNAL INDONESIA', role='SENIOR MANAGER, PRODUCT DESIGN &amp; PM OVERSIGHT · JUN 2024 – NOV 2025', icon=BRIEF,
          h2='Transformed how a regulated fintech designs, plans and ships.',
-         sub='In 17 months I moved Product, Engineering and Marketing onto one design system, one release platform and one sprint, and used that footing to lift deposit-funnel completion by about 12 points.',
+         sub='In 17 months I moved Product, Engineering and Marketing onto one design system, one release platform and one sprint.',
          # one number per shift: the outcome first, then the system, delivery and operating model in the map's order
          stats=[('+12', 'PTS · DEPOSIT FUNNEL', True), ('1', 'SYSTEM · 3 ORGS', False), ('W→D', 'RELEASE CYCLE', False), ('1', 'SPRINT · 3 DEPTS', False)],
          alt='Line drawing: three phone-shaped layers (the design system, the deposit funnel, and the deposit screen as a wireframe). A lime shared component and the lime redesigned funnel step land as the lime deposit button and progress bar.',
@@ -660,13 +666,14 @@ CASES = [
          sub='I founded and ran a B2B product company for eight years, and have sat on its board since 2021.',
          stats=[('~200K', 'DASH CUSTOMERS / MO', True), ('30+', 'DASH CHAINS', False), ('150+', 'LUMIO LOCATIONS', False)],
          alt='Line drawing: three tablet-shaped layers (the restaurant floor, the menu, and the ordering screen as a wireframe). A lime table and a lime dish land as the lime send-to-kitchen bar and the added item.',
+         # the figures (200K, 30+, 150+) live in the key numbers above; the governance cards are gone, so the board role stays here
          bullets=['Founder &amp; Director, Dash Inovasi Abadi (2016–2024): a B2B product company serving SME and enterprise F&amp;B and retail brands.',
-                  'Product vision behind the Dash ordering platform: real-time table, kitchen, captain and back-office modules, live across 30+ chains and ~200,000 customers a month.',
-                  'VP of Design, Lumio: a cloud platform that gives digital-signage owners business metrics and maximises content-slot revenue across 150+ locations.',
+                  'Product vision behind the Dash ordering platform: real-time table, kitchen, captain and back-office modules.',
+                  'VP of Design, Lumio: business metrics for digital-signage owners, and the tools to maximise their content-slot revenue.',
                   'Commissioner at Dash and Lumio since 2021: strategy, governance, financial health and risk; primary representative to investors.']),
     dict(id='ai', scene='independent', n='04 / INDEPENDENT CONSULTING', role='PRODUCT &amp; AI DESIGN CONSULTANT · NOV 2025 – PRESENT', icon=BRIEF,
          h2='Making design teams AI-native.',
-         sub='A data-to-decision workflow that puts live, AI-driven decisions in front of the people running a business, and Chrona, an AI-first social-planning app built with multi-agent Claude Code.',
+         sub='Enterprise AI decisions, and Chrona, an AI-first planning app built with multi-agent Claude Code.',
          stats=[('0→1', 'PROTOTYPES W/ CLAUDE CODE', True), ('3', 'ANTHROPIC CERTIFICATES', False), ('MCP', 'AGENTIC WORKFLOWS', False)],
          alt='Line drawing: three desktop-shaped layers (siloed data sources, demand signals as bars against a dashed confidence threshold, and the workflow builder as a wireframe of node cards and curved connectors). The lime warehouse store lands as its cleaned row in the Sources node; the one signal above the threshold lands as the lime path and the decision node with its approve button.',
          pair=[('ENTERPRISE AI · DATA TO DECISION', 'independent'),
@@ -676,21 +683,18 @@ CASES = [
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
     dict(id='lab', scene='eink', flip=True, n='LAB / BUILT WITH AI', role='PERSONAL R&amp;D · CLAUDE CODE · 2025 – PRESENT', icon=FLASK,
          h2='Shipping real products with AI, end to end.',
-         sub='A self-hosted service pulls my live Garmin biometrics every 30 minutes and renders a 1-bit athlete brief for a 7.5″ e-ink panel on my nightstand.',
+         sub='A self-hosted service turns my live Garmin data into a 1-bit athlete brief on an e-ink panel on my nightstand.',
          stats=[('24/7', 'LIVE ON GCP', True), ('1-BIT', '800×480 E-INK RENDER', False), ('$0', 'CLOUD SUBSCRIPTIONS', False)],
          alt='Line drawing: three panel-shaped layers (live data feeds, the 1-bit layout, and Face 1 of the e-ink panel as a wireframe: header band, four metric cards, today’s suggestion, recovery and footer stats). The lime HRV feed and the lime suggestion block land as the panel’s lime HRV status and suggestion title.',
-         bullets=['Garmin Connect API: live biometrics, races, sleep and readiness, fetched on a schedule.',
-                  'FastAPI fetcher with a SQLite cache, so a Garmin outage never blanks the display.',
-                  'Pillow renderer: an 800×480 canvas converted to 1-bit with Floyd–Steinberg dithering, rendered on fetch.',
+         # two lines: the pipeline and deployment diagrams below carry the detail
+         bullets=['Garmin Connect API into a FastAPI fetcher with a SQLite cache, then a Pillow renderer that dithers an 800×480 canvas to 1-bit.',
                   'TRMNL DIY kit (ESP32) on the nightstand; everything behind it designed and built with Claude Code.']),
     dict(id='lab-ui', scene='cockpit', fan=True, n='LAB / AI-ASSISTED UI', role='PERSONAL CONCEPT · GARMIN CONNECT', icon=FLASK,
          h2='What if Garmin Connect read like a cockpit?',
-         sub='Dark display glass, fine graduated scales and one pointer that always means you, now. AI widened the exploration; the direction and every call stayed mine.',
+         sub='Dark display glass, fine graduated scales and one pointer that always means you, now.',
          alt='Line drawing: three phone-shaped layers (terrain, a wall of instruments, and the app’s glass display as a wireframe). Your lime position and the lime reading that matters land as the lime pointer and value.',
-         bullets=['Home, at a glance: grouped by the question you are asking (recovery, training, today).',
-                  'Density is a setting: the same screen, dense, where only the size changes.',
-                  'On a hard day, colour appears only when something departs from normal.',
-                  'Training, plan first: this week’s sessions, then the load behind them.']),
+         # no "What I did" list: its four lines were the fan's four captions word for word (the drawer skips the block when this is empty)
+         bullets=[]),
 ]
 
 
@@ -753,6 +757,15 @@ fig.replace_with(soup(ss_mount('ai-chrona')))
 del ch[1]['data-r']
 ch[1]['class'] = ['ss-chrona']
 ch[1]['style'] = ''
+# the write-up beside the demo: drop the sentence that repeats the line above it, and say each of the four features in a clause
+ch[1].find('p', string=lambda t: t and t.startswith('It reads your week')).string = 'I owned the design system, the AI interaction model and the Claude Code prototype.'
+for old, new in (('Group the people who matter, such as an inner circle or a weekend crew. Each circle has its own colour across the app.', 'Group the people who matter, each circle in its own colour.'),
+                 ('When a circle is free at the same time, Chrona proposes a plan with a time and place, ready to send.', 'When a circle is free, Chrona proposes a time and place.'),
+                 ('Chrona notices when you haven’t seen a circle in a while and prompts you to meet.', 'It prompts you when you haven’t seen a circle in a while.'),
+                 ('A full-year view shows your social rhythm and which circles you saw each month.', 'Your social rhythm, circle by circle, across the year.')):
+    t = ch[1].find(string=old)
+    assert t is not None, 'Chrona feature text changed: ' + old[:30]
+    t.replace_with(new)
 CHRONA = stage('<div class="ss-box">' + str(ch[1]) + '</div>', (c_t[0], c_t[1])) + str(ch[2])
 # Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
 lk = lab_[2].find_all(recursive=False)
@@ -760,14 +773,19 @@ g_t = spans(lk[0])
 shoe = lk[4]
 drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
 shoe['class'] = ['mk-board', 'flush']
-GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), intro=str(lk[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
+# no featured-build paragraph (lk[1]) above the faces: the hero line says it and the faces show it
+GARMIN = stage(str(lk[2]), (g_t[0], g_t[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
 
 LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
-    'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
+    # Content budget (AUDIT.md "Leaner copy pass"): the "four shifts" map, the tooling-migration band and the sprint sync are left out
+    # (the bullets and key numbers above already say each in a line); the design system, then why placements dropped off (placement
+    # routing) right before the funnel it lifted, then the shipped flow
+    'komunal': blocks(section('komunal-design-system'), section('komunal-placement-routing'),
                       section('komunal-funnel'), ss_stage('komunal-shipped-flow', full=True)),
-    'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
+    # no governance cards: the Commissioner bullet and the timeline already say it
+    'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO)),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
     'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (ss_stage('ai-decision-desk', full=True), CHRONA)),
     'lab': '<div class="mk-block">' + GARMIN + '</div>',      # Garmin Daily Brief: faces, architecture, shoe tracker
@@ -777,6 +795,14 @@ lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
 lui_note = lui[2].find_all(recursive=False)[2]
 # the close-ups keep the live site's isometric tiles: each screen tilted as a slab and cropped in its frame
 closeups_html = str(lui[2].find_all(recursive=False)[1])
+# the write-up was three paragraphs that restated the hero line; it is one now, keeping the question and the honest note on AI
+_q = [p for p in lui_intro.find_all('p')]
+assert len(_q) == 3, 'the cockpit write-up changed shape'
+_q[0].string = ('Every morning my Garmin hands me a wall of instruments: readiness, Body Battery, HRV, sleep, training load. '
+                'It reads like a cockpit, so the question became what the app would look like as a well-set instrument panel. '
+                'I used AI to widen the exploration; the direction and every call stayed mine.')
+for _p in _q[1:]:
+    _p.decompose()
 QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + str(lui_intro) + '</div>'
 
 
@@ -816,8 +842,8 @@ def case_section(c):
               '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + stage(closeups_html) + str(lui_note) + '</div>') if c.get('fan') else '') +
           # the cockpit concept has no outcome numbers to report (owner: "we don't need this")
           ('' if c.get('fan') else '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>') +
-          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
-          + LIVE.get(c['id'], '') +
+          (('<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>') if c['bullets'] else '') +
+          LIVE.get(c['id'], '') +
           '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
           '</div></div></div>')
     tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
@@ -839,19 +865,43 @@ edu = caps[1].find_all(recursive=False)[-1]   # the degree; the certificates liv
 # transformation leadership leads the leadership capabilities (the Komunal case is told as one)
 for t in caps[0].find_all(string=lambda t: t.startswith('Product Strategy & Discovery')):
     t.replace_with('Transformation Leadership · ' + t)
-# one line on what each company is, under the role in the timeline
+# One line on what a company is, only where no case study above says it: LinkAja, Komunal and Dash · Lumio are described in their
+# heroes (ABOUT_CO), so their timeline entries are just role and dates (content budget, AUDIT.md "Leaner copy pass").
 ABOUT = {
     ('2011–16', 'Appsindo Technology'): 'A software house and agency building apps for retail, F&amp;B and entertainment brands.',
-    ('2016–24', 'Dash · Lumio'): 'The B2B product company I founded: Dash for restaurant ordering, Lumio for turning signage screens into revenue.',
-    ('2021–', 'Dash · Lumio'): 'My board seat: strategy, governance, financial health and risk.',
-    ('2021–23', 'LinkAja'): 'An Indonesian digital payments and e-wallet app used by 70M+ people.',
-    ('2024–25', 'Komunal Indonesia'): 'A regulated fintech whose DepositoBPR platform lets people place deposits with rural banks. I led its design and delivery transformation.',
     ('2025–', 'Independent'): 'Product and AI design consulting for businesses and design teams.',
 }
+# Dash · Lumio was two entries (founder, then board seat): one entry, in the founder's slot
+rows = career[1].find_all(recursive=False)
+founder, board_seat = rows[1], rows[2]
+fs, bs = founder.find_all('span'), board_seat.find_all('span')
+assert (fs[1].get_text(strip=True), bs[1].get_text(strip=True)) == ('Dash · Lumio', 'Dash · Lumio'), 'the career timeline changed shape'
+fs[0].string = '2016–'
+fs[2].string = 'Founder & Director · VP of Design, then Commissioner (board) from 2021'
+board_seat.decompose()
 for row in career[1].find_all(recursive=False):
     sp = row.find_all('span')
     key = (sp[0].get_text(strip=True), sp[1].get_text(strip=True))
-    row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
+    if key in ABOUT:
+        row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
+# Earlier work: a clause under each project, not a sentence
+EARLIER = {'Genki Sushi': 'Queuing system, from kiosk to mobile reservations.',
+           'Foodhall': 'Self-service grocery: app, kiosk, runner, pickup.',
+           'Summarecon Malls': 'Receipt-to-points rewards app for the malls.',
+           'MATA2': 'Cinema schedules, reviews and ticketing, in one app.'}
+for card in earlier[1].find_all(recursive=False):
+    name = card.find('div').get_text(strip=True)
+    card.find_all(recursive=False)[-1].string = EARLIER[name]   # the description is the card's last child; the name's own span is inside the title row
+# Capabilities: five or so a group, the ones the case studies actually show
+CAPS = {'LEADERSHIP': 'Transformation Leadership · Product Strategy &amp; Discovery · Delivery Operating Models · Stakeholder Management · Corporate Governance',
+        'DESIGN': 'Design Systems · UX Strategy &amp; Audits · Information Architecture · User Research · Accessibility (A11Y)',
+        'AI &amp; EMERGING TECH': 'Agentic Orchestration · AI-Native SDLC · AI Feature Strategy · AI-Assisted Prototyping · Model Context Protocol (MCP)',
+        'TOOLS': 'Claude Code · Figma · Framer'}
+for grp in caps[0].find_all(recursive=False):
+    label = grp.find('span').get_text(strip=True).replace('&', '&amp;')
+    txt = grp.find_all(recursive=False)[-1]
+    txt.clear()
+    txt.append(BeautifulSoup(CAPS[label], 'html.parser'))
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
@@ -862,12 +912,12 @@ bg_html = (
     + str(career[1]) +
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
-    '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
-    'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
+    '<p class="mk-context">Four client products I designed there:</p>' + str(earlier[1]) + '</div>' +
     '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
     '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
     '</div></div></div></div></section>')
 contact = soup(read('contact')).find()
+contact.find('p').string = 'Open to Head or AVP of Product Design roles where design owns outcomes.'
 for a in contact.find_all('a'):
     if a.get('download') is not None:
         a['href'] = 'https://dennyryanto.github.io/denny-ryanto-resume.pdf'

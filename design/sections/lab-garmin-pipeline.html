@@ -34,10 +34,10 @@
 <div class="gpp-head"><span>ARCHITECTURE · DATA PIPELINE</span></div>
 <div class="gpp-board">
 <ol class="gpp-steps">
-<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">01</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>Garmin Connect API</h4><p>Live biometrics, races, sleep &amp; readiness via an unofficial Python client.</p></div></li>
-<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">02</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>FastAPI fetcher + SQLite cache</h4><p>Scheduled pulls, each endpoint wrapped in try/except; snapshots cached so a Garmin outage never blanks the display.</p></div></li>
-<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">03</span><span class="gpp-seg lit"></span></div><div class="gpp-body"><h4>Pillow renderer</h4><p>Draws an 800×480 canvas, then converts to 1-bit with Floyd–Steinberg dithering. Rendered on fetch, not on request.</p></div></li>
-<li class="gpp-step out"><div class="gpp-rail"><span class="gpp-chip">04</span></div><div class="gpp-body"><h4>TRMNL BYOS → ESP32 e-ink</h4><p>Device polls <code>/api/display</code>, downloads the pre-rendered BMP and blasts it to the panel over the home LAN.</p></div></li>
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">01</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>Garmin Connect API</h4><p>Live biometrics, races, sleep &amp; readiness.</p></div></li>
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">02</span><span class="gpp-seg"></span></div><div class="gpp-body"><h4>FastAPI fetcher + SQLite cache</h4><p>Scheduled pulls, cached so an outage never blanks the display.</p></div></li>
+<li class="gpp-step"><div class="gpp-rail"><span class="gpp-chip">03</span><span class="gpp-seg lit"></span></div><div class="gpp-body"><h4>Pillow renderer</h4><p>An 800×480 canvas, dithered to 1-bit on fetch.</p></div></li>
+<li class="gpp-step out"><div class="gpp-rail"><span class="gpp-chip">04</span></div><div class="gpp-body"><h4>TRMNL BYOS → ESP32 e-ink</h4><p>The device polls <code>/api/display</code> and shows the pre-rendered image.</p></div></li>
 </ol>
 </div>
 </div>

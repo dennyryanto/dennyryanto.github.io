@@ -1019,6 +1019,63 @@ Left alone: the lab's e-ink photo and the lab cockpit (full-bleed images by desi
 edge to edge on purpose). Residual: LinkAja chat between about 900 and 1100px wide, where the demo is on its compact design and the
 frame does not fill its column (35px, was 51).
 
+## Leaner copy pass (2026-11-06)
+
+Owner: "the overall site is text heavy, let's lean it down more". An audit of the built site (words and screens per
+section, collapsed and with each drawer open) found the collapsed page was already short (about 1,130 words, 9.9 screens);
+the weight was in the drawers and in the same fact being told three or four times. Applied to the hi-fi mockup
+(`build_hifi.py` and the section sources); **not yet built into the site** (`index.html` and `assets/` are unchanged).
+
+**Content budget (the rules to keep it lean)**
+- **One telling per fact.** A figure, a company description or a certificate has one home: the headline figures live in the
+  hero or the key numbers, a company is described in its hero (the timeline keeps role and dates), the certificates only in the
+  profile card.
+- **A drawer is at most about 3 screens, 4 blocks and 4 minutes' read.** Komunal (4.3 screens of drawer) and Dash · Lumio
+  (3.8) are still over the screen budget; they are the next candidates (below).
+- **Diagrams and demos carry their own story.** Captions stay under about 15 words; a list that repeats the visual next to it
+  goes.
+- **Key-number captions are a clause**, not a sentence: the "What I did" list holds the sentence.
+
+**What changed**
+- *Opening:* the hero line is one sentence; the profile card drops the Board row and the FINTECH / ENTERPRISE / CONSUMER chips
+  (the Certified seals stay). Case-index lines are 8 words at most (this trims the sentence the owner asked to add on
+  2026-10-12; the number and label still lead).
+- *Case heroes:* a one-sentence line and the company line, without figures (70M+, 30+, 150+ are in the headline and key
+  numbers). Independent, e-ink and the Garmin concept got shorter lines.
+- *Drawers:*
+  - LinkAja: the problem/fix ideogram is gone (the hero line and the support model say it); MyPaylater shows two screens
+    (Active limit, Application status), not four; the home-screen caption is one sentence.
+  - Komunal: the "four shifts" map, the tooling-migration band and the sprint sync are out (the bullets and key numbers say
+    each in a line); the "what it moved" tiles are out of placement routing (they repeated the funnel below); the funnel is one
+    lane, without the volume chart (its +16% was the weakest evidence on the page). Kept: design system, placement routing,
+    funnel, shipped flow.
+  - Dash · Lumio: the governance cards are out (the Commissioner bullet says it); bullets lose the figures.
+  - Independent: Chrona's four features are a clause each, and the line that repeated the sentence above it is gone.
+  - E-ink: the featured-build paragraph is out (it was the hero line, longer); the architecture bullets are two lines, the
+    pipeline steps one line each, and deployment is two items (the SMTP heartbeat item is cut).
+  - Garmin concept: "The question" is one paragraph instead of three; the "What I did" list is gone because its four lines
+    were the fan's four captions word for word (the build skips the block when a case has no bullets).
+- *Background:* the two Dash · Lumio entries are one ("2016–", founder, then Commissioner from 2021), so the timeline is five
+  columns; only Appsindo and Independent keep a company blurb; Earlier work captions are a clause; Capabilities are five or so
+  per group (Tools is a three-item line, kept because Figma is what recruiters scan for).
+- *Contact:* one sentence.
+- Read times rescaled (LinkAja 3→2, Komunal 7→5, Dash · Lumio 4→3, e-ink 3→2); the toggle teasers drop what was cut.
+
+**Measured** (1440×900, hi-fi, before to after): collapsed page 1,128 to 862 words, 9.9 to 9.5 screens; prose in the six drawers
+about 1,980 to 1,340 words; the six case sections with every drawer open 29.5 to 25.9 screens (Komunal 7.3 to 5.4, LinkAja
+5.6 to 5.2, Dash · Lumio 5.4 to 4.8, e-ink 3.5 to 3.2, Garmin concept 3.5 to 3.1, Independent unchanged at 4.2); Background
+289 to 169 words. The audit's estimates (about 650 collapsed words, about 18 open screens) were too optimistic: they counted
+the meta lines and toggle teasers as cuttable, and left the large mock-up stages alone.
+
+**Next candidates, if it should go further** (not done; each is a call for the owner)
+- The toggle teaser line ("3 min read · Home screen today, OPEX chart…", about 15 words under each of six toggles).
+- Komunal's design-system board (0.8 screen) and the key-number row (four numbers, not three).
+- The Dash · Lumio stages (Dash app, captain app and back office, Lumio network and CMS: 4 screens of mock-ups).
+- Independent's habit-loop and engine diagrams, which repeat the decision desk's idea.
+- The Background timeline's two remaining blurbs.
+
+Hi-fi note: in the single-file hi-fi the Stageshow demos show as still posters (the bundle is only wired in by `build_site.py`).
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:
