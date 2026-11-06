@@ -962,13 +962,45 @@ The replaced `sections/` files stay in the repo for reference; `build_hifi.py` n
   (`.mk-board:has(> .ss-box)` in `hifi_shell.html`).
 
 **Quirk to know about.** `kit/stage.tsx` picks the layout from the width of its fit box, which is capped at the wide design's
-width. `linkaja-home` and `komunal-shipped-flow` have a 400px wide design under a 560px threshold, so they always draw their
-compact (358px) design; their `meta.sizes` say so and they ship one poster. The review lines in their REHEARSAL.md were taken in
-that state.
+width. `linkaja-home` has a 400px wide design under a 560px threshold, so it always draws its compact (358px) design; its
+`meta.sizes` say so and it ships one poster. (`komunal-shipped-flow` now has a real wide design, 820px with the step rail beside the
+phone, and ships two posters.) The review lines in a REHEARSAL.md were taken in that state.
 
 **Changing a demo.** Edit it in `design/stageshow/components/<id>/`, run `python3 design/stageshow/build_posters.py` if its
 finished frame changed, then rebuild (below). The review page `design/mockups/stageshow-components.html`
 (`python3 design/stageshow/build_review.py`) shows the same components outside the site.
+
+## Komunal in the live app's type and colours (2026-11-06)
+
+The Komunal design system board and the shipped-flow demo were redrawn from four screenshots of the live DepositoBPR app (Beranda,
+BPR list, Detail BPR). Read from them:
+
+- **Two typefaces, not one.** Poppins (500/600/700) for headings, amounts, buttons and bank names; Mulish (400-800) for body text,
+  labels and tags. Sizes were calibrated by measuring the same strings in both (a heading is about 1.3x the body).
+- **Palette** (sampled): primary `#255ADC`, the sky gradient `#359DFF > #2C7CEF > #275EDF` (home card, headers, main button),
+  ink `#0E1D30`, grey `#656A72`, ground `#E9EFFD`, product band `#F7FAFF`, line `#E4E7EE`, interest rate / success `#3FC89A`,
+  "Buka" `#3AC149`. `#158A66` is the same green darkened for small text on white (the app's green is about 2:1 there).
+- **Shapes:** cards 20, buttons and inputs 16, icon tiles 12, tags and chips fully round; white cards with a 1.5px line on the pale
+  blue ground; the floating tab bar and the gradient header with a white sheet over it.
+
+Where it lives:
+
+| What | Where |
+|---|---|
+| The font files (latin subsets of Poppins 500/600/700 and Mulish variable) | `design/fonts/` |
+| Registered on the page | `build_hifi.py` (`APP_FONTS`); `build_site.py` moves them to `assets/fonts/` with the other faces. Not preloaded: they load when the Komunal drawer first shows them. |
+| Registered for the demo harness (posters, filming) | `design/stageshow/harness/fonts.css` |
+| Design system board | `sections/komunal-design-system.html`: tokens on `.kds-wrap`, offer card drawn as the app draws a product, before = each team's own typeface, blue, radius; after = the app's tokens |
+| Shipped-flow demo | `stageshow/components/komunal-shipped-flow/` (`flow.css` carries the same tokens as `--kd-*`) |
+
+Changes to the demo: an **Android** frame (the app is one; the kit's `android` frame, own status bar drawn in each screen), screens laid
+out at 412 wide; the first screen is the live **Detail BPR** page with its product cards in place of the old product list; the
+success screen has the app's gradient header with the sheet over it; amount, rails and instructions keep their logic and strings.
+The Mulish italic ("minimum penempatan" is italic in the app) is not shipped, to save 32KB; it is set upright.
+
+Placeholders to replace with real values: BPR Artha Sejahtera's city (Semarang) and its product cards other than the 12-month, 6,75%
+one (minimums Rp5, 10, 25 and 50 jt; 3, 24 and 36 months; 6,25%, 7,00% and 7,25%). The 12-month card's minimum (Rp10 jt) is a placeholder too.
+The board's type specimens are labelled "heading" and "body": typefaces are still never named in visible text (VIZ-STYLE.md).
 
 ## Section mockups (2026-10-13)
 

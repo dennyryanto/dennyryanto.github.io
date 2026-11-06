@@ -37,3 +37,10 @@ Unresolved: the placeholder bars on the Artha card (minimum amount and place), w
 Not checked: frame rate on a real phone, the loop inside the built page, the light theme, Indonesian text at a larger system font size, the typed amount against a real keyboard (no keyboard is drawn).
 
 Note after the site port: the wide design (400) is below `compact.below` (560), so the stage always draws the compact (358) design; the film runs above were taken in that state. See design/AUDIT.md, "Stageshow demos in the site".
+
+Update 2026-11-06 (redrawn from the live app's screenshots, see design/AUDIT.md "Komunal in the live app's type and colours"):
+the phone is the kit's `android` frame (status bar drawn inside each screen), screens at 412 wide; the first screen is the Detail BPR
+page with product cards (a tap on the 12-month card), the old product list and its tab bar are gone; Poppins and Mulish and the app's
+palette replace Archivo and the old blue; the success screen is a gradient header with the sheet over it. Same beats, strings and
+loop. Re-checked: the four beats and the poster in the harness at 358 and 900, and in the built page (no console errors, both
+fonts loaded). The rehearsal gate (`--gate`) was not re-run after the redraw. Placeholders: the BPR's city and its product cards.

@@ -2,16 +2,21 @@
      their own fonts, colours and corner radii; after, one library publishes the tokens all three use.
      The library is one slim row (header and token groups on a line) under the three surfaces (owner: execute the trims from the infographic review; the connectors still run up from its top edge). Markup is the "after" state, so the page is complete without JavaScript; the script below starts from "before" and
      plays the library publishing to each surface once and holds it; it replays only after the board has left the screen and come back. Reduced motion keeps the "after" state.
-     The "before" differences are deliberately close (shades of one blue, one sans at different widths and weights,
-     small radius differences): the drift was subtle, which is why it went unnoticed. -->
+     The "before" differences are deliberately close (shades of one blue, each team's own sans, small radius differences): the drift was
+     subtle, which is why it went unnoticed. The "after" state is the live DepositoBPR app's own system, sampled from its screenshots:
+     Poppins for headings, amounts and buttons, Mulish for body text and labels (loaded by the page, build_hifi.py), the blue
+     #255ADC with its sky gradient, the pale blue ground, the green of the interest rate. The same tokens style the shipped-flow
+     demo (design/stageshow/components/komunal-shipped-flow/flow.css). Typefaces are never named in visible text (VIZ-STYLE.md). -->
 <div class="kds-wrap">
 <style>
 .kds-wrap {
   --kds-panel: #1a1b1f; --kds-node: #232429; --kds-tile: #2b2c32; --kds-line: rgba(255, 255, 255, .08);
   --kds-ink: #f2f2f4; --kds-ink-2: #c2c3cb; --kds-ink-3: #8b8d98; --kds-edge: #4a4d57;
   --kds-lime: oklch(0.9 0.2 122); --kds-amber: #fdb022;
-  /* the shared tokens every surface ends up on */
-  --ds-font: Archivo, system-ui, sans-serif; --ds-wide: 100%; --ds-primary: #3a5ccc; --ds-card-r: 12px; --ds-btn-r: 10px;
+  /* the shared tokens every surface ends up on: the live app's own (sampled from its screenshots) */
+  --ds-fh: Poppins, system-ui, sans-serif; --ds-fb: Mulish, system-ui, sans-serif; --ds-hw: 600;
+  --ds-primary: #255adc; --ds-sky: #359dff; --ds-ink: #0e1d30; --ds-grey: #656a72; --ds-tint: #e9effd; --ds-band: #f7faff; --ds-line: #e4e7ee; --ds-green: #3fc89a;
+  --ds-grad: linear-gradient(100deg, #359dff, #2c7cef 50%, #275edf); --ds-card-r: 20px; --ds-btn-r: 16px; --ds-chip-r: 100px;
 }
 .kds-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .kds-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
@@ -35,49 +40,68 @@
 .kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 Archivo, sans-serif; }
 .kds-sh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-stage { flex: 1; display: grid; place-items: center; padding: 10px 14px; background: #202126; color: var(--kds-ink); min-height: 156px; }
+.kds-stage { flex: 1; display: grid; place-items: center; padding: 14px; background: #202126; color: var(--kds-ink); min-height: 226px; }
 .kds-tokens { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 12px; border-top: 1px solid var(--kds-line); }
 .kds-tok { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border-radius: 6px; background: var(--kds-tile); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-2); white-space: nowrap; transition: color .3s, background-color .3s; }
 .kds-tok i { width: 9px; height: 9px; border-radius: 2px; background: var(--c); transition: background-color .5s; }
 .kds-surf:not(.joined) .kds-tok { color: var(--kds-amber); background: rgba(253, 176, 34, .1); }
 
 /* each surface reads its look from these; "off" values are what that org shipped on its own */
-.kds-surf { --f: var(--ds-font); --wd: var(--ds-wide); --c: var(--ds-primary); --cr: var(--ds-card-r); --br: var(--ds-btn-r); --fw: 700; }
-.kds-surf.off[data-org="product"] { --wd: 112%; --c: #2f7fe6; --cr: 6px; --br: 6px; --fw: 800; }
-.kds-surf.off[data-org="eng"] { --wd: 86%; --c: #2a46ad; --cr: 3px; --br: 3px; --fw: 600; }
-.kds-surf.off[data-org="mkt"] { --wd: 100%; --c: #5d6fd8; --cr: 18px; --br: 16px; --fw: 500; }
+.kds-surf { --fh: var(--ds-fh); --fb: var(--ds-fb); --c: var(--ds-primary); --cr: var(--ds-card-r); --br: var(--ds-btn-r); --hw: var(--ds-hw); --cr-chip: var(--ds-chip-r); }
+.kds-surf.off[data-org="product"] { --fh: Poppins, sans-serif; --fb: Poppins, sans-serif; --c: #2f7fe6; --cr: 8px; --br: 8px; --hw: 700; --cr-chip: 6px; }
+.kds-surf.off[data-org="eng"] { --fh: Mulish, sans-serif; --fb: Mulish, sans-serif; --c: #1f45b0; --cr: 4px; --br: 4px; --hw: 800; --cr-chip: 3px; }
+.kds-surf.off[data-org="mkt"] { --fh: system-ui, sans-serif; --fb: system-ui, sans-serif; --c: #5d6fd8; --cr: 26px; --br: 999px; --hw: 700; --cr-chip: 100px; }
 /* Marketing also brought colours the system never had: an off-palette pink promo tag and a gradient button */
-.kds-promo { position: absolute; top: -9px; right: 12px; padding: 3px 7px; border-radius: 6px; background: #e8ecfa; color: var(--ds-primary); font: 600 11px/1.2 Archivo, sans-serif; transition: background-color .5s, color .5s; }
-.kds-surf.off .kds-promo { background: #f0567a; color: #fff; }
+.kds-promo { position: absolute; top: -9px; right: 12px; padding: 3px 8px; border-radius: 100px; background: var(--ds-tint); color: var(--ds-primary); font: 700 11px/1.2 var(--ds-fb); transition: background-color .5s, color .5s; }
+.kds-surf.off .kds-promo { background: #f0567a; color: #fff; font-family: system-ui, sans-serif; }
 .kds-surf.off[data-org="mkt"] .kds-btn { background: linear-gradient(90deg, #5d6fd8, #f0567a); }
 .kds-tok i.x { display: none; background: #f0567a; }
 .kds-surf.off .kds-tok i.x { display: inline-block; }
-.kds-ui { font-family: var(--f); font-stretch: var(--wd); transition: opacity .18s; }
+.kds-ui { font-family: var(--fb); transition: opacity .18s; }
 .kds-ui.swap { opacity: 0; }
-.kds-card { position: relative; width: 100%; max-width: 230px; background: #fff; border-radius: var(--cr); box-shadow: 0 1px 2px rgba(16, 24, 40, .08), 0 0 0 1px #e4e7ec; padding: 14px; transition: border-radius .5s; }
-.kds-card small { display: block; font-size: 11px; letter-spacing: .02em; color: #667085; }
-.kds-card strong { display: block; margin-top: 3px; font-size: 15px; font-weight: var(--fw); color: #101828; }
-.kds-rate { margin-top: 8px; font-size: 26px; font-weight: var(--fw); color: var(--c); transition: color .5s; letter-spacing: -.01em; }
-.kds-rate span { font-size: 12px; font-weight: 500; color: #667085; }
-.kds-btn { margin-top: 12px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font-size: 13px; font-weight: 600; transition: background-color .5s, border-radius .5s; }
+/* the offer card, drawn as the app draws a product: the minimum amount in blue on a tinted band, the rate in green, pill tags */
+.kds-card { position: relative; width: 100%; max-width: 250px; background: #fff; border-radius: var(--cr); box-shadow: 0 0 0 1.5px var(--ds-line); overflow: visible; transition: border-radius .5s; }
+.kds-bank { display: block; padding: 12px 14px 0; font: 600 12px/1.3 var(--fb); color: var(--ds-grey); }
+.kds-band { margin: 8px 0 0; padding: 8px 14px 10px; background: var(--ds-band); }
+.kds-amt { display: block; font: var(--hw) 18px/1.3 var(--fh); color: var(--c); transition: color .5s; }
+.kds-amt-s { display: block; font: 500 11px/1.3 var(--fb); color: var(--ds-grey); }
+.kds-kv { display: flex; gap: 22px; margin-top: 6px; }
+.kds-kv > span { display: grid; gap: 0; }
+.kds-kv small { font: 700 11px/1.3 var(--fb); color: var(--ds-grey); }
+.kds-kv b { font: var(--hw) 14px/1.3 var(--fh); color: var(--ds-ink); }
+.kds-kv b.g { color: var(--ds-green); }
+.kds-chips { display: flex; gap: 6px; padding: 10px 14px 0; }
+.kds-chip { padding: 3px 10px; border-radius: var(--cr-chip); background: var(--ds-tint); color: var(--c); font: 600 11px/1.4 var(--fb); transition: color .5s, border-radius .5s; }
+.kds-btn { margin: 10px 14px 14px; display: block; text-align: center; padding: 9px 12px; border-radius: var(--br); background: var(--c); color: #fff; font: 600 13px/1.3 var(--fh); transition: background-color .5s, border-radius .5s; }
+.kds-surf:not(.off) .kds-btn { background: var(--ds-grad); }
 
 /* the library: one source of tokens and components */
-.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 10px 14px; display: flex; align-items: center; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 12px 14px; display: flex; align-items: center; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
 .kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
 .kds-lh { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
 .kds-lh b { font: 700 15px/1 Archivo, sans-serif; }
-.kds-lh small { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
-.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.4fr 1fr .8fr .8fr; gap: 10px; }
-.kds-g { padding: 7px 10px 8px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
-.kds-g > small { display: block; margin-bottom: 5px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
-.kds-sw { display: flex; gap: 5px; }
-.kds-sw i { flex: 1; height: 20px; border-radius: 6px; background: var(--c); }
-.kds-type { display: flex; align-items: baseline; gap: 10px; font-family: Archivo, sans-serif; font-weight: 700; color: var(--kds-ink); }
-.kds-rad { display: flex; gap: 8px; align-items: center; }
-.kds-rad i { width: 20px; height: 20px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
+.kds-lh small { font: 500 11px/1.3 'IBM Plex Mono', monospace; color: var(--kds-ink-3); }
+.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.9fr 1.05fr .85fr 1.15fr; gap: 10px; }
+.kds-g { padding: 8px 10px 9px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-g > small { display: block; margin-bottom: 7px; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
+.kds-sw { display: flex; gap: 6px; }
+.kds-sw > span { flex: 1; min-width: 0; display: grid; gap: 4px; }
+.kds-sw i { display: block; height: 22px; border-radius: 7px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
+.kds-sw em { font: 500 11px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--kds-ink-3); white-space: nowrap; overflow: hidden; text-overflow: clip; }
+.kds-type { display: flex; align-items: flex-end; gap: 14px; color: var(--kds-ink); }
+.kds-type > span { display: grid; gap: 4px; }
+.kds-type b { font-size: 24px; line-height: 1; }
+.kds-type b.h { font-family: var(--ds-fh); font-weight: 600; }
+.kds-type b.b { font-family: var(--ds-fb); font-weight: 500; }
+.kds-type em { font: 500 11px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--kds-ink-3); }
+.kds-rad { display: flex; gap: 10px; align-items: flex-end; }
+.kds-rad > span { display: grid; gap: 4px; }
+.kds-rad i { width: 26px; height: 26px; border: 1.5px solid var(--kds-ink-2); border-left: 0; border-bottom: 0; }
+.kds-rad em { font: 500 11px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--kds-ink-3); }
 .kds-comp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.kds-comp span { padding: 6px 10px; border-radius: var(--ds-btn-r); font: 600 11px/1 Archivo, sans-serif; }
-.kds-comp .p { background: var(--ds-primary); color: #fff; }
+.kds-comp span { padding: 7px 12px; font: 600 11.5px/1 var(--ds-fh); }
+.kds-comp .p { border-radius: var(--ds-btn-r); background: var(--ds-grad); color: #fff; }
+.kds-comp .t { border-radius: var(--ds-chip-r); background: var(--ds-tint); color: var(--ds-primary); font-family: var(--ds-fb); font-weight: 600; }
 
 .kds-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 
@@ -86,49 +110,52 @@
   .kds-lib { flex-direction: column; align-items: stretch; }
   .kds-lh { max-width: none; }
   .kds-groups { flex: none; }
+  .kds-sw { flex-wrap: wrap; row-gap: 10px; }
+  .kds-sw > span { flex: 1 0 26%; }
   .kds-edges { display: none; }
   .kds-board { gap: 20px; }
   /* each stage keeps room for its taller look (before or after), so nothing below moves when the fonts swap */
-  .kds-stage { min-height: 160px; }
+  .kds-stage { min-height: 226px; }
   }
 @media (prefers-reduced-motion: reduce) { .kds-wrap *, .kds-wrap *::before { transition: none !important; animation: none !important; } }
 </style>
 
 <div class="kds-head"><span>ONE DESIGN SYSTEM · THREE ORGS</span><span>ILLUSTRATIVE</span></div>
 
-<div class="kds-board" role="img" aria-label="The same deposit offer card as three teams shipped it. Before: Product, Engineering and Marketing each used a slightly different blue, a different width and weight of the same sans, and different corner radii, and Marketing added an off-palette pink promo tag and a gradient button. After: one design system library publishes shared colour, type and radius tokens and a primary button, and all three cards match.">
+<div class="kds-board" role="img" aria-label="The same deposit offer card as three teams shipped it. Before: Product, Engineering and Marketing each used a slightly different blue, their own typeface and weight, and different corner radii, and Marketing added an off-palette pink promo tag and a gradient button. After: one design system library publishes shared colour, type and radius tokens, Poppins for headings and amounts and Mulish for body text, and a primary button, and all three cards match.">
   <svg class="kds-edges" aria-hidden="true"></svg>
   <div class="kds-status"><i></i><span class="kds-status-t">1 type scale · 1 palette · 1 radius scale</span></div>
 
   <div class="kds-surfaces">
     <div class="kds-surf joined" data-org="product">
       <div class="kds-sh"><b>Product</b><small>App</small></div>
-      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#2F7FE6" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 6" data-on="radius/md">radius/md</span></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><span class="kds-bank">BPR Artha Sejahtera</span><div class="kds-band"><span class="kds-amt">Rp10.000.000</span><span class="kds-amt-s">minimum penempatan</span><div class="kds-kv"><span><small>Bunga</small><b class="g">6,75%</b></span><span><small>Tenor</small><b>12 Bulan</b></span></div></div><div class="kds-chips"><span class="kds-chip">E-Deposito</span><span class="kds-chip">ARO</span></div><span class="kds-btn">Ajukan deposito</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/heading + body">type/heading + body</span><span class="kds-tok"><i></i><span data-off="#2F7FE6" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 8" data-on="radius/lg">radius/lg</span></div>
     </div>
     <div class="kds-surf joined" data-org="eng">
       <div class="kds-sh"><b>Engineering</b><small>Web app</small></div>
-      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><span data-off="#2A46AD" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 3" data-on="radius/md">radius/md</span></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><span class="kds-bank">BPR Artha Sejahtera</span><div class="kds-band"><span class="kds-amt">Rp10.000.000</span><span class="kds-amt-s">minimum penempatan</span><div class="kds-kv"><span><small>Bunga</small><b class="g">6,75%</b></span><span><small>Tenor</small><b>12 Bulan</b></span></div></div><div class="kds-chips"><span class="kds-chip">E-Deposito</span><span class="kds-chip">ARO</span></div><span class="kds-btn">Ajukan deposito</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/heading + body">type/heading + body</span><span class="kds-tok"><i></i><span data-off="#1F45B0" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 4" data-on="radius/lg">radius/lg</span></div>
     </div>
     <div class="kds-surf joined" data-org="mkt">
       <div class="kds-sh"><b>Marketing</b><small>Website</small></div>
-      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><span class="kds-promo">Promo</span><small>BPR Artha · 12 bulan</small><strong>Deposito BPR</strong><div class="kds-rate">6.25% <span>p.a.</span></div><span class="kds-btn">Tempatkan dana</span></div></div></div>
-      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/body">type/body</span><span class="kds-tok"><i></i><i class="x"></i><span data-off="+ pink" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 18" data-on="radius/md">radius/md</span></div>
+      <div class="kds-stage"><div class="kds-ui"><div class="kds-card"><span class="kds-promo">Promo</span><span class="kds-bank">BPR Artha Sejahtera</span><div class="kds-band"><span class="kds-amt">Rp10.000.000</span><span class="kds-amt-s">minimum penempatan</span><div class="kds-kv"><span><small>Bunga</small><b class="g">6,75%</b></span><span><small>Tenor</small><b>12 Bulan</b></span></div></div><div class="kds-chips"><span class="kds-chip">E-Deposito</span><span class="kds-chip">ARO</span></div><span class="kds-btn">Ajukan deposito</span></div></div></div>
+      <div class="kds-tokens"><span class="kds-tok" data-off="type: own" data-on="type/heading + body">type/heading + body</span><span class="kds-tok"><i></i><i class="x"></i><span data-off="+ pink" data-on="primary/600">primary/600</span></span><span class="kds-tok" data-off="radius 26" data-on="radius/lg">radius/lg</span></div>
     </div>
   </div>
 
   <div class="kds-lib">
     <div class="kds-lh"><b>Komunal DS</b><small>one library for design, code and the website</small></div>
     <div class="kds-groups">
-      <div class="kds-g"><small>COLOUR</small><div class="kds-sw"><i style="--c:#3a5ccc"></i><i style="--c:#6f87dc"></i><i style="--c:#101828"></i><i style="--c:#667085"></i><i style="--c:#d0d5dd"></i></div></div>
-      <div class="kds-g"><small>TYPE</small><div class="kds-type"><span style="font-size:22px">Aa</span><span style="font-size:16px">Aa</span><span style="font-size:12px">Aa</span></div></div>
-      <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><i style="border-top-right-radius:4px"></i><i style="border-top-right-radius:10px"></i><i style="border-top-right-radius:16px"></i></div></div>
-      <div class="kds-g"><small>BUTTON</small><div class="kds-comp"><span class="p">Primary</span></div></div>
+      <div class="kds-g"><small>COLOUR</small><div class="kds-sw">
+        <span><i style="--c:linear-gradient(100deg,#359dff,#275edf)"></i><em>sky</em></span><span><i style="--c:#255adc"></i><em>primary</em></span><span><i style="--c:#0e1d30"></i><em>ink</em></span><span><i style="--c:#656a72"></i><em>grey</em></span><span><i style="--c:#e9effd"></i><em>tint</em></span><span><i style="--c:#3fc89a"></i><em>success</em></span></div></div>
+      <div class="kds-g"><small>TYPE</small><div class="kds-type"><span><b class="h">Aa</b><em>heading</em></span><span><b class="b">Aa</b><em>body</em></span></div></div>
+      <div class="kds-g"><small>RADIUS</small><div class="kds-rad"><span><i style="border-top-right-radius:12px"></i><em>12</em></span><span><i style="border-top-right-radius:16px"></i><em>16</em></span><span><i style="border-top-right-radius:20px"></i><em>20</em></span></div></div>
+      <div class="kds-g"><small>COMPONENTS</small><div class="kds-comp"><span class="p">Primary</span><span class="t">Tag</span></div></div>
     </div>
   </div>
 </div>
-<p class="kds-cap">The same offer card, shipped by three teams. Before the system, each drifted a little: its own shade of blue, its own weight of type, its own corners, and Marketing added colours the system never had. One library now publishes the tokens all three build from.</p>
+<p class="kds-cap">The same offer card, shipped by three teams. Before the system, each drifted a little: its own shade of blue, its own typeface, its own corners, and Marketing added colours the system never had. One library now publishes the tokens all three build from, the ones the DepositoBPR app itself runs on: the blue and its sky gradient, the green of the interest rate, one pair of typefaces for headings and body, one set of corners.</p>
 
 <script>
 (function () {
@@ -210,7 +237,10 @@
   // a shut drawer has no layout yet: measure when it opens (mk-open) or when the board comes into view, not while the page parses
   if (!wrap.closest('.mk-drawer:not(.open)')) draw();
   addEventListener('resize', function () { draw(); });
-  var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); });
+  // the app's two families load when the drawer first shows them; the card heights change a little, so measure again then
+  function fontsThenDraw() { if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('600 16px Poppins'), document.fonts.load('500 14px Mulish')]).then(function () { draw(); }, function () {}); }
+  var host = wrap.closest('.mk-drawer'); if (host) host.addEventListener('mk-open', function () { setTimeout(draw, 0); fontsThenDraw(); });
+  fontsThenDraw();
   if (matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
   before();
   new IntersectionObserver(function (es) { visible = es[0].isIntersecting; if (!visible && done) { done = false; pending = true; } wake(); if (visible && pending) replay(); }, { threshold: 0 }).observe(board);

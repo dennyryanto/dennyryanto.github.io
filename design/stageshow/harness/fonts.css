@@ -1,0 +1,5 @@
+/* The Komunal screens are set in the live app's own pair, which the site page provides (build_hifi.py); the harness loads the same files for filming and posters. */
+@font-face { font-family: 'Poppins'; font-weight: 500; font-display: block; src: url('../../fonts/poppins-500.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-weight: 600; font-display: block; src: url('../../fonts/poppins-600.woff2') format('woff2'); }
+@font-face { font-family: 'Poppins'; font-weight: 700; font-display: block; src: url('../../fonts/poppins-700.woff2') format('woff2'); }
+@font-face { font-family: 'Mulish'; font-weight: 400 800; font-display: block; src: url('../../fonts/mulish-var.woff2') format('woff2'); }
