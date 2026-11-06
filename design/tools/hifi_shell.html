@@ -202,6 +202,8 @@ a.mk-idx:hover .mk-arrow { transform: translateY(3px); color: var(--lime); }
 .ss-chrona { display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 32px 40px; align-items: center; }
 @container (max-width: 860px) { .ss-split { grid-template-columns: minmax(0, 1fr); gap: 24px; } .ss-lead { max-width: none; } }
 @container (max-width: 860px) { .ss-chrona { grid-template-columns: minmax(0, 1fr); } }
+/* the laptop's hinge lip is 104% wide and overhung its column by 2% each side (11px past the board's padding, the tablet beside it sat flush): the padding takes the overhang */
+div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
 /* on a phone the demo gets the full 358px column it was designed for: the board's side padding moves onto the text */
 @media (max-width: 600px) {
   .mk-board:has(> .ss-box) { padding-inline: 0; }
