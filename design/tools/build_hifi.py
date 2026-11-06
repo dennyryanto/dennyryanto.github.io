@@ -459,6 +459,12 @@ SS_LABELS = {
     'ai-chrona': 'Demo: Chrona drafts and sends a birthday brunch plan in two taps',
 }
 SS_RULES = []
+# a stage whose drawing stops short of its frame (design px on the left, right): in the side-by-side layout the column is the drawing's
+# width and the frame bleeds out by the inset (in %, so it holds when the frame scales), so the drawing's edge, not the frame's, meets
+# the board's padding like the text on the other side
+SS_INSET = {'linkaja-home': (16, 16), 'linkaja-routing': (0, 43)}
+# a full-width stage whose panel sits inside the stage (design px): the lead above lines up with the panel's edge, not the stage's
+SS_LEAD_INSET = {'ai-decision-desk': 24}
 
 
 def ss_meta(id):
@@ -486,6 +492,11 @@ def ss_mount(id):
     wide, compact = poster('wide', m['wide']), poster('compact', m['compact'])
     assert compact, 'run design/stageshow/build_posters.py: no poster for ' + id
     sel = '.ss-mount[data-ss="%s"]' % id
+    if id in SS_INSET:
+        fw = m['wide'][0]; li, ri = SS_INSET[id]; rest = 1 - (li + ri) / fw
+        SS_RULES.append('@container (min-width: 861px) { %s { margin-left: -%.2f%%; margin-right: -%.2f%%; } }' % (sel, 100 * li / fw / rest, 100 * ri / fw / rest))
+    if id in SS_LEAD_INSET:
+        SS_RULES.append('@container (min-width: %dpx) { .ss-box:has(%s) .ss-lead-full { margin-left: %dpx; } }' % (m['below'], sel, SS_LEAD_INSET[id]))
     frame = lambda w, h: '%s .ss-frame { max-width: %dpx; aspect-ratio: %d / %d; }' % (sel, w, w, h)
     if wide:
         SS_RULES.append(frame(*m['wide']))
@@ -505,7 +516,7 @@ def ss_stage(id, full=False):
         # the lead lines up with the stage's left edge (the stage is centred on the board)
         inner = '<div class="ss-box"><div style="max-width:%dpx;margin-inline:auto"><p class="ss-lead ss-lead-full">%s</p></div>%s</div>' % (m['stage_w'], lead, ss_mount(id))
     else:
-        inner = '<div class="ss-box"><div class="ss-split" style="--sw:%dpx"><p class="ss-lead">%s</p>%s</div></div>' % (m['stage_w'], lead, ss_mount(id))
+        inner = '<div class="ss-box"><div class="ss-split" style="--sw:%dpx"><p class="ss-lead">%s</p>%s</div></div>' % (round(m['wide'][0] * (1 - sum(SS_INSET.get(id, (0, 0))) / m['wide'][0])), lead, ss_mount(id))
     return stage(inner, (_html.escape(m['head']), _html.escape(m['note'])))
 
 

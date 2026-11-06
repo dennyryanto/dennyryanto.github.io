@@ -25,7 +25,7 @@
   }
 
   /* Phone: inset a gutter from the top and left, off the bottom */
-  .cr-phone { position: absolute; left: 12px; top: 10px; }   /* the whole phone, at the kit's real iPhone proportions */
+  .cr-phone { position: absolute; left: 0; top: 10px; }   /* the whole phone, at the kit's real iPhone proportions */
   & .ss-stage[data-layout='compact'] .cr-phone { left: 16px; top: -90px; }
   .cr-phone .ss-phone__content { background: var(--cr-bg); color: var(--cr-ink); overflow: hidden; }
 
@@ -174,7 +174,7 @@
   .cr-hours i { display: block; height: 64px; border-radius: 16px; background: var(--cr-ink-200); }
 
   /* The outcome beside the phone: lime, on the page's ground (never inside the app's screen) */
-  .cr-sat-slot { position: absolute; left: 354px; top: 295px; width: 190px; }
+  .cr-sat-slot { position: absolute; left: 342px; top: 295px; width: 190px; }
   & .ss-stage[data-layout='compact'] .cr-sat-slot { left: 40px; right: 40px; top: auto; bottom: 12px; width: auto; }
   & .ss-stage[data-layout='compact'] .cr-sat__row { display: none; }
   .cr-sat {

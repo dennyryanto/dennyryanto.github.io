@@ -1002,6 +1002,23 @@ Placeholders to replace with real values: BPR Artha Sejahtera's city (Semarang) 
 one (minimums Rp5, 10, 25 and 50 jt; 3, 24 and 36 months; 6,25%, 7,00% and 7,25%). The 12-month card's minimum (Rp10 jt) is a placeholder too.
 The board's type specimens are labelled "heading" and "body": typefaces are still never named in visible text (VIZ-STYLE.md).
 
+## Board side-padding audit (2026-11-06)
+
+Every `.mk-board` in the built page was screenshotted at 1440, 1024 and 390 and the first and last columns that differ from the
+board ground were measured (the DOM boxes are not a good proxy: stage backgrounds and rounded corners count as content). Found and fixed:
+
+| Board | Before (left / right) | Cause | Fix |
+|---|---|---|---|
+| Chrona | 40 / 28 | `.cr-phone { left: 12px }` in the stage | `left: 0`, the outcome card moved 12px with it (`chrona.css`); poster regenerated |
+| Dash tablet and laptop | 28 / 17 | the laptop's hinge lip is `width: 104%; margin-left: -2%`, so it overhung its column | `div:has(> [style*="width: 104%"]) { padding-inline: 2% }` in `hifi_shell.html` |
+| LinkAja home | 178 / 215 | the column was the 400px stage width, the phone is 358 with a 16px inset in it | `SS_INSET` in `build_hifi.py`: column the width of the drawing, frame bleeds out by the inset |
+| LinkAja chat | 79 / 122 | the agent card stops 43px short of its frame | same, 43px on the right, in % so it scales |
+| Decision desk | 76 / 99 | the lead lined up with the stage edge, the panel is 24px inside it | `SS_LEAD_INSET` |
+
+Left alone: the lab's e-ink photo and the lab cockpit (full-bleed images by design); the phone-width Chrona and Komunal (the stage runs
+edge to edge on purpose). Residual: LinkAja chat between about 900 and 1100px wide, where the demo is on its compact design and the
+frame does not fill its column (35px, was 51).
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:
