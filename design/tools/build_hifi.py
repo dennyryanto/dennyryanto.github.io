@@ -60,7 +60,23 @@ def fonts_css():
     return '\n'.join(out)
 
 
-FONTS = fonts_css()
+# DepositoBPR's own two families, for the Komunal design system and the shipped-flow demo: Poppins (headings, numbers, buttons)
+# and Mulish (body and labels), latin subsets, self-hosted from design/fonts (the live app is set in the same pair)
+LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
+APP_FONTS = [('Poppins', '500', 'poppins-500.woff2'), ('Poppins', '600', 'poppins-600.woff2'), ('Poppins', '700', 'poppins-700.woff2'),
+             ('Mulish', '400 800', 'mulish-var.woff2')]
+
+
+def app_fonts_css():
+    out = []
+    for fam, wt, f in APP_FONTS:
+        data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
+        out.append("/* %s latin */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
+                   "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }" % (fam, fam, wt, data, LATIN))
+    return '\n'.join(out)
+
+
+FONTS = fonts_css() + '\n' + app_fonts_css()
 
 # ---------- top bar ----------
 top = soup(read('topbar'))

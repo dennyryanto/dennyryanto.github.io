@@ -2,6 +2,7 @@ import { StrictMode, type ComponentType } from 'react'
 import { createRoot } from 'react-dom/client'
 import { StillContext } from '../kit/reduced-motion'
 import '../kit/stageshow.css'
+import './fonts.css'
 
 // A direct route for filming one component: /?capture=<folder name>.
 // `&still=1` renders the reduced-motion poster (film.mjs --still / --reduced).
