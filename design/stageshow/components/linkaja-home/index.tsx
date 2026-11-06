@@ -12,7 +12,7 @@ export const meta: Meta = {
   title: 'Home screen as it ships today',
   head: 'HOME SCREEN · AS IT SHIPS TODAY',
   note: 'ILLUSTRATIVE',
-  lead: 'The home-screen revamp I co-led for 70M+ users. At the time the goal was to refresh the design and unify the visual style, introducing updated icons and illustrations for a better user experience. Dashboards and research drove it, and it improved the information architecture, clarity and engagement. It is still the design in the app today.',
+  lead: 'The home-screen revamp I co-led, driven by dashboards and research. It is still the design in the app today.',
   layout: 'split',
   stageWidth: 400,
   sizes: { wide: [358, 718], compact: [358, 718], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
