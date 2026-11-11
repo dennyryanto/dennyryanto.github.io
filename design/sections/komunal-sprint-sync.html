@@ -73,6 +73,10 @@
   .kss-cer span { position: static; }
   .kss-cutnote { grid-column: 1 / -1 !important; }
 }
+/* phone width: the request dots are 12px with a halo on a ~170px track, so neighbours merged; smaller dots keep every request visible */
+@container (max-width: 420px) {
+  .kss-hit { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; box-shadow: 0 0 0 2px rgba(253, 176, 34, .18); }
+}
 @media (prefers-reduced-motion: reduce) { .kss-wrap * { transition: none !important; animation: none !important; } }
 </style>
 
