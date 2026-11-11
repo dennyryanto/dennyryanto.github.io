@@ -17,13 +17,13 @@
 }
 .lsm-wrap *, .lsm-wrap *::before, .lsm-wrap *::after { box-sizing: border-box; }
 .lsm-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
-.lsm-head span { font: 500 12px/1.3 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .6); }
+.lsm-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .lsm-head span:first-child { color: var(--lsm-lime); }
 
-.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); box-shadow: 0 0 0 1px var(--lsm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: 'Inter Tight', sans-serif; color: var(--lsm-ink); }
+.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); box-shadow: 0 0 0 1px var(--lsm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink); }
 .lsm-lane { display: flex; flex-direction: column; min-width: 0; border-radius: 12px; padding: 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--lsm-line); }
 .lsm-lane.after { container-type: inline-size; container-name: lsml; }
-.lsm-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 9px; border-radius: 6px; background: var(--lsm-tile); font: 500 12px/1 'Inter Tight', sans-serif; color: var(--lsm-ink-2); }
+.lsm-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 9px; border-radius: 6px; background: var(--lsm-tile); font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-2); }
 .lsm-tag i { width: 8px; height: 8px; border-radius: 50%; }
 .lsm-lane.before .lsm-tag i { background: var(--lsm-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
 .lsm-lane.after .lsm-tag i { background: var(--lsm-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
@@ -32,9 +32,9 @@
 .lsm-node { display: flex; align-items: center; justify-content: center; gap: 11px; width: 100%; padding: 12px 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
 .lsm-node.route { justify-content: flex-start; gap: 13px; padding: 14px 16px; max-width: 440px; }
 .lsm-node.req { max-width: 340px; }
-.lsm-node b { font: 600 14px/1.25 'Inter Tight', sans-serif; }
+.lsm-node b { font: 600 14px/1.25 'Switzer', 'Mk Arrows', sans-serif; }
 .lsm-node.route b { font-size: 15px; }
-.lsm-node.route p { margin: 3px 0 0; font: 400 13px/1.45 'Inter Tight', sans-serif; color: var(--lsm-ink-2); }
+.lsm-node.route p { margin: 3px 0 0; font: 400 13px/1.45 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-2); }
 .lsm-ico { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--lsm-tile); color: var(--lsm-ink-2); }
 .lsm-ico svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .lsm-ico.lime { color: var(--lsm-lime); }
@@ -48,9 +48,9 @@
 .lsm-queue { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; padding: 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); text-align: center; }
 .lsm-queue .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
 .lsm-queue .lsm-ico svg { width: 20px; height: 20px; }
-.lsm-queue b { display: block; font: 600 15px/1.25 'Inter Tight', sans-serif; }
-.lsm-queue small { display: block; margin-top: 5px; font: 400 12px/1.4 'Inter Tight', sans-serif; color: var(--lsm-ink-3); }
-.lsm-note { margin: auto 0 0; padding-top: 18px; font: 400 13px/1.55 'Inter Tight', sans-serif; color: var(--lsm-ink-3); text-wrap: pretty; }
+.lsm-queue b { display: block; font: 600 15px/1.25 'Switzer', 'Mk Arrows', sans-serif; }
+.lsm-queue small { display: block; margin-top: 5px; font: 400 12px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-3); }
+.lsm-note { margin: auto 0 0; padding-top: 18px; font: 400 13px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-3); text-wrap: pretty; }
 
 /* after lane: a tree; the svg overlay (drawn by script) joins the boxes */
 .lsm-tree { position: relative; display: flex; flex-direction: column; align-items: center; gap: 34px; }
@@ -69,16 +69,16 @@
 .lsm-ch { display: flex; align-items: center; gap: 11px; }
 .lsm-ch .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
 .lsm-ch .lsm-ico svg { width: 20px; height: 20px; }
-.lsm-ch b { display: block; font: 600 15px/1.25 'Inter Tight', sans-serif; }
-.lsm-ch small { display: block; margin-top: 4px; font: 400 12px/1.3 'Inter Tight', sans-serif; color: var(--lsm-ink-3); }
+.lsm-ch b { display: block; font: 600 15px/1.25 'Switzer', 'Mk Arrows', sans-serif; }
+.lsm-ch small { display: block; margin-top: 4px; font: 400 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-3); }
 .lsm-val { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; margin: 16px 0 6px; }
-.lsm-val strong { font: 600 40px/1 'Inter Tight', sans-serif; letter-spacing: -.02em; color: var(--lsm-ink); }
+.lsm-val strong { font: 600 40px/1 'Switzer', 'Mk Arrows', sans-serif; letter-spacing: -.02em; color: var(--lsm-ink); }
 .lsm-card.win .lsm-val strong { color: var(--lsm-lime); }
-.lsm-val span { font: 500 13px/1.3 'Inter Tight', sans-serif; color: var(--lsm-ink-2); }
+.lsm-val span { font: 500 13px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-2); }
 .lsm-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; padding-top: 10px; }
-.lsm-chips span { padding: 6px 9px; border-radius: 6px; background: var(--lsm-tile); font: 400 12px/1 'Inter Tight', sans-serif; color: var(--lsm-ink-2); white-space: nowrap; }
+.lsm-chips span { padding: 6px 9px; border-radius: 6px; background: var(--lsm-tile); font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-2); white-space: nowrap; }
 
-.lsm-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .6); text-wrap: pretty; }
+.lsm-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); text-wrap: pretty; }
 
 /* the two outcome cards stack when the after lane gets narrow; the connectors then run down a left gutter */
 @container lsml (max-width: 540px) {

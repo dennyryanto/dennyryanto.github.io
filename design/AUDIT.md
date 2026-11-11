@@ -1059,24 +1059,24 @@ The owner picked **C × 1** from the options page and asked to fold in the cheap
 (`Nutlope/hallmark` v2.0.0, `audit` verb, run on the built page). The audit's main finding was typographic: tracked
 mono capitals on nearly every label (its gates 67 and 64), kickers above headings (54) and middle-dot strings (63).
 
-**Type.** One family outside the drawings: Inter Tight, a variable file for 400 to 600 in `design/fonts/`, the only font
-preloaded. Two weights (400 text, 500 heads and names). Labels are sentence case, 13px, untracked; no mono on the site
+**Type.** One family outside the drawings: Inter Tight at first (replaced by Switzer and Clash Grotesk the same day, see
+"Type pair" below), a variable file for 400 to 600 in `design/fonts/`, the only font preloaded. Two weights (400 text, 500 heads and names). Labels are sentence case, 13px, untracked; no mono on the site
 itself. `SAY` in `build_hifi.py` lists every label the captures and section files spell in capitals with what it says
 now; the build stops if one is missing. Scale: 13 label, 14 to 18 text, 15 label titles, heads `clamp(30px, 3.4vw, 46px)`,
 the headline `clamp(40px, 6.2vw, 84px)`, key numbers `clamp(40px, 5vw, 64px)`.
 
 **The drawings are restyled too** (owner: "let's restyle the drawings"). Archivo is gone from the page.
-- Diagrams (`design/sections/`, all but the terminal easter egg): Inter Tight, labels in sentence case, no tracking, no
+- Diagrams (`design/sections/`, all but the terminal easter egg): Switzer (first Inter Tight), labels in sentence case, no tracking, no
   dot-joined strings. Mono stays only where it is the material: the design-system board's token names, the terminal,
   and type inside product screens.
 - Captions on the boards that came from the captures (Dash, Lumio, the e-ink faces, the shoe tracker, the Chrona
   write-up) go through `swiss_inline(..., strict=True)` and `SAY`.
 - Product screens (drawn at full size and scaled, or image-role drawings) keep their own design; only their stand-in
-  family changed from Archivo to Inter Tight. Their capitals are the product's, not the site's.
-- The five demos set their page-face text in Inter Tight (`--ss-font`); the harness loads it and the posters were
+  family changed from Archivo to the site's text face. Their capitals are the product's, not the site's.
+- The five demos set their page-face text in the site's text face (`--ss-font`); the harness loads it and the posters were
   regenerated.
-- The font file is our own subset of the variable Inter Tight (latin plus the arrows, `design/fonts/inter-tight-var.woff2`,
-  made with `pyftsubset` from the Google Fonts source), declared for 400 to 800. Page fonts: 12 files, 250KB, one preloaded
+- (Superseded by the type pair below: the file was our own subset of the variable Inter Tight, latin plus the arrows,
+  declared for 400 to 800.) Page fonts: 12 files, 250KB, one preloaded
   (was 14 files, 411KB).
 - The link-preview image (`og_image.js`) uses the same type and was re-rendered.
 
@@ -1132,6 +1132,26 @@ Static linter counts, before to after: unlabelled SVGs 51 to 0, tracked-caps lab
 carries a version). To publish an iteration: build, copy `<workdir>/portfolio-hifi.html` and the two files in
 `assets/stageshow/` into one folder, replace `%%SS_JS%%` and `%%SS_CSS%%` in the page with `stageshow/<file>`, and
 publish to that URL with the two bundle files as supporting files, so the demos run in the artifact too.
+
+### Type pair: Clash Grotesk and Switzer (2026-11-11)
+
+The site's family is now a pair instead of Inter Tight: **Clash Grotesk** for headings, big numbers and the wordmark
+(`--head` in `hifi_shell.html`: `.mk-h1`, `.mk-h2`, `.mk-lab-t`, `.mk-key-n`, `.mk-idx-n`, `.mk-brand`, `.mk-fan-cap strong`,
+the profile card's name and the "Let's talk." heading, plus the name, headline and numbers in `og_image.js`), and
+**Switzer** for everything else, diagrams and demos included (`--display`, `--ss-font`).
+
+- Why: the owner wanted more character, and Hallmark's font guidance lists Inter-family faces as the unchosen default.
+- Source: both are Fontshare variable fonts (Clash Grotesk wght 200 to 700, Switzer wght 100 to 900), ITF Free Font
+  License, self-hosted as `design/fonts/clash-grotesk-var.woff2` and `switzer-var.woff2`. Latin only, so the latin-ext file
+  is gone. Both faces are preloaded; the case studies' own faces still load on demand.
+- Arrows: neither face has U+2190-2193 (the site uses them in the 0 to 1 mark, W to D and "Fund to Complete"). `design/fonts/arrows.woff2`
+  (about 1 KB, `pyftsubset` of the old Inter Tight file, unicodes U+2190-2193) is registered as `Mk Arrows` with that
+  `unicode-range` and follows the family in every font stack, so arrows draw in a matching face, not a system fallback.
+  It is not preloaded. The Inter Tight files were deleted.
+- The two Fontshare faces are registered without a `unicode-range` because they do not cover every codepoint the old range
+  named (no U+2191 and U+2193, no general-punctuation spaces).
+- Neither face has tabular figures; `font-variant-numeric: tabular-nums` stays in the CSS but does nothing for them.
+- Heading metrics: weight 500, letter-spacing -.02em; the headline sets on exactly two lines at 1280 and 1440px.
 
 ## Section mockups (2026-10-13)
 

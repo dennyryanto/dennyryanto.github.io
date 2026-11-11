@@ -9,7 +9,7 @@
     overflow: hidden;
     background: var(--cr-ground, #1a1b1f);
     --ss-accent: oklch(0.9 0.2 122);
-    --ss-font: 'Inter Tight', system-ui, -apple-system, sans-serif;
+    --ss-font: 'Switzer', 'Mk Arrows', system-ui, -apple-system, sans-serif;
     /* The app's real tokens, from the Chrona repo (mockups/index.html :root): --paper, --ink-*, --ai-act-* */
     --cr-bg: #f7f6f4;        /* --paper */
     --cr-ink: #241a15;       /* --ink-900 */

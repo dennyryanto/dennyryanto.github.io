@@ -19,7 +19,7 @@ def soup(html):
 LIME = 'oklch(0.9 0.2 122)'
 
 # ---------- the Swiss pass (design/AUDIT.md, "Type C, grid 1") ----------
-# One family outside the drawings (Inter Tight), labels in sentence case with no tracking and no mono, and a hanging
+# Switzer outside the drawings (Clash Grotesk for the headings), labels in sentence case with no tracking and no mono, and a hanging
 # index: a label column three of twelve columns wide carries the number, the names, the dates, a diagram's title and
 # its remark; everything else hangs from the fourth column. The captures and the section files spell their labels in
 # capitals, so every one of them is listed here with what it says now ("|" starts a new line in the label column).
@@ -102,6 +102,16 @@ def unit(title, body, notes=(), caps=(), cls=''):
     return '<div class="mk-block mk-hang%s">%s<div class="mk-hb">%s</div></div>' % (' ' + cls if cls else '', label_col(title, notes, caps), body)
 
 
+CLASH = "font-family: 'Clash Grotesk', 'Mk Arrows', system-ui, sans-serif"
+
+
+def in_clash(el, weight=500):
+    # a captured heading kept as inline styles: Clash Grotesk at 500 instead of the text face
+    st = re.sub(r'font-family:[^;]*;?', '', el['style'])
+    st = re.sub(r'font-weight:[^;]*;?', '', st).strip().rstrip(';')
+    el['style'] = '%s; font-weight: %d; %s;' % (st, weight, CLASH) if st else '%s; font-weight: %d;' % (CLASH, weight)
+
+
 UNSAID = []
 
 
@@ -127,7 +137,7 @@ def swiss_inline(root, strict=False):
         st = re.sub(r'font-stretch:[^;]*;?', '', st)
         st = re.sub(r'font-weight:\s*[78]00', 'font-weight: 500', st)
         st = re.sub(r'(font:\s*)[78]00\b', r'\g<1>500', st)
-        st = st.replace('Archivo', "'Inter Tight', sans-serif")
+        st = st.replace('Archivo', "'Switzer', 'Mk Arrows', sans-serif")
         el['style'] = st.strip()
     return root
 
@@ -179,12 +189,17 @@ def fonts_css():
 LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
 APP_FONTS = [('Poppins', '500', 'poppins-500.woff2'), ('Poppins', '600', 'poppins-600.woff2'), ('Poppins', '700', 'poppins-700.woff2'),
              ('Mulish', '400 800', 'mulish-var.woff2')]
-# The site's one family: Inter Tight, a variable file for 400 to 600 (latin, and latin-ext for the odd glyph), from design/fonts.
+# The site's type pair, self-hosted from design/fonts (Fontshare, ITF Free Font License): Clash Grotesk (headings, big numbers, the
+# wordmark; wght 200 to 700) and Switzer (everything else; wght 100 to 900), both latin variable files. Neither has the arrows
+# U+2190-2193, so 'Mk Arrows' (a 1 KB subset of Inter Tight, arrows only) follows them in every font stack.
 # Archivo and IBM Plex Mono stay registered for the drawings (diagrams, product mock-ups, the demos), which keep their own
 # lettering; they are no longer preloaded, and load when a case study first shows them.
-LATIN_EXT = 'U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF'
-SITE_LATIN = LATIN.replace('U+2191, U+2193', 'U+2190-2193')   # our own subset of the variable file carries the arrows too
-SITE_FONTS = [('Inter Tight', 'latin', '400 800', 'inter-tight-var.woff2', SITE_LATIN), ('Inter Tight', 'latin-ext', '400 800', 'inter-tight-var-ext.woff2', LATIN_EXT)]
+ARROWS = 'U+2190-2193'
+# (family, subset label, weights, file, unicode-range). None = no restriction: the Fontshare files do not cover every codepoint of
+# LATIN (no U+2191 / U+2193, no general-punctuation spaces), so a range that names them would be a claim the file cannot keep.
+SITE_FONTS = [('Switzer', 'latin', '100 900', 'switzer-var.woff2', None),
+              ('Clash Grotesk', 'latin', '200 700', 'clash-grotesk-var.woff2', None),
+              ('Mk Arrows', 'arrows', '100 900', 'arrows.woff2', ARROWS)]
 
 
 def app_fonts_css():
@@ -196,7 +211,7 @@ def app_fonts_css():
     for fam, sub_, wt, f, rng in SITE_FONTS:
         data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
         out.insert(0, "/* %s %s */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
-                   "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }" % (fam, sub_, fam, wt, data, rng or LATIN))
+                   "src: url(data:font/woff2;base64,%s) format('woff2');%s }" % (fam, sub_, fam, wt, data, ' unicode-range: %s;' % rng if rng else ''))
     return '\n'.join(out)
 
 
@@ -391,16 +406,16 @@ card.insert_after(soup("""<style>
 .ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
   background: linear-gradient(rgba(242, 239, 232, .06), rgba(242, 239, 232, .02)), #161511 !important; overflow: hidden; }
-.ee-eyebrow { font: 400 13px/1.3 'Inter Tight', sans-serif; color: oklch(0.9 0.2 122); }
+.ee-eyebrow { font: 400 13px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: oklch(0.9 0.2 122); }
 /* the only way back: a button, so an extra eleventh tap can't flip the card before the message is read */
 .ee-close { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
   border: 1px solid oklch(0.9 0.2 122 / .55); background: oklch(0.9 0.2 122 / .08); color: oklch(0.9 0.2 122); cursor: pointer;
-  font: 500 13px/1 'Inter Tight', sans-serif; transition: background-color .2s, border-color .2s; }
+  font: 500 13px/1 'Switzer', 'Mk Arrows', sans-serif; transition: background-color .2s, border-color .2s; }
 .ee-close span { font-size: 14px; letter-spacing: 0; }
 .ee-close:hover { background: oklch(0.9 0.2 122 / .16); border-color: oklch(0.9 0.2 122); }
 .ee-close:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
-.ee-title { font: 500 22px/1.1 'Inter Tight', sans-serif; letter-spacing: -.02em; color: #f2efe8; }
-.ee-back p { margin: 0; font: 400 14px/1.5 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .82); }
+.ee-title { font: 500 22px/1.1 'Switzer', 'Mk Arrows', sans-serif; letter-spacing: -.02em; color: #f2efe8; }
+.ee-back p { margin: 0; font: 400 14px/1.5 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .82); }
 [data-r="profile-card"].ee-flipped .ee-in { transform: rotateY(180deg); }
 /* the hint: one small wobble on the seventh tap */
 @keyframes ee-wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-2.2deg); } 45% { transform: rotate(1.8deg); } 70% { transform: rotate(-.9deg); } }
@@ -469,6 +484,7 @@ hero_h1['class'] = ['mk-h1']
 del hero_h1['style']
 del hero_h1['data-r']
 swiss_inline(card)
+in_clash(card.find(string=lambda t: t.strip() == 'Denny Ryanto').parent)   # the card's name
 card['style'] = re.sub(r'(flex|width|margin-top):[^;]*;?\s*', '', card['style'])
 for el in card.find_all(string=lambda t: t.strip() == 'HEAD / AVP,'):   # the card's title line, two lines in capitals
     title_line = el.parent
@@ -1218,6 +1234,7 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
+in_clash(contact.find(string='Let’s talk.').parent)
 contact.find(string='Let’s talk.').parent.attrs.update({'role': 'heading', 'aria-level': '2'})   # a heading for heading navigation, same look
 contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.parent.name = 'footer'        # the contentinfo landmark
 for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
@@ -1267,10 +1284,13 @@ hero_html, lifted4 = floor_type(str(hero), True)
 print('type: floored to 11px and/or converted to rem on', lifted + lifted2 + lifted3 + lifted4, 'elements')
 
 # the mock-ups' own font families (and the Archivo the captures were set in) become the site's family, in the stylesheet and in inline styles alike
+SITE_STACK = "'Switzer', 'Mk Arrows'"
+
+
 def one_type(html):
-    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Inter Tight', html)
+    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)([\'"]?)' + DROP_FAMILIES.pattern + r'\2', lambda m: m.group(1) + SITE_STACK, html)
     # SVG text names its family in an attribute
-    return re.sub(r'(font-family="[^"]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Inter Tight', html)
+    return re.sub(r'(font-family="[^"]*?)([\'"]?)' + DROP_FAMILIES.pattern + r'\2', lambda m: m.group(1) + SITE_STACK, html)
 
 
 css = one_type(css)

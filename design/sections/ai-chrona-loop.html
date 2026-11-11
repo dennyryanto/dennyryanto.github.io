@@ -14,8 +14,8 @@
   --cl-lime: oklch(0.9 0.2 122);
   display: flex; flex-direction: column; height: 100%;
 }
-.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); box-shadow: 0 0 0 1px var(--cl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: 'Inter Tight', sans-serif; color: var(--cl-ink); }
-.cl-top { margin-bottom: 18px; font: 500 12px/1.3 'Inter Tight', sans-serif; color: var(--cl-lime); }
+.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); box-shadow: 0 0 0 1px var(--cl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink); }
+.cl-top { margin-bottom: 18px; font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-lime); }
 .cl-body { flex: 1; display: flex; align-items: center; justify-content: center; gap: 36px; min-width: 0; }
 
 /* the ring: a fixed 200px canvas, everything placed inside it */
@@ -33,8 +33,8 @@
 .cl-n:nth-of-type(2) { left: 142px; top: 115px; }
 .cl-n:nth-of-type(3) { left: 14px; top: 115px; }
 .cl-mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; }
-.cl-mid small { display: block; font: 500 12px/1 'Inter Tight', sans-serif; color: var(--cl-ink-3); }
-.cl-mid b { display: block; margin-top: 6px; font: 600 16px/1.1 'Inter Tight', sans-serif; color: var(--cl-ink); }
+.cl-mid small { display: block; font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink-3); }
+.cl-mid b { display: block; margin-top: 6px; font: 600 16px/1.1 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink); }
 
 /* the steps */
 .cl-steps { flex: 0 1 230px; min-width: 0; list-style: none; margin: 0; padding: 0; }
@@ -42,13 +42,13 @@
 .cl-step:last-child { border-bottom: 0; }
 .cl-step:first-child { padding-top: 0; }
 .cl-step:last-child { padding-bottom: 0; }
-.cl-step > span { font: 500 12px/1 'Inter Tight', sans-serif; color: var(--cl-ink-3); transition: color .35s; }
+.cl-step > span { font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink-3); transition: color .35s; }
 .cl-step.on > span { color: var(--cl-ink); }
-.cl-step b { display: block; font: 600 15px/1.2 'Inter Tight', sans-serif; color: var(--cl-ink); }
-.cl-step p { margin: 4px 0 0; font: 400 13px/1.4 'Inter Tight', sans-serif; color: var(--cl-ink-3); }
-.cl-step p em { font: 500 12px/1 'Inter Tight', sans-serif; font-style: normal; color: var(--cl-lime); }
+.cl-step b { display: block; font: 600 15px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink); }
+.cl-step p { margin: 4px 0 0; font: 400 13px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink-3); }
+.cl-step p em { font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; font-style: normal; color: var(--cl-lime); }
 
-.cl-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--cl-line); max-width: 72ch; font: 400 14px/1.55 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .6); }
+.cl-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--cl-line); max-width: 72ch; font: 400 14px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 
 /* narrow: the ring above the list */
 @container (max-width: 480px) {

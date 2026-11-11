@@ -31,20 +31,20 @@ const STATS = `<!doctype html><html><head><meta charset="utf-8"><base href="file
 ${faces}
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1200px; height: 630px; background: #161511; overflow: hidden; }
-body { position: relative; padding: 64px 72px 0; color: #f2efe8; font-family: 'Inter Tight', sans-serif; -webkit-font-smoothing: antialiased; }
-.top { display: flex; justify-content: space-between; align-items: baseline; font: 500 15px/1 'Inter Tight', sans-serif; }
-.top .who { color: #f2efe8; font: 600 22px/1 'Inter Tight', sans-serif; letter-spacing: -.01em; }
+body { position: relative; padding: 64px 72px 0; color: #f2efe8; font-family: 'Switzer', 'Mk Arrows', sans-serif; -webkit-font-smoothing: antialiased; }
+.top { display: flex; justify-content: space-between; align-items: baseline; font: 500 15px/1 'Switzer', 'Mk Arrows', sans-serif; }
+.top .who { color: #f2efe8; font: 600 22px/1 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.01em; }
 .top .url { color: rgba(242, 239, 232, .55); }
-.eyebrow { margin-top: 58px; font: 500 16px/1 'Inter Tight', sans-serif; color: ${LIME}; }
-h1 { margin-top: 22px; font: 600 92px/.95 'Inter Tight', sans-serif; letter-spacing: -.025em; }
+.eyebrow { margin-top: 58px; font: 500 16px/1 'Switzer', 'Mk Arrows', sans-serif; color: ${LIME}; }
+h1 { margin-top: 22px; font: 500 92px/.95 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
 h1 span { color: ${LIME}; }
 .keys { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(242, 239, 232, .14); }
 .key { padding: 22px 0 30px 72px; }
 .key + .key { padding-left: 28px; border-left: 1px solid rgba(242, 239, 232, .14); }
-.key b { display: block; font: 600 40px/1 'Inter Tight', sans-serif; letter-spacing: -.02em; }
+.key b { display: block; font: 500 40px/1 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
 .key:first-child b { color: ${LIME}; }
 .arw { margin: 0 6px 4px; vertical-align: middle; }
-.key span { display: block; margin-top: 10px; font: 400 13px/1.3 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .6); }
+.key span { display: block; margin-top: 10px; font: 400 13px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .rabbit { position: absolute; right: 84px; top: 252px; opacity: .55; }
 </style></head><body>
 <div class="top"><span class="who">Denny Ryanto</span><span class="url">dennyryanto.github.io</span></div>
@@ -108,7 +108,7 @@ const CARD = anim => `<!doctype html><html><head><meta charset="utf-8"><base hre
 ${faces}
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1200px; height: 630px; overflow: hidden; background: #161511; }
-body { position: relative; color: #f2efe8; font-family: 'Inter Tight', sans-serif; -webkit-font-smoothing: antialiased; }
+body { position: relative; color: #f2efe8; font-family: 'Switzer', 'Mk Arrows', sans-serif; -webkit-font-smoothing: antialiased; }
 /* glows behind the glass */
 .glow { position: absolute; border-radius: 50%; filter: blur(80px); }
 .g1 { width: 560px; height: 520px; left: 120px; top: -300px; background: oklch(0.9 0.2 122 / .42); }
@@ -116,7 +116,7 @@ body { position: relative; color: #f2efe8; font-family: 'Inter Tight', sans-seri
 .g3 { width: 420px; height: 420px; left: -140px; bottom: -200px; background: #fdb022; opacity: .22; }
 .grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 4px 4px; }
 .top { position: absolute; left: 56px; right: 56px; top: 22px; display: flex; justify-content: space-between; align-items: center; }
-.url { font: 500 14px/1 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .62); }
+.url { font: 500 14px/1 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .62); }
 /* the profile card, frosted, straight, running off the bottom edge: identity left, details right */
 .card { position: absolute; left: 56px; right: 56px; top: 58px; height: 620px; padding: 44px 48px; border-radius: 28px;
   display: grid; grid-template-columns: 360px 1fr; column-gap: 64px;
@@ -127,19 +127,19 @@ body { position: relative; color: #f2efe8; font-family: 'Inter Tight', sans-seri
   background: linear-gradient(120deg, rgba(255,255,255,.14) 0%, transparent 30%); }
 .id { display: flex; flex-direction: column; padding-right: 32px; border-right: 1px solid rgba(255,255,255,.13); margin-right: -32px; }
 .id img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 4px rgba(255,255,255,.2); }
-.id b { margin-top: 30px; font: 600 62px/.96 'Inter Tight', sans-serif; letter-spacing: -.02em; }
-.id span { margin-top: 18px; font: 500 19px/1.4 'Inter Tight', sans-serif; color: ${LIME}; }
+.id b { margin-top: 30px; font: 500 62px/.96 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
+.id span { margin-top: 18px; font: 500 19px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: ${LIME}; }
 .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; }
 .chips i { font-style: normal; padding: 9px 14px; border-radius: 100px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.24); background: rgba(255,255,255,.05);
-  font: 500 14px/1 'Inter Tight', sans-serif; }
+  font: 500 14px/1 'Switzer', 'Mk Arrows', sans-serif; }
 .rows { display: flex; flex-direction: column; }
 .row { padding: 16px 0 18px; border-top: 1px solid rgba(255,255,255,.13); }
 .row:first-child { padding-top: 4px; border-top: 0; }
-.row i { display: block; font: 400 15px/1 'Inter Tight', sans-serif; font-style: normal; color: rgba(242,239,232,.62); }
-.row p { margin-top: 10px; font: 400 34px/1.15 'Inter Tight', sans-serif; letter-spacing: -.005em; }
+.row i { display: block; font: 400 15px/1 'Switzer', 'Mk Arrows', sans-serif; font-style: normal; color: rgba(242,239,232,.62); }
+.row p { margin-top: 10px; font: 400 34px/1.15 'Switzer', 'Mk Arrows', sans-serif; letter-spacing: -.005em; }
 .row p b { color: ${LIME}; font-weight: 600; }
 .certs { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-.certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 'Inter Tight', sans-serif; }
+.certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
 .certs svg { width: 27px; height: 27px; flex: none; }
 ${AURA_CSS}
 ${anim ? ANIM_CSS : ''}
@@ -174,7 +174,7 @@ const html = video ? CARD(true) : VARIANT === 'card' ? CARD(false) : STATS;
   const tmp = path.join(ROOT, 'design', 'tools', '.og-image.html');
   fs.writeFileSync(tmp, html);
   await p.goto('file://' + tmp); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(200);
-  const missing = await p.evaluate(() => ['Inter Tight'].filter(f => !document.fonts.check('500 20px "' + f + '"')));
+  const missing = await p.evaluate(() => ['Switzer', 'Clash Grotesk'].filter(f => !document.fonts.check('500 20px "' + f + '"')));
   if (!video) {
     await p.screenshot({ path: OUT });
   } else {
