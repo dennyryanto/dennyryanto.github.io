@@ -249,14 +249,18 @@ del top_reach['style']
 
 def portable(html):
     # The product screens are drawn at their real size (375px phones, 1024 / 1440px tablets and desktops) and scaled
-    # into their frames with scale(calc(100cqw * (1 / 375px))). Dividing a length by a length is typed arithmetic,
-    # which Safari does not support, so it dropped the transform and the screens did not show. tan(atan2(a, b)) gives
-    # the same unitless a / b and works in Safari 16.4+, Chrome and Firefox.
+    # into their frames with an inline transform of scale(100cqw / <width>). Dividing a length by a length is typed
+    # arithmetic, which older Safari does not support, so it dropped the transform and the screens did not show.
+    # tan(atan2(a, b)) gives the same unitless a / b and works in Safari 16.4+, Chrome and Firefox.
+    # The captures spell the ratio two ways, calc(100cqw / 375px) and calc(100cqw * (1 / 375px)); both become the tan form.
     # Safari still sized them at about two thirds (it resolves the container units in the transform differently), so
     # each scaled screen is also marked data-fit="<its width>" and the page script sets the exact scale from its frame's
     # measured width (hifi_shell.html); the CSS stays as the fallback without JavaScript.
-    html = re.sub(r'calc\(100cqw \* \(1 / (\d+(?:\.\d+)?)px\)\)', r'tan(atan2(100cqw, \1px))', html)
-    return re.sub(r'<(div|span)\b(?![^>]*\bdata-fit=)([^>]*?tan\(atan2\(100cqw, (\d+(?:\.\d+)?)px\)\)[^>]*)>', r'<\1 data-fit="\3"\2>', html)
+    # Only inline styles are handled (the marker goes on the element); no stylesheet in the page scales by cqw.
+    n = r'(\d+(?:\.\d+)?)\s*px'
+    html = re.sub(r'calc\(\s*100cqw\s*\*\s*\(\s*1\s*/\s*' + n + r'\s*\)\s*\)', r'tan(atan2(100cqw, \1px))', html)
+    html = re.sub(r'calc\(\s*100cqw\s*/\s*' + n + r'\s*\)', r'tan(atan2(100cqw, \1px))', html)
+    return re.sub(r'<(div|span)\b(?![^>]*\bdata-fit=)([^>]*?tan\(atan2\(100cqw,\s*(\d+(?:\.\d+)?)px\)\)[^>]*)>', r'<\1 data-fit="\3"\2>', html)
 
 
 def section(name):
@@ -1278,8 +1282,8 @@ def floor_type(html, to_rem=False):
 
 
 css = lift(css)
-more_html, lifted = floor_type(more_html, True)
-case_html, lifted2 = floor_type(case_html)
+more_html, lifted = floor_type(portable(more_html), True)
+case_html, lifted2 = floor_type(portable(case_html))
 top_html, lifted3 = floor_type(str(top), True)
 hero_html, lifted4 = floor_type(str(hero), True)
 print('type: floored to 11px and/or converted to rem on', lifted + lifted2 + lifted3 + lifted4, 'elements')

@@ -1215,6 +1215,40 @@ A final quality pass with Impeccable (`pbakaus/impeccable` 4.8.2, its `polish` c
 - *Case numbers 01 to 04:* Impeccable discourages section numbers unless the sequence carries information. Here they tie
   each case to its cell in the index, so they stay.
 
+## Safari safeguard for scaled screens, made to take effect (2026-11-11)
+
+**What was wrong.** The product screens (four LinkAja phones at 375px, the Dash tablets at 1024px, the Dash and Lumio
+laptops at 1440px) are drawn at full size and scaled into their frames with an inline
+`transform: scale(calc(100cqw / 375px))`. `portable()` in `build_hifi.py` was meant to rewrite that to
+`tan(atan2(100cqw, 375px))` (typed length / length arithmetic is not supported by older Safari) and mark each screen
+`data-fit="<width>"` so the page script sets an exact scale. Its regex only knew `calc(100cqw * (1 / 375px))`, a spelling
+the markup does not use, so the built page had no `data-fit` and no `tan(atan2(`, the script found nothing, and
+`floor_type()`'s `data-fit` test never matched either.
+
+**What changed.**
+- `portable()` also rewrites `calc(100cqw / Npx)` (whitespace-tolerant) and marks every inline scale `data-fit`. All eight
+  screens in the page now carry it. No stylesheet scales by `cqw` (the one other `cqw` rule is the background video's cover
+  sizing, which is not a scale), and the stageshow sources have none, so nothing else needed the marker.
+- `floor_type()` now runs on markup that has been through `portable()`, so its `data-fit` test works: product screens keep
+  their px sizes instead of being converted to rem. At the default 16px root the pixels are the same (checked: the built
+  page differs only by rem-to-px inside screens, and no font size inside a screen is under the 11px floor); with a larger
+  browser font size the screens no longer re-flow inside their fixed-size drawing.
+- The page script (`hifi_shell.html`) measures the frame's fractional content width (not the rounded `clientWidth`),
+  sets `scale(w / fit)` on load, on `ResizeObserver` and window `resize`, and refits a case study's screens when it opens
+  (`mk-open`; a shut drawer is `content-visibility: hidden` and measures 0 until it opens). It also works without
+  `ResizeObserver`. The screen's parent is the frame that has `container-type: size`, with no padding or border, and the
+  transform origin is left top.
+
+**Tested (Chromium only).** Screen widths at 1440 and 390 with the case studies open, before and after: identical
+(within 0.01px), and the element screenshots are pixel-identical apart from animated content. A browser that ignores the CSS
+scale was simulated by stripping every `cqw` transform before the page script runs (Playwright `addInitScript` plus a
+`MutationObserver`): on the new build all 8 screens land within 1px of their frame at 1440 and 390, after resizing
+(1024, 700, 390, 1440) and for case studies that were closed at load; on the previous build the same test fails for all of
+them (screens stay at full size). Playwright WebKit is not installed here, so **this has not been verified in real Safari**.
+Known and left alone: in the built markup the font-family rewrite leaves unescaped single quotes inside some single-quoted
+`style` attributes on the screens' wrappers, which cuts those attributes short (the font stack and whatever follows it, such as
+`display: flex`, on all eight); it predates this change.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:

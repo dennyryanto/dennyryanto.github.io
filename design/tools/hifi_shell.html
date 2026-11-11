@@ -550,12 +550,28 @@ div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
   });
 
   // ---- product screens: drawn at full size (data-fit = that width) and scaled to their frame's measured width. The CSS
-  //      scales them too, but Safari gets that ratio wrong, so the exact scale is set here and kept on resize ----
+  //      scales them too, but Safari gets that ratio wrong (or drops it), so the exact scale is set here. A screen's parent
+  //      is its frame: the element with container-type that the CSS scale is relative to, so that element's content width
+  //      (fractional, as container units use) is what counts; the transform origin is left top in the markup. It is kept
+  //      on resize (ResizeObserver plus a window resize listener) and refitted when a case study opens: a shut drawer is
+  //      content-visibility: hidden, its frames measure 0 and are skipped until it opens ----
   var fits = $$('[data-fit]');
-  if (fits.length && 'ResizeObserver' in window) {
-    var fitOne = function (el) { var w = el.parentElement.clientWidth; if (w) el.style.transform = 'scale(' + (w / +el.getAttribute('data-fit')) + ')'; };
-    var fitRO = new ResizeObserver(function (es) { es.forEach(function (e) { $$(':scope > [data-fit]', e.target).forEach(fitOne); }); });
-    fits.forEach(function (el) { fitOne(el); fitRO.observe(el.parentElement); });
+  if (fits.length) {
+    var fitOne = function (el) {
+      var f = el.parentElement, cs = getComputedStyle(f), w = parseFloat(cs.width);
+      if (w && cs.boxSizing === 'border-box') w -= (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0) + (parseFloat(cs.borderLeftWidth) || 0) + (parseFloat(cs.borderRightWidth) || 0);
+      if (!(w > 0)) w = f.clientWidth;
+      var fit = +el.getAttribute('data-fit');
+      if (w > 0 && fit > 0) el.style.transform = 'scale(' + (w / fit) + ')';
+    };
+    var fitAll = function (root) { $$('[data-fit]', root || document).forEach(fitOne); };
+    fitAll();
+    if ('ResizeObserver' in window) {
+      var fitRO = new ResizeObserver(function (es) { es.forEach(function (e) { $$(':scope > [data-fit]', e.target).forEach(fitOne); }); });
+      fits.forEach(function (el) { fitRO.observe(el.parentElement); });
+    }
+    window.addEventListener('resize', function () { fitAll(); });
+    $$('.mk-drawer').forEach(function (d) { d.addEventListener('mk-open', function () { fitAll(d); }); });
   }
 
   // ---- signature visual: exploded layers drawn live; each builds once in view (finished with reduced motion) ----
