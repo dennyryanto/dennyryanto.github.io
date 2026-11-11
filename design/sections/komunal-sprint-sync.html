@@ -17,8 +17,10 @@
 .kss-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .kss-head span:first-child { color: var(--kss-lime); }
 
-.kss-board { border-radius: 14px; background: var(--kss-panel); box-shadow: 0 0 0 1px var(--kss-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink); }
-.kss-lane { border-radius: 12px; padding: 14px 14px 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kss-line); min-width: 0; }
+.kss-board { border-radius: 14px; background: var(--kss-panel); padding: 16px; display: grid; gap: 14px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink); }
+.kss-lane { position: relative; padding: 14px 0 16px; min-width: 0; }
+/* lanes are not boxes: a hairline between them */
+.kss-lane + .kss-lane::before { content: ''; position: absolute; left: 0; right: 0; top: -8px; height: 1px; background: var(--kss-line); }
 .kss-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
 .kss-tag { padding: 4px 8px; border-radius: 6px; background: var(--kss-tile); font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-2); }
 .kss-lh b { font: 600 14px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
@@ -27,7 +29,7 @@
 .kss-bad .kss-st { color: var(--kss-amber); }
 .kss-bad .kss-st i { background: var(--kss-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
 .kss-good .kss-st { color: var(--kss-lime); }
-.kss-good .kss-st i { background: var(--kss-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.kss-good .kss-st i { background: var(--kss-lime); }
 
 /* the timeline: department | intake | cut-off | two weeks | delivered */
 .kss-tl { display: grid; grid-template-columns: 96px 112px 14px minmax(0, 1fr) 40px; row-gap: 8px; align-items: center; }
@@ -52,7 +54,7 @@
 .kss-good .kss-done { color: #182003; background: var(--kss-lime); }
 .kss-done.muted { color: var(--kss-ink-3) !important; background: none !important; box-shadow: inset 0 0 0 1.5px var(--kss-edge) !important; }
 /* the cut-off: one lime rule through all three rows */
-.kss-cut { grid-column: 3; justify-self: center; width: 2.5px; height: 100%; min-height: 26px; background: var(--kss-lime); box-shadow: 0 0 7px oklch(0.9 0.2 122 / .5); border-radius: 2px; }
+.kss-cut { grid-column: 3; justify-self: center; width: 2.5px; height: 100%; min-height: 26px; background: var(--kss-lime); border-radius: 2px; }
 .kss-cut.none { background: none; box-shadow: none; border-left: 1.5px dashed var(--kss-edge); width: 0; }
 /* ceremonies shared by all three rows */
 .kss-cer { grid-column: 4; position: relative; height: 18px; }
@@ -98,7 +100,7 @@
       <span class="kss-dept">Product</span>
       <div class="kss-in"><span class="kss-ch">DM</span></div>
       <span class="kss-cut none"></span>
-      <div class="kss-track"><i class="kss-hit" style="left:24%"></i><i class="kss-hit" style="left:47%"></i><i class="kss-hit" style="left:57%"></i><i class="kss-hit" style="left:79%"></i></div>
+      <div class="kss-track"><i class="kss-hit" style="left:24%"></i><i class="kss-hit" style="left:45%"></i><i class="kss-hit" style="left:59%"></i><i class="kss-hit" style="left:79%"></i></div>
       <span class="kss-done">?</span>
 
       <span class="kss-dept">Engineering</span>

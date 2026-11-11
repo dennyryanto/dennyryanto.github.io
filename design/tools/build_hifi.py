@@ -631,7 +631,7 @@ def did_html(items):
 la_did = [row.find_all('span')[-1].decode_contents() for row in bullets.find_all('div', recursive=False)]
 
 # ---------- one stage for every mock-up and photo in a drawer ----------
-# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, a hairline ring, a long shadow).
+# The diagrams already sit on one board (design/sections/VIZ-STYLE.md: 14px corners, #1a1b1f, flat: no ring, no shadow).
 # The captured product screens and photos get the same: a head row (lime title, a note on the right), the board, and nothing
 # framed twice. Product colours stay inside the screens.
 def drop_style(el, *props):
@@ -1293,7 +1293,13 @@ SITE_STACK = "'Switzer', 'Mk Arrows'"
 
 
 def one_type(html):
-    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)([\'"]?)' + DROP_FAMILIES.pattern + r'\2', lambda m: m.group(1) + SITE_STACK, html)
+    # The stack has single quotes. Inside a single-quoted style attribute they would end the attribute early and drop what
+    # follows, so there it is written with double quotes (this tag's attribute quote decides, not the declaration).
+    def stack_for(m):
+        s0 = m.string
+        tag = s0[s0.rfind('<', 0, m.start()):m.start()]
+        return SITE_STACK.replace("'", '"') if re.search(r"\bstyle='[^']*$", tag) else SITE_STACK
+    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)([\'"]?)' + DROP_FAMILIES.pattern + r'\2', lambda m: m.group(1) + stack_for(m), html)
     # SVG text names its family in an attribute
     return re.sub(r'(font-family="[^"]*?)([\'"]?)' + DROP_FAMILIES.pattern + r'\2', lambda m: m.group(1) + SITE_STACK, html)
 

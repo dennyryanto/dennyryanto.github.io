@@ -189,14 +189,14 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 /* what I did: one column at a reading measure */
 .mk-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 70ch; color: var(--fg-2); font: 400 16px/1.6 var(--display); }
 
-/* the board every diagram and mock-up sits on (the same panel as the diagrams in design/sections) */
-.mk-board { min-width: 0; padding: 28px; border-radius: 14px; background: #1a1b1f; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); }
+/* the board every diagram and mock-up sits on (the same flat panel as the diagrams in design/sections: no ring, no shadow) */
+.mk-board { min-width: 0; padding: 28px; border-radius: 14px; background: #1a1b1f; }
 .mk-board.flush { padding: 0; overflow: hidden; }
 .mk-board.flush .mk-fan-foot { padding: 0 28px 22px; }
 @media (max-width: 600px) { .mk-board { padding: 14px; } .mk-board.flush .mk-fan-foot { padding: 0 14px 16px; } }
 
 /* shipped screens (LinkAja): one dark panel, phones in a centred row with numbered captions */
-.ksf-panel { min-height: 340px; background: #1a1b1f; border-radius: 14px; box-shadow: 0 0 0 1px rgba(255, 255, 255, .08), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 26px; display: flex; flex-direction: column; color: var(--fg); }
+.ksf-panel { min-height: 340px; background: #1a1b1f; border-radius: 14px; padding: 26px; display: flex; flex-direction: column; color: var(--fg); }
 .ksf-row { flex: 1 1 0%; display: flex; gap: 16px; align-items: flex-start; justify-content: center; }
 .ksf-step { flex: 1 1 0; min-width: 0; max-width: 236px; margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .ksf-step > div { max-width: none !important; }
@@ -244,13 +244,12 @@ div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
   .ss-chrona > div:last-child { padding-inline: 16px; }
 }
 
-/* ---- the lab: a band that introduces the two personal builds, a spec line in each hero, a faint workbench grid behind them ---- */
+/* ---- the lab: a band that introduces the two personal builds, a spec line in each hero ---- */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 80px var(--pad) 0; }
 .mk-lab-t { font: 500 clamp(40px, 5vw, 64px)/1 var(--head); letter-spacing: -.02em; color: var(--fg); }
 .mk-lab-wrap p { margin: 16px 0 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .mk-lab { position: relative; --lime: oklch(0.84 0.12 215); }   /* the lab's own accent: instrument cyan, in step with LAB_OKLCH in build_hifi.py */
-.mk-lab::before { content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none; background-image: linear-gradient(rgba(242, 239, 232, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(242, 239, 232, .04) 1px, transparent 1px); background-size: 48px 48px; -webkit-mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent); mask-image: linear-gradient(180deg, transparent, #000 14%, #000 86%, transparent); }
 .mk-lab > * { position: relative; z-index: 1; }
 @media (max-width: 900px) { .mk-lab-wrap { padding-top: 56px; } }
 

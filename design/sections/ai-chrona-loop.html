@@ -14,7 +14,7 @@
   --cl-lime: oklch(0.9 0.2 122);
   display: flex; flex-direction: column; height: 100%;
 }
-.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); box-shadow: 0 0 0 1px var(--cl-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink); }
+.cl-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--cl-panel); padding: 20px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-ink); }
 .cl-top { margin-bottom: 18px; font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--cl-lime); }
 .cl-body { flex: 1; display: flex; align-items: center; justify-content: center; gap: 36px; min-width: 0; }
 
@@ -24,11 +24,11 @@
 .cl-edge { fill: none; stroke: var(--cl-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
 .cl-trail { fill: none; stroke-linecap: round; stroke: var(--cl-lime); }
 .cl-trail.t { stroke-width: 2.5; }
-.cl-trail.g { stroke-width: 7; opacity: .13; }
-.cl-dot { fill: var(--cl-lime); stroke: var(--cl-panel); stroke-width: 2; filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.cl-trail.g { display: none; }   /* the wide faint halo under the lit line is gone (2026-11-11) */
+.cl-dot { fill: var(--cl-lime); stroke: var(--cl-panel); stroke-width: 2; }
 .cl-n { position: absolute; width: 44px; height: 44px; border-radius: 12px; background: var(--cl-node); box-shadow: 0 0 0 1px var(--cl-line); display: grid; place-items: center; color: var(--cl-ink-2); transition: box-shadow .35s, color .35s; }
 .cl-n svg { position: static; width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.cl-n.on { color: var(--cl-lime); box-shadow: 0 0 0 1.5px var(--cl-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1); }
+.cl-n.on { color: var(--cl-lime); box-shadow: 0 0 0 1.5px var(--cl-lime); }
 .cl-n:nth-of-type(1) { left: 78px; top: 4px; }
 .cl-n:nth-of-type(2) { left: 142px; top: 115px; }
 .cl-n:nth-of-type(3) { left: 14px; top: 115px; }

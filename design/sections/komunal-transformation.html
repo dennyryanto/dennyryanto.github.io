@@ -22,10 +22,15 @@
 .ktf-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .ktf-head span:first-child { color: var(--ktf-lime); }
 
-.ktf-board { border-radius: 14px; background: var(--ktf-panel); box-shadow: 0 0 0 1px var(--ktf-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--ktf-ink); }
+.ktf-board { border-radius: 14px; background: var(--ktf-panel); padding: 16px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--ktf-ink); }
 .ktf-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 
-.ktf-tile { padding: 16px; border-radius: 12px; background: var(--ktf-node); box-shadow: 0 0 0 1px var(--ktf-line); }
+/* the four quadrants are not boxes: hairlines between them; the before/after pictures stay the cards */
+.ktf-grid { gap: 0; }
+.ktf-tile { padding: 20px 24px; }
+.ktf-tile:nth-child(odd) { padding-left: 0; }
+.ktf-tile:nth-child(even) { padding-right: 0; border-left: 1px solid var(--ktf-line); }
+.ktf-tile:nth-child(n+3) { border-top: 1px solid var(--ktf-line); }
 .ktf-t { display: flex; align-items: baseline; gap: 10px; margin-bottom: 14px; }
 .ktf-t i { font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; font-style: normal; color: var(--ktf-ink-3); }
 .ktf-t b { font: 600 15px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
@@ -78,7 +83,7 @@
 .ktf-fun b.l { background: var(--ktf-lime); }
 
 .ktf-status { display: flex; align-items: center; gap: 10px; margin-top: 14px; padding: 12px 4px 2px; border-top: 1px solid var(--ktf-line); font: 400 12px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--ktf-ink-2); }
-.ktf-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--ktf-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.ktf-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--ktf-lime); }
 
 .ktf-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 
@@ -96,9 +101,10 @@
 .ktf-play .ktf-status.on { opacity: 1; }
 
 @container (max-width: 700px) {
-  .ktf-board { padding: 10px; }
-  .ktf-grid { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .ktf-tile { padding: 14px 12px; }
+  .ktf-board { padding: 12px 14px; }
+  .ktf-grid { grid-template-columns: minmax(0, 1fr); }
+  .ktf-tile, .ktf-tile:nth-child(odd), .ktf-tile:nth-child(even) { padding: 16px 0; border-left: 0; }
+  .ktf-tile:nth-child(n+2) { border-top: 1px solid var(--ktf-line); }
   .ktf-vs { grid-template-columns: minmax(0, 1fr) 22px minmax(0, 1fr); }
   .ktf-pic { padding: 10px; }
   .ktf-weeks, .ktf-track, .ktf-lanes, .ktf-fun { left: 10px; right: 10px; }

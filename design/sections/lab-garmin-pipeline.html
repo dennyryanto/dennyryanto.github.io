@@ -14,7 +14,7 @@
 .gpp-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
 .gpp-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .gpp-head span:first-child { color: var(--gpp-lime); }
-.gpp-board { flex: 1 1 auto; border-radius: 14px; background: var(--gpp-panel); box-shadow: 0 0 0 1px var(--gpp-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 22px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--gpp-ink); }
+.gpp-board { flex: 1 1 auto; border-radius: 14px; background: var(--gpp-panel); padding: 22px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--gpp-ink); }
 .gpp-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .gpp-step { display: grid; grid-template-columns: 28px minmax(0, 1fr); column-gap: 14px; }
 .gpp-rail { display: flex; flex-direction: column; align-items: center; }
@@ -23,7 +23,7 @@
 /* resting connector: edge, 1.5px, dashed 4 6 */
 .gpp-seg { flex: 1 1 auto; width: 1.5px; min-height: 16px; margin: 6px 0; background: repeating-linear-gradient(180deg, var(--gpp-edge) 0 4px, transparent 4px 10px); }
 /* the lit path: the last hop, into the device */
-.gpp-seg.lit { width: 2.5px; background: var(--gpp-lime); box-shadow: 0 0 7px 2px oklch(0.9 0.2 122 / .13); border-radius: 2px; }
+.gpp-seg.lit { width: 2.5px; background: var(--gpp-lime); border-radius: 2px; }
 .gpp-body { padding-bottom: 20px; min-width: 0; }
 .gpp-step:last-child .gpp-body { padding-bottom: 0; }
 .gpp-body h4 { margin: 4px 0 4px; font: 600 14px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--gpp-ink); }

@@ -41,7 +41,7 @@
 .dfy-edges .base { stroke: var(--dfy-edge); stroke-width: 2; }
 .dfy-edges .base.branch { stroke-dasharray: 5 5; }
 .dfy-edges .lit { stroke-width: 3; }
-.dfy-edges .glow { stroke-width: 7; opacity: .14; }
+.dfy-edges .glow { display: none; }   /* the wide faint halo under the lit line is gone (2026-11-11), lime and amber alike */
 /* lime: the path to a decision; amber: the call is sent to a person */
 .dfy-edges g.lime .lit, .dfy-edges g.lime .glow { stroke: var(--dfy-lime); }
 .dfy-edges g.amber .lit, .dfy-edges g.amber .glow { stroke: var(--dfy-amber); }
@@ -78,7 +78,7 @@
 @keyframes dfy-spin { to { transform: rotate(360deg); } }
 
 /* the decision: the only lime object on the canvas once the run lands */
-.dfy-node.dfy-out[data-st="done"] { box-shadow: 0 0 0 1.5px var(--dfy-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.dfy-node.dfy-out[data-st="done"] { box-shadow: 0 0 0 1.5px var(--dfy-lime); }
 .dfy-dec { padding: 10px 11px; border-radius: 10px; background: oklch(0.9 0.2 122 / .07); box-shadow: inset 0 0 0 1px oklch(0.9 0.2 122 / .35); }
 .dfy-dec small { display: block; font: 600 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--dfy-lime-ink); }
 .dfy-dec strong { display: block; margin-top: 5px; font: 700 14px/1.3 Archivo, sans-serif; color: var(--dfy-ink); }
@@ -125,7 +125,7 @@
 /* between loops the finished run eases out before the canvas resets */
 .dfy-canvas { transition: opacity .45s ease; }
 .dfy-wrap.dfy-fade .dfy-canvas { opacity: .35; }
-.dfy-packet { fill: var(--dfy-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.dfy-packet { fill: var(--dfy-lime); }
 .dfy-wrap.live .dfy-run b { animation: dfy-pulse 2.4s ease-in-out infinite; }
 @keyframes dfy-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(23, 178, 106, .5); } 50% { box-shadow: 0 0 0 5px rgba(23, 178, 106, 0); } }
 .dfy-btns .yes { position: relative; overflow: hidden; }

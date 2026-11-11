@@ -22,22 +22,22 @@
 .kds-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .kds-head span:first-child { color: var(--kds-lime); }
 
-.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); box-shadow: 0 0 0 1px var(--kds-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 22px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink); }
+.kds-board { position: relative; border-radius: 14px; background: var(--kds-panel); padding: 16px; display: grid; gap: 22px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink); }
 .kds-status { display: flex; align-items: center; gap: 10px; font: 400 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink-2); }
-.kds-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--kds-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); transition: background-color .3s, box-shadow .3s; }
+.kds-status i { width: 8px; height: 8px; border-radius: 50%; background: var(--kds-lime); transition: background-color .3s, box-shadow .3s; }
 .kds-wrap.before .kds-status i { background: var(--kds-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
 .kds-edges { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
 .kds-edges path { fill: none; stroke-linecap: round; }
 .kds-edges .base { stroke: var(--kds-edge); stroke-width: 1.5; stroke-dasharray: 4 6; }
 .kds-edges .lit { stroke: var(--kds-lime); stroke-width: 2.5; }
-.kds-edges .glow { stroke: var(--kds-lime); stroke-width: 7; opacity: .13; }
-.kds-dot { fill: var(--kds-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.kds-edges .glow { display: none; }   /* the wide faint halo under the lit line is gone (2026-11-11) */
+.kds-dot { fill: var(--kds-lime); }
 
 /* the three surfaces: the same offer as each org ships it; dark stages keep them quiet in the page, the card stays a light product UI */
 .kds-surfaces { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 .kds-surf { position: relative; display: flex; flex-direction: column; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px var(--kds-line); overflow: hidden; transition: box-shadow .4s; }
 .kds-surf.joined { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); }
-.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--kds-line); }
+.kds-sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--kds-line); }
 .kds-sh b { font: 600 13px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
 .kds-sh small { font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink-3); }
 .kds-stage { flex: 1; display: grid; place-items: center; padding: 14px; background: #202126; color: var(--kds-ink); min-height: 226px; }
@@ -76,13 +76,13 @@
 .kds-surf:not(.off) .kds-btn { background: var(--ds-grad); }
 
 /* the library: one source of tokens and components */
-.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45), 0 0 0 5px oklch(0.9 0.2 122 / .08); padding: 14px; display: flex; align-items: stretch; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
+.kds-lib { position: relative; border-radius: 12px; background: var(--kds-node); box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .45); padding: 14px; display: flex; align-items: stretch; gap: 10px 18px; transition: opacity .5s, transform .5s, box-shadow .5s; }
 .kds-wrap.before .kds-lib { opacity: .25; transform: translateY(10px); box-shadow: 0 0 0 1px var(--kds-line); }
 .kds-lh { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 6px; flex: none; max-width: 150px; }
 .kds-lh b { font: 600 15px/1 'Switzer', 'Mk Arrows', sans-serif; }
 .kds-lh small { font: 400 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink-3); }
-.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.9fr 1.05fr .85fr 1.15fr; gap: 10px; }
-.kds-g { display: grid; align-content: space-between; row-gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
+.kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.9fr 1.05fr .85fr 1.15fr; gap: 0 18px; }
+.kds-g { display: grid; align-content: space-between; row-gap: 8px; padding: 10px 0 10px 18px; border-left: 1px solid var(--kds-line); min-width: 0; }
 .kds-g > small { display: block; font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kds-ink-3); }
 /* two rows of three, so each colour's name fits under its swatch at any board width */
 .kds-sw { display: flex; flex-wrap: wrap; gap: 8px 6px; }
@@ -110,7 +110,8 @@
   .kds-surfaces, .kds-groups { grid-template-columns: minmax(0, 1fr); }
   .kds-lib { flex-direction: column; align-items: stretch; }
   .kds-lh { max-width: none; }
-  .kds-groups { flex: none; }
+  .kds-groups { flex: none; row-gap: 0; }
+  .kds-g { padding: 14px 0 10px; border-left: 0; border-top: 1px solid var(--kds-line); }
   .kds-sw { flex-wrap: wrap; row-gap: 10px; }
   .kds-sw > span { flex: 1 0 26%; }
   .kds-edges { display: none; }

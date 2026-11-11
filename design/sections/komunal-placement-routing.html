@@ -18,8 +18,10 @@
 .kpr-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .kpr-head span:first-child { color: var(--kpr-lime); }
 
-.kpr-board { border-radius: 14px; background: var(--kpr-panel); box-shadow: 0 0 0 1px var(--kpr-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink); }
-.kpr-lane { border-radius: 12px; padding: 14px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; }
+.kpr-board { border-radius: 14px; background: var(--kpr-panel); padding: 16px; display: grid; gap: 14px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink); }
+.kpr-lane { position: relative; padding: 14px 0; min-width: 0; }
+/* lanes are not boxes: a hairline between them (a column gap's middle; a row gap's when stacked) */
+.kpr-lane + .kpr-lane::before { content: ''; position: absolute; left: -16px; top: 0; bottom: 0; width: 1px; background: var(--kpr-line); }
 .kpr-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
 .kpr-tag { padding: 4px 8px; border-radius: 6px; background: var(--kpr-tile); font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink-2); }
 .kpr-lh b { font: 600 14px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
@@ -28,13 +30,13 @@
 .kpr-lane.bad .kpr-st { color: var(--kpr-amber); }
 .kpr-lane.bad .kpr-st i { background: var(--kpr-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
 .kpr-lane.good .kpr-st { color: var(--kpr-lime); }
-.kpr-lane.good .kpr-st i { background: var(--kpr-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.kpr-lane.good .kpr-st i { background: var(--kpr-lime); }
 
 /* one flow: node, link, node, link … ; both lanes share the columns so the steps line up */
 .kpr-flow { display: grid; grid-template-columns: minmax(0, 2.1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr) 26px minmax(0, 1fr); align-items: stretch; }
 /* the placement is the same in both lanes, so it is drawn once, above them (.kpr-shared); the lanes' own copies stay in the markup for the script's step order but are not shown */
 .kpr-flow > :nth-child(-n+2) { display: none; }
-.kpr-node.kpr-shared { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; padding: 10px 14px; }
+.kpr-node.kpr-shared { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 4px 18px; padding: 12px 14px; }
 .kpr-node.kpr-shared b { font-size: 15px; }
 .kpr-node { position: relative; display: flex; flex-direction: column; gap: 4px; padding: 11px 12px; border-radius: 10px; background: var(--kpr-node); box-shadow: 0 0 0 1px var(--kpr-line); min-width: 0; transition: opacity .35s, box-shadow .35s; }
 .kpr-node small { font: 400 12px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink-3); }
@@ -46,7 +48,7 @@
 .kpr-node.idle { opacity: .3; }
 .kpr-node.fail { box-shadow: 0 0 0 1px rgba(253, 176, 34, .55); }
 .kpr-node.fail b { color: var(--kpr-amber); }
-.kpr-node.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.kpr-node.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55); }
 .kpr-node.win b { color: var(--kpr-lime); }
 .kpr-out { margin-top: auto; align-self: flex-start; padding: 3px 6px; border-radius: 5px; font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; }
 .kpr-node.fail .kpr-out { color: var(--kpr-amber); background: rgba(253, 176, 34, .1); }
@@ -60,11 +62,11 @@
 
 /* the route check: every rail measured against this amount, bank and time; one is chosen */
 /* the amount itself is checked first: large placements are where account caps bite (amber: needs attention) */
-.kpr-amt { margin-top: 4px; display: flex; align-items: baseline; gap: 8px; padding: 6px 8px; border-radius: 7px; background: rgba(253, 176, 34, .08); box-shadow: 0 0 0 1px rgba(253, 176, 34, .3); }
+.kpr-amt { margin-top: 4px; display: flex; align-items: baseline; gap: 8px; padding: 8px 10px; border-radius: 7px; background: rgba(253, 176, 34, .08); box-shadow: 0 0 0 1px rgba(253, 176, 34, .3); }
 .kpr-amt b { font: 500 12px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-amber); white-space: nowrap; }
 .kpr-amt span { font: 400 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink-2); }
 .kpr-rails { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 4px; }
-.kpr-rail { display: grid; grid-template-columns: minmax(0, 1fr) 14px; column-gap: 8px; padding: 6px 8px; border-radius: 7px; background: var(--kpr-tile); transition: background-color .3s, opacity .3s; }
+.kpr-rail { display: grid; grid-template-columns: minmax(0, 1fr) 14px; column-gap: 8px; padding: 8px 10px; border-radius: 7px; background: var(--kpr-tile); transition: background-color .3s, opacity .3s; }
 .kpr-rail b { font: 600 12px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink); }
 .kpr-rail span { grid-column: 1; font: 400 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--kpr-ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .kpr-rail i { grid-column: 2; grid-row: 1 / 3; align-self: center; font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; font-style: normal; text-align: center; color: var(--kpr-ink-3); }
@@ -77,7 +79,7 @@
 
 /* wide: the route check is the widest step, so each rail reads on one line (name, then its limit) */
 @container (min-width: 1061px) {
-  .kpr-rail { grid-template-columns: minmax(0, auto) minmax(0, 1fr) 14px; align-items: baseline; column-gap: 12px; padding: 5px 8px; }
+  .kpr-rail { grid-template-columns: minmax(0, auto) minmax(0, 1fr) 14px; align-items: baseline; column-gap: 12px; padding: 7px 10px; }
   .kpr-rail span { grid-column: 2; grid-row: 1; }
   .kpr-rail i { grid-column: 3; grid-row: 1; align-self: baseline; }
 }
@@ -91,7 +93,7 @@
 /* the dot rides a track the size of the link, so it travels by transform (never by left or top) */
 .kpr-link b { position: absolute; inset: 0; opacity: 0; }
 .kpr-link b::after { content: ''; position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--kpr-ink); }
-.kpr-lane.after .kpr-link b::after { background: var(--kpr-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); }
+.kpr-lane.after .kpr-link b::after { background: var(--kpr-lime); }
 .kpr-link.run b { animation: kpr-x .45s linear; }
 @keyframes kpr-x { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 1; } }
 
@@ -111,7 +113,7 @@
 
 /* medium: the two lanes side by side, each flowing down */
 @container (max-width: 1060px) {
-  .kpr-board { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .kpr-board { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; align-items: start; }
   .kpr-flow { grid-template-columns: minmax(0, 1fr); }
   .kpr-link { align-self: auto; justify-self: center; width: 2px; height: 22px; margin: 4px 0; }
   .kpr-link::before { background: repeating-linear-gradient(180deg, var(--kpr-edge) 0 4px, transparent 4px 8px); }
@@ -125,17 +127,18 @@
 }
 /* narrow: lanes stacked */
 @container (max-width: 620px) {
-  .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 10px; gap: 10px; }
-  .kpr-lane { padding: 10px; }
+  .kpr-board { grid-template-columns: minmax(0, 1fr); padding: 12px 14px; gap: 10px; }
+  .kpr-lane { padding: 10px 0; }
+  .kpr-lane + .kpr-lane::before { left: 0; right: 0; top: -5px; bottom: auto; width: auto; height: 1px; }
   /* compact: tighter steps, tags sit in the corner */
   .kpr-lh { margin-bottom: 8px; gap: 6px 8px; }
-  .kpr-node { padding: 8px 10px; gap: 2px; }
+  .kpr-node { padding: 10px 12px; gap: 2px; }
   .kpr-node:not([data-k]) .m { display: none; }
   .kpr-link { height: 12px; margin: 2px 0; }
   .kpr-out { position: absolute; top: 8px; right: 10px; margin: 0; }
   .kpr-chip { margin-top: 4px; }
   .kpr-rails { gap: 3px; }
-  .kpr-rail { padding: 4px 8px; }
+  .kpr-rail { padding: 6px 10px; }
   .kpr-tiles { grid-template-columns: minmax(0, 1fr); }
   .kpr-tile { display: grid; grid-template-columns: 5.2em minmax(0, 1fr); align-items: baseline; gap: 2px 12px; padding: 10px 12px; }
   .kpr-tile b { grid-row: 1 / 3; font-size: 22px; white-space: nowrap; }

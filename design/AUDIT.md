@@ -1204,6 +1204,7 @@ A final quality pass with Impeccable (`pbakaus/impeccable` 4.8.2, its `polish` c
   because neither face has tabular figures.
 
 **Detector findings left alone, with reasons**
+(The glow, nested-card, cramped-padding and grid items below were later adjusted at the owner's request; see "Glow, nested cards, lab grid and style attributes".)
 - *Low contrast, tiny text, wide tracking, flat hierarchy:* all the remaining ones are inside product screens (LinkAja,
   Dash, Lumio, the Komunal app), which are shown as designed.
 - *Nested cards and cramped padding:* the diagrams' node cards on their board, and screens set flush in device frames.
@@ -1245,9 +1246,49 @@ scale was simulated by stripping every `cqw` transform before the page script ru
 `MutationObserver`): on the new build all 8 screens land within 1px of their frame at 1440 and 390, after resizing
 (1024, 700, 390, 1440) and for case studies that were closed at load; on the previous build the same test fails for all of
 them (screens stay at full size). Playwright WebKit is not installed here, so **this has not been verified in real Safari**.
-Known and left alone: in the built markup the font-family rewrite leaves unescaped single quotes inside some single-quoted
+Found here and fixed in the next section: in the built markup the font-family rewrite leaves unescaped single quotes inside some single-quoted
 `style` attributes on the screens' wrappers, which cuts those attributes short (the font stack and whatever follows it, such as
-`display: flex`, on all eight); it predates this change.
+`display: flex`, on all eight); it predated this change.
+
+## Glow, nested cards, lab grid and style attributes (2026-11-11)
+
+The advisor settled the findings the polish pass left open. All changes are in the sources; `index.html` and `assets/` were rebuilt.
+
+**Lime glows removed from the diagrams.** Kept: solid lime fills, strokes and dots, the 1px and 1.5px lime outlines, the terminal
+easter egg and the profile-card spark, everything inside product screens and demos, focus rings, the generative stack.
+Removed: the 5px translucent outer ring and the long blurred drop under lit nodes (`.ce-ai`, `.ce-out`, the `s2`/`s4` states, `.dfy-node.dfy-out`,
+`.kds-lib`, `.kpr-node.win`, `.ktm-card.win`, `.lsm-card.win`, `.cl-n.on`); the `drop-shadow` on travelling dots (`.ce-pk`, `.cl-dot`, `.dfy-packet`,
+`.kds-dot`, the circles in `.lsm-edges`); the 4px halo around the status dots (`.kds-status`, `.kpr-lane.good`, `.kss-good`, `.ktf-dot`, `.gpd-st`, `.lpf-row.after`,
+`.lsm-lane.after`) and the end-point ring on the funnel line (`.kfl-pt.end`); the check disc ring (`.lpf-check`); the glows on lit connectors (`.kpr-link b::after`,
+`.lpf-dot::after`, `.kss-cut`, `.gpp-seg.lit`, `.lpf-c.lit::before`); and the wide faint under-stroke on lit lines (`.glow` in the support model, design system and decision desk,
+`.ce-g`, `.cl-trail.g`, `.kop-glow`, now `display: none`). The decision desk's amber packet and amber connector halo went with the lime ones so the diagram stays consistent;
+other amber and blue halos (sprint dots, product-screen blue) were left. Site level: `hifi_shell.html` had no lime glow. The captured stylesheet still carries
+`loop-dot` and `loop-node-hit` rules from the old bundle (a glow); nothing on the page uses them.
+
+**Nested cards.** Surveyed with a script (boxed ancestors with a fill, ring or four borders, three levels deep, product screens excluded). Panel, lane, node
+occurred in the placement routing, sprint sync, funnel and support model; panel, tile, picture in the transformation board; panel, library, group in the design system.
+Fixes: every `.mk-board`, diagram board and `.ksf-panel` is a flat panel (same fill, no ring, no long shadow); lanes lost their boxes and are separated by a hairline in the
+column gap (or the row gap when stacked), lane padding is vertical only so nodes line up with the board's own padding; the transformation board's four tiles are hairline quadrants
+and the before/after pictures are the cards; the design system library's four groups are hairline columns inside the one library card. Left: panel, surface, product card
+in the design system (the white card is a product screen); chips and pills inside nodes; the Dash and Lumio frames.
+
+**Lab grid.** The faint 48px grid behind the lab (`.mk-lab::before`) is gone; plain page surface.
+
+**Sprint sync.** The two Product dots at 47% and 57% are at 45% and 59%; the smallest gap between dots in a row is 99, 11 and 7px at 1440, 390 and 360 wide (the halo was what made them touch).
+
+**Funnel bars** reveal with `clip-path: inset(... round 4px 4px 0 0)` instead of `scaleY`, so the top corners stay round all the way; reduced motion and no script show the final state; the value labels still travel by transform.
+
+**Chrona on a phone: left as it is.** At 390 the compact stage is 358 x 570 and the phone is 326 x 685 with `top: -90px`, so the notch and the last 25px are cut off. Showing all of it
+means a taller stage and a new placement of the outcome card, the cursor rest points and the posters, which is the demo's own layout (`chrona.css`, `index.tsx`), not the placement in `build_hifi.py`.
+
+**Padding.** Measured text against its nearest boxed ancestor at 1440 and 390. Raised: the placement routing's route options, amount row, nodes and shared card; the design system's surface header;
+the narrow-board padding in the funnel, support model, transformation and placement routing (12px 14px; the flat lanes had made it look like 10px). Judged fine: chips, pills and tags
+(17 to 28px high on purpose), the profile card's tag pills, small labels inside the miniature pictures, the 28px step badges.
+
+**Style attributes (bug).** `one_type()` wrote the site font stack, which contains single quotes, into single-quoted `style` attributes, which cut the attribute short.
+It now writes the stack with double quotes when the attribute is single-quoted. Affected attributes in the built page: 9 before (8 scaled screens and one amber label in Dash), 0 after.
+The scaled screens now keep what followed the font: `display: flex` and the backgrounds, so the LinkAja phones fill their frames (the CTA sits at the foot), the Fiorella menu
+tablet and the Dash tablet are full height and the Dash and Lumio laptops show their content where the main pane was blank.
 
 ## Section mockups (2026-10-13)
 

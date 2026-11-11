@@ -20,13 +20,15 @@
 .lsm-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .lsm-head span:first-child { color: var(--lsm-lime); }
 
-.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); box-shadow: 0 0 0 1px var(--lsm-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink); }
-.lsm-lane { display: flex; flex-direction: column; min-width: 0; border-radius: 12px; padding: 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--lsm-line); }
+.lsm-board { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.7fr); gap: 14px 32px; align-items: stretch; border-radius: 14px; background: var(--lsm-panel); padding: 16px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink); }
+.lsm-lane { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 16px 0; }
+/* lanes are not boxes: a hairline between them */
+.lsm-lane + .lsm-lane::before { content: ''; position: absolute; left: -16px; top: 0; bottom: 0; width: 1px; background: var(--lsm-line); }
 .lsm-lane.after { container-type: inline-size; container-name: lsml; }
 .lsm-tag { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 5px 9px; border-radius: 6px; background: var(--lsm-tile); font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--lsm-ink-2); }
 .lsm-tag i { width: 8px; height: 8px; border-radius: 50%; }
 .lsm-lane.before .lsm-tag i { background: var(--lsm-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
-.lsm-lane.after .lsm-tag i { background: var(--lsm-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.lsm-lane.after .lsm-tag i { background: var(--lsm-lime); }
 
 /* boxes */
 .lsm-node { display: flex; align-items: center; justify-content: center; gap: 11px; width: 100%; padding: 12px 16px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
@@ -57,15 +59,15 @@
 .lsm-edges { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
 .lsm-edges path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .lsm-edges .base { stroke: var(--lsm-edge); stroke-width: 1.5; stroke-dasharray: 4 6; }
-.lsm-edges .glow { stroke: var(--lsm-lime); stroke-width: 7; opacity: .13; }
+.lsm-edges .glow { display: none; }   /* the wide faint halo under the lit line is gone (2026-11-11); the script still draws the element */
 .lsm-edges .lit { stroke: var(--lsm-lime); stroke-width: 2.5; }
 .lsm-edges .head { stroke-width: 1.5; }
 .lsm-edges .head.lit { stroke-width: 2.5; }
 .lsm-edges .head.base { stroke-dasharray: none; }
-.lsm-edges circle { fill: var(--lsm-lime); filter: drop-shadow(0 0 3px oklch(0.9 0.2 122 / .8)); opacity: 0; }
+.lsm-edges circle { fill: var(--lsm-lime); opacity: 0; }
 .lsm-outs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; width: 100%; margin-top: 6px; }
 .lsm-card { display: flex; flex-direction: column; min-width: 0; padding: 18px; border-radius: 12px; background: var(--lsm-node); box-shadow: 0 0 0 1px var(--lsm-line); }
-.lsm-card.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55), 0 0 0 5px oklch(0.9 0.2 122 / .08); }
+.lsm-card.win { box-shadow: 0 0 0 1px oklch(0.9 0.2 122 / .55); }
 .lsm-ch { display: flex; align-items: center; gap: 11px; }
 .lsm-ch .lsm-ico { width: 40px; height: 40px; border-radius: 10px; }
 .lsm-ch .lsm-ico svg { width: 20px; height: 20px; }
@@ -88,11 +90,13 @@
 /* the lanes stack */
 @container lsmw (max-width: 760px) {
   .lsm-board { grid-template-columns: minmax(0, 1fr); }
+  .lsm-lane + .lsm-lane::before { left: 0; right: 0; top: -7px; bottom: auto; width: auto; height: 1px; }
   .lsm-note { padding-top: 16px; }
 }
 @container lsmw (max-width: 520px) {
-  .lsm-board { padding: 10px; gap: 10px; }
-  .lsm-lane { padding: 12px; }
+  .lsm-board { padding: 12px 14px; gap: 10px; }
+  .lsm-lane { padding: 12px 0; }
+  .lsm-lane + .lsm-lane::before { top: -5px; }
   .lsm-tag { margin-bottom: 12px; }
   .lsm-tree { gap: 30px; }
   .lsm-card { padding: 14px; }
