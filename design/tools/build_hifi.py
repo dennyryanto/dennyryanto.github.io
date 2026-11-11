@@ -85,7 +85,8 @@ def say(text):
 
 def label_col(title='', notes=(), caps=(), level=3):
     # the label column: a title, quiet lines under it, then the remark that used to sit under the drawing
-    h = ('<div class="mk-lt" role="heading" aria-level="%d">%s</div>' % (level, title)) if title else ''
+    # a real heading where the title heads a block; level 0 is a plain label (the section's own heading follows it)
+    h = (('<h%d class="mk-lt">%s</h%d>' % (level, title, level)) if level else '<div class="mk-lt">%s</div>' % title) if title else ''
     h += ''.join('<div class="mk-ln">%s</div>' % n for n in notes if n)
     h += ''.join('<p class="mk-lc">%s</p>' % c for c in caps if c)
     return '<div class="mk-hl">' + h + '</div>'
@@ -145,7 +146,8 @@ def swiss_inline(root, strict=False):
 # ---------- CSS: the live site's rules minus runtime/global resets ----------
 css = read('css')
 drop = [r'^html, body \{[^\n]*\n', r'^#dc-root[^\n]*\n', r'^body \{[^\n]*\n', r'^\.sc-[^\n]*\n', r'^html\.sc-dc-streaming[^\n]*\n',
-        r'^x-dc[^\n]*\n', r'^\.(fx|col|grid|ac|jc|jb|f1|noshrink|wrap|fw\d|fs\d+|upper|tc|nowrap|gap\d+|m0|mt\d+|mb\d+|posrel|posabs|round|ohide|bbox|pointer|w100|b0) \{[^\n]*\n']
+        r'^x-dc[^\n]*\n', r'^\s*\.gx-(?:track|stage)\b[^\n]*\}\n',   # the old scroll-pinned cockpit, replaced by the fan
+        r'^\.(fx|col|grid|ac|jc|jb|f1|noshrink|wrap|fw\d|fs\d+|upper|tc|nowrap|gap\d+|m0|mt\d+|mb\d+|posrel|posabs|round|ohide|bbox|pointer|w100|b0) \{[^\n]*\n']
 for d in drop:
     css = re.sub(d, '', css, flags=re.M)
 # play the chart bars only once the chart is on screen
@@ -910,10 +912,6 @@ def live_kids(name):
     return node.find_all(recursive=False)
 
 
-def blocks(*els):
-    return ''.join('<div class="mk-block">' + str(e) + '</div>' for e in els)
-
-
 kom, ai_, brd, lab_, lui = live_kids('komunal'), live_kids('ai'), live_kids('board'), live_kids('lab'), live_kids('labui')
 
 # the Lumio eyebrow was blue; drawer labels are lime titles (design/sections/VIZ-STYLE.md)
@@ -1086,7 +1084,7 @@ career[1].attrs = {'class': ['mk-career']}
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
-    '<div class="mk-hang mk-hero">' + label_col('Background', ['2011 – present'], level=2) +
+    '<div class="mk-hang mk-hero">' + label_col('Background', ['2011 – present'], level=0) +
     '<div class="mk-hb"><h2 class="mk-h2">Fifteen years across four companies.</h2>' + str(career[1]) + '</div></div>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
     + unit('Earlier work', str(earlier[1]), ['2011–2016', 'Appsindo Technology'],

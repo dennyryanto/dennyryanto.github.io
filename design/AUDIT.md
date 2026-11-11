@@ -1180,6 +1180,41 @@ minutes, old to new: Linkaja 308 / 4 / 2, 3.37 min, 3 to 3; Komunal 810 / 0 / 1,
 no element carrying `data-fit` (the build's regex and the page script's `[data-fit]` find nothing in the output), so the scaled
 screens were identified by their computed `scale()` transform.
 
+## Impeccable polish pass (2026-11-11)
+
+A final quality pass with Impeccable (`pbakaus/impeccable` 4.8.2, its `polish` command), on the built page at 1440, 1024,
+768 and 390. Polish preserves the look and fixes what is unfinished; it is not a redesign. The detector ran once, at the end.
+
+**Fixed**
+- **One page gutter.** Between 601 and 820px the case index, the clients strip and the top bar kept a 40px gutter while the
+  sections had already dropped to 24px, so their left edges disagreed. Every wrap now reads one token, `--pad`
+  (40px, 24px from 820, 16px from 480), in step with the captured `[data-r~="wrap"]` rule.
+- **Profile card on small laptops.** From 901 to 1180px four columns were too narrow for the card (every row wrapped and
+  the card ran far below the text). It now sits under the text, both from column 4.
+- **Skip link hover.** The captured stylesheet turns every hovered link lime, which is the skip link's own ground: lime
+  on lime. It keeps its ink on hover.
+- **Diagram text contrast.** The diagrams' quietest ink (`#8b8d98`) read 4.2:1 on their tile ground; it is `#9d9fab` now
+  (about 5.3:1), in all 16 section files.
+- **Heading levels.** The label column's titles are real `h3`s instead of `div`s with a heading role, so no level is
+  skipped anywhere (61 headings, checked with every case study open).
+- **Browser surfaces.** The scrollbar, form accents and the tap flash take the page's colours (`scrollbar-color`,
+  `accent-color`, `-webkit-tap-highlight-color`); text selection was already themed.
+- **Clean-up.** The unused rules of the old scroll-pinned cockpit are dropped from the captured stylesheet (they left a
+  second sticky element in it), `blocks()` is removed from `build_hifi.py`, and the `tabular-nums` declarations are gone
+  because neither face has tabular figures.
+
+**Detector findings left alone, with reasons**
+- *Low contrast, tiny text, wide tracking, flat hierarchy:* all the remaining ones are inside product screens (LinkAja,
+  Dash, Lumio, the Komunal app), which are shown as designed.
+- *Nested cards and cramped padding:* the diagrams' node cards on their board, and screens set flush in device frames.
+  That is the drawings' established language (`design/sections/VIZ-STYLE.md`), not page structure.
+- *Coloured glow:* the lit connectors and travelling dots in the diagrams, and the terminal easter egg's green. Impeccable
+  counts a zero-offset coloured halo as decoration; here it marks the "lit" path. Left for the owner to decide.
+- *Grid background:* the lab's faint workbench grid, an earlier owner decision.
+- *Images at opacity 0:* the demo posters and crossfades, which are meant to be hidden until used.
+- *Case numbers 01 to 04:* Impeccable discourages section numbers unless the sequence carries information. Here they tie
+  each case to its cell in the index, so they stay.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:
