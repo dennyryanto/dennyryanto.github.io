@@ -31,31 +31,31 @@ const STATS = `<!doctype html><html><head><meta charset="utf-8"><base href="file
 ${faces}
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1200px; height: 630px; background: #161511; overflow: hidden; }
-body { position: relative; padding: 64px 72px 0; color: #f2efe8; font-family: Archivo, sans-serif; -webkit-font-smoothing: antialiased; }
-.top { display: flex; justify-content: space-between; align-items: baseline; font: 600 15px/1 'IBM Plex Mono', monospace; letter-spacing: .16em; }
-.top .who { color: #f2efe8; font: 800 22px/1 Archivo, sans-serif; font-stretch: 118%; letter-spacing: -.01em; }
+body { position: relative; padding: 64px 72px 0; color: #f2efe8; font-family: 'Inter Tight', sans-serif; -webkit-font-smoothing: antialiased; }
+.top { display: flex; justify-content: space-between; align-items: baseline; font: 500 15px/1 'Inter Tight', sans-serif; }
+.top .who { color: #f2efe8; font: 600 22px/1 'Inter Tight', sans-serif; letter-spacing: -.01em; }
 .top .url { color: rgba(242, 239, 232, .55); }
-.eyebrow { margin-top: 58px; font: 600 16px/1 'IBM Plex Mono', monospace; letter-spacing: .16em; color: ${LIME}; }
-h1 { margin-top: 22px; font: 800 92px/.95 Archivo, sans-serif; font-stretch: 118%; letter-spacing: -.025em; }
+.eyebrow { margin-top: 58px; font: 500 16px/1 'Inter Tight', sans-serif; color: ${LIME}; }
+h1 { margin-top: 22px; font: 600 92px/.95 'Inter Tight', sans-serif; letter-spacing: -.025em; }
 h1 span { color: ${LIME}; }
 .keys { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(242, 239, 232, .14); }
 .key { padding: 22px 0 30px 72px; }
 .key + .key { padding-left: 28px; border-left: 1px solid rgba(242, 239, 232, .14); }
-.key b { display: block; font: 800 40px/1 Archivo, sans-serif; font-stretch: 120%; letter-spacing: -.02em; }
+.key b { display: block; font: 600 40px/1 'Inter Tight', sans-serif; letter-spacing: -.02em; }
 .key:first-child b { color: ${LIME}; }
 .arw { margin: 0 6px 4px; vertical-align: middle; }
-.key span { display: block; margin-top: 10px; font: 500 13px/1.3 'IBM Plex Mono', monospace; letter-spacing: .12em; color: rgba(242, 239, 232, .6); }
+.key span { display: block; margin-top: 10px; font: 400 13px/1.3 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .6); }
 .rabbit { position: absolute; right: 84px; top: 252px; opacity: .55; }
 </style></head><body>
-<div class="top"><span class="who">DENNY RYANTO</span><span class="url">DENNYRYANTO.GITHUB.IO</span></div>
-<div class="eyebrow">HEAD / AVP, PRODUCT DESIGN · JAKARTA</div>
+<div class="top"><span class="who">Denny Ryanto</span><span class="url">dennyryanto.github.io</span></div>
+<div class="eyebrow">Head / AVP, Product Design, Jakarta</div>
 <h1>Design leadership,<br>measured in <span>outcomes.</span></h1>
 <svg class="rabbit" viewBox="0 0 10 9" width="30" height="27" shape-rendering="crispEdges"><g fill="#f2efe8">${rabbit}</g></svg>
 <div class="keys">
-  <div class="key"><b>−80%</b><span>CS OPEX · LINKAJA</span></div>
-  <div class="key"><b>+12 pts</b><span>DEPOSIT FUNNEL · KOMUNAL</span></div>
-  <div class="key"><b>~200K</b><span>CUSTOMERS / MO · DASH</span></div>
-  <div class="key"><b>0<svg class="arw" viewBox="0 0 34 24" width="34" height="24" fill="none" stroke="#f2efe8" stroke-width="5.5" stroke-linecap="square"><path d="M3 12h24M18 3l10 9-10 9"/></svg>1</b><span>AI-NATIVE BUILDS</span></div>
+  <div class="key"><b>−80%</b><span>CS OPEX, LinkAja</span></div>
+  <div class="key"><b>+12 pts</b><span>Deposit funnel, Komunal</span></div>
+  <div class="key"><b>~200K</b><span>Customers a month, Dash</span></div>
+  <div class="key"><b>0<svg class="arw" viewBox="0 0 34 24" width="34" height="24" fill="none" stroke="#f2efe8" stroke-width="5.5" stroke-linecap="square"><path d="M3 12h24M18 3l10 9-10 9"/></svg>1</b><span>AI-native builds</span></div>
 </div>
 </body></html>`;
 
@@ -108,7 +108,7 @@ const CARD = anim => `<!doctype html><html><head><meta charset="utf-8"><base hre
 ${faces}
 * { box-sizing: border-box; margin: 0; }
 html, body { width: 1200px; height: 630px; overflow: hidden; background: #161511; }
-body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -webkit-font-smoothing: antialiased; }
+body { position: relative; color: #f2efe8; font-family: 'Inter Tight', sans-serif; -webkit-font-smoothing: antialiased; }
 /* glows behind the glass */
 .glow { position: absolute; border-radius: 50%; filter: blur(80px); }
 .g1 { width: 560px; height: 520px; left: 120px; top: -300px; background: oklch(0.9 0.2 122 / .42); }
@@ -116,7 +116,7 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
 .g3 { width: 420px; height: 420px; left: -140px; bottom: -200px; background: #fdb022; opacity: .22; }
 .grain { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.035) 1px, transparent 1px); background-size: 4px 4px; }
 .top { position: absolute; left: 56px; right: 56px; top: 22px; display: flex; justify-content: space-between; align-items: center; }
-.url { font: 600 14px/1 'IBM Plex Mono', monospace; letter-spacing: .16em; color: rgba(242, 239, 232, .62); }
+.url { font: 500 14px/1 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .62); }
 /* the profile card, frosted, straight, running off the bottom edge: identity left, details right */
 .card { position: absolute; left: 56px; right: 56px; top: 58px; height: 620px; padding: 44px 48px; border-radius: 28px;
   display: grid; grid-template-columns: 360px 1fr; column-gap: 64px;
@@ -127,37 +127,37 @@ body { position: relative; color: #f2efe8; font-family: Archivo, sans-serif; -we
   background: linear-gradient(120deg, rgba(255,255,255,.14) 0%, transparent 30%); }
 .id { display: flex; flex-direction: column; padding-right: 32px; border-right: 1px solid rgba(255,255,255,.13); margin-right: -32px; }
 .id img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 4px rgba(255,255,255,.2); }
-.id b { margin-top: 30px; font: 800 62px/.96 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.02em; }
-.id span { margin-top: 18px; font: 600 19px/1.4 'IBM Plex Mono', monospace; letter-spacing: .14em; color: ${LIME}; }
+.id b { margin-top: 30px; font: 600 62px/.96 'Inter Tight', sans-serif; letter-spacing: -.02em; }
+.id span { margin-top: 18px; font: 500 19px/1.4 'Inter Tight', sans-serif; color: ${LIME}; }
 .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; }
 .chips i { font-style: normal; padding: 9px 14px; border-radius: 100px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.24); background: rgba(255,255,255,.05);
-  font: 600 14px/1 'IBM Plex Mono', monospace; letter-spacing: .12em; }
+  font: 500 14px/1 'Inter Tight', sans-serif; }
 .rows { display: flex; flex-direction: column; }
 .row { padding: 16px 0 18px; border-top: 1px solid rgba(255,255,255,.13); }
 .row:first-child { padding-top: 4px; border-top: 0; }
-.row i { display: block; font: 500 15px/1 'IBM Plex Mono', monospace; font-style: normal; letter-spacing: .16em; color: rgba(242,239,232,.62); }
-.row p { margin-top: 10px; font: 400 34px/1.15 Archivo, sans-serif; letter-spacing: -.005em; }
-.row p b { color: ${LIME}; font-weight: 700; }
+.row i { display: block; font: 400 15px/1 'Inter Tight', sans-serif; font-style: normal; color: rgba(242,239,232,.62); }
+.row p { margin-top: 10px; font: 400 34px/1.15 'Inter Tight', sans-serif; letter-spacing: -.005em; }
+.row p b { color: ${LIME}; font-weight: 600; }
 .certs { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
-.certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 Archivo, sans-serif; }
+.certs div { display: flex; align-items: center; gap: 12px; font: 400 27px/1.2 'Inter Tight', sans-serif; }
 .certs svg { width: 27px; height: 27px; flex: none; }
 ${AURA_CSS}
 ${anim ? ANIM_CSS : ''}
 </style></head><body>
 <div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div><div class="grain"></div>
-<div class="top"><span class="url">DENNYRYANTO.GITHUB.IO</span><svg viewBox="0 0 10 9" width="22" height="20" shape-rendering="crispEdges" style="opacity:.6"><g fill="#f2efe8">${rabbit}</g></svg></div>
+<div class="top"><span class="url">dennyryanto.github.io</span><svg viewBox="0 0 10 9" width="22" height="20" shape-rendering="crispEdges" style="opacity:.6"><g fill="#f2efe8">${rabbit}</g></svg></div>
 <div class="aura-halo"><i></i></div><div class="card">
   <div class="id">
     <img src="${HEADSHOT}" alt="">
     <b>Denny Ryanto</b>
-    <span>HEAD / AVP,<br>PRODUCT DESIGN</span>
-    <div class="chips"><i>FINTECH</i><i>ENTERPRISE</i><i>CONSUMER</i></div>
+    <span>Head / AVP,<br>Product Design</span>
+    <div class="chips"><i>Fintech</i><i>Enterprise</i><i>Consumer</i></div>
   </div>
   <div class="rows">
-    <div class="row"><i>EXPERIENCE</i><p><b>15+ years</b> in digital product and transformation</p></div>
-    <div class="row"><i>NOW</i><p>Product &amp; AI design consultant</p></div>
-    <div class="row"><i>BOARD</i><p>Commissioner, Dash &amp; Lumio</p></div>
-    <div class="row"><i>CERTIFIED · ANTHROPIC 2026</i><div class="certs"><div>${anim ? goldSeal(27, '0.00') : SEAL}AI-Native SDLC Playbook</div><div>${anim ? goldSeal(27, '-0.45') : SEAL}Claude Code 101</div><div>${anim ? goldSeal(27, '-0.90') : SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
+    <div class="row"><i>Experience</i><p><b>15+ years</b> in digital product and transformation</p></div>
+    <div class="row"><i>Now</i><p>Product &amp; AI design consultant</p></div>
+    <div class="row"><i>Board</i><p>Commissioner, Dash &amp; Lumio</p></div>
+    <div class="row"><i>Certified, Anthropic 2026</i><div class="certs"><div>${anim ? goldSeal(27, '0.00') : SEAL}AI-Native SDLC Playbook</div><div>${anim ? goldSeal(27, '-0.45') : SEAL}Claude Code 101</div><div>${anim ? goldSeal(27, '-0.90') : SEAL}AI Fluency: Framework &amp; Foundations</div></div></div>
   </div>
 </div>
 <div class="aura"></div>
@@ -174,7 +174,7 @@ const html = video ? CARD(true) : VARIANT === 'card' ? CARD(false) : STATS;
   const tmp = path.join(ROOT, 'design', 'tools', '.og-image.html');
   fs.writeFileSync(tmp, html);
   await p.goto('file://' + tmp); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(200);
-  const missing = await p.evaluate(() => ['Archivo', 'IBM Plex Mono'].filter(f => !document.fonts.check('800 20px "' + f + '"') && !document.fonts.check('500 20px "' + f + '"')));
+  const missing = await p.evaluate(() => ['Inter Tight'].filter(f => !document.fonts.check('500 20px "' + f + '"')));
   if (!video) {
     await p.screenshot({ path: OUT });
   } else {

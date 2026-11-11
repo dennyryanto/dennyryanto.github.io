@@ -1065,9 +1065,20 @@ itself. `SAY` in `build_hifi.py` lists every label the captures and section file
 now; the build stops if one is missing. Scale: 13 label, 14 to 18 text, 15 label titles, heads `clamp(30px, 3.4vw, 46px)`,
 the headline `clamp(40px, 6.2vw, 84px)`, key numbers `clamp(40px, 5vw, 64px)`.
 
-**The drawings keep their own lettering.** Diagrams, product mock-ups and the five demos still use Archivo and IBM Plex
-Mono inside their boards, as the options page said. Both stay registered and load when a case study first shows them.
-This is the next step if the site should be one voice throughout (it also means regenerating the demo posters).
+**The drawings are restyled too** (owner: "let's restyle the drawings"). Archivo is gone from the page.
+- Diagrams (`design/sections/`, all but the terminal easter egg): Inter Tight, labels in sentence case, no tracking, no
+  dot-joined strings. Mono stays only where it is the material: the design-system board's token names, the terminal,
+  and type inside product screens.
+- Captions on the boards that came from the captures (Dash, Lumio, the e-ink faces, the shoe tracker, the Chrona
+  write-up) go through `swiss_inline(..., strict=True)` and `SAY`.
+- Product screens (drawn at full size and scaled, or image-role drawings) keep their own design; only their stand-in
+  family changed from Archivo to Inter Tight. Their capitals are the product's, not the site's.
+- The five demos set their page-face text in Inter Tight (`--ss-font`); the harness loads it and the posters were
+  regenerated.
+- The font file is our own subset of the variable Inter Tight (latin plus the arrows, `design/fonts/inter-tight-var.woff2`,
+  made with `pyftsubset` from the Google Fonts source), declared for 400 to 800. Page fonts: 12 files, 250KB, one preloaded
+  (was 14 files, 411KB).
+- The link-preview image (`og_image.js`) uses the same type and was re-rendered.
 
 **Grid.** Twelve columns in the 1216px column, 24px gutters (`.mk-hang` in `hifi_shell.html`). The label column is
 columns 1 to 3 (`.mk-hl`); everything else hangs from column 4 (`.mk-hb`). Below 900px it is one column, label first.
@@ -1109,13 +1120,18 @@ behaviour, deep links, the lab's cyan accent, every drawing.
 
 Not changed, with reasons: the Hallmark findings inside product screens (pure white, the Komunal "before" gradient, low
 contrast in mock UI), the "hidden at rest" classes (all script-scoped: `kop-pre`, `idle`), the 883 colour literals (how
-the page is assembled), the word budget (a portfolio, not a landing page). The link-preview image (`og_image.js`) still
-uses the old type; re-style it if previews should match.
+the page is assembled), the word budget (a portfolio, not a landing page). 
 
 Checked on the built page: no console errors or failed requests; no horizontal overflow at 1440 or 390; the opening fits
 1280 × 800; deep link, index link, toggle, Escape and focus return work; a stack builds on arrival; the LinkAja demos mount.
 Static linter counts, before to after: unlabelled SVGs 51 to 0, tracked-caps labels 106 to about 83 and mono labels 30 to 27
 (what is left is inside the drawings and in unused captured CSS), dot strings 19 to 7.
+
+**The hi-fi artifact is one page, updated in place** (owner: "so we don't have to keep adding new artifacts"). It is
+"Portfolio Hi-Fi", https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo (it was "Portfolio Hi-Fi v2"; the title no longer
+carries a version). To publish an iteration: build, copy `<workdir>/portfolio-hifi.html` and the two files in
+`assets/stageshow/` into one folder, replace `%%SS_JS%%` and `%%SS_CSS%%` in the page with `stageshow/<file>`, and
+publish to that URL with the two bundle files as supporting files, so the demos run in the artifact too.
 
 ## Section mockups (2026-10-13)
 

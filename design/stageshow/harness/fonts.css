@@ -3,3 +3,5 @@
 @font-face { font-family: 'Poppins'; font-weight: 600; font-display: block; src: url('../../fonts/poppins-600.woff2') format('woff2'); }
 @font-face { font-family: 'Poppins'; font-weight: 700; font-display: block; src: url('../../fonts/poppins-700.woff2') format('woff2'); }
 @font-face { font-family: 'Mulish'; font-weight: 400 800; font-display: block; src: url('../../fonts/mulish-var.woff2') format('woff2'); }
+/* the site's one family, for the text the demos set in the page's own face (--ss-font) */
+@font-face { font-family: 'Inter Tight'; font-weight: 400 800; font-display: block; src: url('../../fonts/inter-tight-var.woff2') format('woff2'); }

@@ -4,7 +4,7 @@
     overflow: hidden;
     background: var(--lh-ground, #1a1b1f);
     --ss-accent: oklch(0.9 0.2 122);
-    --ss-font: Archivo, system-ui, -apple-system, sans-serif;
+    --ss-font: 'Inter Tight', system-ui, -apple-system, sans-serif;
     --lh-red: #e8232b;
     --lh-ink: #1c1f24;
     --lh-muted: #4b5563;

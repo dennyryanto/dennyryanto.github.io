@@ -62,6 +62,15 @@ SAY = {
     'FEATURED BUILD, GARMIN DAILY BRIEF · 7.5″ E-INK ATHLETE PANEL': 'Garmin Daily Brief|Featured build|7.5″ e-ink athlete panel',
     'PYTHON · FASTAPI · PILLOW · DOCKER · GCP': 'Python, FastAPI, Pillow, Docker, GCP',
     'PERSONAL CONCEPT, NOT AFFILIATED WITH GARMIN.': 'Personal concept, not affiliated with Garmin.',
+    # captions on the boards
+    'DASH · CAPTAIN / MANAGER APP': 'Dash captain and manager app', 'DASH · BACK-OFFICE CMS': 'Dash back-office CMS',
+    'LIVE': 'Live', 'LED BILLBOARD': 'LED billboard', 'LED BILLBOARD CLUSTER': 'LED billboard cluster', 'INDOOR DISPLAY': 'Indoor display',
+    'TRANSIT SCREEN': 'Transit screen', 'LUMIO · 150+ DISPLAY LOCATIONS AND GROWING': 'Lumio: 150+ display locations and growing',
+    'THE PRODUCT': 'The product', 'HOW CHRONA WORKS': 'How Chrona works',
+    'FACE 1 · READINESS, VITALS & TODAY’S SUGGESTION': 'Face 1: readiness, vitals and today’s suggestion',
+    'FACE 2 · WEEKLY VOLUME, ACTIVITY CALENDAR & SLEEP': 'Face 2: weekly volume, activity calendar and sleep',
+    'COMPANION BUILD · ESL SHOE TRACKER': 'Companion build: ESL shoe tracker', 'OPENEPAPERLINK': 'OpenEPaperLink', 'BLE AP · ESP32-S3': 'BLE AP, ESP32-S3',
+    'CRON RENDER': 'Cron render',
     # background and contact
     'LEADERSHIP': 'Leadership', 'DESIGN': 'Design', 'AI & EMERGING TECH': 'AI and emerging tech', 'TOOLS': 'Tools',
     'GET IN TOUCH': 'Get in touch', 'CONNECT ON LINKEDIN': 'Connect on LinkedIn', 'DOWNLOAD RESUME (PDF)': 'Download resume (PDF)',
@@ -93,24 +102,35 @@ def unit(title, body, notes=(), caps=(), cls=''):
     return '<div class="mk-block mk-hang%s">%s<div class="mk-hb">%s</div></div>' % (' ' + cls if cls else '', label_col(title, notes, caps), body)
 
 
-def swiss_inline(root):
-    # a captured shell piece (top bar, opening, background, contact): its inline mono labels become the site's label
-    # style in sentence case, and its Archivo declarations the site's one family, at two weights
-    for el in root.find_all(style=True):
+UNSAID = []
+
+
+def swiss_inline(root, strict=False):
+    # a captured piece outside a product screen (top bar, opening, background, contact, the captions on a board): its inline
+    # mono labels become the site's label style in sentence case, and its type the site's one family. A product screen
+    # (drawn at full size and scaled: data-fit, or an image-role drawing) is left as the product draws it.
+    for el in ([root] if root.get('style') else []) + root.find_all(style=True):
+        if el.get('data-fit') or el.find_parent(attrs={'data-fit': True}) or el.get('role') == 'img' or el.find_parent(attrs={'role': 'img'}):
+            continue
         st = el['style']
         if 'IBM Plex Mono' in st:
             st = re.sub(r'font:[^;]*IBM Plex Mono[^;]*;?', '', st)
             st = re.sub(r'letter-spacing:[^;]*;?', '', st)
             el['class'] = el.get('class', []) + ['mk-lb']
             for t in el.find_all(string=True):
-                if t.strip() and t.strip().upper() == t.strip() and re.search(r'[A-Z]{2}', t) and t.strip() in SAY:
-                    t.replace_with(SAY[t.strip()])
+                x = ' '.join(t.split())
+                if x and x.upper() == x and re.search(r'[A-Z]{2}', x):
+                    if x in SAY:
+                        t.replace_with(SAY[x].replace('|', ', '))
+                    elif strict:
+                        UNSAID.append(x)
         st = re.sub(r'font-stretch:[^;]*;?', '', st)
         st = re.sub(r'font-weight:\s*[78]00', 'font-weight: 500', st)
         st = re.sub(r'(font:\s*)[78]00\b', r'\g<1>500', st)
         st = st.replace('Archivo', "'Inter Tight', sans-serif")
         el['style'] = st.strip()
     return root
+
 
 # ---------- CSS: the live site's rules minus runtime/global resets ----------
 css = read('css')
@@ -124,8 +144,8 @@ for d in drop:
 # (Google Fonts with font-display: swap made the headline gain a line ~100ms after load and shifted the page)
 # Two families only: Archivo (one variable file for every weight and width) and IBM Plex Mono, latin subsets only.
 # The live product mock-ups brought their own (Plus Jakarta Sans, Manrope, Sora); they are set in Archivo instead.
-KEEP_FAMILIES, KEEP_SUBSETS = ('Archivo', 'IBM Plex Mono'), ('latin', 'latin-ext')
-DROP_FAMILIES = re.compile(r'\b(Plus Jakarta Sans|Manrope|Sora)\b')
+KEEP_FAMILIES, KEEP_SUBSETS = ('IBM Plex Mono',), ('latin', 'latin-ext')
+DROP_FAMILIES = re.compile(r'\b(Plus Jakarta Sans|Manrope|Sora|Archivo)\b')
 
 
 def fonts_css():
@@ -163,7 +183,8 @@ APP_FONTS = [('Poppins', '500', 'poppins-500.woff2'), ('Poppins', '600', 'poppin
 # Archivo and IBM Plex Mono stay registered for the drawings (diagrams, product mock-ups, the demos), which keep their own
 # lettering; they are no longer preloaded, and load when a case study first shows them.
 LATIN_EXT = 'U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF'
-SITE_FONTS = [('Inter Tight', 'latin', '400 600', 'inter-tight-var.woff2', None), ('Inter Tight', 'latin-ext', '400 600', 'inter-tight-var-ext.woff2', LATIN_EXT)]
+SITE_LATIN = LATIN.replace('U+2191, U+2193', 'U+2190-2193')   # our own subset of the variable file carries the arrows too
+SITE_FONTS = [('Inter Tight', 'latin', '400 800', 'inter-tight-var.woff2', SITE_LATIN), ('Inter Tight', 'latin-ext', '400 800', 'inter-tight-var-ext.woff2', LATIN_EXT)]
 
 
 def app_fonts_css():
@@ -901,6 +922,7 @@ cap.decompose()
 DASH_APP = stage(str(dash_col), (dash_title[0], dash_title[1] if len(dash_title) > 1 else ''))
 # Dash: the captain app and the back office, side by side on one board, each keeping its caption
 drop_style(brd[2], 'margin-top')
+swiss_inline(brd[2], strict=True)
 DASH_TOOLS = stage(str(brd[2]), ('DASH · CAPTAIN APP AND BACK OFFICE',))
 # Lumio: the live network (photos), then the CMS, each on its own board
 l_head, l_grid, l_cap, l_cms = brd[3].find_all(recursive=False)[:4]
@@ -909,6 +931,8 @@ cms_cap = l_cms.find('span', recursive=False)   # the caption under the screen, 
 cms_title = cms_cap.get_text(strip=True)
 cms_cap.decompose()
 drop_style(l_cms, 'margin-top')
+swiss_inline(l_grid, strict=True)
+swiss_inline(l_cap, strict=True)
 LUMIO = stage(str(l_grid) + str(l_cap), (l_t[0], l_t[1])) + stage(str(l_cms), (cms_title,))
 # Chrona: the product (phone and write-up) on a board under the engagement's head row; its two diagrams already are boards
 ch = ai_[3].find_all(recursive=False)
@@ -921,6 +945,7 @@ del ch[1]['data-r']
 ch[1]['class'] = ['ss-chrona']
 ch[1]['style'] = ''
 drop_style(ch[2], 'margin-top')
+swiss_inline(ch[1], strict=True)
 CHRONA = stage('<div class="ss-box">' + str(ch[1]) + '</div>', (c_t[0], c_t[1]), after='<div class="mk-after">' + str(ch[2]) + '</div>')
 # Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
 lk = lab_[2].find_all(recursive=False)
@@ -929,6 +954,8 @@ shoe = lk[4]
 drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
 shoe['class'] = ['mk-board', 'flush']
 drop_style(lk[3], 'margin-top')
+swiss_inline(lk[2], strict=True)
+swiss_inline(shoe, strict=True)
 GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), after='<div class="mk-after">' + str(lk[3]) + '</div><div class="mk-after">' + str(shoe) + '</div>')
 
 LIVE = {
@@ -1051,8 +1078,11 @@ bg_html = (
 assert 'GRAPHIC DESIGN' in edu.get_text(' ', strip=True) and '2004–08' in edu.get_text(' ', strip=True), 'the degree line changed'
 contact = soup(read('contact')).find()
 for a in contact.find_all('a'):
-    if a.get('download') is not None:
+    if a.get('download') is not None:   # as in the top bar: a plain link in the hi-fi (build_site.py makes it a download on the site)
+        del a['download']
         a['href'] = 'https://dennyryanto.github.io/denny-ryanto-resume.pdf'
+        a['target'] = '_blank'
+        a['rel'] = 'noopener'
 
 # ---------- easter egg: when the footer comes into view, a pixel crab (Claude) scuttles in along its top rule ----------
 # Claude Code's mascot, pixel for pixel from its startup logo (the block characters "▐▛███▜▌ / ▝▜█████▛▘ / ▘▘ ▝▝"):
@@ -1236,11 +1266,11 @@ top_html, lifted3 = floor_type(str(top), True)
 hero_html, lifted4 = floor_type(str(hero), True)
 print('type: floored to 11px and/or converted to rem on', lifted + lifted2 + lifted3 + lifted4, 'elements')
 
-# the mock-ups' own font families become Archivo, in the stylesheet and in inline styles alike
+# the mock-ups' own font families (and the Archivo the captures were set in) become the site's family, in the stylesheet and in inline styles alike
 def one_type(html):
-    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Archivo', html)
+    html = re.sub(r'(font(?:-family)?\s*:[^;{}<>]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Inter Tight', html)
     # SVG text names its family in an attribute
-    return re.sub(r'(font-family="[^"]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Archivo', html)
+    return re.sub(r'(font-family="[^"]*?)' + DROP_FAMILIES.pattern, lambda m: m.group(1) + 'Inter Tight', html)
 
 
 css = one_type(css)
@@ -1256,6 +1286,7 @@ for _ in range(3):   # a declaration can name more than one of them
 
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
 tpl = rem(tpl)
+assert not UNSAID, 'labels with no sentence-case form in SAY: %r' % sorted(set(UNSAID))
 for piece in (more_html, case_html):
     assert 'mk-eyebrow' not in piece and 'mk-stagehead' not in piece, 'an old drawer title is left'
 
@@ -1285,7 +1316,7 @@ if COMPONENT:
     body = ('<section class="mk-case" id="preview"><div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:64px 40px 72px">'
             + piece + '</div></section>')
     name = ' '.join(w.capitalize() for w in COMPONENT.split('-'))
-    page = (tpl.replace('<title>Portfolio Hi-Fi v1</title>', '<meta charset="utf-8">\n<title>%s</title>' % name)
+    page = (tpl.replace('<title>Portfolio Hi-Fi</title>', '<meta charset="utf-8">\n<title>%s</title>' % name)
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', body).replace('/*STACK*/', STACK_JS))
@@ -1303,7 +1334,7 @@ if SECTION:
               .replace('<span class="mk-t-closed">', '<span class="mk-t-closed" aria-hidden="true">', 1)
               .replace('<span class="mk-t-open" aria-hidden="true">', '<span class="mk-t-open">', 1))
     one, _ = floor_type(one_type(one))
-    page = (tpl.replace('<title>Portfolio Hi-Fi v1</title>', '<meta charset="utf-8">\n<title>%s Section</title>' % sec['n'].split('/')[-1].strip().title().replace('&Amp;', '&amp;'))
+    page = (tpl.replace('<title>Portfolio Hi-Fi</title>', '<meta charset="utf-8">\n<title>%s Section</title>' % sec['n'].split('/')[-1].strip().title().replace('&Amp;', '&amp;'))
                .replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
                .replace('<!--__TOPBAR__-->', '').replace('<!--__HERO__-->', '').replace('<!--__INDEX__-->', '')
                .replace('<!--__CASE__-->', '').replace('<!--__MORE__-->', one).replace('/*STACK*/', STACK_JS))

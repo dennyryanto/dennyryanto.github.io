@@ -6,7 +6,7 @@
     overflow: hidden;
     background: var(--kd-ground, #1a1b1f);
     --ss-accent: oklch(0.9 0.2 122);
-    --ss-font: Archivo, system-ui, -apple-system, sans-serif;   /* the page's own face, for the rail beside the phone */
+    --ss-font: 'Inter Tight', system-ui, -apple-system, sans-serif;   /* the page's own face, for the rail beside the phone */
     --kd-h: Poppins, system-ui, sans-serif;
     --kd-b: Mulish, system-ui, sans-serif;
     --kd-ink: #0e1d30;          /* headings, amounts */

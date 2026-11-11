@@ -1,4 +1,4 @@
-<title>Portfolio Hi-Fi v1</title>
+<title>Portfolio Hi-Fi</title>
 <style>
 /* fonts: the live site's own files (build_hifi.py inlines them; build_site.py moves them to assets/fonts and preloads the latin ones) */
 /*__FONTS__*/
@@ -18,8 +18,8 @@
   --fg-3: rgba(242, 239, 232, .64);
   --rule: rgba(242, 239, 232, .14);
   --lime: oklch(0.9 0.2 122);
-  --display: 'Inter Tight', 'Archivo', system-ui, sans-serif;   /* Archivo only lends the arrow glyph Inter Tight's latin file lacks */
-  --mono: 'IBM Plex Mono', ui-monospace, monospace;             /* the drawings' label face; the site itself sets no mono */
+  --display: 'Inter Tight', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;   /* only where mono is the material: code tokens, the terminal, product screens */
   --gut: 24px;
   color-scheme: dark;
 }
