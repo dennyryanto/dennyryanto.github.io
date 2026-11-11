@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-/* Layout: one 1120px column; every section = hero (always visible) + drawer (collapsed). Grey wireframe, blue = design notes. */
+/* Layout: one 1120px column on a twelve-column grid (24px gutters). A label column on columns 1-3, everything else hangs from column 4; below 900px it is one column, label first. Every section = hero (always visible) + drawer (collapsed). Grey wireframe, blue = design notes. */
 :root {
   --paper: #f2f3f0;
   --sheet: #fbfbf9;
@@ -39,7 +39,20 @@ button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--note); outline-offset: 3px; }
 
 .wrap { max-width: var(--wrap); margin-inline: auto; }
-.mono { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.mono { font: 400 13px/1.4 var(--display); letter-spacing: 0; text-transform: none; }
+/* the grid: label column (hl) and hanging body (hb) */
+.hang { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: 20px; align-items: start; }
+.hang > .hl { grid-column: 1 / 4; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.hang > .hl:empty { display: none; }
+.hang > .hb { grid-column: 4 / -1; min-width: 0; }
+.lb { font: 400 13px/1.4 var(--display); letter-spacing: 0; }
+.lt { font: 600 15px/1.35 var(--display); color: var(--ink); text-wrap: balance; }
+.ln { font: 400 13px/1.45 var(--display); color: var(--ink-3); }
+.meta-n { color: var(--ink-2); font-weight: 600; }
+@media (max-width: 900px) {
+  .hang { grid-template-columns: minmax(0, 1fr); row-gap: 16px; }
+  .hang > * { grid-column: 1 / -1 !important; grid-row: auto !important; }
+}
 .muted { color: var(--ink-2); }
 h1, h2 { font-family: var(--display); font-weight: 800; font-stretch: 115%; letter-spacing: -.02em; text-wrap: balance; margin: 0; }
 h1 { font-size: clamp(40px, 7vw, 76px); line-height: .98; }
@@ -48,7 +61,7 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
 /* top bar */
 .topbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
 .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 56px; }
-.brand { white-space: nowrap; font-weight: 800; font-stretch: 115%; letter-spacing: .02em; text-decoration: none; }
+.brand { white-space: nowrap; font-weight: 700; font-stretch: 115%; letter-spacing: 0; text-decoration: none; }
 .topbar nav { display: flex; gap: 22px; }
 .topbar nav a { text-decoration: none; color: var(--ink-2); }
 .topbar nav a:hover { color: var(--ink); }
@@ -61,15 +74,10 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
     linear-gradient(to bottom right, transparent calc(50% - .6px), var(--ph-x) 50%, transparent calc(50% + .6px)); }
 .ph.phone { border-radius: 18px; }
 .ph.round { border-radius: 50%; }
-.ph > span { position: relative; background: var(--ph); padding: 4px 8px; text-align: center; font: 500 11px/1.35 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); max-width: 90%; }
-.lines { display: grid; gap: 10px; }
-.lines .cap { margin-bottom: 4px; }
+.ph > span { position: relative; background: var(--ph); padding: 4px 8px; text-align: center; font: 500 12px/1.35 var(--display); letter-spacing: 0; text-transform: none; color: var(--ink-2); max-width: 90%; }
+.lines { display: grid; gap: 12px; max-width: 70ch; }
 .line { display: flex; gap: 12px; align-items: center; }
-.line::before { content: ""; flex: none; width: 12px; height: 2px; background: var(--ink-3); }
 .line i { display: block; height: 10px; border-radius: 3px; background: var(--ph-x); opacity: .7; }
-/* "What I did": the same two-column dash list in every case (one column on phones) */
-.lines.two { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); column-gap: 48px; row-gap: 14px; }
-.lines.two > .cap { grid-column: 1 / -1; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
 
@@ -79,107 +87,89 @@ h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.05; }
 .note b { flex: none; display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; background: var(--note); color: var(--sheet); font: 600 11px/1 var(--mono); }
 body.notes-off .note { display: none; }
 
-/* hero */
-.hero { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 48px; align-items: start; padding-block: 64px 48px; }
-.hero p { max-width: 58ch; font-size: 17px; color: var(--ink-2); margin: 22px 0 0; }
-.avail { display: inline-block; margin-top: 26px; border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; }
-.profile { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 16px; }
+/* opening: label column (Portfolio 2026, the role), headline on 4-12, then the text on 4-8 beside the profile card on 9-12 */
+.hero { padding-block: 56px 48px; row-gap: 32px; }
+.hero > .hl { padding-top: 10px; }
+.hero > .h1w { grid-column: 4 / -1; min-width: 0; }
+.hero-text { grid-column: 4 / 9; display: grid; gap: 24px; justify-items: start; min-width: 0; }
+.hero-text p { max-width: 58ch; font-size: 17px; color: var(--ink-2); margin: 0; }
+.avail { display: inline-block; border: 1px solid var(--line); border-radius: 999px; padding: 9px 14px; }
+.hero > .profile { grid-column: 9 / -1; }
+.profile { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: grid; gap: 16px; min-width: 0; }
 .profile .who { display: flex; gap: 14px; align-items: center; }
 .profile .who .ph { width: 72px; flex: none; --r: 1/1; padding: 0; }
 .profile .who strong { display: block; font-size: 18px; font-stretch: 112%; }
-.prow { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
-.prow .mono { color: var(--ink-3); padding-top: 2px; }
+.prow { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 14px; }
+.prow .mono { color: var(--ink-3); padding-top: 1px; }
 .certs { display: grid; gap: 7px; font-size: 13.5px; }
 .certs span { display: flex; align-items: center; gap: 8px; }
 .seal { flex: none; width: 15px; height: 15px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #fbe9a8, #dca726 55%, #946507); box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.35); animation: seal-spin 4.5s cubic-bezier(.6,0,.4,1) infinite; animation-delay: var(--d, 0s); }
 @keyframes seal-spin { 0%, 55% { transform: perspective(60px) rotateY(0); } 100% { transform: perspective(60px) rotateY(360deg); } }
-@media (max-width: 860px) { .hero { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 40px 32px; } }
+@media (max-width: 900px) { .hero { padding-block: 40px 32px; row-gap: 24px; } .hero > .hl { padding-top: 0; } }
 
-/* case index (replaces the stat band) */
-.index { display: block; border-block: 1px solid var(--line); margin-inline: -16px; padding-inline: 16px; }
-.idx { display: grid; gap: 8px; align-content: start; padding: 16px 20px 22px; text-decoration: none; border-right: 1px solid var(--line); transition: background .2s; }
-.idx:last-child { border-right: 0; }
+/* case index: four cells of three columns each, no icons, no vertical rules, a rule above each cell */
+.index-wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 24px; }
+.idx { display: grid; gap: 8px; align-content: start; padding: 20px 0 28px; text-decoration: none; border-top: 1px solid var(--line); transition: background .2s; }
 .idx:hover { background: var(--sheet); }
-.idx .num { margin-top: 6px; font: 800 clamp(26px, 3vw, 34px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.idx .num { margin-top: 10px; font: 800 clamp(26px, 3vw, 34px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .idx .sl { font-size: 13px; }
 .idx .ctx { font-size: 13.5px; line-height: 1.45; color: var(--ink-2); max-width: 32ch; }
-.idx .go { display: flex; align-items: center; gap: 8px; color: var(--ink-2); }
-.idx .go .arr { margin-left: auto; }
+.idx .go { display: flex; gap: 8px; color: var(--ink-2); }
 .idx:hover .go { color: var(--ink); }
-.index-wrap { max-width: var(--wrap); margin-inline: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-@media (max-width: 860px) { .index-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } .idx:nth-child(2) { border-right: 0; } .idx:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+@media (max-width: 900px) { .index-wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-
-/* clients strip, right under the case index */
+/* clients strip, right under the case index: the label in the label column, the logos from column 4 */
 .clients { padding-top: 40px; }
-.clients-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px 16px; flex-wrap: wrap; margin-bottom: 16px; }
-.clients-head .sl { font-size: 14px; }
+.clients > .hl { padding-top: 22px; }
 .logos { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
-.logo { aspect-ratio: 2.4 / 1; display: grid; place-items: center; padding: 8px; text-align: center; background: var(--ph); border-radius: 6px; font: 800 15px/1.1 var(--display); font-stretch: 112%; color: var(--ink-3); }
-@media (max-width: 860px) { .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } .logo { font-size: 13px; } }
+.logo { aspect-ratio: 2.4 / 1; display: grid; place-items: center; padding: 8px; text-align: center; background: var(--ph); border-radius: 6px; font: 800 15px/1.1 var(--display); font-stretch: 112%; color: var(--ink-3); overflow-wrap: anywhere; }
+@media (max-width: 900px) { .clients > .hl { padding-top: 0; } .logos { grid-template-columns: repeat(3, minmax(0, 1fr)); } .logo { font-size: 13px; } }
 
 /* sections */
-.group-head { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; padding-block: 56px 8px; }
-.group-head .mono { color: var(--ink-2); }
+.group-head { padding-block: 56px 8px; }
 .case { border-bottom: 1px solid var(--line); padding-block: 40px; scroll-margin-top: 72px; }
-.case-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px 48px; align-items: end; }
-.case-hero > .ph { grid-column: 1 / -1; margin-top: 8px; }
-.close-btn { justify-self: center; background: none; border: 0; padding: 10px 16px; cursor: pointer; color: var(--ink-2); }
+.nt { margin-top: 16px; }
+.nt > .hb { display: grid; gap: 12px; justify-items: start; }
+.close-btn { justify-self: start; background: none; border: 0; padding: 10px 0; cursor: pointer; color: var(--ink-2); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 5px; }
 .close-btn:hover { color: var(--ink); }
-.case-meta { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-.case-meta .co { font-weight: 600; }
-.case-meta .role { color: var(--ink-3); }
-.case-copy { display: grid; gap: 22px; min-width: 0; }
-.case-copy .sub { color: var(--ink-2); margin: 0; max-width: 52ch; }
-.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--line); }
-.stat { padding: 14px 12px 0 0; display: grid; gap: 6px; }
-.stat + .stat { padding-left: 14px; border-left: 1px solid var(--line); }
-.stat .n { font: 800 26px/1 var(--display); font-stretch: 118%; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.stat .sl { font-size: 13px; line-height: 1.35; color: var(--ink-2); }
-@media (max-width: 860px) { .case-hero { grid-template-columns: minmax(0, 1fr); gap: 24px; } .stat .n { font-size: 22px; } }
 
-
-/* key numbers: a centred, full-width band of three equal columns, each with a line of context */
-.keys-block > .cap { text-align: center; }
-.keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-block: 1px solid var(--line); text-align: center; }
-.key { display: grid; gap: 8px; justify-items: center; padding: 32px 24px 28px; min-width: 0; }
-.key + .key { border-left: 1px solid var(--line); }
-.key .n { font: 800 clamp(36px, 4.4vw, 52px)/1 var(--display); font-stretch: 120%; letter-spacing: -.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
-.key .l { color: var(--ink-3); }
-.key .c { max-width: 30ch; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
-@media (max-width: 700px) { .keys { grid-template-columns: minmax(0, 1fr); } .key { padding: 22px 8px; } .key + .key { border-left: 0; border-top: 1px solid var(--line); } }
-
-/* compact split hero: title, description and the toggle on one side, the diagram on the other; sides alternate (.flip), the two-diagram Independent hero keeps the stacked layout */
-.case-split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "text fig" "tog fig"; column-gap: 48px; align-items: center; }
-.case-split.flip { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "fig text" "fig tog"; }
-.case-split > .case-text { grid-area: text; align-self: end; display: grid; gap: 14px; }
-.case-split > .case-text .sub { color: var(--ink-2); margin: 0; max-width: 52ch; }
+/* case hero: label column holds number, name, role and dates one a line; title and description on 4-8, the stack on 9-12 (the same side in every case), the toggle under the text */
+.case-top > .hl { grid-row: 1; }
+.case-top > .case-text { grid-column: 4 / 9; grid-row: 1; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.case-top .sub { color: var(--ink-2); margin: 0; max-width: 54ch; }
 /* who the company is: a quieter line under the description */
-.case-text .abouts { display: grid; gap: 6px; max-width: 52ch; padding-top: 12px; border-top: 1px solid var(--line); }
-.case-text .about { margin: 0; font-size: 14px; color: var(--ink-3); }
-.case-text .about b { font-weight: 600; color: var(--ink-2); }
-.case-split > .sv { grid-area: fig; margin: 0; }
-.case-split > .sv canvas { aspect-ratio: 5 / 4; }
-.case-split > .toggle { grid-area: tog; align-self: start; justify-self: start; width: auto; max-width: 100%; margin-top: 22px; padding: 6px 0; flex-direction: row; flex-wrap: wrap; align-items: center; column-gap: 12px; row-gap: 6px; text-align: left; }
-.case-split > .toggle .chev { order: 1; margin-top: 0; }
-.case-split > .toggle .m { order: 2; flex-basis: 100%; }
-@media (max-width: 860px) {
-  .case-split, .case-split.flip { grid-template-columns: minmax(0, 1fr); grid-template-areas: "text" "fig" "tog"; row-gap: 8px; }
-  .case-split > .sv canvas { aspect-ratio: 4 / 3; }
-  .case-split > .toggle { margin-top: 6px; }
-}
+.abouts { display: grid; gap: 6px; max-width: 54ch; padding-top: 12px; border-top: 1px solid var(--line); }
+.about { margin: 0; font-size: 14px; color: var(--ink-3); }
+.about b { font-weight: 600; color: var(--ink-2); }
+.case-top > .sv { grid-column: 9 / -1; grid-row: 1 / span 2; margin: 0; }
+.case-top.is-single { grid-template-rows: auto 1fr; }
+.case-top > .sv-pair { grid-column: 4 / -1; grid-row: 2; }
+.case-top > .toggle { grid-column: 4 / 9; justify-self: start; align-self: start; }
+.case-top.is-single > .toggle, .case-top.bg-top > .toggle { grid-row: 2; }
+.case-top.is-pair > .toggle { grid-row: 3; }
+.case-top.bg-top > .case-text { grid-column: 4 / -1; }
+.case-top.bg-top > .case-text > h2 { margin-bottom: 14px; }
+h2 { overflow-wrap: break-word; }
+
+/* key numbers: left-aligned in equal columns on the grid, no band and no vertical rules */
+.keys { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; }
+.key { min-width: 0; }
+.key .n { display: block; font: 800 clamp(30px, 3.8vw, 46px)/1 var(--display); font-stretch: 118%; letter-spacing: -.02em; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.key .l { display: block; margin-top: 12px; font: 400 13px/1.4 var(--display); color: var(--ink); }
+.key .c { display: block; margin-top: 6px; max-width: 30ch; font-size: 14px; line-height: 1.5; color: var(--ink-2); }
+@media (max-width: 700px) { .keys { grid-template-columns: repeat(2, minmax(0, 1fr)); } .key .n { font-size: 26px; } }
 
 /* signature visual: the exploded-layer stack (stack.js), drawn in the wireframe's greys; decisions in solid ink (lime in the hi-fi) */
-.case-hero > .sv, .case-hero > .sv-pair { grid-column: 1 / -1; margin: 8px 0 0; }
-.sv canvas { display: block; width: 100%; aspect-ratio: 21 / 8; }
-.sv-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
-.sv-pair .sv canvas { aspect-ratio: 21 / 16; }
-.sv figcaption { margin-top: 2px; text-align: center; color: var(--ink-3); }
-.sv-pair + .note, .sv + .note { margin-top: 12px; }
-@media (max-width: 860px) { .sv canvas { aspect-ratio: 4 / 3; } .sv-pair { grid-template-columns: 1fr; gap: 18px; } .sv-pair .sv canvas { aspect-ratio: 4 / 3; } }
+.sv canvas { display: block; width: 100%; aspect-ratio: 4 / 5; }
+.sv.wide canvas { aspect-ratio: 5 / 4; }
+.sv-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; }
+.sv-pair .sv { margin: 0; }
+.sv-pair .sv canvas { aspect-ratio: 21 / 18; }
+.sv figcaption { margin-top: 4px; color: var(--ink-3); }
+@media (max-width: 900px) { .sv canvas, .sv.wide canvas { aspect-ratio: 4 / 3; } .sv-pair .sv canvas { aspect-ratio: 4 / 3; } }
+@media (max-width: 600px) { .sv-pair { grid-template-columns: minmax(0, 1fr); gap: 18px; } }
 
-/* fan: the cockpit's 3D stack of screens, driven by a timer and clicks (now at the top of its drawer) */
-.case-hero > .fan { grid-column: 1 / -1; margin-top: 8px; }
+/* fan: the cockpit's 3D stack of screens, driven by a timer and clicks (at the top of its drawer) */
 .fan { position: relative; outline: none; }
 .fan:focus-visible .fan-stage { outline: 2px solid var(--note); outline-offset: 4px; }
 .fan-stage { position: relative; height: clamp(260px, 34vw, 430px); perspective: 1600px; perspective-origin: 20% 45%; overflow: hidden; touch-action: pan-y; }
@@ -195,10 +185,10 @@ body.notes-off .note { display: none; }
 .fan-ticks button { background: none; border: 0; padding: 10px 2px; cursor: pointer; }
 .fan-ticks i { display: block; width: 22px; height: 2px; background: var(--line); transition: background .3s; }
 .fan-ticks button.on i { background: var(--ink); }
-@media (max-width: 860px) { .fan-card { width: 68%; left: 3%; } .fan-stage { height: clamp(220px, 58vw, 340px); } }
+@media (max-width: 900px) { .fan-card { width: 68%; left: 3%; } .fan-stage { height: clamp(220px, 58vw, 340px); } }
 
 /* timeline (background hero) */
-.timeline { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; }
+.timeline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 24px; }
 .tl { border-top: 2px solid var(--ink-3); padding-top: 12px; display: grid; gap: 4px; font-size: 13px; }
 .tl.lead { border-top-color: var(--ink); }
 .tl .mono { color: var(--ink-3); }
@@ -206,21 +196,20 @@ body.notes-off .note { display: none; }
 /* what each company is: two placeholder lines under the role */
 .tl-about { display: grid; gap: 5px; margin-top: 4px; }
 .tl-about i { display: block; height: 7px; border-radius: 3px; background: var(--ph-x); opacity: .6; }
-@media (max-width: 860px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; } }
+@media (max-width: 600px) { .timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; column-gap: 16px; } }
 
-/* toggle + drawer */
-.toggle { margin-top: 32px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 16px; background: none; border: 0; cursor: pointer; text-align: center; }
-.toggle .t { display: grid; font-weight: 700; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; }
-.toggle { --flip: .5s; --half: .25s; }
+/* toggle + drawer: the toggle is left-aligned at column 4, chevron before the label, the meta line under it */
+.toggle { --flip: .5s; --half: .25s; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 6px 10px; width: 100%; max-width: 62ch; min-height: 44px; padding: 10px 0; background: none; border: 0; cursor: pointer; text-align: left; color: var(--ink); }
+.toggle .t { display: grid; justify-content: start; font: 600 16px/1.2 var(--display); letter-spacing: 0; text-transform: none; }
 .toggle .t > span { grid-area: 1 / 1; }
 /* the label swap rides the chevron flip: the old label fades out while the chevron folds flat, the new one fades in while it unfolds */
 .toggle .t-closed { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
 .toggle .t-open { opacity: 0; transition: opacity var(--half) ease-in 0s; }
 .toggle[aria-expanded="true"] .t-closed { opacity: 0; transition: opacity var(--half) ease-in 0s; }
 .toggle[aria-expanded="true"] .t-open { opacity: 1; transition: opacity var(--half) ease-out var(--half); }
-.toggle .m { color: var(--ink-3); transition: opacity var(--flip) cubic-bezier(.65, 0, .35, 1); }
+.toggle .m { grid-column: 1 / -1; color: var(--ink-3); transition: opacity var(--flip) cubic-bezier(.65, 0, .35, 1); }
 .toggle[aria-expanded="true"] .m { opacity: .45; }
-.toggle .chev { margin-top: 2px; display: grid; place-items: center; color: var(--ink-2); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1); }
+.toggle .chev { order: -1; display: grid; place-items: center; color: var(--ink-2); transition: transform var(--flip) cubic-bezier(.65, 0, .35, 1); }
 .toggle .chev svg { animation: chev-bob 1.8s ease-in-out infinite; }
 .toggle:hover .chev { color: var(--ink); }
 .toggle[aria-expanded="true"] .chev { transform: scaleY(-1); }
@@ -229,12 +218,14 @@ body.notes-off .note { display: none; }
 .drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .4s cubic-bezier(.3,.7,.2,1); }
 .drawer.open { grid-template-rows: 1fr; }
 .drawer > .inner { overflow: hidden; min-height: 0; }
-.drawer .body { display: grid; gap: 28px; padding-top: 28px; }
-.block { display: grid; gap: 10px; }
-.block > .cap { color: var(--ink-3); }
+.drawer .body { display: grid; gap: 40px; padding-top: 36px; }
+/* every block is a row: a rule above, its title in the label column, its content from column 4 */
+.block { min-width: 0; border-top: 1px solid var(--line); padding-top: 20px; }
+.block > .hb { display: grid; gap: 14px; align-content: start; }
+.block.end { border-top: 0; padding-top: 0; margin-top: -20px; }
 .grid { display: grid; gap: 14px; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); }
 .grid > .span2 { grid-column: span 2; }
-@media (max-width: 860px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
+@media (max-width: 900px) { .grid { --cols: 2 !important; } .grid.one-sm { --cols: 1 !important; } .grid > .span2 { grid-column: span 2; } }
 /* the cockpit close-ups: the live site's isometric tiles, with room between them */
 .grid.closeups { gap: 40px; }
 
@@ -248,12 +239,14 @@ body.notes-off .audit { display: none; }
 .ac-id { font: 600 12px/1 var(--mono); }
 .ac-f { color: var(--ink); font-weight: 600; }
 .ac-w { color: var(--ink-2); }
-.ac-s { font: 600 11px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.ac-s { font: 600 12px/1.3 var(--display); letter-spacing: 0; }
 .ac-out, .ac-open { color: var(--ink-3); }
 @media (max-width: 720px) { .ac-row { grid-template-columns: 40px minmax(0, 1fr) auto; } .ac-w { grid-column: 2 / -1; } }
 
 /* footer */
-.footer { padding-block: 72px 24px; display: grid; gap: 22px; }
+.footer { padding-block: 72px 24px; row-gap: 22px; }
+.footer > .hl { padding-top: 14px; }
+.footer > .hb { display: grid; gap: 22px; justify-items: start; }
 .footer .big { font: 800 clamp(40px, 6vw, 60px)/1 var(--display); font-stretch: 118%; letter-spacing: -.02em; }
 .btns { display: flex; flex-wrap: wrap; gap: 10px; }
 .btn { border: 1px solid var(--line); border-radius: 999px; padding: 12px 18px; background: var(--sheet); }
@@ -277,7 +270,7 @@ html { scroll-behavior: smooth; }
 
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="#top">DENNY RYANTO</a>
+    <a class="brand" href="#top">Denny Ryanto</a>
     <nav class="mono" aria-label="Sections">
       <a href="#work">Work</a>
       <a href="#lab" class="hide-sm">Lab</a>
@@ -289,13 +282,13 @@ html { scroll-behavior: smooth; }
 </header>
 
 <main id="top">
-  <section class="wrap hero">
-    <div>
-      <div class="mono muted" style="margin-bottom:24px">Portfolio 2026 · Head / AVP, Product Design</div>
-      <h1>Design leadership, measured in outcomes.</h1>
+  <section class="wrap hero hang">
+    <div class="hl"><span class="lb">Portfolio 2026</span><span class="ln">Head / AVP, Product Design</span></div>
+    <div class="h1w"><h1>Design leadership, measured in outcomes.</h1></div>
+    <div class="hero-text">
       <p>Design leader across fintech, enterprise and consumer platforms, turning design strategy into P&amp;L results: lower cost to serve, higher conversion, platforms used by tens of millions.</p>
-      <span class="avail mono">Open to Head / AVP roles · Jakarta</span>
-      <div class="note" style="margin-top:24px"><b>1</b><span><i class="f">F9 · F3</i>The “In short” paragraph is folded into this subhead, and the brand strip moves into the case index below. One opening message instead of three.</span></div>
+      <span class="avail lb">Open to Head / AVP roles, Jakarta</span>
+      <div class="note"><b>1</b><span><i class="f">F9 · F3</i>The “In short” paragraph is folded into this subhead, and the brand strip moves into the case index below. One opening message instead of three. The label column (columns 1–3) carries “Portfolio 2026” and the role; the headline spans columns 4–12, with the text on 4–8 beside the profile card on 9–12.</span></div>
     </div>
     <aside class="profile" aria-label="Profile summary">
       <div class="who">
@@ -310,25 +303,25 @@ html { scroll-behavior: smooth; }
     </aside>
   </section>
 
-  <nav class="index" aria-label="Case index">
+  <nav class="index wrap" aria-label="Case index">
     <div class="index-wrap" id="index"></div>
   </nav>
-  <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span><i class="f">F3 · F7</i>The stat band becomes the case index. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
+  <div class="wrap" style="padding-top:16px"><div class="note"><b>3</b><span><i class="f">F3 · F7</i>The stat band becomes the case index: four cells of three columns, no icons, no vertical rules, a rule above each. Each headline number appears once on the page, and clicking it opens that case.</span></div></div>
 
-  <section class="wrap clients" aria-label="Clients and brands">
-    <div class="clients-head"><span class="mono">Clients &amp; brands</span></div>
-    <div class="logos"><div class="logo" role="img" aria-label="Ismaya logo">Ismaya</div><div class="logo" role="img" aria-label="SOGO logo">SOGO</div><div class="logo" role="img" aria-label="MAP logo">MAP</div><div class="logo" role="img" aria-label="Philips logo">Philips</div><div class="logo" role="img" aria-label="DANA logo">DANA</div><div class="logo" role="img" aria-label="Tokopedia logo">Tokopedia</div><div class="logo" role="img" aria-label="Netflix logo">Netflix</div><div class="logo" role="img" aria-label="Jasamarga logo">Jasamarga</div><div class="logo" role="img" aria-label="Summarecon logo">Summarecon</div><div class="logo" role="img" aria-label="Galeries Lafayette logo">Galeries Lafayette</div><div class="logo" role="img" aria-label="Genki Sushi logo">Genki Sushi</div><div class="logo" role="img" aria-label="Rainbow logo">Rainbow</div></div>
-    <div class="note" style="margin-top:16px"><b>10</b><span><i class="f">F8</i>Clients move up from the bottom of the page to sit right under the case index, shown in full and always visible. Each logo appears once.</span></div>
+  <section class="wrap clients hang" aria-label="Clients and brands">
+    <div class="hl"><span class="lt">Clients and brands</span></div>
+    <div class="hb"><div class="logos"><div class="logo" role="img" aria-label="Ismaya logo">Ismaya</div><div class="logo" role="img" aria-label="SOGO logo">SOGO</div><div class="logo" role="img" aria-label="MAP logo">MAP</div><div class="logo" role="img" aria-label="Philips logo">Philips</div><div class="logo" role="img" aria-label="DANA logo">DANA</div><div class="logo" role="img" aria-label="Tokopedia logo">Tokopedia</div><div class="logo" role="img" aria-label="Netflix logo">Netflix</div><div class="logo" role="img" aria-label="Jasamarga logo">Jasamarga</div><div class="logo" role="img" aria-label="Summarecon logo">Summarecon</div><div class="logo" role="img" aria-label="Galeries Lafayette logo">Galeries Lafayette</div><div class="logo" role="img" aria-label="Genki Sushi logo">Genki Sushi</div><div class="logo" role="img" aria-label="Rainbow logo">Rainbow</div></div>
+    <div class="note" style="margin-top:16px"><b>10</b><span><i class="f">F8</i>Clients move up from the bottom of the page to sit right under the case index, shown in full and always visible: the label in the label column, the logos from column 4. Each logo appears once.</span></div></div>
   </section>
 
   <section class="wrap" id="work" aria-label="Work">
-    <div class="group-head"><span class="mono">Selected work</span><span class="mono" id="order-label">Ordered by impact</span></div>
-    <div class="note" style="margin-top:12px"><b>9</b><span><i class="f">F6</i>Order is still open. “By impact” in the toolbar puts LinkAja first, which backs the opening’s “measured in outcomes” claim. “By date” starts with the current role.</span></div>
+    <div class="group-head hang"><div class="hl"><span class="lt">Selected work</span></div><div class="hb"><span class="lb muted" id="order-label">Ordered by impact</span></div></div>
+    <div class="hang nt" style="margin-top:12px"><div class="hb"><div class="note"><b>9</b><span><i class="f">F6</i>Order is still open. “By impact” in the toolbar puts LinkAja first, which backs the opening’s “measured in outcomes” claim. “By date” starts with the current role.</span></div></div></div>
     <div id="cases"></div>
   </section>
 
   <section class="wrap" id="lab" aria-label="Lab">
-    <div class="group-head"><span class="mono">Lab · built with AI</span><span class="mono">Personal R&amp;D</span></div>
+    <div class="group-head hang"><div class="hl"><span class="lt">Lab</span><span class="ln">Built with AI</span></div><div class="hb"><span class="lb muted">Personal R&amp;D</span></div></div>
     <div id="labs"></div>
   </section>
 
@@ -338,15 +331,17 @@ html { scroll-behavior: smooth; }
 
 
   <section class="wrap audit" aria-label="Audit coverage">
-    <div class="ac-head"><span class="mono">Audit coverage</span><span class="ac-sub">design/AUDIT.md · findings F1–F10</span></div>
-    <div class="ac-table"><div class="ac-row"><span class="ac-id">F1</span><span class="ac-f">Every case fully expanded</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Hero + drawer on every section (notes 4, 7)</span></div><div class="ac-row"><span class="ac-id">F2</span><span class="ac-f">Bullets repeat the stat tiles</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Bullets and the key numbers live in the drawer; the hero is headline, one line and the visual (note 4)</span></div><div class="ac-row"><span class="ac-id">F3</span><span class="ac-f">Headline numbers repeat</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">The case index owns each headline number, the heroes carry none, and the certificates live only in the profile card (notes 2, 3, 4)</span></div><div class="ac-row"><span class="ac-id">F4</span><span class="ac-f">Garmin outweighs the paid work</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">The cockpit hero is a stack like every other section; the fan sits at the top of its drawer at a fixed height, under 1 screen instead of 5 (note 5)</span></div><div class="ac-row"><span class="ac-id">F5</span><span class="ac-f">Accent and tiny labels everywhere</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">11px minimum, sentence-case number labels (note 8). Accent rules are set in the hi-fi.</span></div><div class="ac-row"><span class="ac-id">F6</span><span class="ac-f">Unclear order</span><span class="ac-s ac-open">Open</span><span class="ac-w">Impact or date, switchable in the toolbar (note 9)</span></div><div class="ac-row"><span class="ac-id">F7</span><span class="ac-f">No way to jump to a case</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Case index plus links like #linkaja (note 3)</span></div><div class="ac-row"><span class="ac-id">F8</span><span class="ac-f">Four thin bands at the end</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">One Background section, open by default (note 6); clients moved up under the case index (note 10)</span></div><div class="ac-row"><span class="ac-id">F9</span><span class="ac-f">“In short” repeats the subhead</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Folded into the opening subhead (note 1)</span></div><div class="ac-row"><span class="ac-id">F10</span><span class="ac-f">7.9MB bundle, needs JavaScript to render</span><span class="ac-s ac-out">Out of scope</span><span class="ac-w">Engineering task, separate from the layout</span></div></div>
+    <div class="ac-head"><span class="lt">Audit coverage</span><span class="ac-sub">design/AUDIT.md · findings F1–F10</span></div>
+    <div class="ac-table"><div class="ac-row"><span class="ac-id">F1</span><span class="ac-f">Every case fully expanded</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Hero + drawer on every section, the toggle left-aligned at column 4 (notes 4, 7)</span></div><div class="ac-row"><span class="ac-id">F2</span><span class="ac-f">Bullets repeat the stat tiles</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Bullets and the key numbers live in the drawer, left-aligned on the grid; the hero is headline, one line and the visual (note 4)</span></div><div class="ac-row"><span class="ac-id">F3</span><span class="ac-f">Headline numbers repeat</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">The case index owns each headline number, the heroes carry none, and the certificates live only in the profile card (notes 2, 3, 4)</span></div><div class="ac-row"><span class="ac-id">F4</span><span class="ac-f">Garmin outweighs the paid work</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">The cockpit hero is a stack like every other section; the fan sits at the top of its drawer at a fixed height, under 1 screen instead of 5 (note 5)</span></div><div class="ac-row"><span class="ac-id">F5</span><span class="ac-f">Accent and tiny labels everywhere</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Labels are sentence case at 13px, untracked and not monospace; 11px is the floor (note 8). Accent rules are set in the hi-fi.</span></div><div class="ac-row"><span class="ac-id">F6</span><span class="ac-f">Unclear order</span><span class="ac-s ac-open">Open</span><span class="ac-w">Impact or date, switchable in the toolbar (note 9)</span></div><div class="ac-row"><span class="ac-id">F7</span><span class="ac-f">No way to jump to a case</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Case index plus links like #linkaja (note 3)</span></div><div class="ac-row"><span class="ac-id">F8</span><span class="ac-f">Four thin bands at the end</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">One Background section, open by default, on the same label-column pattern (note 6); clients moved up under the case index (note 10)</span></div><div class="ac-row"><span class="ac-id">F9</span><span class="ac-f">“In short” repeats the subhead</span><span class="ac-s ac-done">Addressed</span><span class="ac-w">Folded into the opening subhead (note 1)</span></div><div class="ac-row"><span class="ac-id">F10</span><span class="ac-f">7.9MB bundle, needs JavaScript to render</span><span class="ac-s ac-out">Out of scope</span><span class="ac-w">Engineering task, separate from the layout</span></div></div>
   </section>
-  <footer class="wrap footer" id="contact">
-    <div class="mono muted">What I’m looking for</div>
-    <div class="big">Let’s talk.</div>
-    <p class="muted" style="margin:0;max-width:56ch">Open to a Head or AVP of Product Design mandate where design owns outcomes, building and scaling teams, design systems and AI-native practice.</p>
-    <div class="btns mono"><span class="btn primary">Get in touch</span><span class="btn">Connect on LinkedIn</span><span class="btn">Download resume (PDF)</span></div>
-    <div class="mono muted" style="user-select:all">denny.ryanto@gmail.com</div>
+  <footer class="wrap footer hang" id="contact">
+    <div class="hl"><span class="lt">What I’m looking for</span></div>
+    <div class="hb">
+      <div class="big">Let’s talk.</div>
+      <p class="muted" style="margin:0;max-width:56ch">Open to a Head or AVP of Product Design mandate where design owns outcomes, building and scaling teams, design systems and AI-native practice.</p>
+      <div class="btns lb"><span class="btn primary">Get in touch</span><span class="btn">Connect on LinkedIn</span><span class="btn">Download resume (PDF)</span></div>
+      <div class="lb muted" style="user-select:all">denny.ryanto@gmail.com</div>
+    </div>
   </footer>
 </main>
 
@@ -846,23 +841,23 @@ html { scroll-behavior: smooth; }
   // Hero content is real; drawer content is placeholders only.
   var P = function (label, r, kind, span) { return { label: label, r: r || '16/9', kind: kind || '', span: span }; };
   var CASES = [
-    { id: 'linkaja', co: 'LinkAja', role: 'Product Design Lead · Sep 2021 – Jun 2023', start: 2021, impact: 1,
+    { id: 'linkaja', co: 'LinkAja', meta: ['Product Design Lead', 'Sep 2021 – Jun 2023'], start: 2021, impact: 1,
       title: 'Design that cut OPEX 80% for 70 million users.',
       sub: 'Self-service flows replaced agent tickets, and a home-screen redesign shipped to 70M+ users.',
       about: [['LinkAja', 'an Indonesian digital payments and e-wallet app used by 70M+ people.']],
       stats: [['70M+', 'Users', 'People reached by the redesigned home screen.'], ['~72%', 'Cases automated', 'Support cases now solved in the app, without an agent.'], ['4', 'Ships', 'Self-service flows, MyPaylater, the chatbot and the home screen.']],
       sv: 'linkaja',
       index: { num: '−80%', label: 'CS OPEX', ctx: 'Customer-service cost after self-service replaced agent tickets for 70M users.' },
-      note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same compact hero: the headline, one line on what the work is about and the toggle on one side, the signature visual on the other, alternating sides down the page (Independent shows its two visuals side by side instead). The key numbers and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
+      note: '<b>4</b><span><i class="f">F1 · F2</i>Every case uses the same hero: the label column (columns 1–3) holds the case number, name, role and dates, one a line; the headline, one line on what the work is about and the toggle sit on columns 4–8, and the signature visual on columns 9–12, on the same side in every case (Independent’s two visuals span columns 4–12 under its text). The key numbers (left-aligned in equal columns) and the bullets fold into the drawer; the case index above keeps each headline number.</span>',
       svNote: '<b>11</b><span>The signature visual is drawn live in code: three layers in the shape of the work’s platform (phone, tablet, desktop or e-ink panel), from what it started from to the final screen as a simple wireframe. When it first comes into view it builds once from the bottom; each lower layer locks one decision with a flicker, and its thread rises straight up to land as UI on the top layer. No rotation. Decisions are solid ink here and lime in the hi-fi.</span>',
       drawer: [
-        { lines: 4, two: true, cap: 'What I did' },
+        { lines: 4, cap: 'What I did' },
         { cols: 1, items: [P('OPEX chart · −80% callout (moved from the hero)', '21/9')] },
         { cap: 'Problem and fix', cols: 2, items: [P('Before / after flow', '16/10'), P('Support model redesign', '16/10')] },
         { cap: 'Intent routing in chat', cols: 4, items: [P('Explainer', '16/10', '', 1), P('Chat · bot', '9/19', 'phone'), P('Chat · agent', '9/19', 'phone')] },
         { cap: 'MyPaylater shipped flow', cols: 4, items: [P('Onboarding', '9/19', 'phone'), P('Active limit', '9/19', 'phone'), P('Application', '9/19', 'phone'), P('Self-service FAQ', '9/19', 'phone')] }
       ], toggle: 'Read the case study' },
-    { id: 'komunal', note: '<b>8</b><span><i class="f">F5</i>Nothing on the page is smaller than 11px. Number labels are sentence case at 13px instead of tiny mono caps; mono is kept for dates, captions and the toggle.</span>', co: 'Komunal Indonesia', role: 'Senior Manager, Product Design · Jun 2024 – Nov 2025', start: 2024, impact: 2,
+    { id: 'komunal', note: '<b>8</b><span><i class="f">F5</i>Nothing on the page is smaller than 11px. Labels are sentence case at about 13px with no letter-spacing and no monospace, instead of tiny mono caps; the same goes for dates, captions and the toggle.</span>', co: 'Komunal Indonesia', meta: ['Senior Manager, Product Design', 'Jun 2024 – Nov 2025'], start: 2024, impact: 2,
       title: 'Rebuilt how a regulated fintech ships design.',
       sub: 'A first shared design system, a faster web toolchain and a deposit funnel that converts better.',
       about: [['Komunal Indonesia', 'a regulated fintech. Its DepositoBPR platform lets people place deposits with rural banks.']],
@@ -870,12 +865,12 @@ html { scroll-behavior: smooth; }
       sv: 'komunal',
       index: { num: '+12 pts', label: 'Deposit funnel', ctx: 'Deposit-funnel completion after UX audits and a redesign of DepositoBPR.' },
       drawer: [
-        { lines: 4, two: true, cap: 'What I did' },
+        { lines: 4, cap: 'What I did' },
         { cols: 1, items: [P('Deposit funnel chart (moved from the hero)', '21/9')] },
         { cap: 'Diagrams', cols: 2, items: [P('Tooling migration · Sanity → Framer', '16/10'), P('One design system · three orgs', '16/10')] },
         { cap: 'DepositoBPR', cols: 4, items: [P('Placement volume chart', '16/10', '', 1), P('Marketplace', '9/19', 'phone'), P('Confirmation', '9/19', 'phone')] }
       ], toggle: 'Read the case study' },
-    { id: 'board', co: 'Dash · Lumio', role: 'Founder, VP Design, Commissioner · 2016 – present', start: 2016, impact: 3,
+    { id: 'board', co: 'Dash · Lumio', meta: ['Founder, VP Design, Commissioner', '2016 – present'], start: 2016, impact: 3,
       title: 'Board-level judgment, design-level craft.',
       sub: 'Founded and led Dash for 8 years, led design at Lumio, and now sits on both boards.',
       about: [['Dash', 'a restaurant ordering platform: table, kitchen, captain and back-office apps, live across 30+ chains.'], ['Lumio', 'a cloud platform that gives digital-signage owners business metrics and sells their screen time, across 150+ locations.']],
@@ -883,27 +878,27 @@ html { scroll-behavior: smooth; }
       sv: 'dash',
       index: { num: '~200K', label: 'Customers / month', ctx: 'Diners ordering through Dash each month, across 30+ restaurant chains.' },
       drawer: [
-        { lines: 4, two: true, cap: 'What I did' },
+        { lines: 4, cap: 'What I did' },
         { cap: 'Dash', cols: 2, items: [P('Captain app · iPad', '4/3'), P('Back office · laptop', '16/10')] },
         { cap: 'Lumio signage network', cols: 4, items: [P('Highways', '16/10'), P('City streets', '16/10'), P('Supermarkets', '16/10'), P('Transit', '16/10')] },
         { cols: 1, items: [P('Lumio CMS · laptop', '21/9')] },
         { cap: 'Governance', cols: 2, items: [P('Dash board card', '3/1'), P('Lumio board card', '3/1')] }
       ], toggle: 'Read the case study' },
-    { id: 'ai', co: 'Independent', role: 'Product & AI Design Consultant · Nov 2025 – present', start: 2025, impact: 4,
+    { id: 'ai', co: 'Independent', meta: ['Product & AI Design Consultant', 'Nov 2025 – present'], start: 2025, impact: 4,
       title: 'Making design teams AI-native.',
       sub: 'Enterprise AI workflows, multi-agent Claude Code builds, and coaching designers on AI tooling.',
       stats: [['MCP', 'Agentic workflows', 'Multi-agent builds with specialist sub-agents.'], ['0 → 1', 'Prototypes in Claude Code', 'Products taken from concept to working software.'], ['1:1', 'Designer coaching', 'Designers coached on bringing AI into their daily work.']],
       sv: [['independent', 'Enterprise AI · data to decision'], ['chrona', 'Featured · Chrona']],
       index: { num: '0 → 1', label: 'AI-native builds', ctx: 'Products taken from concept to working software with multi-agent Claude Code.' },
       drawer: [
-        { lines: 3, two: true, cap: 'What I did' },
+        { lines: 3, cap: 'What I did' },
         { cols: 1, items: [P('Decision-desk demo · enterprise AI', '21/9')] },
         { cap: 'Chrona · AI-first social planning', cols: 4, items: [P('Chrona app', '9/19', 'phone'), P('How Chrona works · 4 points', '16/10', '', 1)], extra: true },
-        { cols: 2, items: [P('Habit loop diagram', '16/10'), P('Planning engine diagram', '16/10')] }
+        { cap: 'Diagrams', cols: 2, items: [P('Habit loop diagram', '16/10'), P('Planning engine diagram', '16/10')] }
       ], toggle: 'Read the case study' }
   ];
   var LABS = [
-    { id: 'eink', co: 'E-ink athlete panel', role: 'Python · FastAPI · Docker · GCP',
+    { id: 'eink', co: 'E-ink athlete panel', meta: ['Python, FastAPI, Docker, GCP'],
       title: 'Shipping real products with AI, end to end.',
       sub: 'A self-hosted service turns Garmin data into a daily e-ink brief on the nightstand.',
       stats: [['24/7', 'Live on GCP', 'Self-hosted, fetching fresh data every 30 minutes.'], ['800×480', 'E-ink render', 'Dithered to one bit, rendered on fetch, not on request.'], ['$0', 'Subscriptions', 'Nothing to pay to keep it running.']],
@@ -911,11 +906,11 @@ html { scroll-behavior: smooth; }
       drawer: [
         { lines: 2, cap: 'Build summary' },
         { cols: 1, items: [P('Panel on the nightstand (moved from the hero)', '21/9')] },
-        { cols: 2, items: [P('Face 1 · readiness', '4/3'), P('Face 2 · weekly view', '4/3')] },
-        { cols: 2, items: [P('Architecture pipeline', '16/10'), P('Live deployment', '16/10')] },
+        { cap: 'The faces', cols: 2, items: [P('Face 1 · readiness', '4/3'), P('Face 2 · weekly view', '4/3')] },
+        { cap: 'Architecture and deployment', cols: 2, items: [P('Architecture pipeline', '16/10'), P('Live deployment', '16/10')] },
         { cap: 'Companion build', cols: 1, items: [P('E-ink shoe tracker', '21/9')] }
       ], toggle: 'See the build' },
-    { id: 'cockpit', co: 'Garmin Connect concept', role: 'Personal concept · AI-assisted UI',
+    { id: 'cockpit', co: 'Garmin Connect concept', meta: ['Personal concept', 'AI-assisted UI'],
       title: 'What if Garmin Connect read like a cockpit?',
       sub: 'A redesign that reads training data like an instrument panel. Not affiliated with Garmin.',
       stats: [],
@@ -928,20 +923,22 @@ html { scroll-behavior: smooth; }
         { cap: 'Close-ups', cols: 3, closeups: true, items: [P('Readiness strip · isometric', '4/5'), P('Training status map · isometric', '4/5'), P('Weekly load · isometric', '4/5')] }
       ], toggle: 'Explore the concept' }
   ];
-  var BG = { id: 'background', co: 'Background', role: '2011 – present',
+  var BG = { id: 'background', co: 'Background', meta: ['2011 – present'],
     title: 'Fifteen years across four companies.',
     timeline: [['2011–16', 'Appsindo', 'Lead UI/UX'], ['2016–24', 'Dash · Lumio', 'Founder · VP Design'], ['2021–', 'Dash · Lumio', 'Commissioner'], ['2021–23', 'LinkAja', 'Product Design Lead'], ['2024–25', 'Komunal', 'Senior Manager'], ['2025–', 'Independent', 'AI Design Consultant']],
-    note: '<b>6</b><span><i class="f">F8</i>Earlier work, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click. Clients moved up the page (note 10).</span>',
+    note: '<b>6</b><span><i class="f">F8</i>Earlier work, Career and Capabilities merge into one section. It starts expanded, so the full background is visible without a click. It follows the same label-column pattern: “Background” and the years on the left, the headline and the timeline (three columns a company) from column 4. Clients moved up the page (note 10).</span>',
     drawer: [
       { cap: 'Earlier work · 2011–2016 · Appsindo, a software house', intro: 1, cols: 4, items: [P('Genki Sushi', '4/3'), P('Foodhall', '4/3'), P('Summarecon Malls', '4/3'), P('MATA2', '4/3')] },
       { lines: 4, cap: 'Capabilities · 4 groups' },
       { cap: 'Education', chips: ['B.A. Graphic Design · Pelita Harapan University 2004–08'] }
     ], toggle: 'Show full background' };
 
+  var NOTE7 = '<b>7</b><span><i class="f">F1</i>The toggle is plain sentence-case text with no box, left-aligned at column 4 under the description, with the chevron before the label (it gently bobs) and the meta line under it. On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case. Inside the drawer every block is a row with a rule above it, its title in the label column and its content from column 4.</span>';
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  function ph(p) {
-    return '<div class="ph ' + (p.kind || '') + (p.span ? ' span2' : '') + '" style="--r:' + p.r + '"><span>' + esc(p.label) + '</span></div>';
+  function ph(p, generic) {
+    return '<div class="ph ' + (p.kind || '') + (p.span ? ' span2' : '') + '" style="--r:' + p.r + '"><span>' + esc(generic ? 'Diagram' : p.label) + '</span></div>';
   }
+  var pad = function (n) { return String(n).padStart(2, '0'); };
   function lines(n) {
     var w = [92, 78, 86, 64, 80];
     var out = '';
@@ -958,7 +955,7 @@ html { scroll-behavior: smooth; }
       '</div></div></div>';
   }
   function svHtml(c) {
-    var one = function (scene, cap) { return '<figure class="sv"><canvas data-stack="' + scene + '" role="img" aria-label="Signature visual: ' + esc(c.co) + ', exploded layers"></canvas>' + (cap ? '<figcaption class="mono">' + esc(cap) + '</figcaption>' : '') + '</figure>'; };
+    var one = function (scene, cap) { return '<figure class="sv' + (scene === 'dash' || scene === 'eink' ? ' wide' : '') + '"><canvas data-stack="' + scene + '" role="img" aria-label="Signature visual: ' + esc(c.co) + ', exploded layers"></canvas>' + (cap ? '<figcaption class="lb">' + esc(cap) + '</figcaption>' : '') + '</figure>'; };
     return typeof c.sv === 'string' ? one(c.sv) : '<div class="sv-pair">' + c.sv.map(function (p) { return one(p[0], p[1]); }).join('') + '</div>';
   }
   function counts(c) {
@@ -968,36 +965,46 @@ html { scroll-behavior: smooth; }
     if (c.stats && c.stats.length) parts.push(c.stats.length + ' numbers');
     if (pts) parts.push(pts + ' points');
     if (vis) parts.push(vis + ' visuals');
-    return parts.join(' · ');
+    return parts.join(', ');
+  }
+  // a title for the label column: the first part is the title, the parts after ' · ' are quiet lines under it
+  function lab(t) {
+    var a = String(t).split(' · ');
+    return '<span class="lt">' + esc(a[0]) + '</span>' + a.slice(1).map(function (x) { return '<span class="ln">' + esc(x) + '</span>'; }).join('');
+  }
+  // one block of a drawer: a row with a rule above it, the title in the label column, the content from column 4
+  function unit(title, inner) {
+    return '<div class="block hang"><div class="hl">' + (title ? lab(title) : '') + '</div><div class="hb">' + inner + '</div></div>';
   }
   function drawer(c) {
     return c.drawer.map(function (b) {
-      var cap = b.cap ? '<div class="cap mono">' + esc(b.cap) + '</div>' : '';
-      if (b.fan) return '<div class="block">' + cap + fanHtml(c) + '</div>';
-      if (b.lines) return '<div class="block lines' + (b.two ? ' two' : '') + '">' + cap + lines(b.lines) + '</div>';
-      if (b.chips) return '<div class="block">' + cap + '<div class="chips mono">' + b.chips.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div></div>';
-      return '<div class="block">' + cap + (b.intro ? '<div class="lines">' + lines(b.intro) + '</div>' : '') + '<div class="grid' + (b.cols <= 2 || b.closeups ? ' one-sm' : '') + (b.closeups ? ' closeups' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(ph).join('') + '</div></div>';
+      if (b.fan) return unit(b.cap, fanHtml(c));
+      if (b.lines) return unit(b.cap, '<div class="lines">' + lines(b.lines) + '</div>');
+      if (b.chips) return unit(b.cap, '<div class="chips lb">' + b.chips.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div>');
+      // a lone diagram placeholder gets its title in the label column
+      var lone = !b.cap && b.items.length === 1;
+      return unit(lone ? b.items[0].label : b.cap, (b.intro ? '<div class="lines">' + lines(b.intro) + '</div>' : '') + '<div class="grid' + (b.cols <= 2 || b.closeups ? ' one-sm' : '') + (b.closeups ? ' closeups' : '') + '" style="--cols:' + b.cols + '">' + b.items.map(function (p) { return ph(p, lone); }).join('') + '</div>');
     }).join('');
   }
   function caseHtml(c, n) {
-    var eyebrow = (n ? '<span class="mono co" data-num>' + String(n).padStart(2, '0') + ' / ' + esc(c.co) + '</span>' : '<span class="mono co">' + esc(c.co) + '</span>');
-    var stats = c.stats && c.stats.length ? '<div class="keys">' + c.stats.map(function (s) { return '<div class="key"><span class="n">' + esc(s[0]) + '</span><span class="l mono">' + esc(s[1]) + '</span><span class="c">' + esc(s[2] || '') + '</span></div>'; }).join('') + '</div>' : '';
-    var body = c.timeline
-      ? '<div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span><span class="tl-about" aria-hidden="true"><i style="width:92%"></i><i style="width:64%"></i></span></div>'; }).join('') + '</div>'
-      : '<div class="case-hero"><h2>' + esc(c.title) + '</h2><div class="case-copy"><p class="sub">' + esc(c.sub) + '</p></div>' + (c.sv ? svHtml(c) : ph(c.hero)) + '</div>' + (c.svNote ? '<div class="note" style="margin-top:12px">' + c.svNote + '</div>' : '');
-    var title = c.timeline ? '<h2 style="margin-bottom:28px">' + esc(c.title) + '</h2>' : '';
+    var hl = '<div class="hl">' + (n ? '<span class="lb meta-n" data-num>' + pad(n) + '</span>' : '') + '<span class="lt">' + esc(c.co) + '</span>' + c.meta.map(function (m) { return '<span class="ln">' + esc(m) + '</span>'; }).join('') + '</div>';
+    var stats = c.stats && c.stats.length ? '<div class="keys">' + c.stats.map(function (s) { return '<div class="key"><span class="n">' + esc(s[0]) + '</span><span class="l">' + esc(s[1]) + '</span><span class="c">' + esc(s[2] || '') + '</span></div>'; }).join('') + '</div>' : '';
     var toggle = '<button type="button" class="toggle" aria-expanded="false" aria-controls="d-' + c.id + '">' +
-        '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m mono">' + counts(c) + '</span>' +
         '<span class="chev" aria-hidden="true"><svg width="18" height="10" viewBox="0 0 18 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 9 8.5l7.5-7"/></svg></span>' +
+        '<span class="t"><span class="t-closed">' + esc(c.toggle) + '</span><span class="t-open" aria-hidden="true">Close</span></span><span class="m lb">' + counts(c) + '</span>' +
       '</button>';
-    var split = !c.timeline && typeof c.sv === 'string';
-    if (split) body = '<div class="case-split"><div class="case-text"><h2>' + esc(c.title) + '</h2><p class="sub">' + esc(c.sub) + '</p>' + (c.about ? '<div class="abouts">' + c.about.map(function (a) { return '<p class="about"><b>' + esc(a[0]) + '</b> is ' + esc(a[1]) + '</p>'; }).join('') + '</div>' : '') + '</div>' + svHtml(c) + toggle + '</div>' + (c.svNote ? '<div class="note" style="margin-top:16px">' + c.svNote + '</div>' : '');
-    return '<article class="case" id="' + c.id + '">' +
-      '<div class="case-meta">' + eyebrow + '<span class="mono role">' + esc(c.role) + '</span></div>' + title + body +
-      (c.note ? '<div class="note" style="margin-top:20px">' + c.note + '</div>' : '') +
-      (split ? '' : toggle) +
-      (c.id === 'linkaja' ? '<div class="note" style="margin-top:12px"><b>7</b><span><i class="f">F1</i>The toggle is plain caps with no box, sitting under the description with a chevron beside it that gently bobs (centered under the visuals where a hero has two). On open, the chevron flips over 0.5s; the label fades out while the chevron folds flat and “Close” fades in as it unfolds. It says what’s inside before you open it. It opens in place, a link like #linkaja opens it directly, and a Close button at the end of the drawer takes you back to the top of the case.</span></div>' : '') +
-      '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + (stats ? '<div class="block keys-block"><div class="cap mono">Key numbers</div>' + stats + '</div>' : '') + drawer(c) + '<button type="button" class="close-btn mono">Close ↑</button></div></div></div>' +
+    var top;
+    if (c.timeline) {
+      top = '<div class="hang case-top bg-top">' + hl + '<div class="case-text"><h2>' + esc(c.title) + '</h2><div class="timeline">' + c.timeline.map(function (t, i) { return '<div class="tl' + (i > 0 && i < 5 ? ' lead' : '') + '"><span class="mono">' + t[0] + '</span><strong>' + esc(t[1]) + '</strong><span class="muted">' + esc(t[2]) + '</span><span class="tl-about" aria-hidden="true"><i style="width:92%"></i><i style="width:64%"></i></span></div>'; }).join('') + '</div></div>' + toggle + '</div>';
+    } else {
+      var pair = typeof c.sv !== 'string';
+      top = '<div class="hang case-top ' + (pair ? 'is-pair' : 'is-single') + '">' + hl + '<div class="case-text"><h2>' + esc(c.title) + '</h2><p class="sub">' + esc(c.sub) + '</p>' + (c.about ? '<div class="abouts">' + c.about.map(function (a) { return '<p class="about"><b>' + esc(a[0]) + '</b> is ' + esc(a[1]) + '</p>'; }).join('') + '</div>' : '') + '</div>' + svHtml(c) + toggle + '</div>';
+    }
+    var notes = [c.svNote, c.note, c.id === 'linkaja' && NOTE7].filter(Boolean);
+    return '<article class="case" id="' + c.id + '">' + top +
+      (notes.length ? '<div class="hang nt"><div class="hb">' + notes.map(function (t) { return '<div class="note">' + t + '</div>'; }).join('') + '</div></div>' : '') +
+      '<div class="drawer" id="d-' + c.id + '"><div class="inner" inert><div class="body">' + (stats ? unit('Key numbers', stats) : '') + drawer(c) +
+      '<div class="block hang end"><div class="hl"></div><div class="hb"><button type="button" class="close-btn lb">Close ↑</button></div></div></div></div></div>' +
       '</article>';
   }
 
@@ -1006,7 +1013,7 @@ html { scroll-behavior: smooth; }
   document.getElementById('labs').innerHTML = LABS.map(function (c) { return caseHtml(c); }).join('');
   document.getElementById('bg').innerHTML = caseHtml(BG);
   document.getElementById('index').innerHTML = CASES.map(function (c, i) {
-    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="go mono"><span data-inum>' + String(i + 1).padStart(2, '0') + '</span> ' + esc(c.co) + '<span class="arr">↓</span></span><span class="num">' + c.index.num + '</span><span class="sl">' + esc(c.index.label) + '</span><span class="ctx">' + esc(c.index.ctx) + '</span></a>';
+    return '<a class="idx" href="#' + c.id + '" data-open="' + c.id + '"><span class="go lb"><span data-inum>' + String(i + 1).padStart(2, '0') + '</span> ' + esc(c.co) + '<span class="arr" aria-hidden="true">↓</span></span><span class="num">' + c.index.num + '</span><span class="sl">' + esc(c.index.label) + '</span><span class="ctx">' + esc(c.index.ctx) + '</span></a>';
   }).join('');
 
   function setOpen(article, open) {
@@ -1139,16 +1146,6 @@ html { scroll-behavior: smooth; }
     } else { visible = true; start(); }
   });
 
-  // ---- split heroes alternate sides in reading order; the two-diagram hero sits outside the alternation, as in the hi-fi ----
-  function alternate() {
-    var k = 0;
-    document.querySelectorAll('.case').forEach(function (a) {
-      var sp = a.querySelector('.case-split');
-      if (sp) sp.classList.toggle('flip', k++ % 2 === 1);
-    });
-  }
-  alternate();
-
   // ---- signature visuals: exploded-layer stacks, greyscale, decisions in ink ----
   var stacks = [];
   function wirePalette() {
@@ -1157,7 +1154,7 @@ html { scroll-behavior: smooth; }
   }
   if (window.STACK) document.querySelectorAll('canvas[data-stack]').forEach(function (cv) {
     var phone = window.matchMedia('(max-width: 860px)').matches;
-    stacks.push(STACK.mount(cv, { palette: wirePalette, pad: phone ? [0.05, 0.04] : [0.06, 0.12] }));
+    stacks.push(STACK.mount(cv, { palette: wirePalette, pad: phone ? [0.05, 0.03] : [0.04, 0.04] }));
   });
   if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () { stacks.forEach(function (s) { s.redraw(); }); });
 
@@ -1170,13 +1167,12 @@ html { scroll-behavior: smooth; }
     sorted.forEach(function (c, i) {
       var el = document.getElementById(c.id);
       casesEl.appendChild(el);
-      el.querySelector('[data-num]').textContent = String(i + 1).padStart(2, '0') + ' / ' + c.co;
+      el.querySelector('[data-num]').textContent = pad(i + 1);
       var link = document.querySelector('[data-open="' + c.id + '"]');
       link.querySelector('[data-inum]').textContent = String(i + 1).padStart(2, '0');
       document.getElementById('index').appendChild(link);
     });
     document.getElementById('order-label').textContent = by === 'date' ? 'Newest first' : 'Ordered by impact';
-    alternate();
     document.getElementById('t-impact').setAttribute('aria-pressed', by !== 'date');
     document.getElementById('t-date').setAttribute('aria-pressed', by === 'date');
   }
