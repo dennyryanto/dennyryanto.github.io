@@ -8,7 +8,7 @@ export const meta: Meta = {
   title: 'Intent routing',
   head: 'INTENT ROUTING IN CHAT',
   note: 'ILLUSTRATIVE',
-  lead: 'Frequent cases resolve in chat. Sensitive ones reach the right agent with the chat history, related transactions and account status attached.',
+  lead: 'Frequent cases resolve in chat. Sensitive ones reach the right agent with the history attached.',
   layout: 'split',
   stageWidth: 598,
   sizes: { wide: [598, 380], compact: [358, 340], below: 560 },

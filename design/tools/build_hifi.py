@@ -551,8 +551,7 @@ assert len(phones) == len(LA_STEPS)
 shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE VOLUME</span><span>MYPAYLATER · SHIPPED FLOW</span></div>'
               '<div class="ksf-panel"><div class="ksf-row" data-m="parallax">' + ''.join(
                   '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (ph, i + 1, t) for i, (ph, t) in enumerate(zip(phones, LA_STEPS))) +
-              '</div></div><p class="ksf-cap">As shipped: activating, checking the limit, following an application and finding answers all happen in the app, '
-              'so none of them needs an agent.</p>')
+              '</div></div>')
 
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
@@ -760,7 +759,7 @@ g_t = spans(lk[0])
 shoe = lk[4]
 drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
 shoe['class'] = ['mk-board', 'flush']
-GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), intro=str(lk[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
+GARMIN = stage(str(lk[2]), (g_t[0], g_t[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
 
 LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling

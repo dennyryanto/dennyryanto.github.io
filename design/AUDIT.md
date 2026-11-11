@@ -1019,6 +1019,40 @@ Left alone: the lab's e-ink photo and the lab cockpit (full-bleed images by desi
 edge to edge on purpose). Residual: LinkAja chat between about 900 and 1100px wide, where the demo is on its compact design and the
 frame does not fill its column (35px, was 51).
 
+## Copy trim and Swiss type/grid options (2026-11-11)
+
+Owner: "too much copy, too many remarks after a diagram or a project showcase"; wants options for typography and layout,
+"aiming for a minimalistic clean swiss grid layout".
+
+**Copy trim (built into the site).** Rule: a diagram has its title; a remark under it stays only if it says something the
+drawing cannot (a disclaimer, a fact), in one or two short sentences.
+
+| Where | Before | Now |
+|---|---|---|
+| LinkAja problem / fix | two paragraphs beside the board (they repeated the hero line) | gone; the board has a head row and sets before and after side by side |
+| LinkAja support model | closing caption | gone (the diagram already says "not a blanket bot") |
+| LinkAja shipped screens | "As shipped: ..." caption | gone |
+| LinkAja home, routing (demo leads) | 4 sentences; 2 long ones | 2 short sentences each |
+| Komunal transformation map, tooling migration | closing captions | gone (both repeated "What I did") |
+| Komunal design system, sprint sync, placement routing | 3 to 4 sentence captions | 2 short sentences |
+| Komunal routing note, funnel caption | long notes | the NDA / "lift is actual" disclaimers only |
+| Komunal shipped flow, decision desk, Chrona (demo leads) | 1 to 2 long sentences | 1 short sentence |
+| Chrona engine | caption | gone; the habit loop keeps "North Star: the share of invites sent through Chrona." |
+| E-ink lab | intro paragraph above the faces (repeated the hero line) | gone |
+
+Left alone: Key numbers context lines, "What I did", the company lines, the cockpit's "The question" write-up, the
+shoe tracker text, every "ILLUSTRATIVE" tag and the "not affiliated with Garmin" line. These are the next candidates if it
+should go further.
+
+**Type and grid options (not built, awaiting the owner's pick).** `design/mockups/type-grid-options.html`
+(https://claude.ai/artifact/HHQayFJuMsUMDfZpdapivi; refresh its stack copy with `inline_stack.py`). One live preview of the
+opening, the case index and the LinkAja case, redrawn by any pair, with a 12-column overlay.
+
+- Type: **A** Archivo at normal width (no new files, mono caps kept); **B** Geist + Geist Mono; **C** Inter Tight only,
+  labels in sentence case, no mono (recommended).
+- Grid: **1** Hanging index, a label column of three with content hanging from column 4 (recommended); **2** Poster, very
+  large flush-left headlines; **3** Register, the work as a table whose rows open, which drops the separate outcome band.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:

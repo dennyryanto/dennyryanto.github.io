@@ -1,5 +1,5 @@
-<!-- LinkAja: the problem and the fix, with a before/after mini diagram.
-     Left, the problem (amber: needs attention) and the fix (lime: the result). Right, a board in the shared diagram
+<!-- LinkAja: the problem and the fix, as a before/after mini diagram (the two paragraphs that sat beside it repeated the
+     case's opening line and were cut). A board in the shared diagram
      language (design/sections/VIZ-STYLE.md): BEFORE is amber, a phone sends a ticket stack down a dashed connector to an
      agent queue; AFTER is one lit lime connector from the phone to a lime check (the outcome).
      Markup is the finished state, so the page is complete without JavaScript; the script only starts a lime dot that
@@ -10,12 +10,11 @@
   --lpf-panel: #1a1b1f; --lpf-node: #232429; --lpf-tile: #2b2c32; --lpf-line: rgba(255, 255, 255, .08);
   --lpf-ink: #f2f2f4; --lpf-ink-2: #c2c3cb; --lpf-ink-3: #8b8d98; --lpf-edge: #4a4d57;
   --lpf-lime: oklch(0.9 0.2 122); --lpf-amber: #fdb022;
-  margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 40px 56px; align-items: center;
+  margin-top: 44px; container-type: inline-size;
 }
-.lpf-text { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
-.lpf-eyebrow { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--lpf-amber); }
-.lpf-eyebrow.fix { color: var(--lpf-lime); }
-.lpf-text p { margin: 10px 0 0; font: 400 17px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .8); text-wrap: pretty; }
+.lpf-head { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.lpf-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.lpf-head span:first-child { color: var(--lpf-lime); }
 
 .lpf-board { min-width: 0; border-radius: 14px; background: var(--lpf-panel); box-shadow: 0 0 0 1px var(--lpf-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px 22px; font-family: Archivo, system-ui, sans-serif; color: var(--lpf-ink); }
 .lpf-row + .lpf-row { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--lpf-line); }
@@ -47,6 +46,13 @@
 @keyframes lpf-run { 0% { left: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 6px); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .lpf-wrap .lpf-dot { animation: none !important; display: none; } }
 
+/* wide: before and after sit side by side, so neither flow is stretched across the whole board */
+@container (min-width: 760px) {
+  .lpf-board { display: grid; grid-template-columns: 1fr 1fr; }
+  .lpf-row + .lpf-row { margin-top: 0; padding-top: 0; border-top: 0; margin-left: 28px; padding-left: 28px; border-left: 1px solid var(--lpf-line); }
+  .lpf-row.before { padding-right: 0; }
+}
+
 @media (max-width: 480px) {
   .lpf-board { padding: 16px 14px; }
   .lpf-lbl { margin-left: 8px; }
@@ -54,10 +60,7 @@
 }
 </style>
 
-<div class="lpf-text">
-  <div><span class="lpf-eyebrow">THE PROBLEM</span><p>Security and account issues could only be resolved by an agent. Each one became a support ticket, so customer-service cost grew with every new user.</p></div>
-  <div><span class="lpf-eyebrow fix">THE FIX</span><p>Self-service security and account flows replaced agent tickets, so most issues are now solved in the app.</p></div>
-</div>
+<div class="lpf-head"><span>THE PROBLEM AND THE FIX</span><span>AGENT TICKET → SOLVED IN-APP</span></div>
 
 <div class="lpf-board" role="img" aria-label="Before: every issue became a ticket queued for an agent. After: issues solved in the app.">
   <div class="lpf-row before">

@@ -13,7 +13,7 @@ export const meta: Meta = {
   title: 'Chrona product',
   head: 'FEATURED ENGAGEMENT, CHRONA · AI-FIRST SOCIAL PLANNING',
   note: 'DESIGN SYSTEM · PROTOTYPE · BUILT WITH CLAUDE CODE',
-  lead: 'Chrona is a social calendar app for people who want to see their friends more often and spend less time planning it. It reads your week and your circle’s availability, then drafts the plan in one tap.',
+  lead: 'Chrona reads your week and your circle’s availability, then drafts the plan in one tap.',
   layout: 'split',
   stageWidth: 640,
   sizes: { wide: [560, 790], compact: [358, 570], below: 540 },
