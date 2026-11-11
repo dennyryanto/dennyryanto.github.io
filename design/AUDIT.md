@@ -1111,8 +1111,7 @@ behaviour, deep links, the lab's cyan accent, every drawing.
 - Decorative SVGs get `aria-hidden` unless they carry a name (`fixes()` in `build_hifi.py`; 51 on the old page).
 - `overflow-x: clip` on `html` and `body`.
 - The travelling dots in the problem/fix board and placement routing move by `transform` (a track the size of the
-  connector carries the dot). The funnel bars still animate `height`: their value labels ride on the bar, so scaling
-  would distort them. Left as is.
+  connector carries the dot). (The funnel bars now do too, see the 2026-11-11 phone note below.)
 - The scissors character in the sprint diagram is an SVG; the governance block's `h4`s are `h3`s; the design-system
   swatches wrap three a row so their names fit; a straight apostrophe is curled.
 - The focus ring sits on the profile card itself, not its inner face.
@@ -1152,6 +1151,34 @@ the profile card's name and the "Let's talk." heading, plus the name, headline a
   named (no U+2191 and U+2193, no general-punctuation spaces).
 - Neither face has tabular figures; `font-variant-numeric: tabular-nums` stays in the CSS but does nothing for them.
 - Heading metrics: weight 500, letter-spacing -.02em; the headline sets on exactly two lines at 1280 and 1440px.
+
+### Phone check of the drawings, funnel bars, read times (2026-11-11)
+
+**Phone check.** All six case studies opened one at a time at 390 x 844 (spot-check 360), reduced motion, demos `ss-ready`;
+every `.mk-block` screenshotted at 2x and looked at, plus a script for right-edge overflow, text under 11px outside product
+screens, clipped text, overlapping text boxes and board side padding. Result: the diagrams hold up. No horizontal overflow, no
+text under 11px outside product screens, no board with uneven side padding, no connector pointing at nothing. Fixed one thing:
+in the sprint sync, the 12px request dots (plus halo) on a ~170px track merged into blobs at 360 and 390, so a request
+disappeared; `@container (max-width: 420px)` in `komunal-sprint-sync.html` makes them 9px. Desktop is pixel-identical.
+Left for a decision (not changed): Chrona's compact stage crops the top of the phone by design (`top: -90px` in `chrona.css`);
+two Product dots in the sprint sync still touch (their data positions are 10px apart on the track); in the Dash back office
+and Lumio CMS mock-ups the main pane above the content is blank, at every width (product screens); the checker's remaining
+"overlap" hits are line boxes of wrapped text and clipped parts of the demos, not visible collisions.
+
+**Funnel bars.** `komunal-funnel.html` no longer animates `height`. Each bar keeps its full height and scales from its
+foot (`transform: scaleY(0)` in the idle state); the value label is now a sibling of the bar, not inside it, and travels the
+same distance with the same curve, duration and stagger (`translate(-50%, calc(var(--p) * 1.5px))` in the idle state), so it rides
+the bar top without being scaled. Same timing, finished state and reduced-motion behaviour; the markup is still the final state,
+so the page is complete without script. One visible difference: the 4px top corners are scaled with the bar while it grows.
+
+**Read times** (`READ` in `build_hifi.py`), re-measured on the built page with the case study open. Words in the reading copy and
+diagram labels at 230 a minute, leaving out text inside the animated demos (`[data-ss]` holds every frame of the loop) and inside
+scaled product screens; 8s per image up to 8, each scaled product screen counting as one image; 30s per demo; 30s for the case
+studies with drawings from `design/sections/` (linkaja, komunal, ai, lab; not board or lab-ui). Words / images / demos, unrounded
+minutes, old to new: Linkaja 308 / 4 / 2, 3.37 min, 3 to 3; Komunal 810 / 0 / 1, 4.52, 7 to 5; Board 244 / 8 (18 counted, capped) / 0,
+2.13, 4 to 2; AI 342 / 0 / 2, 2.99, 3 to 3; Lab 347 / 3 / 0, 2.41, 3 to 2; Lab UI 197 / 7 / 0, 1.79, 2 to 2. Note: the built page has
+no element carrying `data-fit` (the build's regex and the page script's `[data-fit]` find nothing in the output), so the scaled
+screens were identified by their computed `scale()` transform.
 
 ## Section mockups (2026-10-13)
 

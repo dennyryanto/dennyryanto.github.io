@@ -831,9 +831,12 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 H2 = '<h2 class="mk-h2">%s</h2>'
 
 
-# what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
-# (all words, diagram labels included, at 230 a minute, plus 8s per image up to 8 and about 30s for a section's diagrams)
-READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
+# what each toggle promises: minutes to read the full case study, measured on the built page with it open. Words are counted in
+# the case study's reading copy and diagram labels at 230 a minute; text inside the animated demos ([data-ss], which hold every
+# frame of their loop) and inside scaled product screens (UI, not copy) is left out. Then 8s per image up to 8 (each scaled product
+# screen counts as one image), 30s per demo, and about 30s for a case study with diagrams from design/sections/.
+# Re-measured 2026-11-11 after the copy trim and corrected the same day (numbers in design/AUDIT.md).
+READ = {'linkaja': 3, 'komunal': 5, 'board': 2, 'ai': 3, 'lab': 2, 'lab-ui': 2}
 
 
 toggle = toggle.replace('%%READ%%', '%d min read. %s.' % (READ['linkaja'], TEASE['linkaja']))
