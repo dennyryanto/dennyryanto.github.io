@@ -8,6 +8,10 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 `design/AUDIT.md`). The old single-file bundle the content was taken from is kept
 at `design/source/legacy-index.html`.
 
+Type and grid: one family (Inter Tight) outside the drawings, sentence-case labels, and a twelve-column grid with a
+hanging label column. A new label spelled in capitals in a capture or section file needs an entry in `SAY`
+(`build_hifi.py`). See "Swiss build" in `design/AUDIT.md`.
+
 Colours: sources use the lime accent; `design/tools/theme.py` swaps it for the
 site's current accent when both build scripts write their output. Change the
 accent there, not in the sources.

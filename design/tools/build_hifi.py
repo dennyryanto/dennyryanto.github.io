@@ -18,6 +18,100 @@ def soup(html):
 
 LIME = 'oklch(0.9 0.2 122)'
 
+# ---------- the Swiss pass (design/AUDIT.md, "Type C, grid 1") ----------
+# One family outside the drawings (Inter Tight), labels in sentence case with no tracking and no mono, and a hanging
+# index: a label column three of twelve columns wide carries the number, the names, the dates, a diagram's title and
+# its remark; everything else hangs from the fourth column. The captures and the section files spell their labels in
+# capitals, so every one of them is listed here with what it says now ("|" starts a new line in the label column).
+SAY = {
+    # the opening and the profile card
+    'EXPERIENCE': 'Experience', 'NOW': 'Now', 'BOARD': 'Board', 'CERTIFIED': 'Certified',
+    'FINTECH': 'Fintech', 'ENTERPRISE': 'Enterprise', 'CONSUMER': 'Consumer',
+    # key-number labels
+    'CS OPEX': 'CS OPEX', 'USERS · HOME REVAMP': 'Users, home revamp', 'CASES AUTOMATED': 'Cases automated',
+    'PTS · DEPOSIT FUNNEL': 'Points, deposit funnel', 'RELEASE CYCLE': 'Release cycle', 'SYSTEM · 3 ORGS': 'System, 3 orgs',
+    'SPRINT · 3 DEPTS': 'Sprint, 3 departments', 'DASH CUSTOMERS / MO': 'Dash customers a month', 'DASH CHAINS': 'Dash chains',
+    'LUMIO LOCATIONS': 'Lumio locations', 'PROTOTYPES W/ CLAUDE CODE': 'Prototypes with Claude Code',
+    'ANTHROPIC CERTIFICATES': 'Anthropic certificates', 'AGENTIC WORKFLOWS': 'Agentic workflows', 'LIVE ON GCP': 'Live on GCP',
+    '800×480 E-INK RENDER': '800×480 e-ink render', 'CLOUD SUBSCRIPTIONS': 'Cloud subscriptions',
+    # index labels
+    'DEPOSIT FUNNEL': 'Deposit funnel', 'CUSTOMERS / MONTH': 'Customers a month', 'AI-NATIVE BUILDS': 'AI-native builds',
+    # diagram and mock-up titles (first line) and their notes
+    'HOME SCREEN · AS IT SHIPS TODAY': 'Home screen|As it ships today', 'ILLUSTRATIVE': 'Illustrative',
+    'CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED': 'CS OPEX after the self-service revamp|Indexed',
+    'TICKET-DRIVEN → SELF-SERVICE': 'Ticket-driven to self-service',
+    'THE PROBLEM AND THE FIX': 'The problem and the fix', 'AGENT TICKET → SOLVED IN-APP': 'Agent ticket to solved in-app',
+    'SUPPORT MODEL, REDESIGNED': 'Support model, redesigned', 'IN-PERSON AGENTS → MAPPED, INTENT-ROUTED ASSIST': 'In-person agents to mapped, intent-routed assist',
+    'INTENT ROUTING IN CHAT': 'Intent routing in chat',
+    'SELF-SERVICE SCREENS THAT ABSORB THE VOLUME': 'Self-service screens that absorb the volume', 'MYPAYLATER · SHIPPED FLOW': 'MyPaylater|Shipped flow',
+    'THE TRANSFORMATION · FOUR SHIFTS': 'The transformation|Four shifts', 'JUN 2024 – NOV 2025 · ILLUSTRATIVE': 'Jun 2024 – Nov 2025|Illustrative',
+    'ONE DESIGN SYSTEM · THREE ORGS': 'One design system|Three orgs',
+    'TOOLING MIGRATION · WEB DELIVERY': 'Tooling migration|Web delivery', 'SANITY → FRAMER': 'Sanity to Framer',
+    'SPRINT SYNC · MARKETING, PRODUCT, ENGINEERING': 'Sprint sync|Marketing, Product, Engineering', 'TWO-WEEK SPRINTS · ILLUSTRATIVE': 'Two-week sprints|Illustrative',
+    'PLACEMENT ROUTING · BEFORE AND AFTER': 'Placement routing|Before and after',
+    'DEPOSIT PLACEMENT FUNNEL · VOLUME': 'Deposit placement funnel|Volume', 'DEPOSITOBPR · ILLUSTRATIVE VOLUMES': 'DepositoBPR|Illustrative volumes',
+    'SHIPPED SCREEN + FLOW': 'Shipped screen and flow', 'DEPOSITOBPR · PRODUCT': 'DepositoBPR',
+    'DASH ORDERING PLATFORM': 'Dash ordering platform', 'CUSTOMER TABLE APP': 'Customer table app',
+    'DASH · CAPTAIN APP AND BACK OFFICE': 'Dash captain app and back office',
+    'LUMIO · DIGITAL SIGNAGE NETWORK': 'Lumio digital signage network', 'VP DESIGN 2016–24 · COMMISSIONER 2021– · JAKARTA': 'VP Design 2016–24|Commissioner 2021–|Jakarta',
+    'LUMIO · DIGITAL SIGNAGE CMS': 'Lumio digital signage CMS',
+    'GOVERNANCE & OVERSIGHT': 'Governance and oversight', 'COMMISSIONER · DASH / LUMIO': 'Commissioner, Dash and Lumio',
+    'ENTERPRISE AI · DATA-TO-DECISION WORKFLOW': 'Enterprise AI|Data-to-decision workflow',
+    'FEATURED ENGAGEMENT, CHRONA · AI-FIRST SOCIAL PLANNING': 'Chrona|Featured engagement|AI-first social planning',
+    'DESIGN SYSTEM · PROTOTYPE · BUILT WITH CLAUDE CODE': 'Design system, prototype, built with Claude Code',
+    'FEATURED BUILD, GARMIN DAILY BRIEF · 7.5″ E-INK ATHLETE PANEL': 'Garmin Daily Brief|Featured build|7.5″ e-ink athlete panel',
+    'PYTHON · FASTAPI · PILLOW · DOCKER · GCP': 'Python, FastAPI, Pillow, Docker, GCP',
+    'PERSONAL CONCEPT, NOT AFFILIATED WITH GARMIN.': 'Personal concept, not affiliated with Garmin.',
+    # background and contact
+    'LEADERSHIP': 'Leadership', 'DESIGN': 'Design', 'AI & EMERGING TECH': 'AI and emerging tech', 'TOOLS': 'Tools',
+    'GET IN TOUCH': 'Get in touch', 'CONNECT ON LINKEDIN': 'Connect on LinkedIn', 'DOWNLOAD RESUME (PDF)': 'Download resume (PDF)',
+}
+
+
+def say(text):
+    t = ' '.join(text.replace('&amp;', '&').split())
+    assert t in SAY, 'a label has no sentence-case form in SAY: %r' % t
+    return SAY[t].replace('&', '&amp;')
+
+
+def label_col(title='', notes=(), caps=(), level=3):
+    # the label column: a title, quiet lines under it, then the remark that used to sit under the drawing
+    h = ('<div class="mk-lt" role="heading" aria-level="%d">%s</div>' % (level, title)) if title else ''
+    h += ''.join('<div class="mk-ln">%s</div>' % n for n in notes if n)
+    h += ''.join('<p class="mk-lc">%s</p>' % c for c in caps if c)
+    return '<div class="mk-hl">' + h + '</div>'
+
+
+def head_parts(*strings):
+    # a head row's strings (a title, then a note) as (title, notes)
+    lines = [l for st in strings if st for l in say(st).split('|')]
+    return lines[0], lines[1:]
+
+
+def unit(title, body, notes=(), caps=(), cls=''):
+    # one block of a case study: its label column, and the body hanging from the fourth column
+    return '<div class="mk-block mk-hang%s">%s<div class="mk-hb">%s</div></div>' % (' ' + cls if cls else '', label_col(title, notes, caps), body)
+
+
+def swiss_inline(root):
+    # a captured shell piece (top bar, opening, background, contact): its inline mono labels become the site's label
+    # style in sentence case, and its Archivo declarations the site's one family, at two weights
+    for el in root.find_all(style=True):
+        st = el['style']
+        if 'IBM Plex Mono' in st:
+            st = re.sub(r'font:[^;]*IBM Plex Mono[^;]*;?', '', st)
+            st = re.sub(r'letter-spacing:[^;]*;?', '', st)
+            el['class'] = el.get('class', []) + ['mk-lb']
+            for t in el.find_all(string=True):
+                if t.strip() and t.strip().upper() == t.strip() and re.search(r'[A-Z]{2}', t) and t.strip() in SAY:
+                    t.replace_with(SAY[t.strip()])
+        st = re.sub(r'font-stretch:[^;]*;?', '', st)
+        st = re.sub(r'font-weight:\s*[78]00', 'font-weight: 500', st)
+        st = re.sub(r'(font:\s*)[78]00\b', r'\g<1>500', st)
+        st = st.replace('Archivo', "'Inter Tight', sans-serif")
+        el['style'] = st.strip()
+    return root
+
 # ---------- CSS: the live site's rules minus runtime/global resets ----------
 css = read('css')
 drop = [r'^html, body \{[^\n]*\n', r'^#dc-root[^\n]*\n', r'^body \{[^\n]*\n', r'^\.sc-[^\n]*\n', r'^html\.sc-dc-streaming[^\n]*\n',
@@ -65,6 +159,11 @@ def fonts_css():
 LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
 APP_FONTS = [('Poppins', '500', 'poppins-500.woff2'), ('Poppins', '600', 'poppins-600.woff2'), ('Poppins', '700', 'poppins-700.woff2'),
              ('Mulish', '400 800', 'mulish-var.woff2')]
+# The site's one family: Inter Tight, a variable file for 400 to 600 (latin, and latin-ext for the odd glyph), from design/fonts.
+# Archivo and IBM Plex Mono stay registered for the drawings (diagrams, product mock-ups, the demos), which keep their own
+# lettering; they are no longer preloaded, and load when a case study first shows them.
+LATIN_EXT = 'U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF'
+SITE_FONTS = [('Inter Tight', 'latin', '400 600', 'inter-tight-var.woff2', None), ('Inter Tight', 'latin-ext', '400 600', 'inter-tight-var-ext.woff2', LATIN_EXT)]
 
 
 def app_fonts_css():
@@ -73,10 +172,14 @@ def app_fonts_css():
         data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
         out.append("/* %s latin */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
                    "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }" % (fam, fam, wt, data, LATIN))
+    for fam, sub_, wt, f, rng in SITE_FONTS:
+        data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
+        out.insert(0, "/* %s %s */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
+                   "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }" % (fam, sub_, fam, wt, data, rng or LATIN))
     return '\n'.join(out)
 
 
-FONTS = fonts_css() + '\n' + app_fonts_css()
+FONTS = app_fonts_css() + '\n' + fonts_css()
 
 # ---------- top bar ----------
 top = soup(read('topbar'))
@@ -91,6 +194,20 @@ for a in top.find_all('a', href='#work'):
 top.find(attrs={'data-r': 'topbar'}).name = 'header'      # the banner landmark
 for n in top.find_all('nav'):
     n['aria-label'] = 'Primary'
+# the same links, set as the site's labels: brand, sections, then the ways to reach me
+TOP_SAY = {'DENNY RYANTO': 'Denny Ryanto', 'WORK': 'Work', 'LAB': 'Lab', 'CONTACT': 'Contact', 'DENNY.RYANTO@GMAIL.COM': 'denny.ryanto@gmail.com',
+           'LINKEDIN': 'LinkedIn', 'RESUME (PDF) ↓': 'Resume (PDF)'}
+for a in top.find_all('a'):
+    a.string = TOP_SAY[a.get_text(' ', strip=True)]
+    del a['style']
+top_wrap = top.find(attrs={'data-r': 'wrap'})
+top_wrap['class'] = ['mk-top']
+del top_wrap['style']
+top_brand, top_nav, top_reach = top_wrap.find_all(recursive=False)
+top_brand['class'] = ['mk-brand']
+del top_nav['style']
+top_reach['class'] = ['mk-top-r']
+del top_reach['style']
 
 def portable(html):
     # The product screens are drawn at their real size (375px phones, 1024 / 1440px tablets and desktops) and scaled
@@ -107,6 +224,26 @@ def portable(html):
 def section(name):
     # a piece that lives in the repo (design/sections/<name>.html), edited there instead of in the capture
     return soup(open(os.path.join(HERE, '..', 'sections', name + '.html'), encoding='utf-8').read())
+
+
+def figure_unit(name):
+    # a diagram from design/sections as a unit: its head row and the remarks under it move to the label column
+    sp = section(name)
+    wrap = sp.find('div', class_=re.compile(r'-wrap$'))
+    head = wrap.find('div', class_=re.compile(r'-head$'), recursive=False)
+    assert head is not None, 'no head row in ' + name
+    title, notes = head_parts(*[x.get_text(strip=True) for x in head.find_all('span')])
+    head.decompose()
+    caps = []
+    for c in wrap.find_all('p', class_=re.compile(r'-(cap|note)$'), recursive=False):
+        caps.append(c.decode_contents())
+        c.decompose()
+    if wrap.get('style'):
+        del wrap['style']
+    return unit(title, str(sp), notes, caps)
+
+
+CLOSE = '<div class="mk-hang mk-end"><div class="mk-hb"><button type="button" class="mk-close">Close the case study</button></div></div>'
 
 
 # ---------- hero ----------
@@ -128,7 +265,7 @@ issuer = hero.find(string='ANTHROPIC · 2026').parent
 issuer['style'] += ' display: flex; align-items: center; gap: 7px;'
 issuer.clear()
 issuer.append(soup(ANTHROPIC_WORDMARK % 'M38.247 15.874L29.553 2.338H24.86v19.337h4.002V8.139l8.694 13.536h4.693V2.338h-4.003v13.536zm7.313-9.807h6.487v15.608h4.14V6.067h6.487v-3.73H45.56v3.73zm33.686 3.978h-9.109V2.338h-4.14v19.337h4.14v-7.9h9.109v7.9h4.14V2.338h-4.14v7.707zm13.39-3.978h5.108c2.043 0 3.12.746 3.12 2.155 0 1.408-1.077 2.154-3.12 2.154h-5.107v-4.31zm12.37 2.155c0-3.647-2.679-5.884-7.068-5.884h-9.443v19.337h4.142v-7.57h4.61l4.142 7.57h4.583l-4.586-8.146c2.302-.885 3.62-2.75 3.62-5.307zm12.686 9.91c-3.257 0-5.244-2.32-5.244-6.104 0-3.84 1.987-6.16 5.244-6.16 3.23 0 5.189 2.32 5.189 6.16 0 3.784-1.96 6.105-5.189 6.105zm0-16.132c-5.575 0-9.522 4.144-9.522 10.028 0 5.828 3.947 9.972 9.522 9.972 5.547 0 9.466-4.144 9.466-9.972C127.158 6.144 123.24 2 117.692 2zm22.59 8.929h-5.109V6.067h5.11c2.043 0 3.12.829 3.12 2.43 0 1.603-1.077 2.432-3.12 2.432zm.194-8.591h-9.445v19.337h4.142v-7.017h5.303c4.39 0 7.07-2.32 7.07-6.16 0-3.84-2.68-6.16-7.07-6.16zm35.108 12.839c-.718 1.878-2.153 2.956-4.113 2.956-3.257 0-5.244-2.32-5.244-6.105 0-3.84 1.987-6.16 5.244-6.16 1.96 0 3.395 1.077 4.113 2.955h4.388C178.896 4.68 175.667 2 171.472 2c-5.576 0-9.523 4.144-9.523 10.028 0 5.828 3.947 9.972 9.522 9.972 4.223 0 7.453-2.707 8.529-6.823h-4.416zm-26.39-12.84l7.705 19.338h4.225L153.42 2.338h-4.225zM9.277 14.024l2.636-6.796 2.637 6.796H9.276zm.428-11.685L2 21.675h4.307l1.576-4.06h8.06l1.575 4.06h4.307L14.121 2.338H9.704z'))
-issuer.append(soup('<span>· 2026</span>'))
+issuer.append(soup('<span>2026</span>'))
 # "measured in outcomes.": each letter of the lime word rolls through a few digits and lands on its letter, left to
 # right, like the count-ups in the case studies. The markup is the finished word (split into letters only so the roll
 # can't shift the layout), and screen readers get the plain word. Reduced motion keeps it still.
@@ -198,12 +335,12 @@ for ch in list(card.contents):
     front.append(ch.extract())
 front['style'] = frame
 flip.append(soup("""<div class="ee-back" aria-hidden="true" style="%s">
-<div class="ee-eyebrow">EASTER EGG · 1 OF 3</div>
+<div class="ee-eyebrow">Easter egg, 1 of 3</div>
 <div class="ee-title">You found it.</div>
 <p>Ten taps? Okay, you&rsquo;re officially curious. Here&rsquo;s something that&rsquo;s not on my CV: I&rsquo;m a huge sci-fi movie nerd.</p>
 <p>Long before I knew UI/UX was a job, I&rsquo;d pause films just to stare at the screens in the background: ship consoles, HUDs, interfaces that didn&rsquo;t exist yet. Wondering who designs those is how I ended up designing real ones.</p>
 <p>Thanks for poking around. You&rsquo;re my kind of person.</p>
-<button type="button" class="ee-close">FLIP BACK <span aria-hidden="true">&#8634;</span></button>
+<button type="button" class="ee-close">Flip back <span aria-hidden="true">&#8634;</span></button>
 </div>""" % frame).div)
 card.append(flip)
 card.insert_before(Comment("""
@@ -219,7 +356,7 @@ card.insert_before(Comment("""
   Denny
 """))
 card.insert_after(soup("""<style>
-[data-r="profile-card"] { perspective: 1400px; outline: none; -webkit-tap-highlight-color: transparent; }
+[data-r="profile-card"] { perspective: 1400px; border-radius: 18px; -webkit-tap-highlight-color: transparent; }
 /* the site's card padding and header spacing now belong to the faces, so the card keeps its live size */
 [data-r="profile-card"] { padding: 0 !important; }
 [data-r="profile-card"] > div.ee-in:first-child { margin-bottom: 0 !important; }
@@ -228,21 +365,21 @@ card.insert_after(soup("""<style>
   .ee-front > div:first-child { margin-bottom: 14px !important; }
 }
 @media (max-width: 480px) { .ee-front, .ee-back { padding: 22px 18px !important; } }
-[data-r="profile-card"]:focus-visible .ee-in { box-shadow: 0 0 0 3px oklch(0.9 0.2 122); border-radius: 18px; }
+[data-r="profile-card"]:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 3px; }
 .ee-in { position: relative; transform-style: preserve-3d; transition: transform .75s cubic-bezier(.3, .7, .2, 1); }
 .ee-front, .ee-back { box-sizing: border-box; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .ee-back { position: absolute; inset: 0; transform: rotateY(180deg); display: flex; flex-direction: column; gap: 10px;
   background: linear-gradient(rgba(242, 239, 232, .06), rgba(242, 239, 232, .02)), #161511 !important; overflow: hidden; }
-.ee-eyebrow { font: 500 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: oklch(0.9 0.2 122); }
+.ee-eyebrow { font: 400 13px/1.3 'Inter Tight', sans-serif; color: oklch(0.9 0.2 122); }
 /* the only way back: a button, so an extra eleventh tap can't flip the card before the message is read */
 .ee-close { margin-top: auto; align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px;
   border: 1px solid oklch(0.9 0.2 122 / .55); background: oklch(0.9 0.2 122 / .08); color: oklch(0.9 0.2 122); cursor: pointer;
-  font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .14em; transition: background-color .2s, border-color .2s; }
+  font: 500 13px/1 'Inter Tight', sans-serif; transition: background-color .2s, border-color .2s; }
 .ee-close span { font-size: 14px; letter-spacing: 0; }
 .ee-close:hover { background: oklch(0.9 0.2 122 / .16); border-color: oklch(0.9 0.2 122); }
 .ee-close:focus-visible { outline: 2px solid oklch(0.9 0.2 122); outline-offset: 2px; }
-.ee-title { font: 800 21px/1.1 Archivo, sans-serif; font-stretch: 112%; letter-spacing: -.01em; color: #f2efe8; }
-.ee-back p { margin: 0; font: 400 14px/1.5 Archivo, sans-serif; color: rgba(242, 239, 232, .82); }
+.ee-title { font: 500 22px/1.1 'Inter Tight', sans-serif; letter-spacing: -.02em; color: #f2efe8; }
+.ee-back p { margin: 0; font: 400 14px/1.5 'Inter Tight', sans-serif; color: rgba(242, 239, 232, .82); }
 [data-r="profile-card"].ee-flipped .ee-in { transform: rotateY(180deg); }
 /* the hint: one small wobble on the seventh tap */
 @keyframes ee-wobble { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-2.2deg); } 45% { transform: rotate(1.8deg); } 70% { transform: rotate(-.9deg); } }
@@ -297,6 +434,35 @@ card.insert_after(soup("""<style>
 })();
 </script>"""))
 
+# ---------- the opening on the grid: the label column, the headline from the fourth column, then the text beside the card ----------
+hero_wrap = hero.find(attrs={'data-r': re.compile('hero-row')})
+hero_left = hero_wrap.find('div', recursive=False)
+hero_left.find('div', recursive=False).decompose()          # the mono kicker: its two facts move to the label column
+avail = hero_left.find('a', attrs={'data-r': 'avail'})
+avail.string = 'Open to Head / AVP roles in Jakarta'
+avail['class'] = ['mk-avail']
+del avail['style']
+p['class'] = ['mk-lede']
+del p['style']
+hero_h1['class'] = ['mk-h1']
+del hero_h1['style']
+del hero_h1['data-r']
+swiss_inline(card)
+card['style'] = re.sub(r'(flex|width|margin-top):[^;]*;?\s*', '', card['style'])
+for el in card.find_all(string=lambda t: t.strip() == 'HEAD / AVP,'):   # the card's title line, two lines in capitals
+    title_line = el.parent
+    title_line.clear()
+    title_line.append('Head / AVP, Product Design')
+hero_new = soup('<div data-r="wrap" class="mk-open mk-hang">' + label_col('', ['Portfolio 2026', 'Head / AVP, Product Design'])
+                + '<div class="mk-open-h"></div><div class="mk-open-text"></div></div>').div
+slot_h, slot_t = hero_new.find(class_='mk-open-h'), hero_new.find(class_='mk-open-text')
+for n in list(hero_left.contents):
+    (slot_t if n is p or n is avail else slot_h).append(n.extract())
+hero_left.decompose()
+for n in list(hero_wrap.contents):
+    hero_new.append(n.extract())
+hero_wrap.replace_with(hero_new)
+
 # ---------- case index (replaces the stat band) ----------
 brands = soup(read('brands'))
 logo = {i.get('alt'): i['src'] for i in brands.find_all('img')}
@@ -311,20 +477,20 @@ spark = ('<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="cu
 INDEX = [
     ('linkaja', '−80%', 'CS OPEX', str(icons[0]), '01', 'LinkAja',
      'Customer-service cost after self-service replaced agent tickets for 70M users.'),
-    ('komunal', '+12<span class="mk-unit">PTS</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal',
+    ('komunal', '+12<span class="mk-unit">pts</span>', 'DEPOSIT FUNNEL', str(icons[1]), '02', 'Komunal',
      'A design and delivery transformation: one system, one sprint, and a deposit funnel that completes more often.'),
-    ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash · Lumio',
+    ('board', '~200K', 'CUSTOMERS / MONTH', str(icons[2]), '03', 'Dash and Lumio',
      'Diners ordering through Dash each month, across 30+ restaurant chains.'),
     ('ai', '0→1', 'AI-NATIVE BUILDS', spark, '04', 'Independent',
      'Products taken from concept to working software with multi-agent Claude Code.'),
 ]
 idx_cells = []
-for i, (cid, num, label, icon, n, co, ctx) in enumerate(INDEX):
+for i, (cid, num, label_, icon, n, co, ctx) in enumerate(INDEX):
     idx_cells.append(
         f'<a class="mk-idx" href="#{cid}" data-open="{cid}">'
-        f'<div class="mk-dest"><span class="mk-dest-n">{n}</span><span class="mk-dest-co">{co}</span><span class="mk-arrow" aria-hidden="true">↓</span></div>'
+        f'<div class="mk-dest"><span class="mk-dest-n">{n}</span><span class="mk-dest-co">{co}</span></div>'
         f'<div data-m="count" class="mk-idx-n">{num}</div>'
-        f'<div class="mk-idx-l">{icon}<span>{label}</span></div>'
+        f'<div class="mk-idx-l">{say(label_)}</div>'
         f'<p class="mk-idx-c">{ctx}</p>'
         f'</a>')
 index_html = ('<nav aria-label="Case index" class="mk-index-nav">'
@@ -344,9 +510,9 @@ RABBIT = ('<button type="button" class="mx-rabbit" tabindex="-1" aria-label="A w
           '<svg viewBox="0 0 10 9" width="20" height="18" shape-rendering="crispEdges" aria-hidden="true">'
           + '<g fill="#f2efe8">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'X') + '</g>'
           + '<g fill="#161511">' + ''.join('<rect x="%d" y="%d" width="1" height="1"/>' % (x, y) for y, row in enumerate(RABBIT_ROWS) for x, c in enumerate(row) if c == 'E') + '</g></svg></button>')
-clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap">'
-                '<div class="mk-clients-head"><span>Clients &amp; brands</span></div>'
-                '<div class="mk-clients-grid">' + client_logos + '</div></div></section>')
+clients_html = ('<section class="mk-clients" aria-label="Clients and brands"><div class="mk-clients-wrap mk-hang">'
+                + label_col('', ['Clients and brands']) +
+                '<div class="mk-hb"><div class="mk-clients-grid">' + client_logos + '</div></div></div></section>')
 
 # ---------- the Garmin glass cockpit: four screens for the fan, three close-ups ----------
 labui = soup(read('labui'))
@@ -399,9 +565,9 @@ CONTEXT = {
 
 
 def keys_html(stats):
-    return ('<div class="mk-keys">' + ''.join(
+    return ('<div class="mk-keys" style="--n:%d">' % len(stats) + ''.join(
         f'<div class="mk-key"><div data-m="count" class="mk-key-n" style="color:{LIME if hi else "#f2efe8"}">{n}</div>'
-        f'<div class="mk-key-l">{l}</div><p class="mk-key-c">{CONTEXT[l]}</p></div>'
+        f'<div class="mk-key-l">{say(l)}</div><p class="mk-key-c">{CONTEXT[l]}</p></div>'
         for n, l, hi in stats) + '</div>')
 
 
@@ -432,11 +598,14 @@ def drop_style(el, *props):
     el['style'] = st.strip('; ')
 
 
-def stage(inner, head=None, intro='', flush=False):
-    h = ''
-    if head:
-        h = '<div class="mk-stagehead"><span>%s</span>%s</div>' % (head[0], ('<span>%s</span>' % head[1]) if len(head) > 1 and head[1] else '')
-    return '<div class="mk-stage">' + h + intro + '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div></div>'
+def board(inner, flush=False):
+    return '<div class="mk-board' + (' flush' if flush else '') + '">' + inner + '</div>'
+
+
+def stage(inner, head=None, caps=(), flush=False, after=''):
+    # a drawing on the board, with its title and note (and any remark) in the label column; `after` continues under the board
+    title, notes = head_parts(*head) if head else ('', [])
+    return unit(title, board(inner, flush) + after, notes, caps)
 
 
 def spans(row):
@@ -462,9 +631,9 @@ SS_RULES = []
 # a stage whose drawing stops short of its frame (design px on the left, right): in the side-by-side layout the column is the drawing's
 # width and the frame bleeds out by the inset (in %, so it holds when the frame scales), so the drawing's edge, not the frame's, meets
 # the board's padding like the text on the other side
-SS_INSET = {'linkaja-home': (16, 16), 'linkaja-routing': (0, 43)}
+SS_INSET = {}   # was for the text-beside-frame layout; the frame is centred on its board now and the text hangs in the label column
 # a full-width stage whose panel sits inside the stage (design px): the lead above lines up with the panel's edge, not the stage's
-SS_LEAD_INSET = {'ai-decision-desk': 24}
+SS_LEAD_INSET = {}
 
 
 def ss_meta(id):
@@ -511,19 +680,13 @@ def ss_mount(id):
 
 def ss_stage(id, full=False):
     m = ss_meta(id)
-    lead = _html.escape(m['lead'])
-    if full:
-        # the lead lines up with the stage's left edge (the stage is centred on the board)
-        inner = '<div class="ss-box"><div style="max-width:%dpx;margin-inline:auto"><p class="ss-lead ss-lead-full">%s</p></div>%s</div>' % (m['stage_w'], lead, ss_mount(id))
-    else:
-        inner = '<div class="ss-box"><div class="ss-split" style="--sw:%dpx"><p class="ss-lead">%s</p>%s</div></div>' % (round(m['wide'][0] * (1 - sum(SS_INSET.get(id, (0, 0))) / m['wide'][0])), lead, ss_mount(id))
-    return stage(inner, (_html.escape(m['head']), _html.escape(m['note'])))
+    return stage('<div class="ss-box">' + ss_mount(id) + '</div>', (m['head'], m['note']), caps=[_html.escape(m['lead'])])
 
 
 toggle = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-linkaja">'
           '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
+          '<span class="mk-t-icon" aria-hidden="true"><svg width="16" height="9" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '<span class="mk-t-meta">%%READ%%</span>'
-          '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
           '</button>')
 
 # phone mockups: no Dynamic Island (at this scale it crowded every header), and the chat header gets the same back
@@ -548,10 +711,10 @@ assert n_shots == 4, n_shots
 LA_STEPS = ['Onboarding', 'Active limit', 'Application status', 'Self-service FAQ']
 phones = [col.find(recursive=False) for col in soup(shots_html).find('div', attrs={'data-r': 'grid4'}).find_all(recursive=False)]
 assert len(phones) == len(LA_STEPS)
-shots_html = ('<div class="ksf-head"><span>SELF-SERVICE SCREENS THAT ABSORB THE VOLUME</span><span>MYPAYLATER · SHIPPED FLOW</span></div>'
-              '<div class="ksf-panel"><div class="ksf-row" data-m="parallax">' + ''.join(
-                  '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (ph, i + 1, t) for i, (ph, t) in enumerate(zip(phones, LA_STEPS))) +
-              '</div></div>')
+shots_html = unit(*head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MYPAYLATER · SHIPPED FLOW')[:1],
+                  '<div class="ksf-panel"><div class="ksf-row" data-m="parallax">' + ''.join(
+                      '<figure class="ksf-step">%s<figcaption><b>%d</b> %s</figcaption></figure>' % (ph, i + 1, t) for i, (ph, t) in enumerate(zip(phones, LA_STEPS))) +
+                  '</div></div>', head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MYPAYLATER · SHIPPED FLOW')[1])
 
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
@@ -559,16 +722,10 @@ LA_HOME = ss_stage('linkaja-home')
 LA_ROUTING = ss_stage('linkaja-routing')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
-          '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats_html + '</div>'
-          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did_html(la_did) + '</div>'
-          '<div class="mk-block">' + LA_HOME + '</div>'
+          + unit('Key numbers', stats_html) + unit('What I did', did_html(la_did)) + LA_HOME
           # the diagrams live in design/sections/ so they share one design language (design/sections/VIZ-STYLE.md)
-          '<div class="mk-block">' + str(section('linkaja-opex-chart')) + '</div>'
-          '<div class="mk-block">' + str(section('linkaja-problem-fix')) + '</div>'
-          '<div class="mk-block">' + str(section('linkaja-support-model')) + '</div>'
-          '<div class="mk-block">' + LA_ROUTING + '</div>'
-          '<div class="mk-block">' + shots_html + '</div>'
-          '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
+          + figure_unit('linkaja-opex-chart') + figure_unit('linkaja-problem-fix') + figure_unit('linkaja-support-model')
+          + LA_ROUTING + shots_html + CLOSE +
           '</div></div></div>')
 
 
@@ -586,12 +743,21 @@ def about_html(cid):
     return ''.join('<p class="mk-about"><b>' + n + '</b> is ' + t + '</p>' for n, t in ABOUT_CO.get(cid, []))
 
 
-def meta_html(n, role):
-    # "01 / LinkAja": the number in lime, the name in cream; the role and dates on the right, readable rather than whispered
-    num, name = n.split(' / ', 1)
-    return ('<div class="mk-meta">'
-            '<div class="mk-meta-l"><span class="mk-meta-n">%s</span><span class="mk-meta-co">%s</span></div>'
-            '<div class="mk-meta-r">%s</div></div>' % (num, name, role))
+# the label column of each case: its number (or "Lab"), its name, then the role and the dates on their own lines
+META = {
+    'linkaja': ('01', 'LinkAja', ['Product Design Lead', 'Sep 2021 – Jun 2023']),
+    'komunal': ('02', 'Komunal Indonesia', ['Senior Manager, Product Design &amp; PM Oversight', 'Jun 2024 – Nov 2025']),
+    'board': ('03', 'Executive and board', ['Dash Inovasi Abadi', 'Lumio Inovasi Technology', 'Nov 2016 – present']),
+    'ai': ('04', 'Independent consulting', ['Product &amp; AI Design Consultant', 'Nov 2025 – present']),
+    'lab': ('Lab', 'Built with AI', ['Personal R&amp;D with Claude Code', '2025 – present']),
+    'lab-ui': ('Lab', 'AI-assisted UI', ['Personal concept', 'Garmin Connect']),
+}
+
+
+def meta_html(cid):
+    num, name, lines = META[cid]
+    return ('<div class="mk-hl mk-meta"><div class="mk-lt"><span class="mk-meta-n">%s</span> %s</div>' % (num, name)
+            + ''.join('<div class="mk-ln">%s</div>' % l for l in lines) + '</div>')
 
 
 # what is inside each case study, said on its toggle
@@ -612,17 +778,20 @@ def spec_html(cid):
 
 
 # the two lab cases share a band: personal builds, as opposed to the client work above them
-LAB_BAND = ('<div class="mk-lab-band"><div class="mk-lab-wrap"><div class="mk-lab-t" role="heading" aria-level="2">Lab</div>'
-            '<p>Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day.</p></div></div>')
+LAB_BAND = ('<div class="mk-lab-band"><div class="mk-lab-wrap mk-hang"><div class="mk-hl"></div><div class="mk-hb"><div class="mk-lab-t" role="heading" aria-level="2">Lab</div>'
+            '<p>Personal builds, made with Claude Code: real software on my own hardware, and a concept for an app I use every day.</p></div></div></div>')
 
 
 def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
-    # compact hero: title and description beside the diagram, sides alternating down the page; the toggle sits centred
-    # under the hero, at the bottom of the section
-    return ('<div class="mk-split' + (' flip' if flip else '') + '">'
+    # the case hero on the grid: label column, then title and description (columns 4 to 8) beside the drawing (9 to 12);
+    # the toggle hangs from the fourth column under it
+    return ('<div class="mk-hang mk-hero">' + meta_html(cid) +
             '<div class="mk-split-text">' + h2_html + '<p class="mk-sub">' + sub_html + '</p>' + spec_html(cid)
             + (('<div class="mk-abouts">' + about_html(cid) + '</div>') if cid in ABOUT_CO else '') + '</div>'
-            + fig_html + '</div>' + toggle_html)
+            + fig_html + '</div><div class="mk-hang mk-tog"><div class="mk-hb">' + toggle_html + '</div></div>')
+
+
+H2 = '<h2 class="mk-h2">%s</h2>'
 
 
 # what each toggle promises: minutes to read the full case study, measured on the built page with every drawer open
@@ -630,12 +799,11 @@ def split_hero(h2_html, sub_html, fig_html, toggle_html, flip, cid=''):
 READ = {'linkaja': 3, 'komunal': 7, 'board': 4, 'ai': 3, 'lab': 3, 'lab-ui': 2}
 
 
-toggle = toggle.replace('%%READ%%', '%d min read · %s' % (READ['linkaja'], TEASE['linkaja']))
+toggle = toggle.replace('%%READ%%', '%d min read. %s.' % (READ['linkaja'], TEASE['linkaja']))
 case_html = (
     '<section id="linkaja" class="mk-case" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
-    + meta_html('01 / LINKAJA', meta.find_all('div', recursive=False)[1].get_text(strip=True))
-    + split_hero(str(h2), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False, 'linkaja')
+    + split_hero(H2 % h2.get_text(' ', strip=True), sub, '<figure class="mk-sv"><canvas data-stack="linkaja" role="img" aria-label="' + SV_ALT + '"></canvas></figure>', toggle, False, 'linkaja')
     + drawer +
     '</div></section>')
 
@@ -668,8 +836,8 @@ CASES = [
          sub='A data-to-decision workflow that puts live, AI-driven decisions in front of the people running a business, and Chrona, an AI-first social-planning app built with multi-agent Claude Code.',
          stats=[('0→1', 'PROTOTYPES W/ CLAUDE CODE', True), ('3', 'ANTHROPIC CERTIFICATES', False), ('MCP', 'AGENTIC WORKFLOWS', False)],
          alt='Line drawing: three desktop-shaped layers (siloed data sources, demand signals as bars against a dashed confidence threshold, and the workflow builder as a wireframe of node cards and curved connectors). The lime warehouse store lands as its cleaned row in the Sources node; the one signal above the threshold lands as the lime path and the decision node with its approve button.',
-         pair=[('ENTERPRISE AI · DATA TO DECISION', 'independent'),
-               ('FEATURED · CHRONA', 'chrona', 'Line drawing: three phone-shaped layers (your week, your friends’ free time, and the drafted plan as a wireframe). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button.')],
+         pair=[('Enterprise AI, data to decision', 'independent'),
+               ('Chrona', 'chrona', 'Line drawing: three phone-shaped layers (your week, your friends’ free time, and the drafted plan as a wireframe). A lime free evening and the lime overlap where everyone is free land as the plan’s lime time and its lime send button.')],
          bullets=['Enterprise AI: a data-to-decision workflow that validates and cleans siloed legacy data, then puts live decisions in front of the people running the business.',
                   'Agentic orchestration: multi-agent Claude Code builds with specialist sub-agents for brand, exploration, prototyping and shipping, including Chrona, an AI-first social-planning app.',
                   'Advisory and mentorship: AI-augmented UX strategy and design systems for businesses; coaching designers on AI tooling in their daily work.']),
@@ -752,31 +920,33 @@ fig.replace_with(soup(ss_mount('ai-chrona')))
 del ch[1]['data-r']
 ch[1]['class'] = ['ss-chrona']
 ch[1]['style'] = ''
-CHRONA = stage('<div class="ss-box">' + str(ch[1]) + '</div>', (c_t[0], c_t[1])) + str(ch[2])
+drop_style(ch[2], 'margin-top')
+CHRONA = stage('<div class="ss-box">' + str(ch[1]) + '</div>', (c_t[0], c_t[1]), after='<div class="mk-after">' + str(ch[2]) + '</div>')
 # Garmin brief: the two e-ink faces on a board (the build's write-up above it), the diagrams, then the shoe tracker on a flush board
 lk = lab_[2].find_all(recursive=False)
 g_t = spans(lk[0])
 shoe = lk[4]
 drop_style(shoe, 'margin-top', 'background', 'border', 'border-radius')
 shoe['class'] = ['mk-board', 'flush']
-GARMIN = stage(str(lk[2]), (g_t[0], g_t[1])) + str(lk[3]) + '<div class="mk-stage" style="margin-top:40px">' + str(shoe) + '</div>'
+drop_style(lk[3], 'margin-top')
+GARMIN = stage(str(lk[2]), (g_t[0], g_t[1]), after='<div class="mk-after">' + str(lk[3]) + '</div><div class="mk-after">' + str(shoe) + '</div>')
 
 LIVE = {
     # the transformation map first (four shifts), then one diagram per shift in its order: the design system, the tooling
     # migration, the sprint, then why placements dropped off (placement routing) right before the funnel it lifted
-    'komunal': blocks(section('komunal-transformation'), section('komunal-design-system'), section('komunal-tooling-migration'), section('komunal-sprint-sync'), section('komunal-placement-routing'),
-                      section('komunal-funnel'), ss_stage('komunal-shipped-flow', full=True)),
-    'board': ''.join('<div class="mk-block">' + b + '</div>' for b in (DASH_APP, DASH_TOOLS, LUMIO, str(section('board-governance')))),
+    'komunal': ''.join(figure_unit(n) for n in ('komunal-transformation', 'komunal-design-system', 'komunal-tooling-migration', 'komunal-sprint-sync',
+                                                 'komunal-placement-routing', 'komunal-funnel')) + ss_stage('komunal-shipped-flow', full=True),
+    'board': DASH_APP + DASH_TOOLS + LUMIO + figure_unit('board-governance'),
     # the decision desk lives in the repo (design/sections/); Chrona's photos come from the capture, its two diagrams from the repo
-    'ai': ''.join('<div class="mk-block">' + b + '</div>' for b in (ss_stage('ai-decision-desk', full=True), CHRONA)),
-    'lab': '<div class="mk-block">' + GARMIN + '</div>',      # Garmin Daily Brief: faces, architecture, shoe tracker
+    'ai': ss_stage('ai-decision-desk', full=True) + CHRONA,
+    'lab': GARMIN,      # Garmin Daily Brief: faces, architecture, shoe tracker
 }
 # the cockpit: the write-up beside its headline on the live site, and the not-affiliated note under the close-ups
 lui_intro = lui[0].find_all(recursive=False)[1].find_all(recursive=False)[1]
 lui_note = lui[2].find_all(recursive=False)[2]
 # the close-ups keep the live site's isometric tiles: each screen tilted as a slab and cropped in its frame
 closeups_html = str(lui[2].find_all(recursive=False)[1])
-QUESTION = '<div class="mk-block"><div class="mk-eyebrow">THE QUESTION</div>' + str(lui_intro) + '</div>'
+QUESTION = unit('The question', str(lui_intro))
 
 
 # The lab has its own accent, instrument cyan (owner picked it from the lab colour options): lime stays for outcomes on the case
@@ -790,7 +960,8 @@ def lab_accent(h):
 
 def figure(c):
     if 'pair' not in c:
-        return '<figure class="mk-sv"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear data-accent="' + LAB_HEX + '"' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
+        # tablet, desktop and panel stacks are wide, so their frame is 5:4; the phone stacks stand in 4:5
+        return '<figure class="mk-sv' + (' mk-sv-wide' if c.get('scene') in ('dash', 'eink') else '') + '"><canvas data-stack="' + c.get('scene', c['id']) + '"' + (' data-clear data-accent="' + LAB_HEX + '"' if c['id'] in SPEC else '') + ' role="img" aria-label="' + c['alt'] + '"></canvas></figure>'
     # two stories in one section: side by side in the wide frame, stacked on phones
     cells = ''
     for p in c['pair']:
@@ -802,30 +973,27 @@ def figure(c):
 
 def case_section(c):
     stats = keys_html(c['stats']) if c.get('stats') else ''
-    meta = meta_html(c['n'], c['role'])
-    h2 = ('<h2 style="margin:0;font:800 46px/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">' + c['h2'] + '</h2>')
+    h2 = H2 % c['h2']
     did = did_html(c['bullets'])
     tog = ('<button type="button" class="mk-toggle" aria-expanded="false" aria-controls="d-' + c['id'] + '">'
            '<span class="mk-t-label"><span class="mk-t-closed">Read the case study</span><span class="mk-t-open" aria-hidden="true">Close</span></span>'
+           '<span class="mk-t-icon" aria-hidden="true"><svg width="16" height="9" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '<span class="mk-t-meta">%%READ%%</span>'
-           '<span class="mk-t-icon" aria-hidden="true"><svg width="20" height="11" viewBox="0 0 20 11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 1.5 10 9.5l8.5-8"/></svg></span>'
            '</button>')
     dr = ('<div class="mk-drawer" id="d-' + c['id'] + '"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
-          + (('<div class="mk-block"><div class="mk-eyebrow">THE SCREENS</div>' + stage(fan_html, flush=True) + '</div>' + QUESTION +
-              '<div class="mk-block"><div class="mk-eyebrow">THE INSTRUMENT CRAFT, UP CLOSE</div>' + stage(closeups_html) + str(lui_note) + '</div>') if c.get('fan') else '') +
+          + ((unit('The screens', board(fan_html, flush=True)) + QUESTION +
+              unit('The instrument craft, up close', board(closeups_html), [say(lui_note.get_text(' ', strip=True))])) if c.get('fan') else '') +
           # the cockpit concept has no outcome numbers to report (owner: "we don't need this")
-          ('' if c.get('fan') else '<div class="mk-block mk-keys-block"><div class="mk-eyebrow">KEY NUMBERS</div>' + stats + '</div>') +
-          '<div class="mk-block"><div class="mk-eyebrow">WHAT I DID</div>' + did + '</div>'
-          + LIVE.get(c['id'], '') +
-          '<button type="button" class="mk-close">Close the case study <span aria-hidden="true">↑</span></button>'
+          ('' if c.get('fan') else unit('Key numbers', stats)) +
+          unit('What I did', did)
+          + LIVE.get(c['id'], '') + CLOSE +
           '</div></div></div>')
-    tog = tog.replace('%%READ%%', '%d min read · %s' % (READ[c['id']], TEASE[c['id']]))
+    tog = tog.replace('%%READ%%', '%d min read. %s.' % (READ[c['id']], TEASE[c['id']]))
     lab = c['id'] in SPEC
     out = (('' if c['id'] != 'lab' else LAB_BAND) +
             '<section id="' + c['id'] + '" class="mk-case' + (' mk-lab' if lab else '') + '" style="' + ('' if c['id'] == 'lab' else 'border-top:1px solid rgba(242,239,232,.14)') + '">'
-            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">' + meta
-            + (('<div class="mk-case-hero"><div>' + h2 + '</div><div class="mk-case-side"><p class="mk-sub">' + c['sub'] + '</p></div></div>' + figure(c) + tog)
-               if 'pair' in c else split_hero(h2, c['sub'], figure(c), tog, c.get('flip', False), c['id']))
+            '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
+            + split_hero(h2, c['sub'], figure(c), tog, False, c['id'])
             + dr + '</div></section>')
     return lab_accent(out) if lab else out
 
@@ -851,21 +1019,36 @@ for row in career[1].find_all(recursive=False):
     sp = row.find_all('span')
     key = (sp[0].get_text(strip=True), sp[1].get_text(strip=True))
     row.append(BeautifulSoup('<span class="mk-co-about">' + ABOUT[key] + '</span>', 'html.parser'))
+swiss_inline(career[1])
+swiss_inline(earlier[1])
+swiss_inline(caps[0])
+for row in career[1].find_all(recursive=False):
+    for t in row.find_all(string=lambda t: ' · ' in t):
+        t.replace_with(t.replace('Dash · Lumio', 'Dash and Lumio').replace(' · ', ', '))
+for d in earlier[1].find_all('svg'):
+    d.decompose()
+# capabilities: a plain heading per group, one capability a line
+for grp in caps[0].find_all(recursive=False):
+    hd, body = grp.find_all(recursive=False)
+    for sv in hd.find_all('svg'):
+        sv.decompose()
+    hd.attrs = {'class': ['mk-cap-h']}
+    items = [x.strip() for x in body.get_text(' ', strip=True).split('·')]
+    body.replace_with(soup('<ul class="mk-cap-l">' + ''.join('<li>%s</li>' % i.replace('&', '&amp;') for i in items) + '</ul>'))
+caps[0].attrs = {'class': ['mk-caps']}
+career[1].attrs = {'class': ['mk-career']}
 bg_html = (
     '<section id="background" class="mk-case mk-bg" style="border-top:1px solid rgba(242,239,232,.14)">'
     '<div data-r="wrap" style="max-width:1216px;margin:0 auto;padding:80px 40px 48px">'
-    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:26px;flex-wrap:wrap">'
-    f'<div style="font:600 12px/1 \'IBM Plex Mono\',monospace;letter-spacing:.16em;color:{LIME}">BACKGROUND</div>'
-    '<div style="font:500 11px/1 \'IBM Plex Mono\',monospace;letter-spacing:.1em;color:rgba(242,239,232,.6)">2011 – PRESENT</div></div>'
-    '<h2 style="margin:0 0 36px;font:800 clamp(32px,3.4vw,44px)/1.04 Archivo;font-stretch:112%;letter-spacing:-.02em;text-wrap:balance">Fifteen years across four companies.</h2>'
-    + str(career[1]) +
+    '<div class="mk-hang mk-hero">' + label_col('Background', ['2011 – present'], level=2) +
+    '<div class="mk-hb"><h2 class="mk-h2">Fifteen years across four companies.</h2>' + str(career[1]) + '</div></div>'
     '<div class="mk-drawer open" id="d-background"><div class="mk-drawer-inner settled"><div class="mk-drawer-body">'
-    + '<div class="mk-block"><div class="mk-eyebrow">EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY</div>'
-    '<p class="mk-context">Appsindo Technology is a software house and agency that designs and builds apps for its clients. '
-    'Four of the products I designed there:</p>' + str(earlier[1]) + '</div>' +
-    '<div class="mk-block"><div class="mk-eyebrow">CAPABILITIES</div>' + str(caps[0]) + '</div>'
-    '<div class="mk-block"><div class="mk-eyebrow">EDUCATION</div><div class="mk-edu">' + edu.get_text(' ', strip=True) + '</div></div>'
+    + unit('Earlier work', str(earlier[1]), ['2011–2016', 'Appsindo Technology'],
+           ['Appsindo Technology is a software house and agency that designs and builds apps for its clients. Four of the products I designed there.'])
+    + unit('Capabilities', str(caps[0]))
+    + unit('Education', '<div class="mk-edu">B.A. Graphic Design, Pelita Harapan University, 2004–08</div>') +
     '</div></div></div></div></section>')
+assert 'GRAPHIC DESIGN' in edu.get_text(' ', strip=True) and '2004–08' in edu.get_text(' ', strip=True), 'the degree line changed'
 contact = soup(read('contact')).find()
 for a in contact.find_all('a'):
     if a.get('download') is not None:
@@ -895,6 +1078,20 @@ crab_svg = ('<svg class="cc-svg" viewBox="0 0 18 10" width="72" height="40" shap
             + '<g class="cc-eyes" fill="#16150f">%s</g>' % pixels(CRAB_BODY, 0, 'E')
             + ''.join('<g class="cc-legs cc-legs-%d" fill="%s">%s</g>' % (k, CLAUDE_ORANGE, pixels(legs, 4)) for k, legs in enumerate(CRAB_LEGS))
             + '</svg>')
+swiss_inline(contact)
+c_wrap = contact.find(attrs={'data-r': 'wrap'})
+c_left, c_foot = c_wrap.find_all(recursive=False)
+c_kicker = c_left.find('div', recursive=False)
+c_kicker.decompose()
+for a_ in c_left.find_all('a'):
+    for sv in a_.find_all('svg'):
+        sv.decompose()
+c_foot.clear()
+c_foot.attrs = {'class': ['mk-foot']}
+c_foot.append(soup('<span>PORTFOLIO 2026</span><span>Head / AVP, Product Design</span>'))
+c_left.attrs = {'class': ['mk-hb', 'mk-contact']}
+c_wrap.attrs = {'data-r': 'wrap', 'class': ['mk-hang', 'mk-contact-wrap']}
+c_wrap.insert(0, soup(label_col('', ['What I’m looking for'])))
 contact['style'] = contact.get('style', '') + ' position: relative;'
 contact.append(Comment("""
   Psst, code explorer. The little orange crab on this line is Claude, who built this site with me.
@@ -992,9 +1189,10 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 </script>""").contents):
     contact.append(node)
 contact.find(string='Let’s talk.').parent.attrs.update({'role': 'heading', 'aria-level': '2'})   # a heading for heading navigation, same look
-contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.name = 'footer'               # the contentinfo landmark
+contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.parent.name = 'footer'        # the contentinfo landmark
 for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)
     t.insert_after(soup('<button type="button" class="mx-cursor" aria-label="Open the terminal">_</button>').button)
+    t.replace_with('Portfolio 2026')
 more_html += bg_html + str(contact) + str(section('egg-matrix')).replace('<!--RABBIT-->', RABBIT)
 
 # ---------- type floor (audit F5): nothing under 11px, except text drawn inside SVG diagrams, which scales with them ----------
@@ -1058,19 +1256,18 @@ for _ in range(3):   # a declaration can name more than one of them
 
 tpl = open(os.path.join(HERE, 'hifi_shell.html'), encoding='utf-8').read()
 tpl = rem(tpl)
-HEADINGS = {'KEY NUMBERS': 'Key numbers', 'WHAT I DID': 'What I did', 'THE SCREENS': 'The screens', 'THE QUESTION': 'The question',
-            'THE INSTRUMENT CRAFT, UP CLOSE': 'The instrument craft, up close', 'CAPABILITIES': 'Capabilities', 'EDUCATION': 'Education',
-            'EARLIER WORK · 2011–2016 · APPSINDO TECHNOLOGY': 'Earlier work <span class="mk-eb-meta">2011–2016 · Appsindo Technology</span>'}
+for piece in (more_html, case_html):
+    assert 'mk-eyebrow' not in piece and 'mk-stagehead' not in piece, 'an old drawer title is left'
 
 
-def headings(html):
-    for k, v in HEADINGS.items():
-        html = html.replace('<div class="mk-eyebrow">%s</div>' % k, '<div class="mk-eyebrow" role="heading" aria-level="3">%s</div>' % v)
-    assert '<div class="mk-eyebrow">' not in html, 'a drawer title is missing from HEADINGS'
-    return html
+def fixes(html):
+    # decorative drawings are hidden from assistive tech unless they carry a name of their own
+    def hide(m):
+        tag = m.group(0)
+        return tag if re.search(r'\b(aria-hidden|aria-label|aria-labelledby|role)=', tag) else tag[:-1] + ' aria-hidden="true">'
+    return re.sub(r'<svg\b[^>]*>', hide, html)
 
 
-more_html, case_html = headings(more_html), headings(case_html)
 out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__TOPBAR__-->', top_html)
           .replace('<!--__HERO__-->', hero_html)
@@ -1078,6 +1275,7 @@ out = (tpl.replace('/*__FONTS__*/', FONTS).replace('/*__SITE_CSS__*/', css)
           .replace('<!--__CASE__-->', case_html)
           .replace('<!--__MORE__-->', more_html)
           .replace('/*STACK*/', STACK_JS))
+out = fixes(out)
 open(os.path.join(S, 'portfolio-hifi.html'), 'w', encoding='utf-8').write(theme.apply(portable(out)))
 
 # ---------- one piece on its own, for polishing it in isolation: COMPONENT=<file in design/sections, no extension> ----------

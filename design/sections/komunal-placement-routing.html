@@ -88,10 +88,12 @@
 .kpr-link.on::before { background: var(--kpr-ink-3); }
 .kpr-lane.after .kpr-link.on::before { background: var(--kpr-lime); }
 .kpr-link.cut::before { background: repeating-linear-gradient(90deg, rgba(253, 176, 34, .6) 0 4px, transparent 4px 8px); }
-.kpr-link b { position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--kpr-ink); opacity: 0; }
-.kpr-lane.after .kpr-link b { background: var(--kpr-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); }
+/* the dot rides a track the size of the link, so it travels by transform (never by left or top) */
+.kpr-link b { position: absolute; inset: 0; opacity: 0; }
+.kpr-link b::after { content: ''; position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--kpr-ink); }
+.kpr-lane.after .kpr-link b::after { background: var(--kpr-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); }
 .kpr-link.run b { animation: kpr-x .45s linear; }
-@keyframes kpr-x { 0% { left: 0; opacity: 1; } 100% { left: 100%; opacity: 1; } }
+@keyframes kpr-x { 0% { transform: translateX(0); opacity: 1; } 100% { transform: translateX(100%); opacity: 1; } }
 
 .kpr-cap { margin: 0 0 18px; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
 .kpr-note { margin: 6px 0 0; max-width: 72ch; font: 400 12px/1.5 'IBM Plex Mono', monospace; color: rgba(242, 239, 232, .6); }
@@ -114,9 +116,9 @@
   .kpr-link { align-self: auto; justify-self: center; width: 2px; height: 22px; margin: 4px 0; }
   .kpr-link::before { background: repeating-linear-gradient(180deg, var(--kpr-edge) 0 4px, transparent 4px 8px); }
   .kpr-link.cut::before { background: repeating-linear-gradient(180deg, rgba(253, 176, 34, .6) 0 4px, transparent 4px 8px); }
-  .kpr-link b { top: 0; left: 50%; }
+  .kpr-link b::after { top: 0; left: 50%; }
   .kpr-link.run b { animation-name: kpr-y; }
-  @keyframes kpr-y { 0% { top: 0; opacity: 1; } 100% { top: 100%; opacity: 1; } }
+  @keyframes kpr-y { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(100%); opacity: 1; } }
   .kpr-out, .kpr-chip { margin-top: 4px; }
   /* the status gets its own line, so a longer status never pushes the flow down */
   .kpr-st { flex-basis: 100%; margin-left: 0; }
@@ -155,7 +157,7 @@
       <div class="kpr-link on"><b></b></div>
       <div class="kpr-node"><small>CHECKOUT</small><b><svg class="kpr-ico" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Virtual account issued</b><span>Amount and payment method locked in</span><span class="m">VA 8870 1204 5531</span></div>
       <div class="kpr-link on"><b></b></div>
-      <div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Over this account's transfer limit</span><span class="m">Low default · forgotten cap · basic tier</span></div>
+      <div class="kpr-node fail" data-k="bank"><small>BANK APP</small><b class="kpr-bank-t">Transfer rejected</b><span>Over this account’s transfer limit</span><span class="m">Low default · forgotten cap · basic tier</span></div>
       <div class="kpr-link cut"><b></b></div>
       <div class="kpr-node" data-k="listen"><small>LISTENER</small><b><span class="kpr-spin"></span><span class="kpr-ls-t">Funds never arrive</span></b><span>Still waiting on this VA</span><span class="m kpr-hold">Waited 3+ days</span></div>
       <div class="kpr-link cut"><b></b></div>

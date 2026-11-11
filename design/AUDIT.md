@@ -1044,7 +1044,7 @@ Left alone: Key numbers context lines, "What I did", the company lines, the cock
 shoe tracker text, every "ILLUSTRATIVE" tag and the "not affiliated with Garmin" line. These are the next candidates if it
 should go further.
 
-**Type and grid options (not built, awaiting the owner's pick).** `design/mockups/type-grid-options.html`
+**Type and grid options (the owner picked C × 1; built, see the next section).** `design/mockups/type-grid-options.html`
 (https://claude.ai/artifact/HHQayFJuMsUMDfZpdapivi; refresh its stack copy with `inline_stack.py`). One live preview of the
 opening, the case index and the LinkAja case, redrawn by any pair, with a 12-column overlay.
 
@@ -1052,6 +1052,70 @@ opening, the case index and the LinkAja case, redrawn by any pair, with a 12-col
   labels in sentence case, no mono (recommended).
 - Grid: **1** Hanging index, a label column of three with content hanging from column 4 (recommended); **2** Poster, very
   large flush-left headlines; **3** Register, the work as a table whose rows open, which drops the separate outcome band.
+
+## Swiss build: type C on grid 1 (2026-11-11)
+
+The owner picked **C × 1** from the options page and asked to fold in the cheap fixes from a Hallmark audit
+(`Nutlope/hallmark` v2.0.0, `audit` verb, run on the built page). The audit's main finding was typographic: tracked
+mono capitals on nearly every label (its gates 67 and 64), kickers above headings (54) and middle-dot strings (63).
+
+**Type.** One family outside the drawings: Inter Tight, a variable file for 400 to 600 in `design/fonts/`, the only font
+preloaded. Two weights (400 text, 500 heads and names). Labels are sentence case, 13px, untracked; no mono on the site
+itself. `SAY` in `build_hifi.py` lists every label the captures and section files spell in capitals with what it says
+now; the build stops if one is missing. Scale: 13 label, 14 to 18 text, 15 label titles, heads `clamp(30px, 3.4vw, 46px)`,
+the headline `clamp(40px, 6.2vw, 84px)`, key numbers `clamp(40px, 5vw, 64px)`.
+
+**The drawings keep their own lettering.** Diagrams, product mock-ups and the five demos still use Archivo and IBM Plex
+Mono inside their boards, as the options page said. Both stay registered and load when a case study first shows them.
+This is the next step if the site should be one voice throughout (it also means regenerating the demo posters).
+
+**Grid.** Twelve columns in the 1216px column, 24px gutters (`.mk-hang` in `hifi_shell.html`). The label column is
+columns 1 to 3 (`.mk-hl`); everything else hangs from column 4 (`.mk-hb`). Below 900px it is one column, label first.
+
+| Piece | Label column | From column 4 |
+|---|---|---|
+| Opening | Portfolio 2026, the role | headline (4 to 12), then the text (4 to 8) beside the profile card (9 to 12) |
+| Case index | none: four cells of three columns, no icons, no vertical rules | |
+| Clients | "Clients and brands" | the logos |
+| Case hero | number (lime), name, role, dates, one a line | title and description (4 to 8), the stack (9 to 12); toggle under them |
+| Case study units | the title, quiet note lines, and the remark that used to sit under the drawing | the numbers, the list, or the board |
+| Background | "Background", the years | headline, the timeline three columns a company |
+| Contact | "What I'm looking for" | "Let's talk", the text, the buttons, the footer line |
+
+Units are built by `unit()`, `stage()` and `figure_unit()` in `build_hifi.py`; `figure_unit()` lifts a section file's
+`-head` row and top-level `-cap` / `-note` paragraphs into the label column, so the section files are unchanged in shape.
+
+**Earlier decisions this replaces** (they followed from the pick, flag any to restore):
+- The toggle is left-aligned at column 4 with the chevron before the label, no longer centred caps. The bob, the flip and
+  the label crossfade are kept. Its line reads "3 min read. Home screen today, …".
+- Key numbers are left-aligned on the grid, no centred band or vertical rules.
+- Heroes no longer alternate sides: the text is always at column 4 and the stack at column 9.
+- "What I did" is one column at a reading measure, without dash markers.
+- The case index has no icons; the capabilities are one a line instead of dot-joined.
+- The "Lab" band title is at head size, not 84px.
+Kept as they were: the profile card with its spinning seals and its easter egg, the stacks and their build, the drawers'
+behaviour, deep links, the lab's cyan accent, every drawing.
+
+**Cheap fixes folded in.**
+- Decorative SVGs get `aria-hidden` unless they carry a name (`fixes()` in `build_hifi.py`; 51 on the old page).
+- `overflow-x: clip` on `html` and `body`.
+- The travelling dots in the problem/fix board and placement routing move by `transform` (a track the size of the
+  connector carries the dot). The funnel bars still animate `height`: their value labels ride on the bar, so scaling
+  would distort them. Left as is.
+- The scissors character in the sprint diagram is an SVG; the governance block's `h4`s are `h3`s; the design-system
+  swatches wrap three a row so their names fit; a straight apostrophe is curled.
+- The focus ring sits on the profile card itself, not its inner face.
+- `:active` states on the links and the toggle; tabular figures on the numbers.
+
+Not changed, with reasons: the Hallmark findings inside product screens (pure white, the Komunal "before" gradient, low
+contrast in mock UI), the "hidden at rest" classes (all script-scoped: `kop-pre`, `idle`), the 883 colour literals (how
+the page is assembled), the word budget (a portfolio, not a landing page). The link-preview image (`og_image.js`) still
+uses the old type; re-style it if previews should match.
+
+Checked on the built page: no console errors or failed requests; no horizontal overflow at 1440 or 390; the opening fits
+1280 × 800; deep link, index link, toggle, Escape and focus return work; a stack builds on arrival; the LinkAja demos mount.
+Static linter counts, before to after: unlabelled SVGs 51 to 0, tracked-caps labels 106 to about 83 and mono labels 30 to 27
+(what is left is inside the drawings and in unused captured CSS), dot strings 19 to 7.
 
 ## Section mockups (2026-10-13)
 

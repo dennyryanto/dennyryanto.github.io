@@ -66,7 +66,7 @@ def out(m):
 
 page = re.sub(r'data:(image/[a-z+.-]+);base64,([A-Za-z0-9+/=]+)', out, page)
 
-# ---- fonts: out to files too; the latin faces of the two families every screen uses are preloaded ----
+# ---- fonts: out to files too; the latin face of the site's family is preloaded ----
 fonts, preload = {}, []
 
 
@@ -81,7 +81,7 @@ def font_out(m):
 
 def face_out(m):
     face = re.sub(r'url\(data:font/woff2;base64,([A-Za-z0-9+/=]+)\)', font_out, m.group(0))
-    if m.group(1) in ('Archivo latin', 'IBM Plex Mono latin'):
+    if m.group(1) == 'Inter Tight latin':   # the site's one family; the drawings' faces load with the case study that shows them
         preload.append(re.search(r'url\((assets/fonts/[^)]+)\)', face).group(1))
     return face
 

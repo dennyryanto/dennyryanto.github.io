@@ -84,8 +84,9 @@
 .kds-groups { flex: 1; min-width: 0; display: grid; grid-template-columns: 1.9fr 1.05fr .85fr 1.15fr; gap: 10px; }
 .kds-g { display: grid; align-content: space-between; row-gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--kds-tile); min-width: 0; }
 .kds-g > small { display: block; font: 500 11px/1 'IBM Plex Mono', monospace; letter-spacing: .06em; color: var(--kds-ink-3); }
-.kds-sw { display: flex; gap: 6px; }
-.kds-sw > span { flex: 1; min-width: 0; display: grid; gap: 4px; }
+/* two rows of three, so each colour's name fits under its swatch at any board width */
+.kds-sw { display: flex; flex-wrap: wrap; gap: 8px 6px; }
+.kds-sw > span { flex: 1 0 26%; min-width: 0; display: grid; gap: 4px; }
 .kds-sw i { display: block; height: 22px; border-radius: 7px; background: var(--c); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .1); }
 .kds-sw em { font: 500 11px/1 'IBM Plex Mono', monospace; font-style: normal; color: var(--kds-ink-3); white-space: nowrap; overflow: hidden; text-overflow: clip; }
 .kds-type { display: flex; align-items: flex-end; gap: 14px; color: var(--kds-ink); }

@@ -41,9 +41,11 @@
 .lpf-c::after { content: ''; position: absolute; right: 1px; top: 50%; width: 7px; height: 7px; margin-top: -3.5px; border-top: 1.5px solid var(--lpf-edge); border-right: 1.5px solid var(--lpf-edge); transform: rotate(45deg); transform-origin: center; }
 .lpf-c.lit::before { height: 2.5px; margin-top: -1.25px; border-radius: 2px; background: var(--lpf-lime); box-shadow: 0 0 0 2.5px oklch(0.9 0.2 122 / .13); }
 .lpf-c.lit::after { border-color: var(--lpf-lime); width: 8px; height: 8px; margin-top: -4px; border-width: 2.5px; }
-.lpf-dot { position: absolute; top: 50%; left: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); opacity: 0; }
+/* the dot rides a track as wide as the connector, so it travels by transform (never by left) */
+.lpf-dot { position: absolute; top: 50%; left: 0; width: 100%; height: 0; opacity: 0; }
+.lpf-dot::after { content: ''; position: absolute; left: 0; top: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--lpf-lime); box-shadow: 0 0 6px oklch(0.9 0.2 122 / .8); }
 .lpf-wrap.go .lpf-dot { animation: lpf-run 1.8s linear infinite; }
-@keyframes lpf-run { 0% { left: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { left: calc(100% - 6px); opacity: 0; } }
+@keyframes lpf-run { 0% { transform: translateX(0); opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { transform: translateX(calc(100% - 6px)); opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .lpf-wrap .lpf-dot { animation: none !important; display: none; } }
 
 /* wide: before and after sit side by side, so neither flow is stretched across the whole board */
