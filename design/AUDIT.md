@@ -1152,6 +1152,34 @@ the profile card's name and the "Let's talk." heading, plus the name, headline a
 - Neither face has tabular figures; `font-variant-numeric: tabular-nums` stays in the CSS but does nothing for them.
 - Heading metrics: weight 500, letter-spacing -.02em; the headline sets on exactly two lines at 1280 and 1440px.
 
+### Heading face: Archivo expanded replaces Clash Grotesk (2026-11-12)
+
+The owner compared nine heading faces on `design/mockups/display-type-options.html` (each set at the same sizes as the site, with a
+side-by-side of the headline) and picked **option F, Archivo expanded**. Clash Grotesk is gone from the build.
+
+- Face: Archivo, one variable file (`design/fonts/archivo-var.woff2`, Google Fonts latin, SIL Open Font License 1.1) cut with fonttools
+  to wght 500 to 900 and wdth 100 to 125, 59 KB (the full file is 90 KB). Registered in `SITE_FONTS` with `font-weight: 500 900` and
+  `font-stretch: 100% 125%`; it is the preloaded heading face. `--head` is `'Archivo', 'Mk Arrows', system-ui, sans-serif`.
+- A font-family token cannot carry the width, so every rule that reads `--head` sets `font-stretch: 125%` after its `font` shorthand
+  (the shorthand resets it), and the two captured headings kept as inline styles (the card's name, "Let's talk.") get the same
+  declaration from `in_head()` in `build_hifi.py`. Weight 800 for the headline, h2s, key numbers, index numbers and lab title; 700 for the
+  wordmark and the fan caption.
+- `DROP_FAMILIES` still strips Archivo from the captures and mock-ups (they become Switzer, as before), but its Archivo branch skips the
+  heading stack (Archivo followed by Mk Arrows), so the new rules and inline styles survive `one_type()`. Checked on the built page:
+  every element whose computed family starts with Archivo is a heading element (brand, h1 and its `.ol` letters, h2s, key and index
+  numbers, lab title, card name, "Let's talk.", fan caption).
+- Sizes, before to after (about 70% of Clash for the headline, about 80% for the rest, as on the options page; Archivo expanded 800
+  is much wider): headline `clamp(40px, 6.2vw, 84px)` to `clamp(28px, 4.3vw, 59px)` (27 to 40px from 7.7vw under 600px), line height
+  .98; h2 `clamp(30px, 3.4vw, 46px)`/1.04 to `clamp(23px, 2.5vw, 34px)`/1.08; key numbers and lab title `clamp(40px, 5vw, 64px)` to
+  `clamp(32px, 4vw, 51px)`; index numbers `clamp(30px, 3.2vw, 40px)` to `clamp(24px, 2.6vw, 32px)` (phone 26 to 30 becomes 22 to 26);
+  wordmark 15px/500 to 14px/700; fan caption 22px/500 to 18px/700 (19 to 16 on phones). Letter spacing stays -.02em (-.01em on the
+  wordmark). The opening still fits 1280 x 800 (headline bottom 264 to 215, card bottom 792 to 743).
+- The link-preview card (`og_image.js`, both variants) uses the same face; the video variant's name, headline and numbers moved to
+  Archivo 800 at 17, 72 and 32px. `assets/og-image.png` was re-rendered. The Clash line in `design/stageshow/harness/fonts.css` was
+  removed (nothing in the demos used it).
+- Side effect: the matrix easter egg in `design/sections/egg-matrix.html` draws its dot grid from a canvas set in `800 40px Archivo`;
+  Archivo was not on the page before, so it fell back to Arial Black, and now draws in Archivo (normal width).
+
 ### Phone check of the drawings, funnel bars, read times (2026-11-11)
 
 **Phone check.** All six case studies opened one at a time at 390 x 844 (spot-check 360), reduced motion, demos `ss-ready`;

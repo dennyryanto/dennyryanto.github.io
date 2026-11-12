@@ -33,15 +33,15 @@ ${faces}
 html, body { width: 1200px; height: 630px; background: #161511; overflow: hidden; }
 body { position: relative; padding: 64px 72px 0; color: #f2efe8; font-family: 'Switzer', 'Mk Arrows', sans-serif; -webkit-font-smoothing: antialiased; }
 .top { display: flex; justify-content: space-between; align-items: baseline; font: 500 15px/1 'Switzer', 'Mk Arrows', sans-serif; }
-.top .who { color: #f2efe8; font: 600 22px/1 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.01em; }
+.top .who { color: #f2efe8; font: 700 17px/1 'Archivo', 'Mk Arrows', sans-serif; font-stretch: 125%; letter-spacing: -.01em; }
 .top .url { color: rgba(242, 239, 232, .55); }
 .eyebrow { margin-top: 58px; font: 500 16px/1 'Switzer', 'Mk Arrows', sans-serif; color: ${LIME}; }
-h1 { margin-top: 22px; font: 500 92px/.95 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
+h1 { margin-top: 22px; font: 800 72px/.98 'Archivo', 'Mk Arrows', sans-serif; font-stretch: 125%; letter-spacing: -.02em; }
 h1 span { color: ${LIME}; }
 .keys { position: absolute; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(242, 239, 232, .14); }
 .key { padding: 22px 0 30px 72px; }
 .key + .key { padding-left: 28px; border-left: 1px solid rgba(242, 239, 232, .14); }
-.key b { display: block; font: 500 40px/1 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
+.key b { display: block; font: 800 32px/1 'Archivo', 'Mk Arrows', sans-serif; font-stretch: 125%; letter-spacing: -.02em; }
 .key:first-child b { color: ${LIME}; }
 .arw { margin: 0 6px 4px; vertical-align: middle; }
 .key span { display: block; margin-top: 10px; font: 400 13px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
@@ -127,7 +127,7 @@ body { position: relative; color: #f2efe8; font-family: 'Switzer', 'Mk Arrows', 
   background: linear-gradient(120deg, rgba(255,255,255,.14) 0%, transparent 30%); }
 .id { display: flex; flex-direction: column; padding-right: 32px; border-right: 1px solid rgba(255,255,255,.13); margin-right: -32px; }
 .id img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 4px rgba(255,255,255,.2); }
-.id b { margin-top: 30px; font: 500 62px/.96 'Clash Grotesk', 'Mk Arrows', sans-serif; letter-spacing: -.02em; }
+.id b { margin-top: 30px; font: 800 46px/1 'Archivo', 'Mk Arrows', sans-serif; font-stretch: 125%; letter-spacing: -.02em; }
 .id span { margin-top: 18px; font: 500 19px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: ${LIME}; }
 .chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 26px; }
 .chips i { font-style: normal; padding: 9px 14px; border-radius: 100px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.24); background: rgba(255,255,255,.05);
@@ -174,7 +174,7 @@ const html = video ? CARD(true) : VARIANT === 'card' ? CARD(false) : STATS;
   const tmp = path.join(ROOT, 'design', 'tools', '.og-image.html');
   fs.writeFileSync(tmp, html);
   await p.goto('file://' + tmp); await p.evaluate(() => document.fonts.ready); await p.waitForTimeout(200);
-  const missing = await p.evaluate(() => ['Switzer', 'Clash Grotesk'].filter(f => !document.fonts.check('500 20px "' + f + '"')));
+  const missing = await p.evaluate(() => ['Switzer', 'Archivo'].filter(f => !document.fonts.check('700 20px "' + f + '"')));
   if (!video) {
     await p.screenshot({ path: OUT });
   } else {

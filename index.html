@@ -20,15 +20,15 @@
 <link rel="canonical" href="https://dennyryanto.github.io/">
 <meta name="theme-color" content="#161511">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-<link rel="preload" href="assets/fonts/21a507dfc03b8a11.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/d5fc679e026378e6.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/2a46d02291560d57.woff2" as="font" type="font/woff2" crossorigin>
 <style>html, body { margin: 0; background: #161511; } html { scroll-padding-top: 72px; }</style>
 <style>
 /* fonts: the live site's own files (build_hifi.py inlines them; build_site.py moves them to assets/fonts and preloads the latin ones) */
 /* Mk Arrows arrows */
 @font-face { font-family: 'Mk Arrows'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/6d9168ebb0aae420.woff2) format('woff2'); unicode-range: U+2190-2193; }
-/* Clash Grotesk latin */
-@font-face { font-family: 'Clash Grotesk'; font-style: normal; font-weight: 200 700; font-display: swap; src: url(assets/fonts/21a507dfc03b8a11.woff2) format('woff2'); }
+/* Archivo latin */
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 500 900; font-stretch: 100% 125%; font-display: swap; src: url(assets/fonts/d5fc679e026378e6.woff2) format('woff2'); }
 /* Switzer latin */
 @font-face { font-family: 'Switzer'; font-style: normal; font-weight: 100 900; font-display: swap; src: url(assets/fonts/2a46d02291560d57.woff2) format('woff2'); }
 /* Poppins latin */
@@ -709,7 +709,7 @@ html { scroll-behavior: smooth; }
 <style>
 /* Layout: a twelve-column grid in the live site's 1216px column (design/AUDIT.md, "Type C, grid 1"). A label column, three
    columns wide, carries the numbers, names, dates, titles and remarks; everything else hangs from the fourth column.
-   Switzer for text and Clash Grotesk (--head) for the headings, big numbers and wordmark, at two weights; labels in sentence case, untracked. The drawings keep their own lettering. */
+   Switzer for text and Archivo expanded (--head, set at font-stretch 125%) for the headings, big numbers and wordmark, at weight 800 (700 for the small uses); labels in sentence case, untracked. The drawings keep their own lettering. */
 :root {
   --bg: #161511;
   --card: rgb(16, 15, 9);
@@ -719,7 +719,7 @@ html { scroll-behavior: smooth; }
   --rule: rgba(242, 239, 232, .14);
   --lime: oklch(0.9 0.2 122);
   --display: 'Switzer', 'Mk Arrows', system-ui, sans-serif;
-  --head: 'Clash Grotesk', 'Mk Arrows', system-ui, sans-serif;
+  --head: 'Archivo', 'Mk Arrows', system-ui, sans-serif;
   --mono: 'IBM Plex Mono', ui-monospace, monospace;   /* only where mono is the material: code tokens, the terminal, product screens */
   --gut: 24px;
   --pad: 40px;   /* the page's side gutter; every wrap uses it, so the bands and the sections share one left edge */
@@ -765,7 +765,7 @@ a[data-r="avail"]::after { content: ""; position: absolute; inset: -12px 0; }
 .mk-top a { font: 400 0.8125rem/1 var(--display); letter-spacing: 0; color: var(--fg-2); text-decoration: none; transition: color .2s; }
 .mk-top a:hover { color: var(--fg); }
 .mk-top a:active { color: var(--lime); }
-.mk-top .mk-brand { font: 500 0.9375rem/1 var(--head); letter-spacing: -.01em; color: var(--fg); }
+.mk-top .mk-brand { font: 700 0.875rem/1 var(--head); font-stretch: 125%; letter-spacing: -.01em; color: var(--fg); }
 .mk-top nav, .mk-top-r { display: flex; gap: 12px 24px; flex-wrap: wrap; }
 .mk-top-r a:last-child { color: var(--lime); }
 @media (max-width: 600px) { .mk-top { padding-block: 14px; } }
@@ -774,7 +774,8 @@ a[data-r="avail"]::after { content: ""; position: absolute; inset: -12px 0; }
 .mk-open { max-width: 1216px; margin: 0 auto; padding: 56px var(--pad) 64px; row-gap: 36px; }
 .mk-open > .mk-hl { padding-top: 12px; }
 .mk-open-h { grid-column: 4 / -1; min-width: 0; }
-.mk-h1 { margin: 0; font: 500 clamp(2.5rem, 6.2vw, 84px)/.98 var(--head); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+.mk-h1 { margin: 0; font: 800 clamp(1.75rem, 4.3vw, 59px)/.98 var(--head); font-stretch: 125%; letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+@media (max-width: 600px) { .mk-h1 { font-size: clamp(1.6875rem, 7.7vw, 2.5rem); } }
 .mk-open-text { grid-column: 4 / 9; display: grid; gap: 28px; justify-items: start; min-width: 0; }
 .mk-lede { margin: 0; font: 400 1.125rem/1.55 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .mk-avail { font: 400 0.9375rem/1.3 var(--display); letter-spacing: 0; color: var(--fg); text-decoration: underline; text-decoration-color: var(--lime); text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
@@ -794,7 +795,7 @@ a.mk-idx:hover { color: inherit; }
 .mk-dest-n { color: var(--lime); }
 .mk-dest-co { color: var(--fg); text-decoration: underline; text-decoration-color: transparent; text-underline-offset: 4px; transition: text-decoration-color .2s; }
 a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color: var(--lime); }
-.mk-idx-n { margin-top: 18px; font: 500 clamp(1.875rem, 3.2vw, 40px)/1 var(--head); letter-spacing: -.02em; color: var(--fg); white-space: nowrap; }
+.mk-idx-n { margin-top: 18px; font: 800 clamp(1.5rem, 2.6vw, 32px)/1 var(--head); font-stretch: 125%; letter-spacing: -.02em; color: var(--fg); white-space: nowrap; }
 .mk-idx-l { margin-top: 10px; font: 400 0.8125rem/1.3 var(--display); color: var(--fg); }
 .mk-idx-c { margin: 6px 0 0; max-width: 32ch; font: 400 0.875rem/1.5 var(--display); color: var(--fg-3); text-wrap: pretty; }
 .mk-unit { font-size: .45em; letter-spacing: 0; margin-left: .14em; }
@@ -802,7 +803,7 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
   .mk-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
 }
-@media (max-width: 600px) { .mk-idx-n { font-size: clamp(1.625rem, 7.5vw, 1.875rem); } .mk-idx-c { font-size: 0.8125rem; } }
+@media (max-width: 600px) { .mk-idx-n { font-size: clamp(1.375rem, 6.2vw, 1.625rem); } .mk-idx-c { font-size: 0.8125rem; } }
 
 /* ---- clients and brands: the label, then the logos from the fourth column ---- */
 .mk-clients { border-bottom: 1px solid var(--rule); }
@@ -824,7 +825,7 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 .mk-hero > .mk-sv { grid-column: 9 / -1; margin: 0; }
 .mk-hero > .mk-sv-pair { grid-column: 4 / -1; }
 .mk-meta-n { color: var(--lime); }
-.mk-h2 { margin: 0; font: 500 clamp(1.875rem, 3.4vw, 46px)/1.04 var(--head); letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+.mk-h2 { margin: 0; font: 800 clamp(1.4375rem, 2.5vw, 34px)/1.08 var(--head); font-stretch: 125%; letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
 .mk-sub { margin: 0; max-width: 54ch; font: 400 1.0625rem/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 /* who the company is: a quieter line under the description, set off by a short rule */
 .mk-abouts { display: grid; gap: 8px; max-width: 54ch; padding-top: 16px; border-top: 1px solid var(--rule); }
@@ -882,7 +883,7 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 /* key numbers: left-aligned on the grid, three columns each (four share the nine columns for Komunal's four shifts) */
 .mk-keys { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 28px var(--gut); }
 .mk-key { min-width: 0; }
-.mk-key-n { font: 500 clamp(2.5rem, 5vw, 64px)/1 var(--head); letter-spacing: -.02em; white-space: nowrap; }
+.mk-key-n { font: 800 clamp(2rem, 4vw, 51px)/1 var(--head); font-stretch: 125%; letter-spacing: -.02em; white-space: nowrap; }
 .mk-key-l { margin-top: 12px; font: 400 0.8125rem/1.4 var(--display); color: var(--fg); }
 .mk-key-c { margin: 6px 0 0; max-width: 30ch; font: 400 0.875rem/1.5 var(--display); color: var(--fg-3); text-wrap: pretty; }
 @media (max-width: 700px) { .mk-keys { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -918,13 +919,13 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 .mk-fan-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; margin-top: 18px; }
 .mk-fan-cap { min-width: 0; display: grid; gap: 6px; }
 .mk-fan-cap .n { font: 400 0.8125rem/1 var(--display); color: var(--lime); }
-.mk-fan-cap strong { font: 500 1.375rem/1.15 var(--head); letter-spacing: -.02em; color: var(--fg); }
+.mk-fan-cap strong { font: 700 1.125rem/1.15 var(--head); font-stretch: 125%; letter-spacing: -.02em; color: var(--fg); }
 .mk-fan-cap .d { font: 400 0.9375rem/1.5 var(--display); color: var(--fg-2); }
 .mk-fan-ticks { display: flex; gap: 4px; flex: none; }
 .mk-fan-ticks button { background: none; border: 0; padding: 12px 2px; cursor: pointer; }
 .mk-fan-ticks i { display: block; width: 24px; height: 2px; background: var(--rule); transition: background .3s; }
 .mk-fan-ticks button.on i { background: var(--lime); }
-@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 56vw; } .mk-fan-cap strong { font-size: 1.1875rem; } }
+@media (max-width: 600px) { .mk-fan-stage { height: clamp(380px, 112vw, 480px); } .mk-fan-card { left: 4%; width: 56vw; } .mk-fan-cap strong { font-size: 1rem; } }
 
 /* Stageshow demos (design/stageshow): a placeholder holds the space and shows the finished frame until the demo code loads,
    the first time a case study that has one opens (and for good without JavaScript). build_hifi.py adds one rule set per demo
@@ -947,7 +948,7 @@ div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
 /* ---- the lab: a band that introduces the two personal builds, a spec line in each hero ---- */
 .mk-lab-band { border-top: 1px solid var(--rule); }
 .mk-lab-wrap { max-width: 1216px; margin: 0 auto; padding: 80px var(--pad) 0; }
-.mk-lab-t { font: 500 clamp(2.5rem, 5vw, 64px)/1 var(--head); letter-spacing: -.02em; color: var(--fg); }
+.mk-lab-t { font: 800 clamp(2rem, 4vw, 51px)/1 var(--head); font-stretch: 125%; letter-spacing: -.02em; color: var(--fg); }
 .mk-lab-wrap p { margin: 16px 0 0; max-width: 54ch; font: 400 1.0625rem/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .mk-lab { position: relative; --lime: oklch(0.84 0.12 215); }   /* the lab's own accent: instrument cyan, in step with LAB_OKLCH in build_hifi.py */
 .mk-lab > * { position: relative; z-index: 1; }
@@ -1071,7 +1072,7 @@ div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
 </div>
 </div>
 <div style="min-width: 0px;">
-<div style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal;   font-size: 1.3125rem; line-height: 1.1;  letter-spacing: -0.01em; color: rgb(242, 239, 232); font-weight: 500; font-family: 'Clash Grotesk', 'Mk Arrows', system-ui, sans-serif;">Denny Ryanto</div>
+<div style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal;   font-size: 1.3125rem; line-height: 1.1;  letter-spacing: -0.01em; color: rgb(242, 239, 232); font-weight: 800; font-family: 'Archivo', 'Mk Arrows', system-ui, sans-serif; font-stretch: 125%;">Denny Ryanto</div>
 <div class="mk-lb" style="margin-top: 8px;   color: oklch(0.9 0.2 122);">Head / AVP, Product Design</div>
 </div>
 </div>
@@ -3439,7 +3440,7 @@ div:has(> [style*="width: 104%"]) { padding-inline: 2%; }
 </div></div></div><div class="mk-block mk-hang"><div class="mk-hl"><h3 class="mk-lt">Education</h3></div><div class="mk-hb"><div class="mk-edu">B.A. Graphic Design, Pelita Harapan University, 2004–08</div></div></div></div></div></div></div></section><div id="contact" style="border-top: 1px solid rgba(242, 239, 232, 0.14); position: relative;">
 <div class="mk-hang mk-contact-wrap" data-r="wrap"><div class="mk-hl"><div class="mk-ln">What I’m looking for</div></div>
 <div class="mk-hb mk-contact">
-<div aria-level="2" role="heading" style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal;   font-size: 4rem; line-height: 1;  letter-spacing: -0.02em; margin-bottom: 22px; font-weight: 500; font-family: 'Clash Grotesk', 'Mk Arrows', system-ui, sans-serif;">Let’s talk.</div>
+<div aria-level="2" role="heading" style="font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal;   font-size: 4rem; line-height: 1;  letter-spacing: -0.02em; margin-bottom: 22px; font-weight: 800; font-family: 'Archivo', 'Mk Arrows', system-ui, sans-serif; font-stretch: 125%;">Let’s talk.</div>
 <p style="margin: 0px 0px 30px; max-width: 600px; font: 400 1rem / 1.6 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, 0.7); text-wrap: pretty;">Open to a Head or AVP of Product Design mandate where design owns outcomes, building and scaling teams, design systems and AI-native practice across fintech, platform or consumer products.</p>
 <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px;">
 <a class="scp3 mk-lb" href="mailto:denny.ryanto@gmail.com" style="display: inline-flex; align-items: center; gap: 9px; background: oklch(0.9 0.2 122); color: rgb(24, 32, 3);   padding: 16px 22px; border-radius: 100px;">Get in touch</a>

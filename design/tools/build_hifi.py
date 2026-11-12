@@ -19,7 +19,7 @@ def soup(html):
 LIME = 'oklch(0.9 0.2 122)'
 
 # ---------- the Swiss pass (design/AUDIT.md, "Type C, grid 1") ----------
-# Switzer outside the drawings (Clash Grotesk for the headings), labels in sentence case with no tracking and no mono, and a hanging
+# Switzer outside the drawings (Archivo expanded for the headings), labels in sentence case with no tracking and no mono, and a hanging
 # index: a label column three of twelve columns wide carries the number, the names, the dates, a diagram's title and
 # its remark; everything else hangs from the fourth column. The captures and the section files spell their labels in
 # capitals, so every one of them is listed here with what it says now ("|" starts a new line in the label column).
@@ -103,14 +103,14 @@ def unit(title, body, notes=(), caps=(), cls=''):
     return '<div class="mk-block mk-hang%s">%s<div class="mk-hb">%s</div></div>' % (' ' + cls if cls else '', label_col(title, notes, caps), body)
 
 
-CLASH = "font-family: 'Clash Grotesk', 'Mk Arrows', system-ui, sans-serif"
+HEADFACE = "font-family: 'Archivo', 'Mk Arrows', system-ui, sans-serif; font-stretch: 125%"
 
 
-def in_clash(el, weight=500):
-    # a captured heading kept as inline styles: Clash Grotesk at 500 instead of the text face
+def in_head(el, weight=800):
+    # a captured heading kept as inline styles: Archivo expanded (wdth 125) at 800 instead of the text face
     st = re.sub(r'font-family:[^;]*;?', '', el['style'])
     st = re.sub(r'font-weight:[^;]*;?', '', st).strip().rstrip(';')
-    el['style'] = '%s; font-weight: %d; %s;' % (st, weight, CLASH) if st else '%s; font-weight: %d;' % (CLASH, weight)
+    el['style'] = '%s; font-weight: %d; %s;' % (st, weight, HEADFACE) if st else '%s; font-weight: %d;' % (HEADFACE, weight)
 
 
 UNSAID = []
@@ -157,7 +157,9 @@ for d in drop:
 # Two families only: Archivo (one variable file for every weight and width) and IBM Plex Mono, latin subsets only.
 # The live product mock-ups brought their own (Plus Jakarta Sans, Manrope, Sora); they are set in Archivo instead.
 KEEP_FAMILIES, KEEP_SUBSETS = ('IBM Plex Mono',), ('latin', 'latin-ext')
-DROP_FAMILIES = re.compile(r'\b(Plus Jakarta Sans|Manrope|Sora|Archivo)\b')
+# Archivo is dropped from the captures (their uses become the site's text face), except where it is written as the heading stack
+# (Archivo followed by Mk Arrows: HEADFACE and the --head token), which is the site's own and stays.
+DROP_FAMILIES = re.compile(r'\b(Plus Jakarta Sans|Manrope|Sora|Archivo(?![\'"]?,\s*[\'"]Mk Arrows))\b')
 
 
 def fonts_css():
@@ -191,17 +193,18 @@ def fonts_css():
 LATIN = 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD'
 APP_FONTS = [('Poppins', '500', 'poppins-500.woff2'), ('Poppins', '600', 'poppins-600.woff2'), ('Poppins', '700', 'poppins-700.woff2'),
              ('Mulish', '400 800', 'mulish-var.woff2')]
-# The site's type pair, self-hosted from design/fonts (Fontshare, ITF Free Font License): Clash Grotesk (headings, big numbers, the
-# wordmark; wght 200 to 700) and Switzer (everything else; wght 100 to 900), both latin variable files. Neither has the arrows
+# The site's type pair, self-hosted from design/fonts: Archivo (headings, big numbers, the wordmark; Google Fonts, SIL Open Font
+# License 1.1; the latin variable file cut to wght 500 to 900 and wdth 100 to 125, set at wdth 125 and weight 700 or 800) and
+# Switzer (everything else; Fontshare, ITF Free Font License; wght 100 to 900, latin). Neither has the arrows
 # U+2190-2193, so 'Mk Arrows' (a 1 KB subset of Inter Tight, arrows only) follows them in every font stack.
-# Archivo and IBM Plex Mono stay registered for the drawings (diagrams, product mock-ups, the demos), which keep their own
-# lettering; they are no longer preloaded, and load when a case study first shows them.
+# The captures' own use of Archivo is rewritten to Switzer by one_type() below, which runs on their CSS and inline styles only,
+# never on these @font-face rules or the heading rules of hifi_shell.html. IBM Plex Mono stays registered for the drawings.
 ARROWS = 'U+2190-2193'
-# (family, subset label, weights, file, unicode-range). None = no restriction: the Fontshare files do not cover every codepoint of
+# (family, subset label, weights, file, unicode-range, font-stretch range). None = no restriction: the Fontshare files do not cover every codepoint of
 # LATIN (no U+2191 / U+2193, no general-punctuation spaces), so a range that names them would be a claim the file cannot keep.
-SITE_FONTS = [('Switzer', 'latin', '100 900', 'switzer-var.woff2', None),
-              ('Clash Grotesk', 'latin', '200 700', 'clash-grotesk-var.woff2', None),
-              ('Mk Arrows', 'arrows', '100 900', 'arrows.woff2', ARROWS)]
+SITE_FONTS = [('Switzer', 'latin', '100 900', 'switzer-var.woff2', None, None),
+              ('Archivo', 'latin', '500 900', 'archivo-var.woff2', None, '100% 125%'),
+              ('Mk Arrows', 'arrows', '100 900', 'arrows.woff2', ARROWS, None)]
 
 
 def app_fonts_css():
@@ -210,10 +213,10 @@ def app_fonts_css():
         data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
         out.append("/* %s latin */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
                    "src: url(data:font/woff2;base64,%s) format('woff2'); unicode-range: %s; }" % (fam, fam, wt, data, LATIN))
-    for fam, sub_, wt, f, rng in SITE_FONTS:
+    for fam, sub_, wt, f, rng, stretch in SITE_FONTS:
         data = base64.b64encode(open(os.path.join(HERE, '..', 'fonts', f), 'rb').read()).decode()
-        out.insert(0, "/* %s %s */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s; font-display: swap; "
-                   "src: url(data:font/woff2;base64,%s) format('woff2');%s }" % (fam, sub_, fam, wt, data, ' unicode-range: %s;' % rng if rng else ''))
+        out.insert(0, "/* %s %s */\n@font-face { font-family: '%s'; font-style: normal; font-weight: %s;%s font-display: swap; "
+                   "src: url(data:font/woff2;base64,%s) format('woff2');%s }" % (fam, sub_, fam, wt, ' font-stretch: %s;' % stretch if stretch else '', data, ' unicode-range: %s;' % rng if rng else ''))
     return '\n'.join(out)
 
 
@@ -490,7 +493,7 @@ hero_h1['class'] = ['mk-h1']
 del hero_h1['style']
 del hero_h1['data-r']
 swiss_inline(card)
-in_clash(card.find(string=lambda t: t.strip() == 'Denny Ryanto').parent)   # the card's name
+in_head(card.find(string=lambda t: t.strip() == 'Denny Ryanto').parent)   # the card's name
 card['style'] = re.sub(r'(flex|width|margin-top):[^;]*;?\s*', '', card['style'])
 for el in card.find_all(string=lambda t: t.strip() == 'HEAD / AVP,'):   # the card's title line, two lines in capitals
     title_line = el.parent
@@ -1239,7 +1242,7 @@ for node in list(soup('<div class="cc-track"><div class="cc" hidden><div class="
 })();
 </script>""").contents):
     contact.append(node)
-in_clash(contact.find(string='Let’s talk.').parent)
+in_head(contact.find(string='Let’s talk.').parent)
 contact.find(string='Let’s talk.').parent.attrs.update({'role': 'heading', 'aria-level': '2'})   # a heading for heading navigation, same look
 contact.find(string=lambda x: x.strip() == 'PORTFOLIO 2026').parent.parent.name = 'footer'        # the contentinfo landmark
 for t in contact.find_all(string=lambda x: x.strip() == 'PORTFOLIO 2026'):   # the terminal's cursor (egg-matrix)

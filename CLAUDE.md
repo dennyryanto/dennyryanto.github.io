@@ -8,7 +8,7 @@ signature visuals in `design/generative/stack.js`, then rebuild with
 `design/AUDIT.md`). The old single-file bundle the content was taken from is kept
 at `design/source/legacy-index.html`.
 
-Type and grid: a pair, Clash Grotesk for headings, big numbers and the wordmark and Switzer for everything else (drawings
+Type and grid: a pair, Archivo expanded (wdth 125, weight 800; `--head` plus `font-stretch: 125%`) for headings, big numbers and the wordmark and Switzer for everything else (drawings
 included; an arrows-only font, Mk Arrows, follows them); sentence-case labels, and a twelve-column grid with a
 hanging label column. A new label spelled in capitals in a capture or section file needs an entry in `SAY`
 (`build_hifi.py`). See "Swiss build" in `design/AUDIT.md`.

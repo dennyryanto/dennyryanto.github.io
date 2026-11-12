@@ -5,5 +5,4 @@
 @font-face { font-family: 'Mulish'; font-weight: 400 800; font-display: block; src: url('../../fonts/mulish-var.woff2') format('woff2'); }
 /* the site's type pair, for the text the demos set in the page's own face (--ss-font); the arrows come from a small subset because neither face has them */
 @font-face { font-family: 'Switzer'; font-weight: 100 900; font-display: block; src: url('../../fonts/switzer-var.woff2') format('woff2'); }
-@font-face { font-family: 'Clash Grotesk'; font-weight: 200 700; font-display: block; src: url('../../fonts/clash-grotesk-var.woff2') format('woff2'); }
 @font-face { font-family: 'Mk Arrows'; font-weight: 100 900; font-display: block; src: url('../../fonts/arrows.woff2') format('woff2'); unicode-range: U+2190-2193; }
