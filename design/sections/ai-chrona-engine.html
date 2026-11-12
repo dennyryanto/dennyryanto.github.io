@@ -11,12 +11,12 @@
 .ce-wrap {
   container-type: inline-size;
   --ce-panel: #1a1b1f; --ce-node: #232429; --ce-tile: #2b2c32; --ce-line: rgba(255, 255, 255, .08);
-  --ce-ink: #f2f2f4; --ce-ink-2: #c2c3cb; --ce-ink-3: #8b8d98; --ce-edge: #4a4d57;
+  --ce-ink: #f2f2f4; --ce-ink-2: #c2c3cb; --ce-ink-3: #9d9fab; --ce-edge: #4a4d57;
   --ce-lime: oklch(0.9 0.2 122);
   display: flex; flex-direction: column; height: 100%;
 }
-.ce-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--ce-panel); box-shadow: 0 0 0 1px var(--ce-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 20px; font-family: Archivo, system-ui, sans-serif; color: var(--ce-ink); }
-.ce-top { margin-bottom: 18px; font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: var(--ce-lime); }
+.ce-board { flex: 1; display: flex; flex-direction: column; border-radius: 14px; background: var(--ce-panel); padding: 20px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--ce-ink); }
+.ce-top { margin-bottom: 18px; font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: var(--ce-lime); }
 .ce-body { flex: 1; display: flex; align-items: center; justify-content: center; min-width: 0; }
 
 /* one row: inputs, merge, AI, link, outcome */
@@ -25,7 +25,7 @@
 .ce-in { display: flex; align-items: center; gap: 9px; height: 44px; padding: 0 12px 0 8px; border-radius: 12px; background: var(--ce-node); box-shadow: 0 0 0 1px var(--ce-line); }
 .ce-chip { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--ce-tile); display: grid; place-items: center; color: var(--ce-ink-2); transition: color .35s; }
 .ce-chip svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-.ce-in b { font: 600 13px/1.2 Archivo, sans-serif; white-space: nowrap; }
+.ce-in b { font: 600 13px/1.2 'Switzer', 'Mk Arrows', sans-serif; white-space: nowrap; }
 
 /* connectors: dashed resting line, lime lit path on top (pathLength 1 so it can be drawn in) */
 .ce-c { display: block; overflow: visible; }
@@ -33,26 +33,26 @@
 .ce-base { fill: none; stroke: var(--ce-edge); stroke-width: 1.5; stroke-dasharray: 4 6; stroke-linecap: round; }
 .ce-g, .ce-l { fill: none; stroke: var(--ce-lime); stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 2; transition: stroke-dashoffset .55s ease-out, opacity .25s; }
 .ce-l { stroke-width: 2.5; }
-.ce-g { stroke-width: 7; opacity: .13; }
+.ce-g { display: none; }   /* the wide faint halo under the lit line is gone (2026-11-11) */
 .ce-hd { fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.5; }
 .ce-hd.b { stroke: var(--ce-edge); }
 .ce-hd.l { stroke: var(--ce-lime); stroke-width: 2.5; transition: opacity .25s; }
-.ce-pk { fill: var(--ce-lime); filter: drop-shadow(0 0 4px oklch(0.9 0.2 122 / .8)); }
+.ce-pk { fill: var(--ce-lime); }
 
 /* the decision: node box with a lime ring and a lime icon */
 .ce-ai { display: flex; flex-direction: column; align-items: center; gap: 9px; padding: 14px 12px; border-radius: 12px; background: var(--ce-node); text-align: center; transition: box-shadow .4s;
-  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+  box-shadow: 0 0 0 1.5px var(--ce-lime); }
 .ce-ai .ce-chip { color: var(--ce-lime); }
-.ce-ai b { font: 600 14px/1.25 Archivo, sans-serif; }
+.ce-ai b { font: 600 14px/1.25 'Switzer', 'Mk Arrows', sans-serif; }
 
 /* the outcome: lime ring and a lime chip */
 .ce-out { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 14px; border-radius: 12px; background: var(--ce-node); min-width: 0; transition: box-shadow .4s;
-  box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
-.ce-tag { padding: 4px 7px; border-radius: 6px; font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .08em; color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); transition: color .35s, background-color .35s; }
-.ce-out b { font: 700 16px/1.2 Archivo, sans-serif; }
-.ce-out span { font: 400 13px/1.4 Archivo, sans-serif; color: var(--ce-ink-2); }
+  box-shadow: 0 0 0 1.5px var(--ce-lime); }
+.ce-tag { padding: 4px 7px; border-radius: 6px; font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); transition: color .35s, background-color .35s; }
+.ce-out b { font: 600 16px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
+.ce-out span { font: 400 13px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--ce-ink-2); }
 
-.ce-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--ce-line); max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.ce-cap { margin: 20px 0 0; padding-top: 16px; border-top: 1px solid var(--ce-line); max-width: 72ch; font: 400 14px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 
 /* idle (the script's start state): nothing lit yet; the stages light the path in order */
 .ce-wrap.run .ce-g, .ce-wrap.run .ce-l { stroke-dashoffset: 1; opacity: 0; }
@@ -63,9 +63,9 @@
 .ce-wrap.run.s1 .ce-k1 .ce-l, .ce-wrap.run.s3 .ce-k2 .ce-l { stroke-dashoffset: 0; opacity: 1; }
 .ce-wrap.run.s1 .ce-k1 .ce-g, .ce-wrap.run.s3 .ce-k2 .ce-g { stroke-dashoffset: 0; opacity: .13; }
 .ce-wrap.run.s1 .ce-k1 .ce-hd.l, .ce-wrap.run.s3 .ce-k2 .ce-hd.l { opacity: 1; }
-.ce-wrap.run.s2 .ce-ai { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s2 .ce-ai { box-shadow: 0 0 0 1.5px var(--ce-lime); }
 .ce-wrap.run.s2 .ce-ai .ce-chip { color: var(--ce-lime); }
-.ce-wrap.run.s4 .ce-out { box-shadow: 0 0 0 1.5px var(--ce-lime), 0 0 0 5px oklch(0.9 0.2 122 / .1), 0 16px 36px -16px oklch(0.9 0.2 122 / .35); }
+.ce-wrap.run.s4 .ce-out { box-shadow: 0 0 0 1.5px var(--ce-lime); }
 .ce-wrap.run.s4 .ce-tag { color: var(--ce-lime); background: oklch(0.9 0.2 122 / .1); }
 
 /* narrow: the engine stacks, joined by short vertical connectors */
@@ -82,7 +82,7 @@
 </style>
 
 <div class="ce-board" role="img" aria-label="The Chrona engine: three inputs, your week, circle free and social memory, feed Chrona AI, which plans it. The result is an invite sent in under 120 seconds, with the plan landing on the calendar. Conversational planning that turns intent into a sent invite, the moment that defines success.">
-  <div class="ce-top">HOW IT WORKS · THE ENGINE</div>
+  <div class="ce-top">How it works: the engine</div>
   <div class="ce-body">
     <div class="ce-flow">
       <div class="ce-ins">
@@ -116,7 +116,6 @@
       <div class="ce-out"><span class="ce-tag">&lt;120s</span><b>Invite sent</b><span>Plan lands on the calendar</span></div>
     </div>
   </div>
-  <p class="ce-cap">Conversational planning that turns intent into a sent invite, the moment that defines success.</p>
 </div>
 
 <script>

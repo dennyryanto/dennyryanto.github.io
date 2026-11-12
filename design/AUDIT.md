@@ -1019,6 +1019,318 @@ Left alone: the lab's e-ink photo and the lab cockpit (full-bleed images by desi
 edge to edge on purpose). Residual: LinkAja chat between about 900 and 1100px wide, where the demo is on its compact design and the
 frame does not fill its column (35px, was 51).
 
+## Copy trim and Swiss type/grid options (2026-11-11)
+
+Owner: "too much copy, too many remarks after a diagram or a project showcase"; wants options for typography and layout,
+"aiming for a minimalistic clean swiss grid layout".
+
+**Copy trim (built into the site).** Rule: a diagram has its title; a remark under it stays only if it says something the
+drawing cannot (a disclaimer, a fact), in one or two short sentences.
+
+| Where | Before | Now |
+|---|---|---|
+| LinkAja problem / fix | two paragraphs beside the board (they repeated the hero line) | gone; the board has a head row and sets before and after side by side |
+| LinkAja support model | closing caption | gone (the diagram already says "not a blanket bot") |
+| LinkAja shipped screens | "As shipped: ..." caption | gone |
+| LinkAja home, routing (demo leads) | 4 sentences; 2 long ones | 2 short sentences each |
+| Komunal transformation map, tooling migration | closing captions | gone (both repeated "What I did") |
+| Komunal design system, sprint sync, placement routing | 3 to 4 sentence captions | 2 short sentences |
+| Komunal routing note, funnel caption | long notes | the NDA / "lift is actual" disclaimers only |
+| Komunal shipped flow, decision desk, Chrona (demo leads) | 1 to 2 long sentences | 1 short sentence |
+| Chrona engine | caption | gone; the habit loop keeps "North Star: the share of invites sent through Chrona." |
+| E-ink lab | intro paragraph above the faces (repeated the hero line) | gone |
+
+Left alone: Key numbers context lines, "What I did", the company lines, the cockpit's "The question" write-up, the
+shoe tracker text, every "ILLUSTRATIVE" tag and the "not affiliated with Garmin" line. These are the next candidates if it
+should go further.
+
+**Type and grid options (the owner picked C × 1; built, see the next section).** `design/mockups/type-grid-options.html`
+(https://claude.ai/artifact/HHQayFJuMsUMDfZpdapivi; refresh its stack copy with `inline_stack.py`). One live preview of the
+opening, the case index and the LinkAja case, redrawn by any pair, with a 12-column overlay.
+
+- Type: **A** Archivo at normal width (no new files, mono caps kept); **B** Geist + Geist Mono; **C** Inter Tight only,
+  labels in sentence case, no mono (recommended).
+- Grid: **1** Hanging index, a label column of three with content hanging from column 4 (recommended); **2** Poster, very
+  large flush-left headlines; **3** Register, the work as a table whose rows open, which drops the separate outcome band.
+
+## Swiss build: type C on grid 1 (2026-11-11)
+
+The owner picked **C × 1** from the options page and asked to fold in the cheap fixes from a Hallmark audit
+(`Nutlope/hallmark` v2.0.0, `audit` verb, run on the built page). The audit's main finding was typographic: tracked
+mono capitals on nearly every label (its gates 67 and 64), kickers above headings (54) and middle-dot strings (63).
+
+**Type.** One family outside the drawings: Inter Tight at first (replaced by Switzer and Clash Grotesk the same day, see
+"Type pair" below), a variable file for 400 to 600 in `design/fonts/`, the only font preloaded. Two weights (400 text, 500 heads and names). Labels are sentence case, 13px, untracked; no mono on the site
+itself. `SAY` in `build_hifi.py` lists every label the captures and section files spell in capitals with what it says
+now; the build stops if one is missing. Scale: 13 label, 14 to 18 text, 15 label titles, heads `clamp(30px, 3.4vw, 46px)`,
+the headline `clamp(40px, 6.2vw, 84px)`, key numbers `clamp(40px, 5vw, 64px)`.
+
+**The drawings are restyled too** (owner: "let's restyle the drawings"). Archivo is gone from the page.
+- Diagrams (`design/sections/`, all but the terminal easter egg): Switzer (first Inter Tight), labels in sentence case, no tracking, no
+  dot-joined strings. Mono stays only where it is the material: the design-system board's token names, the terminal,
+  and type inside product screens.
+- Captions on the boards that came from the captures (Dash, Lumio, the e-ink faces, the shoe tracker, the Chrona
+  write-up) go through `swiss_inline(..., strict=True)` and `SAY`.
+- Product screens (drawn at full size and scaled, or image-role drawings) keep their own design; only their stand-in
+  family changed from Archivo to the site's text face. Their capitals are the product's, not the site's.
+- The five demos set their page-face text in the site's text face (`--ss-font`); the harness loads it and the posters were
+  regenerated.
+- (Superseded by the type pair below: the file was our own subset of the variable Inter Tight, latin plus the arrows,
+  declared for 400 to 800.) Page fonts: 12 files, 250KB, one preloaded
+  (was 14 files, 411KB).
+- The link-preview image (`og_image.js`) uses the same type and was re-rendered.
+
+**Grid.** Twelve columns in the 1216px column, 24px gutters (`.mk-hang` in `hifi_shell.html`). The label column is
+columns 1 to 3 (`.mk-hl`); everything else hangs from column 4 (`.mk-hb`). Below 900px it is one column, label first.
+
+| Piece | Label column | From column 4 |
+|---|---|---|
+| Opening | Portfolio 2026, the role | headline (4 to 12), then the text (4 to 8) beside the profile card (9 to 12) |
+| Case index | none: four cells of three columns, no icons, no vertical rules | |
+| Clients | "Clients and brands" | the logos |
+| Case hero | number (lime), name, role, dates, one a line | title and description (4 to 8), the stack (9 to 12); toggle under them |
+| Case study units | the title, quiet note lines, and the remark that used to sit under the drawing | the numbers, the list, or the board |
+| Background | "Background", the years | headline, the timeline three columns a company |
+| Contact | "What I'm looking for" | "Let's talk", the text, the buttons, the footer line |
+
+Units are built by `unit()`, `stage()` and `figure_unit()` in `build_hifi.py`; `figure_unit()` lifts a section file's
+`-head` row and top-level `-cap` / `-note` paragraphs into the label column, so the section files are unchanged in shape.
+
+**Earlier decisions this replaces** (they followed from the pick, flag any to restore):
+- The toggle is left-aligned at column 4 with the chevron before the label, no longer centred caps. The bob, the flip and
+  the label crossfade are kept. Its line reads "3 min read. Home screen today, …".
+- Key numbers are left-aligned on the grid, no centred band or vertical rules.
+- Heroes no longer alternate sides: the text is always at column 4 and the stack at column 9.
+- "What I did" is one column at a reading measure, without dash markers.
+- The case index has no icons; the capabilities are one a line instead of dot-joined.
+- The "Lab" band title is at head size, not 84px.
+Kept as they were: the profile card with its spinning seals and its easter egg, the stacks and their build, the drawers'
+behaviour, deep links, the lab's cyan accent, every drawing.
+
+**Cheap fixes folded in.**
+- Decorative SVGs get `aria-hidden` unless they carry a name (`fixes()` in `build_hifi.py`; 51 on the old page).
+- `overflow-x: clip` on `html` and `body`.
+- The travelling dots in the problem/fix board and placement routing move by `transform` (a track the size of the
+  connector carries the dot). (The funnel bars now do too, see the 2026-11-11 phone note below.)
+- The scissors character in the sprint diagram is an SVG; the governance block's `h4`s are `h3`s; the design-system
+  swatches wrap three a row so their names fit; a straight apostrophe is curled.
+- The focus ring sits on the profile card itself, not its inner face.
+- `:active` states on the links and the toggle; tabular figures on the numbers.
+
+Not changed, with reasons: the Hallmark findings inside product screens (pure white, the Komunal "before" gradient, low
+contrast in mock UI), the "hidden at rest" classes (all script-scoped: `kop-pre`, `idle`), the 883 colour literals (how
+the page is assembled), the word budget (a portfolio, not a landing page). 
+
+Checked on the built page: no console errors or failed requests; no horizontal overflow at 1440 or 390; the opening fits
+1280 × 800; deep link, index link, toggle, Escape and focus return work; a stack builds on arrival; the LinkAja demos mount.
+Static linter counts, before to after: unlabelled SVGs 51 to 0, tracked-caps labels 106 to about 83 and mono labels 30 to 27
+(what is left is inside the drawings and in unused captured CSS), dot strings 19 to 7.
+
+**The hi-fi artifact is one page, updated in place** (owner: "so we don't have to keep adding new artifacts"). It is
+"Portfolio Hi-Fi", https://claude.ai/artifact/4RueWNnvUFU4onFqKDnCUo (it was "Portfolio Hi-Fi v2"; the title no longer
+carries a version). To publish an iteration: build, copy `<workdir>/portfolio-hifi.html` and the two files in
+`assets/stageshow/` into one folder, replace `%%SS_JS%%` and `%%SS_CSS%%` in the page with `stageshow/<file>`, and
+publish to that URL with the two bundle files as supporting files, so the demos run in the artifact too.
+
+### Type pair: Clash Grotesk and Switzer (2026-11-11)
+
+The site's family is now a pair instead of Inter Tight: **Clash Grotesk** for headings, big numbers and the wordmark
+(`--head` in `hifi_shell.html`: `.mk-h1`, `.mk-h2`, `.mk-lab-t`, `.mk-key-n`, `.mk-idx-n`, `.mk-brand`, `.mk-fan-cap strong`,
+the profile card's name and the "Let's talk." heading, plus the name, headline and numbers in `og_image.js`), and
+**Switzer** for everything else, diagrams and demos included (`--display`, `--ss-font`).
+
+- Why: the owner wanted more character, and Hallmark's font guidance lists Inter-family faces as the unchosen default.
+- Source: both are Fontshare variable fonts (Clash Grotesk wght 200 to 700, Switzer wght 100 to 900), ITF Free Font
+  License, self-hosted as `design/fonts/clash-grotesk-var.woff2` and `switzer-var.woff2`. Latin only, so the latin-ext file
+  is gone. Both faces are preloaded; the case studies' own faces still load on demand.
+- Arrows: neither face has U+2190-2193 (the site uses them in the 0 to 1 mark, W to D and "Fund to Complete"). `design/fonts/arrows.woff2`
+  (about 1 KB, `pyftsubset` of the old Inter Tight file, unicodes U+2190-2193) is registered as `Mk Arrows` with that
+  `unicode-range` and follows the family in every font stack, so arrows draw in a matching face, not a system fallback.
+  It is not preloaded. The Inter Tight files were deleted.
+- The two Fontshare faces are registered without a `unicode-range` because they do not cover every codepoint the old range
+  named (no U+2191 and U+2193, no general-punctuation spaces).
+- Neither face has tabular figures; `font-variant-numeric: tabular-nums` stays in the CSS but does nothing for them.
+- Heading metrics: weight 500, letter-spacing -.02em; the headline sets on exactly two lines at 1280 and 1440px.
+
+### Heading face: Archivo expanded replaces Clash Grotesk (2026-11-12)
+
+The owner compared nine heading faces on `design/mockups/display-type-options.html` (each set at the same sizes as the site, with a
+side-by-side of the headline) and picked **option F, Archivo expanded**. Clash Grotesk is gone from the build.
+
+- Face: Archivo, one variable file (`design/fonts/archivo-var.woff2`, Google Fonts latin, SIL Open Font License 1.1) cut with fonttools
+  to wght 500 to 900 and wdth 100 to 125, 59 KB (the full file is 90 KB). Registered in `SITE_FONTS` with `font-weight: 500 900` and
+  `font-stretch: 100% 125%`; it is the preloaded heading face. `--head` is `'Archivo', 'Mk Arrows', system-ui, sans-serif`.
+- A font-family token cannot carry the width, so every rule that reads `--head` sets `font-stretch: 125%` after its `font` shorthand
+  (the shorthand resets it), and the two captured headings kept as inline styles (the card's name, "Let's talk.") get the same
+  declaration from `in_head()` in `build_hifi.py`. Weight 800 for the headline, h2s, key numbers, index numbers and lab title; 700 for the
+  wordmark and the fan caption.
+- `DROP_FAMILIES` still strips Archivo from the captures and mock-ups (they become Switzer, as before), but its Archivo branch skips the
+  heading stack (Archivo followed by Mk Arrows), so the new rules and inline styles survive `one_type()`. Checked on the built page:
+  every element whose computed family starts with Archivo is a heading element (brand, h1 and its `.ol` letters, h2s, key and index
+  numbers, lab title, card name, "Let's talk.", fan caption).
+- Sizes, before to after (about 70% of Clash for the headline, about 80% for the rest, as on the options page; Archivo expanded 800
+  is much wider): headline `clamp(40px, 6.2vw, 84px)` to `clamp(28px, 4.3vw, 59px)` (27 to 40px from 7.7vw under 600px), line height
+  .98; h2 `clamp(30px, 3.4vw, 46px)`/1.04 to `clamp(23px, 2.5vw, 34px)`/1.08; key numbers and lab title `clamp(40px, 5vw, 64px)` to
+  `clamp(32px, 4vw, 51px)`; index numbers `clamp(30px, 3.2vw, 40px)` to `clamp(24px, 2.6vw, 32px)` (phone 26 to 30 becomes 22 to 26);
+  wordmark 15px/500 to 14px/700; fan caption 22px/500 to 18px/700 (19 to 16 on phones). Letter spacing stays -.02em (-.01em on the
+  wordmark). The opening still fits 1280 x 800 (headline bottom 264 to 215, card bottom 792 to 743).
+- The link-preview card (`og_image.js`, both variants) uses the same face; the video variant's name, headline and numbers moved to
+  Archivo 800 at 17, 72 and 32px. `assets/og-image.png` was re-rendered. The Clash line in `design/stageshow/harness/fonts.css` was
+  removed (nothing in the demos used it).
+- Matrix easter egg (`design/sections/egg-matrix.html`): its canvas headline is set in `800 40px Archivo`, which used to fall back to
+  Arial Black and now draws in real Archivo at normal width. Checked at 1440 and 390 against the old fallback: still legible, centred and
+  inside the canvas (the font size is fitted to the grid width), only a little narrower and lighter, so nothing was changed. The terminal and
+  profile-card eggs open, close and flip as before, and none of them names Clash.
+- Rolling "outcomes": the roll's clip window was cut `.07em` below the top of each letter slot, tuned for Clash, and the rolling digits
+  (Archivo expanded 800, 41 to 47px at 1440) were wider than most slots and overlapped their neighbours. The window is now exactly the
+  slot (`clip-path: inset(0 -.2em)`, was `inset(.07em -40% -.12em -40%)`), so no glyph inside its slot is cut and no neighbouring digit
+  peeks in, and the rolling digits use `font-stretch: 100%` (the settled letters stay expanded). Layout is unchanged: the h1 and every slot
+  sit where they do with the roll disabled.
+- Two follow-ups. The profile card's row labels (Experience, Now, Board, Certified) were 50% cream inline in the capture, which the
+  Impeccable detector measured at 4.4 to 4.49:1 on the card's gradient; `build_hifi.py` now rewrites them to 58% (about 5.7:1 sampled
+  on the lightest point behind the labels at 1440 and 390; the values beside them stay at 88%). The h2 max went from 34px to 32px
+  (`clamp(23px, 2.5vw, 32px)`), which brings the Komunal h2 from 4 lines to 3 at 1440 (the hero text column is 493px there and the h2
+  has no narrower max-width; it already had `text-wrap: balance`); LinkAja was already 2 lines at 1440, and nothing at 1280, 1024
+  or 390 changed.
+
+### Phone check of the drawings, funnel bars, read times (2026-11-11)
+
+**Phone check.** All six case studies opened one at a time at 390 x 844 (spot-check 360), reduced motion, demos `ss-ready`;
+every `.mk-block` screenshotted at 2x and looked at, plus a script for right-edge overflow, text under 11px outside product
+screens, clipped text, overlapping text boxes and board side padding. Result: the diagrams hold up. No horizontal overflow, no
+text under 11px outside product screens, no board with uneven side padding, no connector pointing at nothing. Fixed one thing:
+in the sprint sync, the 12px request dots (plus halo) on a ~170px track merged into blobs at 360 and 390, so a request
+disappeared; `@container (max-width: 420px)` in `komunal-sprint-sync.html` makes them 9px. Desktop is pixel-identical.
+Left for a decision (not changed): Chrona's compact stage crops the top of the phone by design (`top: -90px` in `chrona.css`);
+two Product dots in the sprint sync still touch (their data positions are 10px apart on the track); in the Dash back office
+and Lumio CMS mock-ups the main pane above the content is blank, at every width (product screens); the checker's remaining
+"overlap" hits are line boxes of wrapped text and clipped parts of the demos, not visible collisions.
+
+**Funnel bars.** `komunal-funnel.html` no longer animates `height`. Each bar keeps its full height and scales from its
+foot (`transform: scaleY(0)` in the idle state); the value label is now a sibling of the bar, not inside it, and travels the
+same distance with the same curve, duration and stagger (`translate(-50%, calc(var(--p) * 1.5px))` in the idle state), so it rides
+the bar top without being scaled. Same timing, finished state and reduced-motion behaviour; the markup is still the final state,
+so the page is complete without script. One visible difference: the 4px top corners are scaled with the bar while it grows.
+
+**Read times** (`READ` in `build_hifi.py`), re-measured on the built page with the case study open. Words in the reading copy and
+diagram labels at 230 a minute, leaving out text inside the animated demos (`[data-ss]` holds every frame of the loop) and inside
+scaled product screens; 8s per image up to 8, each scaled product screen counting as one image; 30s per demo; 30s for the case
+studies with drawings from `design/sections/` (linkaja, komunal, ai, lab; not board or lab-ui). Words / images / demos, unrounded
+minutes, old to new: Linkaja 308 / 4 / 2, 3.37 min, 3 to 3; Komunal 810 / 0 / 1, 4.52, 7 to 5; Board 244 / 8 (18 counted, capped) / 0,
+2.13, 4 to 2; AI 342 / 0 / 2, 2.99, 3 to 3; Lab 347 / 3 / 0, 2.41, 3 to 2; Lab UI 197 / 7 / 0, 1.79, 2 to 2. Note: the built page has
+no element carrying `data-fit` (the build's regex and the page script's `[data-fit]` find nothing in the output), so the scaled
+screens were identified by their computed `scale()` transform.
+
+## Impeccable polish pass (2026-11-11)
+
+A final quality pass with Impeccable (`pbakaus/impeccable` 4.8.2, its `polish` command), on the built page at 1440, 1024,
+768 and 390. Polish preserves the look and fixes what is unfinished; it is not a redesign. The detector ran once, at the end.
+
+**Fixed**
+- **One page gutter.** Between 601 and 820px the case index, the clients strip and the top bar kept a 40px gutter while the
+  sections had already dropped to 24px, so their left edges disagreed. Every wrap now reads one token, `--pad`
+  (40px, 24px from 820, 16px from 480), in step with the captured `[data-r~="wrap"]` rule.
+- **Profile card on small laptops.** From 901 to 1180px four columns were too narrow for the card (every row wrapped and
+  the card ran far below the text). It now sits under the text, both from column 4.
+- **Skip link hover.** The captured stylesheet turns every hovered link lime, which is the skip link's own ground: lime
+  on lime. It keeps its ink on hover.
+- **Diagram text contrast.** The diagrams' quietest ink (`#8b8d98`) read 4.2:1 on their tile ground; it is `#9d9fab` now
+  (about 5.3:1), in all 16 section files.
+- **Heading levels.** The label column's titles are real `h3`s instead of `div`s with a heading role, so no level is
+  skipped anywhere (61 headings, checked with every case study open).
+- **Browser surfaces.** The scrollbar, form accents and the tap flash take the page's colours (`scrollbar-color`,
+  `accent-color`, `-webkit-tap-highlight-color`); text selection was already themed.
+- **Clean-up.** The unused rules of the old scroll-pinned cockpit are dropped from the captured stylesheet (they left a
+  second sticky element in it), `blocks()` is removed from `build_hifi.py`, and the `tabular-nums` declarations are gone
+  because neither face has tabular figures.
+
+**Detector findings left alone, with reasons**
+(The glow, nested-card, cramped-padding and grid items below were later adjusted at the owner's request; see "Glow, nested cards, lab grid and style attributes".)
+- *Low contrast, tiny text, wide tracking, flat hierarchy:* all the remaining ones are inside product screens (LinkAja,
+  Dash, Lumio, the Komunal app), which are shown as designed.
+- *Nested cards and cramped padding:* the diagrams' node cards on their board, and screens set flush in device frames.
+  That is the drawings' established language (`design/sections/VIZ-STYLE.md`), not page structure.
+- *Coloured glow:* the lit connectors and travelling dots in the diagrams, and the terminal easter egg's green. Impeccable
+  counts a zero-offset coloured halo as decoration; here it marks the "lit" path. Left for the owner to decide.
+- *Grid background:* the lab's faint workbench grid, an earlier owner decision.
+- *Images at opacity 0:* the demo posters and crossfades, which are meant to be hidden until used.
+- *Case numbers 01 to 04:* Impeccable discourages section numbers unless the sequence carries information. Here they tie
+  each case to its cell in the index, so they stay.
+
+## Safari safeguard for scaled screens, made to take effect (2026-11-11)
+
+**What was wrong.** The product screens (four LinkAja phones at 375px, the Dash tablets at 1024px, the Dash and Lumio
+laptops at 1440px) are drawn at full size and scaled into their frames with an inline
+`transform: scale(calc(100cqw / 375px))`. `portable()` in `build_hifi.py` was meant to rewrite that to
+`tan(atan2(100cqw, 375px))` (typed length / length arithmetic is not supported by older Safari) and mark each screen
+`data-fit="<width>"` so the page script sets an exact scale. Its regex only knew `calc(100cqw * (1 / 375px))`, a spelling
+the markup does not use, so the built page had no `data-fit` and no `tan(atan2(`, the script found nothing, and
+`floor_type()`'s `data-fit` test never matched either.
+
+**What changed.**
+- `portable()` also rewrites `calc(100cqw / Npx)` (whitespace-tolerant) and marks every inline scale `data-fit`. All eight
+  screens in the page now carry it. No stylesheet scales by `cqw` (the one other `cqw` rule is the background video's cover
+  sizing, which is not a scale), and the stageshow sources have none, so nothing else needed the marker.
+- `floor_type()` now runs on markup that has been through `portable()`, so its `data-fit` test works: product screens keep
+  their px sizes instead of being converted to rem. At the default 16px root the pixels are the same (checked: the built
+  page differs only by rem-to-px inside screens, and no font size inside a screen is under the 11px floor); with a larger
+  browser font size the screens no longer re-flow inside their fixed-size drawing.
+- The page script (`hifi_shell.html`) measures the frame's fractional content width (not the rounded `clientWidth`),
+  sets `scale(w / fit)` on load, on `ResizeObserver` and window `resize`, and refits a case study's screens when it opens
+  (`mk-open`; a shut drawer is `content-visibility: hidden` and measures 0 until it opens). It also works without
+  `ResizeObserver`. The screen's parent is the frame that has `container-type: size`, with no padding or border, and the
+  transform origin is left top.
+
+**Tested (Chromium only).** Screen widths at 1440 and 390 with the case studies open, before and after: identical
+(within 0.01px), and the element screenshots are pixel-identical apart from animated content. A browser that ignores the CSS
+scale was simulated by stripping every `cqw` transform before the page script runs (Playwright `addInitScript` plus a
+`MutationObserver`): on the new build all 8 screens land within 1px of their frame at 1440 and 390, after resizing
+(1024, 700, 390, 1440) and for case studies that were closed at load; on the previous build the same test fails for all of
+them (screens stay at full size). Playwright WebKit is not installed here, so **this has not been verified in real Safari**.
+Found here and fixed in the next section: in the built markup the font-family rewrite leaves unescaped single quotes inside some single-quoted
+`style` attributes on the screens' wrappers, which cuts those attributes short (the font stack and whatever follows it, such as
+`display: flex`, on all eight); it predated this change.
+
+## Glow, nested cards, lab grid and style attributes (2026-11-11)
+
+The advisor settled the findings the polish pass left open. All changes are in the sources; `index.html` and `assets/` were rebuilt.
+
+**Lime glows removed from the diagrams.** Kept: solid lime fills, strokes and dots, the 1px and 1.5px lime outlines, the terminal
+easter egg and the profile-card spark, everything inside product screens and demos, focus rings, the generative stack.
+Removed: the 5px translucent outer ring and the long blurred drop under lit nodes (`.ce-ai`, `.ce-out`, the `s2`/`s4` states, `.dfy-node.dfy-out`,
+`.kds-lib`, `.kpr-node.win`, `.ktm-card.win`, `.lsm-card.win`, `.cl-n.on`); the `drop-shadow` on travelling dots (`.ce-pk`, `.cl-dot`, `.dfy-packet`,
+`.kds-dot`, the circles in `.lsm-edges`); the 4px halo around the status dots (`.kds-status`, `.kpr-lane.good`, `.kss-good`, `.ktf-dot`, `.gpd-st`, `.lpf-row.after`,
+`.lsm-lane.after`) and the end-point ring on the funnel line (`.kfl-pt.end`); the check disc ring (`.lpf-check`); the glows on lit connectors (`.kpr-link b::after`,
+`.lpf-dot::after`, `.kss-cut`, `.gpp-seg.lit`, `.lpf-c.lit::before`); and the wide faint under-stroke on lit lines (`.glow` in the support model, design system and decision desk,
+`.ce-g`, `.cl-trail.g`, `.kop-glow`, now `display: none`). The decision desk's amber packet and amber connector halo went with the lime ones so the diagram stays consistent;
+other amber and blue halos (sprint dots, product-screen blue) were left. Site level: `hifi_shell.html` had no lime glow. The captured stylesheet still carries
+`loop-dot` and `loop-node-hit` rules from the old bundle (a glow); nothing on the page uses them.
+
+**Nested cards.** Surveyed with a script (boxed ancestors with a fill, ring or four borders, three levels deep, product screens excluded). Panel, lane, node
+occurred in the placement routing, sprint sync, funnel and support model; panel, tile, picture in the transformation board; panel, library, group in the design system.
+Fixes: every `.mk-board`, diagram board and `.ksf-panel` is a flat panel (same fill, no ring, no long shadow); lanes lost their boxes and are separated by a hairline in the
+column gap (or the row gap when stacked), lane padding is vertical only so nodes line up with the board's own padding; the transformation board's four tiles are hairline quadrants
+and the before/after pictures are the cards; the design system library's four groups are hairline columns inside the one library card. Left: panel, surface, product card
+in the design system (the white card is a product screen); chips and pills inside nodes; the Dash and Lumio frames.
+
+**Lab grid.** The faint 48px grid behind the lab (`.mk-lab::before`) is gone; plain page surface.
+
+**Sprint sync.** The two Product dots at 47% and 57% are at 45% and 59%; the smallest gap between dots in a row is 99, 11 and 7px at 1440, 390 and 360 wide (the halo was what made them touch).
+
+**Funnel bars** reveal with `clip-path: inset(... round 4px 4px 0 0)` instead of `scaleY`, so the top corners stay round all the way; reduced motion and no script show the final state; the value labels still travel by transform.
+
+**Chrona on a phone: left as it is.** At 390 the compact stage is 358 x 570 and the phone is 326 x 685 with `top: -90px`, so the notch and the last 25px are cut off. Showing all of it
+means a taller stage and a new placement of the outcome card, the cursor rest points and the posters, which is the demo's own layout (`chrona.css`, `index.tsx`), not the placement in `build_hifi.py`.
+
+**Padding.** Measured text against its nearest boxed ancestor at 1440 and 390. Raised: the placement routing's route options, amount row, nodes and shared card; the design system's surface header;
+the narrow-board padding in the funnel, support model, transformation and placement routing (12px 14px; the flat lanes had made it look like 10px). Judged fine: chips, pills and tags
+(17 to 28px high on purpose), the profile card's tag pills, small labels inside the miniature pictures, the 28px step badges.
+
+**Style attributes (bug).** `one_type()` wrote the site font stack, which contains single quotes, into single-quoted `style` attributes, which cut the attribute short.
+It now writes the stack with double quotes when the attribute is single-quoted. Affected attributes in the built page: 9 before (8 scaled screens and one amber label in Dash), 0 after.
+The scaled screens now keep what followed the font: `display: flex` and the backgrounds, so the LinkAja phones fill their frames (the CTA sits at the foot), the Fiorella menu
+tablet and the Dash tablet are full height and the Dash and Lumio laptops show their content where the main pane was blank.
+
 ## Section mockups (2026-10-13)
 
 One section at a time can be polished in isolation:

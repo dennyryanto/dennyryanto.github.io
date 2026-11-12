@@ -9,7 +9,7 @@ export const meta: Meta = {
   title: 'Shipped deposit flow',
   head: 'SHIPPED SCREEN + FLOW',
   note: 'DEPOSITOBPR · PRODUCT',
-  lead: 'As shipped, in the app\'s own type and colours: the amount is checked as it is entered, the app recommends the one rail that works for this amount, bank and time, and nothing is locked while it waits for the funds.',
+  lead: 'As shipped: the app recommends the one rail that works for this amount, bank and time.',
   layout: 'full',
   stageWidth: 820,
   sizes: { wide: [820, 750], compact: [358, 736], below: 620 },

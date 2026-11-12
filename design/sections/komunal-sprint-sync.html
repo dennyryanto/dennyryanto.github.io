@@ -10,34 +10,36 @@
 .kss-wrap {
   container-type: inline-size;
   --kss-panel: #1a1b1f; --kss-node: #232429; --kss-tile: #2b2c32; --kss-line: rgba(255, 255, 255, .08);
-  --kss-ink: #f2f2f4; --kss-ink-2: #c2c3cb; --kss-ink-3: #8b8d98; --kss-edge: #4a4d57; --kss-mark: #6b6e78;
+  --kss-ink: #f2f2f4; --kss-ink-2: #c2c3cb; --kss-ink-3: #9d9fab; --kss-edge: #4a4d57; --kss-mark: #6b6e78;
   --kss-lime: oklch(0.9 0.2 122); --kss-amber: #fdb022;
 }
 .kss-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
-.kss-head span { font: 600 11px/1.3 'IBM Plex Mono', monospace; letter-spacing: .14em; color: rgba(242, 239, 232, .6); }
+.kss-head span { font: 500 12px/1.3 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 .kss-head span:first-child { color: var(--kss-lime); }
 
-.kss-board { border-radius: 14px; background: var(--kss-panel); box-shadow: 0 0 0 1px var(--kss-line), 0 30px 60px -30px rgba(0, 0, 0, .9); padding: 16px; display: grid; gap: 14px; font-family: Archivo, system-ui, sans-serif; color: var(--kss-ink); }
-.kss-lane { border-radius: 12px; padding: 14px 14px 16px; background: rgba(255, 255, 255, .015); box-shadow: 0 0 0 1px var(--kss-line); min-width: 0; }
+.kss-board { border-radius: 14px; background: var(--kss-panel); padding: 16px; display: grid; gap: 14px; font-family: 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink); }
+.kss-lane { position: relative; padding: 14px 0 16px; min-width: 0; }
+/* lanes are not boxes: a hairline between them */
+.kss-lane + .kss-lane::before { content: ''; position: absolute; left: 0; right: 0; top: -8px; height: 1px; background: var(--kss-line); }
 .kss-lh { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.kss-tag { padding: 4px 8px; border-radius: 6px; background: var(--kss-tile); font: 600 11px/1 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kss-ink-2); }
-.kss-lh b { font: 600 14px/1.2 Archivo, sans-serif; }
-.kss-st { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1 'IBM Plex Mono', monospace; white-space: nowrap; }
+.kss-tag { padding: 4px 8px; border-radius: 6px; background: var(--kss-tile); font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-2); }
+.kss-lh b { font: 600 14px/1.2 'Switzer', 'Mk Arrows', sans-serif; }
+.kss-st { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; white-space: nowrap; }
 .kss-st i { width: 8px; height: 8px; border-radius: 50%; }
 .kss-bad .kss-st { color: var(--kss-amber); }
 .kss-bad .kss-st i { background: var(--kss-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .15); }
 .kss-good .kss-st { color: var(--kss-lime); }
-.kss-good .kss-st i { background: var(--kss-lime); box-shadow: 0 0 0 4px oklch(0.9 0.2 122 / .15); }
+.kss-good .kss-st i { background: var(--kss-lime); }
 
 /* the timeline: department | intake | cut-off | two weeks | delivered */
 .kss-tl { display: grid; grid-template-columns: 96px 112px 14px minmax(0, 1fr) 40px; row-gap: 8px; align-items: center; }
-.kss-th { font: 500 11px/1.2 'IBM Plex Mono', monospace; letter-spacing: .1em; color: var(--kss-ink-3); }
+.kss-th { font: 400 12px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-3); }
 .kss-days { display: grid; grid-template-columns: repeat(10, 1fr); }
-.kss-days span { font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kss-ink-3); text-align: center; }
+.kss-days span { font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-3); text-align: center; }
 .kss-days span.wk { color: var(--kss-ink-2); }
-.kss-dept { font: 600 13px/1.2 Archivo, sans-serif; color: var(--kss-ink); }
+.kss-dept { font: 600 13px/1.2 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink); }
 .kss-in { display: flex; align-items: center; gap: 4px; min-height: 26px; }
-.kss-ch { padding: 3px 6px; border-radius: 6px; background: rgba(253, 176, 34, .1); box-shadow: inset 0 0 0 1px rgba(253, 176, 34, .35); font: 500 11px/1 'IBM Plex Mono', monospace; color: var(--kss-amber); }
+.kss-ch { padding: 3px 6px; border-radius: 6px; background: rgba(253, 176, 34, .1); box-shadow: inset 0 0 0 1px rgba(253, 176, 34, .35); font: 400 12px/1 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-amber); }
 .kss-ch.ok { background: var(--kss-tile); box-shadow: inset 0 0 0 1px var(--kss-line); color: var(--kss-ink-2); }
 .kss-q { width: 10px; height: 10px; border-radius: 50%; background: var(--kss-ink-2); }
 .kss-track { position: relative; height: 26px; }
@@ -47,31 +49,35 @@
 .kss-bad .kss-bar b { background: var(--kss-mark); opacity: .55; }
 .kss-good .kss-bar b { background: oklch(0.9 0.2 122 / .22); box-shadow: inset 0 2px 0 var(--kss-lime); }
 .kss-hit { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; background: var(--kss-amber); box-shadow: 0 0 0 4px rgba(253, 176, 34, .18); }
-.kss-done { justify-self: center; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 700 12px/1 'IBM Plex Mono', monospace; }
+.kss-done { justify-self: center; display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; font: 500 12px/1 'Switzer', 'Mk Arrows', sans-serif; }
 .kss-bad .kss-done { color: var(--kss-amber); box-shadow: inset 0 0 0 1.5px rgba(253, 176, 34, .6); }
 .kss-good .kss-done { color: #182003; background: var(--kss-lime); }
 .kss-done.muted { color: var(--kss-ink-3) !important; background: none !important; box-shadow: inset 0 0 0 1.5px var(--kss-edge) !important; }
 /* the cut-off: one lime rule through all three rows */
-.kss-cut { grid-column: 3; justify-self: center; width: 2.5px; height: 100%; min-height: 26px; background: var(--kss-lime); box-shadow: 0 0 7px oklch(0.9 0.2 122 / .5); border-radius: 2px; }
+.kss-cut { grid-column: 3; justify-self: center; width: 2.5px; height: 100%; min-height: 26px; background: var(--kss-lime); border-radius: 2px; }
 .kss-cut.none { background: none; box-shadow: none; border-left: 1.5px dashed var(--kss-edge); width: 0; }
 /* ceremonies shared by all three rows */
 .kss-cer { grid-column: 4; position: relative; height: 18px; }
-.kss-cer span { position: absolute; top: 0; font: 500 11px/1.4 'IBM Plex Mono', monospace; color: var(--kss-ink-2); white-space: nowrap; }
+.kss-cer span { position: absolute; top: 0; font: 400 12px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-2); white-space: nowrap; }
 .kss-cer span:first-child { left: 0; } .kss-cer span:last-child { right: 0; }
 .kss-cer span::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 6px; border-radius: 50%; background: var(--kss-ink-2); vertical-align: 1px; }
-.kss-note { grid-column: 2 / -1; font: 500 11px/1.4 'IBM Plex Mono', monospace; color: var(--kss-ink-3); }
+.kss-note { grid-column: 2 / -1; font: 400 12px/1.4 'Switzer', 'Mk Arrows', sans-serif; color: var(--kss-ink-3); }
 
-.kss-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 Archivo, sans-serif; color: rgba(242, 239, 232, .6); }
+.kss-cap { margin: 14px 0 0; max-width: 72ch; font: 400 14px/1.55 'Switzer', 'Mk Arrows', sans-serif; color: rgba(242, 239, 232, .6); }
 
 @container (max-width: 640px) {
   .kss-tl { grid-template-columns: 74px 64px 12px minmax(0, 1fr) 30px; }
   .kss-dept { font-size: 12px; }
   .kss-days span:not(.wk) { visibility: hidden; }
   .kss-ch { padding: 3px 4px; }
-  .kss-th { font-size: 11px; letter-spacing: .04em; }
+  .kss-th { font-size: 11px; }
   .kss-cer { grid-column: 1 / -1; height: auto; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 4px; }
   .kss-cer span { position: static; }
   .kss-cutnote { grid-column: 1 / -1 !important; }
+}
+/* phone width: the request dots are 12px with a halo on a ~170px track, so neighbours merged; smaller dots keep every request visible */
+@container (max-width: 420px) {
+  .kss-hit { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px; box-shadow: 0 0 0 2px rgba(253, 176, 34, .18); }
 }
 @media (prefers-reduced-motion: reduce) { .kss-wrap * { transition: none !important; animation: none !important; } }
 </style>
@@ -79,14 +85,14 @@
 <div class="kss-head"><span>SPRINT SYNC · MARKETING, PRODUCT, ENGINEERING</span><span>TWO-WEEK SPRINTS · ILLUSTRATIVE</span></div>
 <div class="kss-board">
   <div class="kss-lane kss-bad" data-lane="before">
-    <div class="kss-lh"><span class="kss-tag">BEFORE</span><b>Only Engineering runs sprints</b><span class="kss-st"><i></i>Requests land mid-sprint</span></div>
+    <div class="kss-lh"><span class="kss-tag">Before</span><b>Only Engineering runs sprints</b><span class="kss-st"><i></i>Requests land mid-sprint</span></div>
     <div class="kss-tl">
-      <span></span><span class="kss-th">INTAKE</span><span></span>
+      <span></span><span class="kss-th">Intake</span><span></span>
       <div class="kss-days"><span class="wk">W1</span><span>2</span><span>3</span><span>4</span><span>5</span><span class="wk">W2</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
-      <span class="kss-th" style="text-align:center">DONE</span>
+      <span class="kss-th" style="text-align:center">Done</span>
 
       <span class="kss-dept">Marketing</span>
-      <div class="kss-in"><span class="kss-ch">CHAT</span></div>
+      <div class="kss-in"><span class="kss-ch">Chat</span></div>
       <span class="kss-cut none"></span>
       <div class="kss-track"><i class="kss-hit" style="left:14%"></i><i class="kss-hit" style="left:38%"></i><i class="kss-hit" style="left:66%"></i><i class="kss-hit" style="left:88%"></i></div>
       <span class="kss-done">?</span>
@@ -94,11 +100,11 @@
       <span class="kss-dept">Product</span>
       <div class="kss-in"><span class="kss-ch">DM</span></div>
       <span class="kss-cut none"></span>
-      <div class="kss-track"><i class="kss-hit" style="left:24%"></i><i class="kss-hit" style="left:47%"></i><i class="kss-hit" style="left:57%"></i><i class="kss-hit" style="left:79%"></i></div>
+      <div class="kss-track"><i class="kss-hit" style="left:24%"></i><i class="kss-hit" style="left:45%"></i><i class="kss-hit" style="left:59%"></i><i class="kss-hit" style="left:79%"></i></div>
       <span class="kss-done">?</span>
 
       <span class="kss-dept">Engineering</span>
-      <div class="kss-in"><span class="kss-ch ok">TICKETS</span></div>
+      <div class="kss-in"><span class="kss-ch ok">Tickets</span></div>
       <span class="kss-cut none"></span>
       <div class="kss-track"><div class="kss-bar"><b></b></div><i class="kss-hit" style="left:38%"></i><i class="kss-hit" style="left:66%"></i></div>
       <span class="kss-done muted">✓</span>
@@ -108,11 +114,11 @@
   </div>
 
   <div class="kss-lane kss-good" data-lane="after">
-    <div class="kss-lh"><span class="kss-tag">AFTER</span><b>One sprint, three departments</b><span class="kss-st"><i></i>Requests, execution and delivery in sync</span></div>
+    <div class="kss-lh"><span class="kss-tag">After</span><b>One sprint, three departments</b><span class="kss-st"><i></i>Requests, execution and delivery in sync</span></div>
     <div class="kss-tl">
-      <span></span><span class="kss-th">REQUEST FORM</span><span class="kss-th" style="text-align:center">✂</span>
+      <span></span><span class="kss-th">Request form</span><span class="kss-th" style="text-align:center"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Cut-off"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M8.1 8.1 20 20M8.1 15.9 20 4"/></svg></span>
       <div class="kss-days"><span class="wk">W1</span><span>2</span><span>3</span><span>4</span><span>5</span><span class="wk">W2</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
-      <span class="kss-th" style="text-align:center">DONE</span>
+      <span class="kss-th" style="text-align:center">Done</span>
 
       <span class="kss-dept">Marketing</span>
       <div class="kss-in"><span class="kss-q"></span><span class="kss-q"></span><span class="kss-q"></span></div>
@@ -130,13 +136,13 @@
       <div class="kss-track"><div class="kss-bar"><b></b></div></div>
       <span class="kss-done">✓</span>
 
-      <span></span><span class="kss-note kss-cutnote" style="grid-column: 2 / 4">CUT-OFF</span>
-      <div class="kss-cer"><span>PLANNING</span><span>REVIEW · RETRO</span></div>
+      <span></span><span class="kss-note kss-cutnote" style="grid-column: 2 / 4">Cut-off</span>
+      <div class="kss-cer"><span>Planning</span><span>Review, retro</span></div>
       <span></span>
     </div>
   </div>
 </div>
-<p class="kss-cap">I defined what a sprint means for all three departments: one standard request form in ClickUp, a cut-off before sprint planning, and the same two-week sprint with planning, review and retro. Asks now wait for the next sprint instead of breaking the current one, each department ranks what matters most, and Marketing, Product and Engineering talk in the same rhythm.</p>
+<p class="kss-cap">One request form, one cut-off, one two-week sprint. Asks now wait for the next sprint instead of breaking the current one.</p>
 
 <script>
 (function () {

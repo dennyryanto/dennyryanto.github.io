@@ -10,7 +10,7 @@ export const meta: Meta = {
   title: 'Decision desk',
   head: 'ENTERPRISE AI · DATA-TO-DECISION WORKFLOW',
   note: 'ILLUSTRATIVE',
-  lead: 'A weekly replenishment run: four siloed sources are cleaned and reconciled, an LLM scores demand against lead time, and only a high-confidence call reaches the operator, ready to approve.',
+  lead: 'A weekly replenishment run: four siloed sources in, one high-confidence call for the operator to approve.',
   layout: 'full',
   stageWidth: 1064,
   sizes: { wide: [1064, 520], compact: [358, 560], below: 640 },
