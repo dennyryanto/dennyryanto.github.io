@@ -303,6 +303,10 @@ for row in hero.find_all(attrs={'data-r': 'pc-row'}):
         row.decompose()
     elif label == 'EXPERIENCE':
         row.find(string=' in digital product').replace_with(' in digital product and transformation')
+    if row.parent is not None:
+        # the row labels were 50% cream, 4.4:1 on the card's lightest point; 58% measures 5.6:1 and stays quieter than the values (88%)
+        lab = row.find('div')
+        lab['style'] = lab['style'].replace('rgba(242, 239, 232, 0.5)', 'rgba(242, 239, 232, 0.58)')
 # the certificates' issuer line shows Anthropic's own wordmark (from @lobehub/icons-static-svg, cropped to the letters), then the year
 ANTHROPIC_WORDMARK = ('<svg role="img" aria-label="Anthropic" viewBox="2 2 178.6 20" height="9" width="80" fill="currentColor" style="display: block; flex: none;">'
                       '<path d="%s"></path></svg>')

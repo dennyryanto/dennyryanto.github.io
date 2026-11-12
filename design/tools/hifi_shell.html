@@ -98,7 +98,7 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 .mk-idx-n { margin-top: 18px; font: 800 clamp(24px, 2.6vw, 32px)/1 var(--head); font-stretch: 125%; letter-spacing: -.02em; color: var(--fg); white-space: nowrap; }
 .mk-idx-l { margin-top: 10px; font: 400 13px/1.3 var(--display); color: var(--fg); }
 .mk-idx-c { margin: 6px 0 0; max-width: 32ch; font: 400 14px/1.5 var(--display); color: var(--fg-3); text-wrap: pretty; }
-.mk-unit { font-size: .45em; letter-spacing: 0; margin-left: .14em; }
+.mk-unit { font-size: max(11px, .45em); letter-spacing: 0; margin-left: .14em; }
 @media (max-width: 1000px) {
   .mk-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   a.mk-idx:nth-child(n+3) { border-top: 1px solid var(--rule); }
@@ -125,7 +125,7 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 .mk-hero > .mk-sv { grid-column: 9 / -1; margin: 0; }
 .mk-hero > .mk-sv-pair { grid-column: 4 / -1; }
 .mk-meta-n { color: var(--lime); }
-.mk-h2 { margin: 0; font: 800 clamp(23px, 2.5vw, 34px)/1.08 var(--head); font-stretch: 125%; letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
+.mk-h2 { margin: 0; font: 800 clamp(23px, 2.5vw, 32px)/1.08 var(--head); font-stretch: 125%; letter-spacing: -.02em; text-wrap: balance; overflow-wrap: break-word; min-width: 0; }
 .mk-sub { margin: 0; max-width: 54ch; font: 400 17px/1.6 var(--display); color: var(--fg-2); text-wrap: pretty; }
 /* who the company is: a quieter line under the description, set off by a short rule */
 .mk-abouts { display: grid; gap: 8px; max-width: 54ch; padding-top: 16px; border-top: 1px solid var(--rule); }

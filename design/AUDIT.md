@@ -1179,6 +1179,12 @@ side-by-side of the headline) and picked **option F, Archivo expanded**. Clash G
   removed (nothing in the demos used it).
 - Side effect: the matrix easter egg in `design/sections/egg-matrix.html` draws its dot grid from a canvas set in `800 40px Archivo`;
   Archivo was not on the page before, so it fell back to Arial Black, and now draws in Archivo (normal width).
+- Two follow-ups. The profile card's row labels (Experience, Now, Board, Certified) were 50% cream inline in the capture, which the
+  Impeccable detector measured at 4.4 to 4.49:1 on the card's gradient; `build_hifi.py` now rewrites them to 58% (about 5.7:1 sampled
+  on the lightest point behind the labels at 1440 and 390; the values beside them stay at 88%). The h2 max went from 34px to 32px
+  (`clamp(23px, 2.5vw, 32px)`), which brings the Komunal h2 from 4 lines to 3 at 1440 (the hero text column is 493px there and the h2
+  has no narrower max-width; it already had `text-wrap: balance`); LinkAja was already 2 lines at 1440, and nothing at 1280, 1024
+  or 390 changed.
 
 ### Phone check of the drawings, funnel bars, read times (2026-11-11)
 
