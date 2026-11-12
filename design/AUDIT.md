@@ -1177,8 +1177,15 @@ side-by-side of the headline) and picked **option F, Archivo expanded**. Clash G
 - The link-preview card (`og_image.js`, both variants) uses the same face; the video variant's name, headline and numbers moved to
   Archivo 800 at 17, 72 and 32px. `assets/og-image.png` was re-rendered. The Clash line in `design/stageshow/harness/fonts.css` was
   removed (nothing in the demos used it).
-- Side effect: the matrix easter egg in `design/sections/egg-matrix.html` draws its dot grid from a canvas set in `800 40px Archivo`;
-  Archivo was not on the page before, so it fell back to Arial Black, and now draws in Archivo (normal width).
+- Matrix easter egg (`design/sections/egg-matrix.html`): its canvas headline is set in `800 40px Archivo`, which used to fall back to
+  Arial Black and now draws in real Archivo at normal width. Checked at 1440 and 390 against the old fallback: still legible, centred and
+  inside the canvas (the font size is fitted to the grid width), only a little narrower and lighter, so nothing was changed. The terminal and
+  profile-card eggs open, close and flip as before, and none of them names Clash.
+- Rolling "outcomes": the roll's clip window was cut `.07em` below the top of each letter slot, tuned for Clash, and the rolling digits
+  (Archivo expanded 800, 41 to 47px at 1440) were wider than most slots and overlapped their neighbours. The window is now exactly the
+  slot (`clip-path: inset(0 -.2em)`, was `inset(.07em -40% -.12em -40%)`), so no glyph inside its slot is cut and no neighbouring digit
+  peeks in, and the rolling digits use `font-stretch: 100%` (the settled letters stay expanded). Layout is unchanged: the h1 and every slot
+  sit where they do with the roll disabled.
 - Two follow-ups. The profile card's row labels (Experience, Now, Board, Certified) were 50% cream inline in the capture, which the
   Impeccable detector measured at 4.4 to 4.49:1 on the card's gradient; `build_hifi.py` now rewrites them to 58% (about 5.7:1 sampled
   on the lightest point behind the labels at 1440 and 390; the values beside them stay at 88%). The h2 max went from 34px to 32px

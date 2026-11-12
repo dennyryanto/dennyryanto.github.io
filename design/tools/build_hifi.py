@@ -324,10 +324,10 @@ oc_word, oc_style, oc_script = [n for n in soup("""<span style="color: oklch(0.9
 <style>
 .oc { white-space: nowrap; }
 .oc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.ol { display: inline-block; position: relative; clip-path: inset(.07em -40% -.12em -40%); }
+.ol { display: inline-block; position: relative; clip-path: inset(0 -.2em); }
 .ol-s { display: block; position: relative; }
 .ol-d { position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%); display: flex; flex-direction: column; }
-.ol-d i { font-style: normal; display: block; height: .98em; line-height: .98; text-align: center; font-variant-numeric: tabular-nums; }
+.ol-d i { font-style: normal; font-stretch: 100%; display: block; height: .98em; line-height: .98; text-align: center; font-variant-numeric: tabular-nums; }
 </style>
 <script>
 (function () {
