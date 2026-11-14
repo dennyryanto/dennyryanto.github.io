@@ -38,7 +38,7 @@ sections and rebuild the hi-fi and the site lives in `design/tools/`.
 
 ## Stageshow demos
 
-Five mock-ups on the site are looping React demos from `design/stageshow/` (LinkAja routing chat and home screen, Komunal shipped
-flow, the decision desk, Chrona). Edit them there, not in `index.html`; `build_hifi.py` places them and `build_site.py` bundles them
+Four mock-ups on the site are looping React demos from `design/stageshow/` (LinkAja routing chat, Komunal shipped
+flow, the decision desk, Chrona). The LinkAja home screen (live and the redrawn pre-revamp one) is a before/after scroll-reveal built from their posters (see `design/AUDIT.md`, "LinkAja home: before and after"). Edit them there, not in `index.html`; `build_hifi.py` places them and `build_site.py` bundles them
 into `assets/stageshow/`. Needs `npm install --ignore-scripts` in `design/stageshow` once. How they load, what was decided and the
 rebuild steps are in `design/AUDIT.md` ("Stageshow demos in the site") and `design/stageshow/README.md`.
