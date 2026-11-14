@@ -1,17 +1,19 @@
-/* All rules belong to this demo. The stage sits on the page's board ground; LinkAja's red stays inside the screen. */
+/* All rules belong to this demo. The stage sits on the page's board ground; LinkAja's red stays inside the screen.
+   The screen is laid out in screenshot pixels (900 x 2000, an Android) scaled to the frame's 412 pt: --k is pt per screenshot px.
+   `--x` is a column centre and `--y` a top, both in screenshot px, on the items that use them. */
 .lh {
   & .ss-stage {
     overflow: hidden;
     background: var(--lh-ground, #1a1b1f);
     --ss-accent: oklch(0.9 0.2 122);
     --ss-font: 'Switzer', 'Mk Arrows', system-ui, -apple-system, sans-serif;
-    --lh-red: #e8232b;
-    --lh-ink: #1c1f24;
-    --lh-muted: #4b5563;
-    --lh-ground-screen: #f6f7f9;
+    --lh-red: #e0202a;
+    --lh-ink: #1d2036;
+    --lh-sub: #3d4258;
+    --lh-app-font: 'Mulish', 'Switzer', system-ui, sans-serif;
+    --k: 0.45778;
   }
 
-  /* One phone, whole, one gutter from the top and the foot */
   .lh-phone {
     position: absolute;
     top: 24px;
@@ -22,318 +24,214 @@
     left: 16px;
   }
 
-  /* The screen, laid out in true points (402 wide); the Phone scales it */
   .lh-app {
     position: absolute;
     inset: 0;
     overflow: hidden;
-    font-family: var(--ss-font);
-    background: linear-gradient(180deg, #eceff5 0, var(--lh-ground-screen) 170px);
+    font-family: var(--lh-app-font);
+    font-weight: 500;
+    background: linear-gradient(180deg, #f2f3f8 0, #f6f7fb 330px);
     color: var(--lh-ink);
     letter-spacing: 0;
   }
+  /* Everything below is positioned in screenshot px */
+  .lh-app > * { position: absolute; }
   .lh-street {
-    position: absolute;
     top: 0;
     left: 0;
-    width: 402px;
-    height: 172px;
-    background-size: 402px 172px;
+    width: calc(900px * var(--k));
+    height: calc(380px * var(--k));
+    background-size: 100% 100%;
     background-repeat: no-repeat;
   }
 
-  .lh-top {
-    position: absolute;
-    top: 68px;
-    right: 20px;
-    left: 20px;
+  .lh-sb {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(120px * var(--k));
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 2px calc(43px * var(--k)) 0;
+    color: #6a6d78;
+    font: 600 calc(31px * var(--k)) / 1 var(--lh-app-font);
   }
-  .lh-logo {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    padding-left: 8px;
-    border-radius: 13px;
-    background: var(--lh-red);
-    color: #fff;
-    font: italic 800 13.5px/1 var(--ss-font);
-  }
-  .lh-icons { display: flex; gap: 10px; }
-  .lh-ibtn {
+  .lh-sb__g { display: flex; align-items: center; gap: 5px; }
+  .lh-batt {
     display: grid;
     place-items: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 13px;
-    background: #fff;
-    color: var(--lh-red);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    min-width: 22px;
+    height: 15px;
+    padding: 0 3px;
+    border-radius: 4px;
+    background: #4a4c52;
+    color: #fff;
+    font: 800 11px/1 var(--lh-app-font);
   }
 
+  .lh-logo { top: calc(180px * var(--k)); left: calc(34px * var(--k)); width: calc(86px * var(--k)); height: calc(86px * var(--k)); }
+  .lh-ibtn { top: calc(182px * var(--k)); width: calc(86px * var(--k)); height: calc(84px * var(--k)); }
+  .lh-ibtn--1 { left: calc(678px * var(--k)); }
+  .lh-ibtn--2 { left: calc(780px * var(--k)); }
+
   .lh-hero {
-    position: absolute;
-    top: 134px;
-    right: 20px;
-    left: 20px;
-    height: 118px;
-    padding: 20px 0 0 12px;
+    top: calc(317px * var(--k));
+    left: calc(34px * var(--k));
+    width: calc(832px * var(--k));
+    height: calc(258px * var(--k));
     overflow: hidden;
-    border-radius: 17px;
+    border-radius: calc(22px * var(--k));
     color: #fff;
-    background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1.3px, transparent 1.3px), linear-gradient(150deg, #e8232b, #b3141c);
-    background-size: 16px 16px, auto;
+    background:
+      radial-gradient(circle at 92% 8%, rgba(255, 255, 255, 0.12) 0 calc(150px * var(--k)), transparent calc(151px * var(--k))),
+      linear-gradient(118deg, #d82024 0%, #dd2429 56%, #cf1c22 100%);
   }
-  .lh-hero__hi { margin-left: 8px; font: 700 16px/1 var(--ss-font); }
-  .lh-hero__cards { display: flex; gap: 8px; margin-top: 12px; }
+  .lh-hero__hi { position: absolute; left: calc(31px * var(--k)); top: calc(34px * var(--k)); font: 700 calc(26px * var(--k)) / 1.2 var(--lh-app-font); }
   .lh-bal {
-    flex: none;
-    display: grid;
-    gap: 9px;
-    width: 122px;
-    padding: 11px 8px;
-    border-radius: 12px;
+    position: absolute;
+    top: calc(96px * var(--k));
+    width: calc(247px * var(--k));
+    height: calc(128px * var(--k));
+    padding: calc(28px * var(--k)) 0 0 calc(17px * var(--k));
+    border-radius: calc(14px * var(--k));
     background: #fff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: var(--lh-ink);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+    display: grid;
+    align-content: start;
+    gap: calc(24px * var(--k));
   }
-  .lh-bal:first-child { width: 128px; }
-  .lh-bal__k { font: 500 13px/1 var(--ss-font); color: var(--lh-ink); white-space: nowrap; }
+  .lh-bal--1 { left: calc(31px * var(--k)); }
+  .lh-bal--2 { left: calc(305px * var(--k)); }
+  .lh-bal--3 { left: calc(579px * var(--k)); }
+  .lh-bal__k { display: flex; align-items: center; gap: calc(8px * var(--k)); font: 500 calc(22px * var(--k)) / 1 var(--lh-app-font); white-space: nowrap; }
   .lh-bal__v {
     display: flex;
     align-items: center;
-    gap: 5px;
-    font: 800 14px/1 var(--ss-font);
-    color: var(--lh-ink);
+    gap: calc(14px * var(--k));
+    height: calc(30px * var(--k));
+    font: 800 calc(27px * var(--k)) / 1 var(--lh-app-font);
     white-space: nowrap;
   }
-  .lh-bal__v--cta { color: var(--lh-red); }
+  .lh-bal__v--cta { color: var(--lh-red); gap: calc(12px * var(--k)); }
   .lh-go {
     display: grid;
     place-items: center;
     flex: none;
-    width: 15px;
-    height: 15px;
+    width: calc(26px * var(--k));
+    height: calc(26px * var(--k));
     border-radius: 50%;
     background: var(--lh-red);
     color: #fff;
   }
   .lh-coin {
+    display: grid;
+    place-items: center;
     flex: none;
-    width: 16px;
-    height: 16px;
+    width: calc(34px * var(--k));
+    height: calc(34px * var(--k));
+    margin-right: calc(-4px * var(--k));
     border-radius: 50%;
-    background: #f4b740;
-    box-shadow: inset 0 0 0 1.5px #e69a1c;
+    background: linear-gradient(180deg, #ffc247, #f58f1e);
+    color: #fff;
+    font: 800 calc(20px * var(--k)) / 1 var(--lh-app-font);
   }
+  .lh-ec { flex: none; display: block; width: calc(34px * var(--k)); height: calc(34px * var(--k)); }
 
   .lh-quick {
-    position: absolute;
-    top: 264px;
-    right: 20px;
-    left: 20px;
-    display: flex;
-    padding: 14px 4px 12px;
-    border-radius: 15px;
+    top: calc(611px * var(--k));
+    left: calc(35px * var(--k));
+    width: calc(830px * var(--k));
+    height: calc(160px * var(--k));
+    border-radius: calc(16px * var(--k));
     background: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: inset 0 0 0 1.4px #e6e8f1;
   }
   .lh-quick__i {
-    flex: 1;
+    position: absolute;
+    top: calc(26px * var(--k));
+    left: calc(var(--x) * var(--k) * 1px);
+    translate: -50% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
-    font: 500 14px/1.15 var(--ss-font);
-    color: var(--lh-ink);
+    gap: calc(22px * var(--k));
+    font: 500 calc(23px * var(--k)) / 1 var(--lh-app-font);
+    color: var(--lh-sub);
     white-space: nowrap;
   }
-  .lh-quick__ic { position: relative; display: block; height: 28px; }
-  .lh-quick__ic svg { display: block; }
-  .lh-badge {
-    position: absolute;
-    right: -5px;
-    bottom: -3px;
-    display: grid;
-    place-items: center;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--lh-red);
-    color: #fff;
-  }
+  .lh-quick__i img { display: block; width: calc(62px * var(--k)); height: calc(62px * var(--k)); object-fit: contain; }
 
-  .lh-grid {
-    position: absolute;
-    top: 366px;
-    right: 20px;
-    left: 20px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px 4px;
-  }
   .lh-svc {
+    top: calc(var(--y) * var(--k) * 1px);
+    left: calc(var(--x) * var(--k) * 1px);
+    translate: -50% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 7px;
-    text-align: center;
+    gap: calc(14px * var(--k));
   }
-  .lh-svc__ic {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 54px;
-    height: 54px;
-    border-radius: 15px;
-  }
-  .lh-svc__ic svg { display: block; }
-  .lh-svc__l { max-width: 80px; font: 500 14px/1.15 var(--ss-font); color: var(--lh-muted); }
-  .lh-nb { white-space: nowrap; }
-  .lh-rp {
-    padding: 5px 6px;
-    border-radius: 6px;
-    background: #a9e3d9;
-    font: 800 15px/1 var(--ss-font);
-  }
-  .lh-new {
-    position: absolute;
-    top: -7px;
-    right: -6px;
-    padding: 3px 5px;
-    border-radius: 5px;
-    background: var(--lh-red);
-    color: #fff;
-    font: 700 13.5px/1 var(--ss-font);
-  }
+  .lh-svc img { display: block; width: calc(86px * var(--k)); height: calc(86px * var(--k)); }
+  .lh-svc__l { display: grid; justify-items: center; font: 500 calc(23px * var(--k)) / calc(38px * var(--k)) var(--lh-app-font); color: var(--lh-sub); white-space: nowrap; }
 
-  .lh-promo__title {
-    position: absolute;
-    top: 568px;
-    left: 20px;
-    font: 800 19px/1.2 var(--ss-font);
-  }
-  .lh-promo {
-    position: absolute;
-    top: 602px;
-    left: 20px;
-    right: 0;
-    height: 140px;
-    overflow: hidden;
-  }
-  .lh-track {
-    display: flex;
-    gap: 10px;
-    height: 100%;
-    will-change: transform;
-    transition: transform 0.9s cubic-bezier(0.45, 0, 0.1, 1);
-  }
-  .lh-ban {
-    position: relative;
-    flex: none;
-    width: 342px;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 14px;
-    color: #fff;
-  }
-  .lh-ban--1 { --b0: #d3202a; --b1: #ef5a2a; }
-  .lh-ban--2 { --b0: #dc3a1f; --b1: #f2802b; }
-  .lh-ban--3 { --b0: #9d1a2b; --b1: #e8232b; }
-  /* The two discs are drawn into the banner's own background, opaque where they overlap */
-  .lh-ban {
-    --da: color-mix(in srgb, #fff 13%, var(--b1));
-    --db: color-mix(in srgb, #fff 17%, var(--b1));
-    background:
-      radial-gradient(circle 52px at 260px 128px, var(--db) 51.4px, transparent 52px),
-      radial-gradient(circle 80px at 288px 48px, var(--da) 79.4px, transparent 80px),
-      linear-gradient(115deg, var(--b0), var(--b1));
-  }
-  .lh-ban__h { position: absolute; left: 18px; top: 22px; font: 800 20px/1.2 var(--ss-font); }
-  .lh-ban__s { position: absolute; left: 18px; top: 96px; font: 500 14px/1 var(--ss-font); opacity: 0.92; }
-  /* Banners 2 and 3 are invented placeholders: flat shapes in the banner's own colours (art.ts), no mark. */
-  .lh-ban--2, .lh-ban--3 { background-repeat: no-repeat; background-size: 342px 140px, auto; }
-  .lh-ban__badge {
-    position: absolute;
-    top: -7px;
-    right: -7px;
-    display: grid;
-    place-items: center;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #fff;
-    color: var(--b0);
-  }
-  .lh-ban__tile {
-    position: absolute;
-    right: 30px;
-    top: 48px;
-    display: grid;
-    place-items: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 14px;
-    background: color-mix(in srgb, #fff 26%, var(--b1));
-  }
+  .lh-banner { top: calc(1322px * var(--k)); left: calc(107px * var(--k)); width: calc(686px * var(--k)); height: calc(214px * var(--k)); }
 
-  .lh-dots {
-    position: absolute;
-    top: 756px;
-    left: 20px;
-    display: flex;
-    gap: 5px;
-    align-items: center;
-  }
-  .lh-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 3px;
-    background: #d1d5db;
-    transition: width 0.5s cubic-bezier(0.45, 0, 0.1, 1), background-color 0.4s ease;
-  }
-  .lh-dot[data-on] { width: 20px; background: var(--lh-red); }
-
-  .lh-tabs {
-    position: absolute;
+  .lh-special {
+    top: calc(1570px * var(--k));
+    left: 0;
     right: 0;
     bottom: 0;
-    left: 0;
-    display: flex;
-    height: 88px;
-    padding: 15px 6px 0;
+    border-top: calc(17px * var(--k)) solid #eeeff5;
     background: #fff;
-    box-shadow: 0 -6px 18px -10px rgba(0, 0, 0, 0.25);
+  }
+  .lh-special__t { position: absolute; left: calc(35px * var(--k)); top: calc(40px * var(--k)); font: 800 calc(31px * var(--k)) / 1.2 var(--lh-app-font); color: #111426; }
+  .lh-promo { position: absolute; left: 0; top: calc(110px * var(--k)); width: calc(900px * var(--k)); height: auto; }
+
+  .lh-tabs {
+    top: calc(1848px * var(--k));
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    box-shadow: 0 -1px 0 #e7e9f0, 0 -8px 20px -14px rgba(0, 0, 0, 0.3);
   }
   .lh-tab {
-    flex: 1;
+    position: absolute;
+    top: calc(20px * var(--k));
+    left: calc(var(--x) * var(--k) * 1px);
+    translate: -50% 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
-    color: #6b7280;
-    font: 500 13px/1 var(--ss-font);
+    gap: calc(14px * var(--k));
+    color: #4a4f66;
+    font: 600 calc(23px * var(--k)) / 1 var(--lh-app-font);
   }
-  .lh-tab svg { display: block; flex: none; }
-  .lh-tab[data-on] { color: var(--lh-red); font-weight: 700; }
-  .lh-tab__gap { display: block; width: 24px; height: 24px; }
-  .lh-qris { display: block; width: 44px; height: auto; filter: brightness(0) invert(1); }
+  .lh-tab svg { display: block; flex: none; width: calc(54px * var(--k)); height: calc(54px * var(--k)); }
+  .lh-tab--on { color: var(--lh-red); }
+  .lh-homeicon { color: var(--lh-red); }
+  .lh-tab--pay { top: calc(88px * var(--k)); color: #3b3f55; }
   .lh-fab {
-    position: absolute;
-    bottom: 46px;
-    left: 50%;
-    translate: -50% 0;
+    top: calc(1820px * var(--k));
+    left: calc(407px * var(--k));
+    width: calc(86px * var(--k));
+    height: calc(86px * var(--k));
     display: grid;
     place-items: center;
-    width: 56px;
-    height: 56px;
-    border-radius: 17px;
-    background: var(--lh-red);
-    box-shadow: 0 8px 16px -6px rgba(232, 35, 43, 0.7);
-    color: #fff;
+    border-radius: calc(22px * var(--k));
+    background: linear-gradient(160deg, #ef3a3f, #dc1f27);
+    box-shadow: 0 6px 14px -6px rgba(224, 32, 42, 0.7);
   }
-  .lh-tab--pay { gap: 6px; font-weight: 700; }
+  .lh-fab__frame {
+    position: absolute;
+    inset: calc(14px * var(--k));
+    --c: #fff;
+    background:
+      linear-gradient(var(--c), var(--c)) 0 0 / 30% 2.4px no-repeat, linear-gradient(var(--c), var(--c)) 0 0 / 2.4px 30% no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 0 / 30% 2.4px no-repeat, linear-gradient(var(--c), var(--c)) 100% 0 / 2.4px 30% no-repeat,
+      linear-gradient(var(--c), var(--c)) 0 100% / 30% 2.4px no-repeat, linear-gradient(var(--c), var(--c)) 0 100% / 2.4px 30% no-repeat,
+      linear-gradient(var(--c), var(--c)) 100% 100% / 30% 2.4px no-repeat, linear-gradient(var(--c), var(--c)) 100% 100% / 2.4px 30% no-repeat;
+  }
+  .lh-qris { position: relative; display: block; width: calc(40px * var(--k)); height: auto; filter: brightness(0) invert(1); }
 }

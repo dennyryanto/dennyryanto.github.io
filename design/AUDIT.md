@@ -941,9 +941,9 @@ The replaced `sections/` files stay in the repo for reference; `build_hifi.py` n
 - Chrona: the drafted message and the free window are fine. The **aura glow** is kept (the old animated overlay, a coral light
   travelling round the AI card's edge, rebuilt in CSS as a ring over a halo). After the invite is sent the ring stays dim, so the
   card still reads as the AI's. The bold coral line along the top of the card is gone.
-- LinkAja home: promo banners 2 and 3 are invented placeholders (generic copy, no figures) to replace with the real ones. The
+- LinkAja home: superseded by the real-screenshot version below (2026-11-14). The
   Bayar button carries the QRIS logo (Wikimedia Commons "QRIS logo.svg", cropped to the mark, white); swap in the official asset.
-- LinkAja routing: the agent queue card is in English (an agent-side surface); the phone stays in Indonesian.
+- LinkAja routing: superseded by the inline-card version below. The agent queue card is in English (an agent-side surface); the phone stays in Indonesian.
 
 **How they are built into the page**
 - `design/stageshow/vite.site.config.ts` bundles the five into one ES module plus one stylesheet (about 123KB and 22KB gzipped;
@@ -969,6 +969,27 @@ phone, and ships two posters.) The review lines in a REHEARSAL.md were taken in 
 **Changing a demo.** Edit it in `design/stageshow/components/<id>/`, run `python3 design/stageshow/build_posters.py` if its
 finished frame changed, then rebuild (below). The review page `design/mockups/stageshow-components.html`
 (`python3 design/stageshow/build_review.py`) shows the same components outside the site.
+
+## LinkAja home and chat from the live app (2026-11-14)
+
+The owner supplied four screenshots of the live Android app (home, Pusat Bantuan with its tour, the help centre, the LinkAja Support chat) and
+approved showing the real name; the balance was then changed from Rp9.701 to Rp2.150.000 at the owner's request (comment on the hi-fi artifact).
+
+- **`linkaja-home`** is redrawn from the home screenshot: "Hai, DENNY RYANTO", Saldo Kamu Rp9.701, Saldo Bonus 0, Easycash "Cek di Sini", the
+  wallet actions (Isi, Kirim, Tarik Saldo, Semua), the eight real services, the real "Berbagi di setiap transaksi" banner, the first
+  "Spesial Hanya Untukmu!" promo card under the tab bar, the five real tabs. An Android frame, Mulish (the app's face, already shipped for
+  Komunal). Positions are in screenshot px scaled by `--k` (412 pt / 900 px), so they can be re-read off the screenshot. The service and wallet
+  icons, logo, header buttons, banner and promo strip are **cropped from the screenshot** (`components/linkaja-home/img/`, 112KB, inlined
+  into the bundle); status bar, balance card, labels and tab bar are drawn. The invented banners 2 and 3, `art.ts` and the carousel are gone.
+  **It is a still** (no script): there is one screenshot, so nothing real to advance to. Open: a real second and third promo card would
+  allow the carousel back.
+- **`linkaja-routing`** now follows the real support chat: the greeting by name, then the four options as one **inline interactive card**
+  (icons cropped from the screenshot), the composer locked ("Silakan klik menu yang tersedia"). A cursor taps "Keluhan mengenai transaksi";
+  that is the user's message, it is classified, and the case lands in the agent queue with its attachments as before. **Dropped:** the earlier
+  limit question resolved without an agent and the typed fraud report (menu picks have no free text to classify). Illustrative: the intent
+  label, the reply, the agent line and the queue. Stage is now 598x470 (wide) and 358x450 (compact). The page's lead line and alt texts changed.
+- Rebuild: `python3 design/stageshow/build_posters.py`, then `build_hifi.py` and `build_site.py` as in the technical notes. The page
+  captures come from `grab-sections.js` and `grab-clients-cockpit.js` writing into `<workdir>/hifi/` (not the workdir root).
 
 ## Komunal in the live app's type and colours (2026-11-06)
 

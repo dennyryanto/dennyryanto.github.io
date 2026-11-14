@@ -1,9 +1,25 @@
-import { Phone, Stage, type Act } from '../../kit'
-import { Bus, Check, Gamepad2, Headset, Heart, House, LayoutGrid, Mail, MoveRight, Plus, ReceiptText, Send, ShieldCheck, ShoppingBag, Smartphone, Ticket, User, Wallet, Wifi, Zap, FileText } from 'lucide-react'
+import { Phone, Stage } from '../../kit'
+import { ArrowRight, FileText, Mail, Signal, User, Wifi } from 'lucide-react'
 import qris from './qris.svg'
 import './home.css'
 import { STREET } from './street'
-import { BILLS, COINS } from './art'
+import iLogo from './img/logo.webp'
+import iHeart from './img/btn-heart.webp'
+import iAgent from './img/btn-agent.webp'
+import qIsi from './img/q-isi.webp'
+import qKirim from './img/q-kirim.webp'
+import qTarik from './img/q-tarik.webp'
+import qSemua from './img/q-semua.webp'
+import sPulsa from './img/svc-pulsa.webp'
+import sListrik from './img/svc-listrik.webp'
+import sKartu from './img/svc-kartu.webp'
+import sEasycash from './img/svc-easycash.webp'
+import sVoucher from './img/svc-voucher.webp'
+import sInfaq from './img/svc-infaq.webp'
+import sTv from './img/svc-tv.webp'
+import sLainnya from './img/svc-lainnya.webp'
+import banner from './img/banner.webp'
+import promo from './img/promo.webp'
 import type { Meta } from '../plan'
 
 export const meta: Meta = {
@@ -11,251 +27,168 @@ export const meta: Meta = {
   case: 'LinkAja',
   title: 'Home screen as it ships today',
   head: 'HOME SCREEN · AS IT SHIPS TODAY',
-  note: 'ILLUSTRATIVE',
+  note: 'FROM THE LIVE APP',
   lead: 'The home-screen revamp I co-led for 70M+ users. It is still the design in the app today.',
   layout: 'split',
   stageWidth: 400,
-  sizes: { wide: [358, 718], compact: [358, 718], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
+  sizes: { wide: [358, 736], compact: [358, 736], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
   notes: [
-    ['One phone, one calm loop.', 'The screen is the shipped home as it stands: street illustration and headset in the header, balances, the four quick actions, the service grid, the promo area. The only thing that moves is the promo carousel, advancing the way a banner area does on its own, with the page dots following. After the third banner it comes round to the first, so nothing runs backwards.'],
-    ['What replaces the old block.', 'The isometric phone, its extruded edge and the faint icon pattern on the board are gone: the phone is flat, and the page ground is the board. The product colour (LinkAja red) stays inside the screen.'],
-    ['The Bayar button carries the QRIS mark.', 'The scan icon is replaced by the QRIS logo (Bank Indonesia\'s payment standard mark), taken from Wikimedia Commons ("QRIS logo.svg"), cropped to the mark without its tagline and shown in white. Swap in the official asset if you have it; the mark belongs to its owner.'],
-    ['Invented placeholder banners.', 'The existing mockup drew one banner, "Bayar apa aja & di mana aja", and its art was a placeholder. The second ("Isi saldo kapan aja, langsung dari HP") and the third ("Semua tagihan di satu tempat") are invented by me at the owner\'s request, in the same voice and layout, with generic claims only: no figures, prices, dates or partners, and no brand mark. They are placeholders for the owner to replace with the real banners.'],
-    ['Checked.', 'The rehearsal gate at both widths; reduced motion shows the screen on its first banner. Not checked: frame rate on a real phone, and the loop inside the built page.'],
+    ['The real screen.', 'This is the home screen as it runs on an Android phone today, redrawn from a screenshot of the live app: the street header with the logo, the favourites and help buttons, the red balance card (Saldo Kamu, Saldo Bonus, Easycash), the four wallet actions, the eight services, the "Berbagi di setiap transaksi" banner and the first promo card of "Spesial Hanya Untukmu!" under the tab bar. The name is the author\'s own; the balance was changed to about Rp2 million at the owner\'s request.'],
+    ['What is real and what is redrawn.', 'The layout is measured from the screenshot, in the app\'s own type (Mulish). The service and wallet-action icons, the logo, the banner and the promo card are cropped from the screenshot at its resolution; the status bar, the balance card, the labels and the tab bar are drawn. The Bayar button carries the QRIS mark (Wikimedia Commons, "QRIS logo.svg"); the mark belongs to its owner.'],
+    ['Still on purpose.', 'The screen does not move: there is one screenshot, so there is nothing real to advance to. The old animated promo carousel and its invented banners are gone.'],
+    ['Not checked.', 'The loop inside the built page (there is none now), and Indonesian text at a larger system font size.'],
   ],
 }
 
-// LinkAja's home screen as it ships today. A home is a still with a little life:
-// the promo area advances on its own (banner 1, 2, 3, then round to 1), the page
-// dots following, and nothing else moves. The carousel is an endless track with
-// a copy of banner 1 at its end, so the loop continues forward and the reset is
-// a snap between two identical frames. The poster is banner 1, the screen as it
-// is in the app.
-//
-// Real strings (all from the existing mockup): Hai, Linka Jadid; Saldo Kamu
-// Rp1.000.000; AKHLAK Poin 150.000; MyPaylater Aktifkan; the four quick actions;
-// the eight services (Baru on Kirim ke E-Wallet); Spesial Hanya Untukmu!; the
-// first banner; the five tabs. Banners 2 and 3 are invented placeholders (generic
-// copy, no figures or partners) for the owner to replace.
+// LinkAja's home screen as it ships today, drawn from a screenshot of the live app (Android, 900 x 2000).
+// The screen is laid out in screenshot pixels scaled to the Pixel frame's 412 pt (--k in home.css),
+// so every position below is a number read off the screenshot. A still: one screenshot, nothing real to advance.
+// Real strings: Hai, DENNY RYANTO; Saldo Kamu Rp2.150.000; Saldo Bonus 0; Easycash Cek di Sini; the four wallet
+// actions; the eight services; the banner; Spesial Hanya Untukmu!; the five tabs.
 
-type S = { i: number }
-const initial: S = { i: 0 }
-const poster: S = { i: 0 }
-
-const STEP = 352 // banner 342 + 10 gap, in screen points
-
-async function script(a: Act<S>) {
-  await a.wait(1500)
-  a.mark('next1')
-  await a.set({ i: 1 })
-  await a.wait(2400)
-  a.mark('next2')
-  await a.set({ i: 2 })
-  await a.wait(2400)
-  a.mark('wrap')
-  await a.set({ i: 3 })
-  await a.wait(1100)
-  // The track holds a copy of the first banner at its end: snapping to the start is invisible
-  await a.snap({ i: 0 })
-  await a.wait(200)
-}
-
-const I = { size: 28, strokeWidth: 1.7 } as const
-const T = { size: 26, strokeWidth: 1.8 } as const
-
-const QUICK = [
-  { label: 'Isi Saldo', icon: <ReceiptText {...I} />, badge: <Plus size={9} strokeWidth={3.4} /> },
-  { label: 'Kirim Saldo', icon: <Smartphone {...I} />, badge: <MoveRight size={9} strokeWidth={3.2} /> },
-  { label: 'Kode Tiket', icon: <Ticket {...I} /> },
-  { label: 'Semua', icon: <LayoutGrid {...I} /> },
+const WALLET = [
+  { label: 'Isi Saldo', src: qIsi, x: 132 },
+  { label: 'Kirim Saldo', src: qKirim, x: 344 },
+  { label: 'Tarik Saldo', src: qTarik, x: 556 },
+  { label: 'Semua', src: qSemua, x: 768 },
 ]
 
 const SERVICES = [
-  { label: 'Pulsa/Data', icon: <Wifi {...T} />, c: '#e8232b', bg: '#fde7e7' },
-  { label: 'Listrik', icon: <Zap {...T} />, c: '#1196b0', bg: '#dcf5fa' },
-  { label: 'Bis', icon: <Bus {...T} />, c: '#2f9d4a', bg: '#e0f4e6' },
-  { label: 'Kirim ke E-Wallet', node: <>Kirim ke <span className="lh-nb">E-Wallet</span></>, icon: <Send {...T} />, c: '#2b59c3', bg: '#e3eafc', tag: 'Baru' },
-  { label: 'Mgames', icon: <Gamepad2 {...T} />, c: '#d9791c', bg: '#fff0dc' },
-  { label: 'Infaq', icon: <span className="lh-rp">Rp</span>, c: '#1c8a7a', bg: '#dbf3ee' },
-  { label: 'Samsat', icon: <ShieldCheck {...T} />, c: '#c32a86', bg: '#fce4f2' },
-  { label: 'Lainnya', icon: <LayoutGrid {...T} />, c: '#4b5563', bg: '#eceef3' },
+  { label: ['Pulsa/Data'], src: sPulsa },
+  { label: ['Listrik'], src: sListrik },
+  { label: ['Kartu Uang', 'Elektronik'], src: sKartu },
+  { label: ['Pinjaman', 'Easycash'], src: sEasycash },
+  { label: ['Voucher &', 'E-Wallet'], src: sVoucher },
+  { label: ['Infaq'], src: sInfaq },
+  { label: ['TV Kabel &', 'Internet'], src: sTv },
+  { label: ['Lainnya'], src: sLainnya },
 ]
 
-const TABS = [
-  { label: 'Beranda', icon: <House size={24} strokeWidth={2} />, on: true },
-  { label: 'Riwayat', icon: <FileText size={24} strokeWidth={1.7} /> },
-  null,
-  { label: 'Pesan', icon: <Mail size={24} strokeWidth={1.7} /> },
-  { label: 'Akun', icon: <User size={24} strokeWidth={1.7} /> },
-]
+const COLS = [126, 342, 558, 774]
 
 function Arrow() {
   return (
     <span className="lh-go" aria-hidden>
-      <MoveRight size={11} strokeWidth={3.2} />
+      <ArrowRight size={10} strokeWidth={3.4} />
     </span>
+  )
+}
+
+function Home() {
+  return (
+    <svg className="lh-homeicon" viewBox="0 0 48 48" aria-hidden>
+      <path d="M24 5 6 20v22h13V30h10v12h13V20z" fill="currentColor" opacity=".25" />
+      <path d="M24 7 8 21v19h11V29h10v11h11V21z" fill="currentColor" />
+      <circle cx="24" cy="21" r="4" fill="#fff" />
+    </svg>
   )
 }
 
 export default function LinkAjaHome() {
   return (
-    <Stage<S>
-      width={400}
-      height={755}
-      compact={{ below: 560, width: 358, height: 718 }}
-      initial={initial}
-      poster={poster}
-      script={script}
-      play="loop"
-      theme="dark"
-      className="lh"
-    >
-      {(s, _rect, layout) => (
-        <Phone width={layout === 'compact' ? 326 : 340} className="lh-phone">
+    <Stage width={400} height={755} compact={{ below: 560, width: 358, height: 736 }} theme="dark" className="lh">
+      {(_s, _rect, layout) => (
+        <Phone width={layout === 'compact' ? 326 : 340} frame="android" status={false} className="lh-phone">
           <div className="lh-app">
             <div className="lh-street" style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(STREET)}")` }} />
 
-            <div className="lh-top">
-              <span className="lh-logo">
-                <span>Link</span>
-                <span>Aja!</span>
-              </span>
-              <span className="lh-icons">
-                <span className="lh-ibtn">
-                  <Heart size={22} strokeWidth={1.6} fill="currentColor" />
-                </span>
-                <span className="lh-ibtn">
-                  <Headset size={24} strokeWidth={1.8} />
-                </span>
+            <div className="lh-sb">
+              <span>20:47</span>
+              <span className="lh-sb__g">
+                <Wifi size={15} strokeWidth={2.2} />
+                <Signal size={15} strokeWidth={2.2} />
+                <span className="lh-batt">51</span>
               </span>
             </div>
 
+            <img className="lh-logo" src={iLogo} alt="LinkAja" />
+            <img className="lh-ibtn lh-ibtn--1" src={iHeart} alt="" />
+            <img className="lh-ibtn lh-ibtn--2" src={iAgent} alt="" />
+
             <div className="lh-hero">
-              <div className="lh-hero__hi">Hai, Linka Jadid</div>
-              <div className="lh-hero__cards">
-                <div className="lh-bal">
-                  <span className="lh-bal__k">Saldo Kamu</span>
-                  <span className="lh-bal__v">
-                    Rp1.000.000
-                    <Arrow />
+              <div className="lh-hero__hi">Hai, DENNY RYANTO</div>
+              <div className="lh-bal lh-bal--1">
+                <span className="lh-bal__k">Saldo Kamu</span>
+                <span className="lh-bal__v">
+                  Rp2.150.000
+                  <Arrow />
+                </span>
+              </div>
+              <div className="lh-bal lh-bal--2">
+                <span className="lh-bal__k">Saldo Bonus</span>
+                <span className="lh-bal__v">
+                  <span className="lh-coin" aria-hidden>
+                    L
                   </span>
-                </div>
-                <div className="lh-bal">
-                  <span className="lh-bal__k">AKHLAK Poin</span>
-                  <span className="lh-bal__v">
-                    <span className="lh-coin" aria-hidden />
-                    150.000
-                    <Arrow />
-                  </span>
-                </div>
-                <div className="lh-bal">
-                  <span className="lh-bal__k">MyPaylater</span>
-                  <span className="lh-bal__v lh-bal__v--cta">Aktifkan</span>
-                </div>
+                  0
+                  <Arrow />
+                </span>
+              </div>
+              <div className="lh-bal lh-bal--3">
+                <span className="lh-bal__k">
+                  <svg className="lh-ec" viewBox="0 0 24 24" aria-hidden>
+                    <rect width="24" height="24" rx="6" fill="#19c25f" />
+                    <path d="M8 7.2l1.2 2.4M15.5 7l-.5 2.6M6.8 12.4c2.4 4 8.4 4 10.4 0" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
+                  </svg>
+                  Easycash
+                </span>
+                <span className="lh-bal__v lh-bal__v--cta">
+                  Cek di Sini
+                  <Arrow />
+                </span>
               </div>
             </div>
 
             <div className="lh-quick">
-              {QUICK.map((q) => (
-                <span key={q.label} className="lh-quick__i">
-                  <span className="lh-quick__ic">
-                    {q.icon}
-                    {q.badge && <span className="lh-badge">{q.badge}</span>}
-                  </span>
+              {WALLET.map((q) => (
+                <span key={q.label} className="lh-quick__i" style={{ ['--x' as string]: q.x - 35 }}>
+                  <img src={q.src} alt="" />
                   <span>{q.label}</span>
                 </span>
               ))}
             </div>
 
-            <div className="lh-grid">
-              {SERVICES.map((v) => (
-                <span key={v.label} className="lh-svc">
-                  <span className="lh-svc__ic" style={{ background: v.bg, color: v.c }}>
-                    {v.icon}
-                    {v.tag && <span className="lh-new">{v.tag}</span>}
-                  </span>
-                  <span className="lh-svc__l">{'node' in v ? v.node : v.label}</span>
+            {SERVICES.map((v, i) => (
+              <span key={v.label.join(' ')} className="lh-svc" style={{ ['--x' as string]: COLS[i % 4], ['--y' as string]: i < 4 ? 846 : 1067 }}>
+                <img src={v.src} alt="" />
+                <span className="lh-svc__l">
+                  {v.label.map((l) => (
+                    <span key={l}>{l}</span>
+                  ))}
                 </span>
-              ))}
-            </div>
+              </span>
+            ))}
 
-            <div className="lh-promo__title">Spesial Hanya Untukmu!</div>
-            <div className="lh-promo">
-              <div className="lh-track" style={{ transform: `translateX(${-s.i * STEP}px)` }}>
-                <div className="lh-ban lh-ban--1">
-                  <span className="lh-ban__h">
-                    Bayar apa aja &amp;
-                    <br />
-                    di mana aja
-                  </span>
-                  <span className="lh-ban__s">praktis selalu ada LinkAja!</span>
-                  <span className="lh-ban__tile">
-                    <ShoppingBag size={26} strokeWidth={1.8} />
-                  </span>
-                </div>
-                <div className="lh-ban lh-ban--2" style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(COINS)}"), linear-gradient(115deg, var(--b0), var(--b1))` }}>
-                  <span className="lh-ban__h">
-                    Isi saldo kapan aja,
-                    <br />
-                    langsung dari HP
-                  </span>
-                  <span className="lh-ban__s">top up jadi gampang</span>
-                  <span className="lh-ban__tile">
-                    <Wallet size={26} strokeWidth={1.8} />
-                    <span className="lh-ban__badge">
-                      <Plus size={11} strokeWidth={3.4} />
-                    </span>
-                  </span>
-                </div>
-                <div className="lh-ban lh-ban--3" style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(BILLS)}"), linear-gradient(115deg, var(--b0), var(--b1))` }}>
-                  <span className="lh-ban__h">
-                    Semua tagihan
-                    <br />
-                    di satu tempat
-                  </span>
-                  <span className="lh-ban__s">dari listrik sampai internet</span>
-                  <span className="lh-ban__tile">
-                    <ReceiptText size={26} strokeWidth={1.8} />
-                    <span className="lh-ban__badge">
-                      <Check size={11} strokeWidth={3.4} />
-                    </span>
-                  </span>
-                </div>
-                <div className="lh-ban lh-ban--1" aria-hidden>
-                  <span className="lh-ban__h">
-                    Bayar apa aja &amp;
-                    <br />
-                    di mana aja
-                  </span>
-                  <span className="lh-ban__s">praktis selalu ada LinkAja!</span>
-                  <span className="lh-ban__tile">
-                    <ShoppingBag size={26} strokeWidth={1.8} />
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="lh-dots">
-              {[0, 1, 2].map((d) => (
-                <span key={d} className="lh-dot" data-on={s.i % 3 === d || undefined} />
-              ))}
+            <img className="lh-banner" src={banner} alt="Berbagi di setiap transaksi" />
+
+            <div className="lh-special">
+              <div className="lh-special__t">Spesial Hanya Untukmu!</div>
+              <img className="lh-promo" src={promo} alt="Easycash: cek limit sampai 100 juta" />
             </div>
 
             <nav className="lh-tabs">
-              {TABS.map((t, k) =>
-                t ? (
-                  <span key={t.label} className="lh-tab" data-on={t.on || undefined}>
-                    {t.icon}
-                    <span>{t.label}</span>
-                  </span>
-                ) : (
-                  <span key={k} className="lh-tab lh-tab--pay">
-                    <span className="lh-tab__gap" />
-                    <span>Bayar</span>
-                  </span>
-                ),
-              )}
+              <span className="lh-tab lh-tab--on" style={{ ['--x' as string]: 97 }}>
+                <Home />
+                <span>Beranda</span>
+              </span>
+              <span className="lh-tab" style={{ ['--x' as string]: 274 }}>
+                <FileText size={26} strokeWidth={1.6} />
+                <span>Riwayat</span>
+              </span>
+              <span className="lh-tab lh-tab--pay" style={{ ['--x' as string]: 450 }}>
+                <span>Bayar</span>
+              </span>
+              <span className="lh-tab" style={{ ['--x' as string]: 627 }}>
+                <Mail size={26} strokeWidth={1.6} />
+                <span>Pesan</span>
+              </span>
+              <span className="lh-tab" style={{ ['--x' as string]: 803 }}>
+                <User size={26} strokeWidth={1.6} />
+                <span>Profil</span>
+              </span>
             </nav>
             <span className="lh-fab">
+              <span className="lh-fab__frame" aria-hidden />
               <img className="lh-qris" src={qris} alt="QRIS" />
             </span>
           </div>

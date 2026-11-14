@@ -4,12 +4,12 @@
     overflow: hidden;
     background: var(--lr-ground, #1a1b1f);
     --ss-accent: oklch(0.9 0.2 122);
-    --ss-font: 'Switzer', 'Mk Arrows', system-ui, -apple-system, sans-serif;
-    --lr-red: #e8232b;
+    --ss-font: 'Mulish', 'Switzer', 'Mk Arrows', system-ui, -apple-system, sans-serif;
+    --lr-red: #e0202a;
     --lr-ink: #1c1f24;
     --lr-muted: #6b7280;
     --lr-ok: #1c7a4a;
-    --lr-h: 380px;
+    --lr-h: 470px;
     --lr-b: -16px;
   }
 
@@ -23,9 +23,11 @@
        44px instead of slicing a bubble */
     mask-image: linear-gradient(to top, #000 0 calc(var(--lr-h) + var(--lr-b) - 56px), transparent calc(var(--lr-h) + var(--lr-b)));
   }
-  & .ss-stage[data-layout='compact'] { --lr-h: 340px; }
+  & .ss-stage[data-layout='compact'] { --lr-h: 450px; }
   & .ss-stage[data-layout='compact'] .lr-phone { left: 16px; }
 
+  .lr-phone { --ss-font: 'Mulish', 'Switzer', system-ui, sans-serif; font-family: var(--ss-font); }
+  .lr-phone .ss-bubble, .lr-phone .ss-stamp { font-family: var(--ss-font); }
   .lr-phone .ss-phone__content {
     display: flex;
     flex-direction: column;
@@ -35,6 +37,7 @@
     --ss-me: var(--lr-red);
     --ss-me-text: #fff;
     --ss-them: #fff;
+    --ss-radius-bubble: 20px;
     --ss-them-text: var(--lr-ink);
     flex: 1;
     padding: 0 16px 10px;
@@ -81,34 +84,46 @@
     padding-top: 12px;
   }
 
-  .lr-compose {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 0 14px 36px;
-  }
+  /* The composer is locked: the card is the only way in */
+  .lr-compose { margin: 0 12px 40px; }
   .lr-field {
-    flex: 1;
-    min-height: 38px;
     display: flex;
     align-items: center;
-    padding: 0 16px;
-    border-radius: 19px;
+    min-height: 40px;
+    padding: 0 18px;
+    border-radius: 20px;
+    background: #ecedf4;
+    color: #7d8296;
+    font-size: 14.5px;
+    font-weight: 500;
+  }
+
+  /* The inline card: four options, each a round icon, a bold label and a red chevron */
+  .lr-menu {
+    width: 94%;
+    overflow: hidden;
+    border-radius: 18px;
     background: #fff;
-    box-shadow: inset 0 0 0 1px #d9dce1;
-    color: #8a9099;
-    font-size: 15px;
+    box-shadow: inset 0 0 0 1.4px #e6e8f1, 0 1px 3px rgba(20, 24, 54, 0.06);
   }
-  .lr-send {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    background: var(--lr-red);
-    color: #fff;
+  .lr-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px 8px 10px;
+    color: #14172e;
+    font-size: 13.5px;
+    font-weight: 800;
+    line-height: 1.2;
+    transition: background-color 0.2s ease;
   }
+  .lr-opt + .lr-opt { box-shadow: inset 0 1.4px 0 #e6e8f1; }
+  .lr-opt img { display: block; flex: none; width: 36px; height: 36px; }
+  .lr-opt span { flex: 1; min-width: 0; }
+  .lr-opt svg { flex: none; color: var(--lr-red); }
+  .lr-opt[data-hover],
+  .lr-opt[data-pressed] { background: #f3f4fa; }
+  .lr-opt[data-picked] { background: #fdeeee; }
 
   /* The agent queue: a satellite straddling the phone's edge over its bezel and
      margin only (no bubble sits there), tied to the agent line by a leader */
@@ -116,7 +131,7 @@
     position: absolute;
     left: 378px;
     top: 40px;
-    width: 176px;
+    width: 194px;
     display: grid;
     gap: 12px;
     padding: 14px 14px 16px;
