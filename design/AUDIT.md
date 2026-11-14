@@ -973,7 +973,7 @@ finished frame changed, then rebuild (below). The review page `design/mockups/st
 ## LinkAja home and chat from the live app (2026-11-14)
 
 The owner supplied four screenshots of the live Android app (home, Pusat Bantuan with its tour, the help centre, the LinkAja Support chat) and
-approved showing the real name and balance.
+approved showing the real name; the balance was then changed from Rp9.701 to Rp2.150.000 at the owner's request (comment on the hi-fi artifact).
 
 - **`linkaja-home`** is redrawn from the home screenshot: "Hai, DENNY RYANTO", Saldo Kamu Rp9.701, Saldo Bonus 0, Easycash "Cek di Sini", the
   wallet actions (Isi, Kirim, Tarik Saldo, Semua), the eight real services, the real "Berbagi di setiap transaksi" banner, the first

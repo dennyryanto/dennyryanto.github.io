@@ -33,7 +33,7 @@ export const meta: Meta = {
   stageWidth: 400,
   sizes: { wide: [358, 736], compact: [358, 736], below: 560 }, // the wide design (400) is below `below`, so the stage always draws the compact one
   notes: [
-    ['The real screen.', 'This is the home screen as it runs on an Android phone today, redrawn from a screenshot of the live app: the street header with the logo, the favourites and help buttons, the red balance card (Saldo Kamu, Saldo Bonus, Easycash), the four wallet actions, the eight services, the "Berbagi di setiap transaksi" banner and the first promo card of "Spesial Hanya Untukmu!" under the tab bar. The name and the balance are the author\'s own.'],
+    ['The real screen.', 'This is the home screen as it runs on an Android phone today, redrawn from a screenshot of the live app: the street header with the logo, the favourites and help buttons, the red balance card (Saldo Kamu, Saldo Bonus, Easycash), the four wallet actions, the eight services, the "Berbagi di setiap transaksi" banner and the first promo card of "Spesial Hanya Untukmu!" under the tab bar. The name is the author\'s own; the balance was changed to about Rp2 million at the owner\'s request.'],
     ['What is real and what is redrawn.', 'The layout is measured from the screenshot, in the app\'s own type (Mulish). The service and wallet-action icons, the logo, the banner and the promo card are cropped from the screenshot at its resolution; the status bar, the balance card, the labels and the tab bar are drawn. The Bayar button carries the QRIS mark (Wikimedia Commons, "QRIS logo.svg"); the mark belongs to its owner.'],
     ['Still on purpose.', 'The screen does not move: there is one screenshot, so there is nothing real to advance to. The old animated promo carousel and its invented banners are gone.'],
     ['Not checked.', 'The loop inside the built page (there is none now), and Indonesian text at a larger system font size.'],
@@ -43,7 +43,7 @@ export const meta: Meta = {
 // LinkAja's home screen as it ships today, drawn from a screenshot of the live app (Android, 900 x 2000).
 // The screen is laid out in screenshot pixels scaled to the Pixel frame's 412 pt (--k in home.css),
 // so every position below is a number read off the screenshot. A still: one screenshot, nothing real to advance.
-// Real strings: Hai, DENNY RYANTO; Saldo Kamu Rp9.701; Saldo Bonus 0; Easycash Cek di Sini; the four wallet
+// Real strings: Hai, DENNY RYANTO; Saldo Kamu Rp2.150.000; Saldo Bonus 0; Easycash Cek di Sini; the four wallet
 // actions; the eight services; the banner; Spesial Hanya Untukmu!; the five tabs.
 
 const WALLET = [
@@ -110,7 +110,7 @@ export default function LinkAjaHome() {
               <div className="lh-bal lh-bal--1">
                 <span className="lh-bal__k">Saldo Kamu</span>
                 <span className="lh-bal__v">
-                  Rp9.701
+                  Rp2.150.000
                   <Arrow />
                 </span>
               </div>

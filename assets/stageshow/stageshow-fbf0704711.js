@@ -7579,7 +7579,7 @@ function _d() {
       /* @__PURE__ */ l.jsxs("div", { className: "lh-bal lh-bal--1", children: [
         /* @__PURE__ */ l.jsx("span", { className: "lh-bal__k", children: "Saldo Kamu" }),
         /* @__PURE__ */ l.jsxs("span", { className: "lh-bal__v", children: [
-          "Rp9.701",
+          "Rp2.150.000",
           /* @__PURE__ */ l.jsx(Ri, {})
         ] })
       ] }),
