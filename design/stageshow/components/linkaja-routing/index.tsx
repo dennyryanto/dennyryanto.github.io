@@ -1,5 +1,10 @@
-import { Avatar, Bar, Check, Collapse, Connector, Icon, Phone, Row, Stage, Stamp, Thread, Bubble, type Act } from '../../kit'
+import { Avatar, Bar, Check, Collapse, Connector, Phone, Row, Stage, Stamp, Thread, Bubble, type Act } from '../../kit'
+import { ChevronRight } from 'lucide-react'
 import './routing.css'
+import mInfo from '../linkaja-home/img/m-info.webp'
+import mTrx from '../linkaja-home/img/m-trx.webp'
+import mNon from '../linkaja-home/img/m-non.webp'
+import mReq from '../linkaja-home/img/m-req.webp'
 import type { Meta } from '../plan'
 
 export const meta: Meta = {
@@ -7,38 +12,33 @@ export const meta: Meta = {
   case: 'LinkAja',
   title: 'Intent routing',
   head: 'INTENT ROUTING IN CHAT',
-  note: 'ILLUSTRATIVE',
-  lead: 'Frequent cases resolve in chat. Sensitive ones reach the right agent with the history attached.',
+  note: 'CHAT AS IN THE APP',
+  lead: 'The support chat offers its options as an inline card. One tap is classified, and the case reaches the right agent with the history attached.',
   layout: 'split',
   stageWidth: 598,
-  sizes: { wide: [598, 380], compact: [358, 340], below: 560 },
+  sizes: { wide: [598, 470], compact: [358, 450], below: 560 },
   notes: [
-    ['One phone, one story.', 'The chat builds message by message. A limit question is classified and resolved without an agent. Then the fraud report arrives, is classified, and is handed to a person. This replaces the two phones side by side.'],
-    ['The consequence is shown where it lands.', 'The case drops into the agent queue with its chat history, transactions and account status attached. A leader ties it to the agent who joins the chat.'],
-    ['Checked.', 'The rehearsal gate passes at the 390px phone column. At the desktop width its only finding is the phone side gutters against its 16px bottom gutter, which comes from keeping the shell whole. Reduced motion shows the finished chat.'],
-    ['Not checked.', 'Frame rate on a real phone, and the loop inside the built site.'],
+    ['The real chat.', 'The bot greets by name and offers its four options as one inline card: Informasi seputar LinkAja, Keluhan mengenai transaksi, Keluhan mengenai non-transaksi, Permintaan. The composer is locked ("Silakan klik menu yang tersedia"), so the card is the only way in. The greeting, the card, its icons and the composer line are taken from a screenshot of the live app.'],
+    ['One tap is the routing.', 'A tap on "Keluhan mengenai transaksi" is the user\'s message, and it is classified at once, with no free text to interpret. This replaces the earlier version, where a typed fraud report was classified.'],
+    ['The consequence is shown where it lands.', 'The case drops into the agent queue with its chat history, transactions and account status attached. A leader ties it to the agent who joins the chat. The queue and the agent are illustrative: they are not a screen from the real agent tool.'],
+    ['Checked.', 'Reduced motion shows the finished chat. Not checked: frame rate on a real phone, the loop inside the built site, and Indonesian text at a larger system font size.'],
   ],
 }
 
-// LinkAja intent routing in chat. The chat is built message by message, so the
-// viewer has the context before the sensitive case arrives: a limit question
-// is classified, answered and resolved without an agent. Then a fraud report
-// arrives, is classified, answered, and handed to a person. The consequence
-// lands somewhere else: the case drops into the agent queue with its chat
-// history, transactions and account status attached, tied back to the chat by a
-// leader. The agent joins; the payoff holds. The loop resets around its anchor:
-// everything the story added leaves in one reverse stagger while the date
-// stamp, the composer and the queue stay. The poster is the finished chat.
+// LinkAja intent routing in chat, from the live support chat: the bot greets by name and offers its options as an
+// inline card (the composer is locked, so the card is the only way in). One tap on "Keluhan mengenai transaksi" is
+// the user's message and is classified; the case drops into the agent queue with its history, transactions and
+// account status attached, tied back to the chat by a leader, and the agent joins. The loop resets around its
+// anchor: everything the story added leaves in one reverse stagger while the date stamp, the composer and the queue
+// stay. The poster is the finished chat.
 //
-// Real strings: two questions, two intent labels, two answers, the resolved
-// line, the agent line, the queue title, the case and its three attachments.
+// Real strings (screenshot): the stamp, the greeting, the card's four options, the composer line. Illustrative:
+// the intent label, the reply, the agent line and the queue.
 
 type S = {
-  me1: boolean
-  chip1: boolean
-  reply1: boolean
-  typing1: boolean
-  done1: boolean
+  greet: boolean
+  card: boolean
+  pick: boolean
   me: boolean
   chip: boolean
   reply: boolean
@@ -49,29 +49,27 @@ type S = {
   link: boolean
 }
 
-const initial: S = { me1: false, chip1: false, reply1: false, typing1: true, done1: false, me: false, chip: false, reply: false, typing: true, agent: false, queue: false, att: 0, link: false }
-const poster: S = { me1: true, chip1: true, reply1: true, typing1: false, done1: true, me: true, chip: true, reply: true, typing: false, agent: true, queue: true, att: 3, link: true }
+const initial: S = { greet: false, card: false, pick: false, me: false, chip: false, reply: false, typing: true, agent: false, queue: false, att: 0, link: false }
+const poster: S = { greet: true, card: true, pick: true, me: true, chip: true, reply: true, typing: false, agent: true, queue: true, att: 3, link: true }
+
+const REST = { wide: { x: 500, y: 430 }, compact: { x: 300, y: 410 } }
 
 async function script(a: Act<S>) {
-  // First case: asked, classified, answered, resolved without an agent
+  // The bot greets and offers its options as one inline card
   await a.wait(700)
-  a.mark('ask1')
-  await a.set({ me1: true })
-  await a.wait(650)
-  a.mark('intent1')
-  await a.set({ chip1: true })
-  await a.wait(650)
-  await a.set({ reply1: true })
-  await a.wait(1000)
-  await a.set({ typing1: false })
+  a.mark('greet')
+  await a.set({ greet: true })
   await a.wait(800)
-  a.mark('resolved')
-  await a.set({ done1: true })
+  a.mark('card')
+  await a.set({ card: true })
   await a.wait(1100)
-  // Second case: a sensitive message, routed to a person
-  a.mark('ask')
+  // One tap is the message, and it is classified at once
+  a.mark('tap')
+  await a.click('trx')
+  a.put({ pick: true })
+  await a.wait(350)
   await a.set({ me: true })
-  await a.wait(700)
+  await a.wait(650)
   a.mark('intent')
   await a.set({ chip: true })
   await a.wait(700)
@@ -90,28 +88,34 @@ async function script(a: Act<S>) {
   await a.wait(900)
   await a.set({ link: true })
   await a.wait(2600)
-  // Exit around the anchor: what the story added leaves in one reverse
-  // stagger; the stamp, the composer and the queue stay
+  // Exit around the anchor: what the story added leaves in one reverse stagger; the stamp, the composer and the queue stay
   a.mark('exit')
   await a.set({ link: false })
-  await a.wait(600)
-  await a.stagger(['agent', 'queue', 'reply', 'chip', 'me', 'done1', 'reply1', 'chip1', 'me1'] as const, (k) => a.put({ [k]: false } as Partial<S>), 55)
+  await a.move(a.layout === 'wide' ? REST.wide : REST.compact)
+  await a.wait(300)
+  await a.stagger(['agent', 'queue', 'reply', 'chip', 'me', 'card', 'greet'] as const, (k) => a.put({ [k]: false } as Partial<S>), 55)
   await a.wait(700)
-  await a.snap({ att: 0, typing: true, typing1: true })
+  await a.snap({ att: 0, typing: true, pick: false })
   await a.wait(100)
 }
 
-const ME = 'Ada transaksi yang bukan saya'
+const OPTIONS = [
+  { id: 'info', label: 'Informasi seputar LinkAja', src: mInfo },
+  { id: 'trx', label: 'Keluhan mengenai transaksi', src: mTrx },
+  { id: 'non', label: 'Keluhan mengenai non-transaksi', src: mNon },
+  { id: 'req', label: 'Permintaan', src: mReq },
+] as const
 
 export default function LinkAjaRouting() {
   return (
     <Stage
       width={598}
-      height={380}
-      compact={{ below: 560, width: 358, height: 340 }}
+      height={470}
+      compact={{ below: 560, width: 358, height: 450 }}
       initial={initial}
       poster={poster}
       script={script}
+      cursor={{ at: REST, style: 'touch' }}
       play="loop"
       theme="dark"
       className="lr"
@@ -122,61 +126,55 @@ export default function LinkAjaRouting() {
         const c = wide ? rect('case') : null
         return (
           <>
-            <Phone width={wide ? 340 : 326} className="lr-phone" wallpaper="#eef0f3">
+            <Phone width={wide ? 340 : 326} frame="android" status={false} wallpaper="#f3f4fa" className="lr-phone">
               <Thread className="lr-thread">
-                <Stamp>Hari ini 09.41</Stamp>
-                <Collapse open={s.me1} reveal="drop" from="below">
+                <Stamp>Obrolan dimulai at 20:49</Stamp>
+                <Collapse open={s.greet} reveal="drop" from="below">
                   <div className="lr-gap">
-                    <Bubble from="me" tail>
-                      Limit PayLater saya kok belum naik?
+                    <Bubble from="them" tail={false}>
+                      Hai <b>DENNY RYANTO</b>, mohon maaf atas kendala yang kamu alami, berikut adalah beberapa informasi kendala yang bisa kamu pilih.
                     </Bubble>
                   </div>
                 </Collapse>
-                <Collapse open={s.chip1} reveal="drop" from="below">
-                  <div className="lr-intent lr-gap">Intent · Limit</div>
-                </Collapse>
-                <Collapse open={s.reply1} reveal="drop" from="below">
+                <Collapse open={s.card} reveal="drop" from="below">
                   <div className="lr-gap">
-                    <Bubble from="them" tail typing={s.typing1}>
-                      Limit dievaluasi tiap bulan.
-                    </Bubble>
-                  </div>
-                </Collapse>
-                <Collapse open={s.done1} reveal="drop" from="below">
-                  <div className="lr-done">
-                    <Icon name="check" size={14} stroke={2.4} />
-                    Selesai tanpa agen
+                    <div className="lr-menu">
+                      {OPTIONS.map((o) => (
+                        <div key={o.id} className="lr-opt" data-picked={(o.id === 'trx' && s.pick) || undefined} data-target={o.id === 'trx' ? 'trx' : undefined} data-cursor={o.id === 'trx' ? 'pointer' : undefined}>
+                          <img src={o.src} alt="" />
+                          <span>{o.label}</span>
+                          <ChevronRight size={18} strokeWidth={2.4} />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </Collapse>
                 <Collapse open={s.me} reveal="drop" from="below">
                   <div className="lr-gap">
                     <Bubble from="me" tail>
-                      {ME}
+                      Keluhan mengenai transaksi
                     </Bubble>
                   </div>
                 </Collapse>
                 <Collapse open={s.chip} reveal="drop" from="below">
-                  <div className="lr-intent lr-gap">Intent · Indikasi fraud</div>
+                  <div className="lr-intent lr-gap">Intent · Keluhan transaksi</div>
                 </Collapse>
                 <Collapse open={s.reply} reveal="drop" from="below">
                   <div className="lr-gap">
                     <Bubble from="them" tail typing={s.typing}>
-                      Akunmu kami amankan dulu.
+                      Kami teruskan ke tim transaksi.
                     </Bubble>
                   </div>
                 </Collapse>
                 <Collapse open={s.agent} reveal="drop" from="below">
                   <div className="lr-agent lr-gap">
                     <Avatar name="Rina" size={26} />
-                    <span data-target="agent">Rina, agen keamanan, bergabung</span>
+                    <span data-target="agent">Rina, agen transaksi, bergabung</span>
                   </div>
                 </Collapse>
               </Thread>
               <div className="lr-compose">
-                <span className="lr-field">Tulis pesan</span>
-                <span className="lr-send" aria-hidden>
-                  <Icon name="send" size={16} filled />
-                </span>
+                <span className="lr-field">Silakan klik menu yang tersedia</span>
               </div>
             </Phone>
             {wide && (
@@ -186,7 +184,7 @@ export default function LinkAjaRouting() {
                 <Row lead={<Avatar plain size={28} />} title={<Bar w={78} h={8} />} subtitle={<Bar w={52} h={6} tone={2} />} pad={0} />
                 <Collapse open={s.queue} reveal="drop">
                   <div className="lr-case" data-target="case">
-                    <Row lead={<Avatar name="Rina" size={28} />} title="Fraud suspected" subtitle="Handled by Rina" pad={0} />
+                    <Row lead={<Avatar name="Rina" size={28} />} title="Transaction case" subtitle="Handled by Rina" pad={0} />
                     <div className="lr-att">
                       {["Chat history", "Transactions", "Account status"].map((t, i) => (
                         <div key={t} className="lr-att__row" data-on={s.att > i || undefined}>

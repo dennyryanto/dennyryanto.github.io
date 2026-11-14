@@ -37,7 +37,7 @@ SAY = {
     # index labels
     'DEPOSIT FUNNEL': 'Deposit funnel', 'CUSTOMERS / MONTH': 'Customers a month', 'AI-NATIVE BUILDS': 'AI-native builds',
     # diagram and mock-up titles (first line) and their notes
-    'HOME SCREEN · AS IT SHIPS TODAY': 'Home screen|As it ships today', 'ILLUSTRATIVE': 'Illustrative',
+    'HOME SCREEN · AS IT SHIPS TODAY': 'Home screen|As it ships today', 'ILLUSTRATIVE': 'Illustrative', 'FROM THE LIVE APP': 'From the live app', 'CHAT AS IN THE APP': 'Chat as in the app',
     'CS OPEX AFTER SELF-SERVICE CTP REVAMP · INDEXED': 'CS OPEX after the self-service revamp|Indexed',
     'TICKET-DRIVEN → SELF-SERVICE': 'Ticket-driven to self-service',
     'THE PROBLEM AND THE FIX': 'The problem and the fix', 'AGENT TICKET → SOLVED IN-APP': 'Agent ticket to solved in-app',
@@ -671,8 +671,8 @@ def spans(row):
 import html as _html
 SS = os.path.join(HERE, '..', 'stageshow')
 SS_LABELS = {
-    'linkaja-routing': 'Demo: a limit question is resolved in chat, then a fraud report is routed to a security agent and lands in the agent queue',
-    'linkaja-home': 'Demo: the LinkAja home screen as it ships today, with its promo banners advancing',
+    'linkaja-routing': 'Demo: the LinkAja support chat offers its options as an inline card, a tap on a transaction complaint is routed to an agent and lands in the agent queue',
+    'linkaja-home': 'The LinkAja home screen as it ships today, from a screenshot of the live app',
     'komunal-shipped-flow': 'Demo: a deposit placed in the DepositoBPR app, from the product list to the success screen',
     'ai-decision-desk': 'Demo: an enterprise AI workflow run, from four data sources to a reorder decision ready to approve',
     'ai-chrona': 'Demo: Chrona drafts and sends a birthday brunch plan in two taps',
