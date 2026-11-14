@@ -991,6 +991,29 @@ approved showing the real name; the balance was then changed from Rp9.701 to Rp2
 - Rebuild: `python3 design/stageshow/build_posters.py`, then `build_hifi.py` and `build_site.py` as in the technical notes. The page
   captures come from `grab-sections.js` and `grab-clients-cockpit.js` writing into `<workdir>/hifi/` (not the workdir root).
 
+## LinkAja home: before and after (2026-11-14)
+
+The home screen is now a **scroll-reveal comparison** (owner's idea, over the side-by-side, slider and toggle options proposed): the pre-revamp screen is
+wiped away by the live one as the reader scrolls, a lime divider with a handle marking the split, while five reasons light up in turn beside it and outline
+their place on both screens (amber on the old, lime on the new). It replaces the live home still in the LinkAja drawer.
+
+- **Built from posters.** Both screens are the stageshow posters (`linkaja-home` and the new poster-only `linkaja-home-before`, same stage and size, so they
+  overlay exactly); `design/tools/build_hifi.py` (`ba_unit`) builds the markup, `hifi_shell.html` the CSS (`.ba-*`) and the script (`beforeAfter`). The live
+  `linkaja-home` demo is no longer mounted on the page and was dropped from `stageshow/site/main.tsx`; its component and poster stay.
+- **How it pins.** `position: sticky` on the stage inside a tall track (stage height plus 60vh per reason), with one ScrollTrigger driving the divider
+  (`--x`), the active reason and its zones. No GSAP pin: sticky works once the drawer has settled (`overflow: visible`) and `ScrollTrigger.refresh()` runs
+  on settle. The label column is sticky with it. `--ba-top` (the top bar plus 16px) is set on `:root` by the script.
+- **Fallbacks.** Under 900px wide or 640px tall, with reduced motion, or without JavaScript, the two screens stand side by side (stacked under 600px) with the reasons below.
+- **The old screen is redrawn**, from low-resolution screenshots (the "Linka Jadid" one: Rp 1.000.000, Saldo Bonus 10.000, Kirim Uang / Isi Saldo / Kode Tiket / Semua,
+  the payment-method card, eight services, the Layanan Syariah banner). The layout and strings follow them; the icon drawings are mine (bare glyphs in mixed weights and
+  colours), which is the point being made, so they are an interpretation. Labelled "redrawn" on the page.
+- **Reasons** (copy to review): balances as equal tappable cards; wallet actions as solid tiles; one icon system (53 services in seven families); no payment-method
+  prompt between balance and services; the QRIS mark on Bayar. Deliberately not claimed: bigger labels or higher services (neither is true of the two screens).
+- **The icon set** follows as a wall: 53 icons in the app's seven groups, cut from a screenshot of the app's Product LinkAja list into one 8-column sprite
+  (`design/images/linkaja-icons.webp`, 51KB, 96px tiles, in list order; the sprite rule is added in `build_hifi.py`). Some tiles carry third-party marks (Telkomsel, My Pertamina, BAZNAS)
+  because the app's list does.
+- The balance shown is Rp2.150.000, changed from the screenshot's value at the owner's request.
+
 ## Komunal in the live app's type and colours (2026-11-06)
 
 The Komunal design system board and the shipped-flow demo were redrawn from four screenshots of the live DepositoBPR app (Beranda,

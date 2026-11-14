@@ -672,7 +672,6 @@ import html as _html
 SS = os.path.join(HERE, '..', 'stageshow')
 SS_LABELS = {
     'linkaja-routing': 'Demo: the LinkAja support chat offers its options as an inline card, a tap on a transaction complaint is routed to an agent and lands in the agent queue',
-    'linkaja-home': 'The LinkAja home screen as it ships today, from a screenshot of the live app',
     'komunal-shipped-flow': 'Demo: a deposit placed in the DepositoBPR app, from the product list to the success screen',
     'ai-decision-desk': 'Demo: an enterprise AI workflow run, from four data sources to a reorder decision ready to approve',
     'ai-chrona': 'Demo: Chrona drafts and sends a birthday brunch plan in two taps',
@@ -767,8 +766,87 @@ shots_html = unit(*head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MY
                   '</div></div>', head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MYPAYLATER · SHIPPED FLOW')[1])
 
 
-# LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
-LA_HOME = ss_stage('linkaja-home')
+
+# ---------- LinkAja home screen, before and after (design/stageshow/components/linkaja-home*) ----------
+# A scroll-reveal: the pre-revamp screen (redrawn from low-resolution screenshots) is wiped away by the live one as the reader
+# scrolls, while the reason for each difference lights up beside it and outlines its place on both screens. Both screens are the
+# demos' posters (same stage, so they overlay exactly). Without JavaScript, with reduced motion and on phones the two stand side
+# by side, with the reasons below. The 53 service icons of the live app follow as a wall, cut from a screenshot of the app's list.
+BA_REASONS = [
+    ('Balances read as equal, tappable cards',
+     'One balance, with the bonus as a small line on red.',
+     'Saldo Kamu, Saldo Bonus and Easycash side by side at the same weight, each a clear tap target.',
+     (9.3, 15.5, 80.4, 5.9), (10.1, 20.2, 79.6, 8.5)),
+    ('Wallet actions get solid tiles',
+     'Thin white outlines on the red card, carrying a bare &ldquo;Rp&rdquo; each.',
+     'Solid red tiles on white, in a card of their own, so the four actions keep their contrast and each has its own glyph.',
+     (9.7, 22.3, 80.7, 6.1), (10.1, 31.8, 79.6, 7.5)),
+    ('One icon system, easier to read',
+     'Eight bare glyphs in mixed weights and colours: outline, filled, thin, heavy.',
+     'Tinted tiles with one drawing style, and colour that means something: 53 services in seven families (see the set below).',
+     (9.3, 38.2, 81.5, 17.7), (10.3, 42.3, 79.4, 19.5)),
+    ('No prompt between the balance and the services',
+     'A &ldquo;Tambah Metode Pembayaran&rdquo; card sat between the balance and the services.',
+     'The screen runs from balances to actions to services without an interruption.',
+     (9.7, 28.9, 80.7, 6.1), None),
+    ('Bayar carries the QRIS mark',
+     'A generic QR glyph on the centre button.',
+     'The QRIS mark, so the button reads as the national QR payment.',
+     (44.5, 85.5, 10.8, 5.6), (44.5, 87.0, 11.0, 6.5)),
+]
+
+
+def ba_poster(id, alt):
+    f = os.path.join(SS, 'site', 'posters', '%s-compact.webp' % id)
+    assert os.path.exists(f), 'run design/stageshow/build_posters.py: no poster for ' + id
+    return '<img src="data:image/webp;base64,%s" width="358" height="736" alt="%s">' % (base64.b64encode(open(f, 'rb').read()).decode(), _html.escape(alt, quote=True))
+
+
+def ba_unit():
+    def zones(k):
+        return ''.join('<span class="ba-zone" data-z="%d" style="left:%.1f%%;top:%.1f%%;width:%.1f%%;height:%.1f%%" aria-hidden="true"></span>' % ((n + 1,) + r[k])
+                       for n, r in enumerate(BA_REASONS) if r[k])
+    why = ''.join('<li><span class="ba-n">%d</span><div><h4>%s</h4><p><span class="ba-k">Before</span>%s</p><p><span class="ba-k ba-k-a">After</span>%s</p></div></li>' % (n + 1, t, b, a)
+                  for n, (t, b, a, _, _) in enumerate(BA_REASONS))
+    frame = ('<div class="ba-frame">'
+             '<figure class="ba-layer ba-before">%s<span class="ba-chip">Before</span>%s</figure>'
+             '<figure class="ba-layer ba-after">%s<span class="ba-chip">After</span>%s</figure>'
+             '<span class="ba-divider" aria-hidden="true"><i></i></span><span class="ba-cue" aria-hidden="true">Scroll to compare</span></div>'
+             % (ba_poster('linkaja-home-before', 'The LinkAja home screen before the revamp, redrawn from low-resolution screenshots: a red card with the balance and four actions, a payment-method prompt, eight small icons in mixed styles, a banner'),
+                zones(3), ba_poster('linkaja-home', 'The LinkAja home screen as it ships today: a red card with three balances, four wallet actions, eight service icons on tinted tiles, a banner and the first promo card'), zones(4)))
+    body = '<div class="ba" style="--n:%d"><div class="ba-track"><div class="ba-stick">%s<ol class="ba-why">%s</ol></div></div></div>' % (len(BA_REASONS), frame, why)
+    return unit('Home screen, before and after', board(body), ['From the live app'],
+                ['The home-screen revamp I co-led for 70M+ users. It is still the design in the app today. Scroll to compare it with the old screen, which is redrawn from low-resolution screenshots.'])
+
+
+# the icon set, as the live app lists it (Product LinkAja): cut from a screenshot of that list into one sprite sheet, 8 tiles per row, in list order
+BA_FAMILIES = [
+    ('Telekomunikasi', ['Pulsa/Data', 'Pascabayar', 'eSIM', 'Hemat Lengkap by Telkomsel', 'Pulsa &amp; E-SIM Internasional']),
+    ('Beli/Bayar Tagihan', ['PDAM', 'Listrik', 'Kartu Kredit', 'Multifinance', 'Voucher &amp; E-Wallet', 'Pegadaian', 'TV Kabel &amp; Internet', 'Asuransi', 'GAS', 'BPJS',
+                            'Telepon', 'Properti', 'Kartu Uang Elektronik', 'Pendidikan', 'Rekening Virtual']),
+    ('Transportasi', ['Kapal', 'Parkir', 'My Pertamina', 'Kereta', 'Taksi', 'Bus', 'Pesawat', 'Kendaraan Online']),
+    ('Keuangan', ['Beli Asuransi', 'Pinjaman Easycash', 'Rekening Online', 'Reksadana']),
+    ('Aktivitas Seru', ['Voucher Games', 'Streaming', 'Travel dan Hiburan']),
+    ('Dana Sosial', ['Infaq', 'Zakat', 'Wakaf', 'Masjid', 'Gereja', 'Donasi Lainnya', 'Kalkulator Zakat', 'BAZNAS']),
+    ('Pajak', ['Pajak', 'Bayar KUA', 'Bayar Paspor', 'Bayar SIM', 'Bayar Denda Tilang', 'Bayar Beacukai', 'Bayar PPH', 'Bayar PPN', 'E-Samsat', 'Layanan Perpajakan']),
+]
+assert sum(len(v) for _, v in BA_FAMILIES) == 53
+BA_SPRITE = 'data:image/webp;base64,' + base64.b64encode(open(os.path.join(HERE, '..', 'images', 'linkaja-icons.webp'), 'rb').read()).decode()
+
+
+def ba_wall():
+    i, out = 0, []
+    for fam, names in BA_FAMILIES:
+        tiles = ''
+        for n in names:
+            tiles += '<li class="ba-ic" role="img" aria-label="%s" style="--c:%d;--r:%d"></li>' % (n, i % 8, i // 8)
+            i += 1
+        out.append('<div class="ba-fam"><h4>%s<span>%d</span></h4><ul>%s</ul></div>' % (fam, len(names), tiles))
+    return unit('The icon set', board('<div class="ba-wall">' + ''.join(out) + '</div>'), ['53 services, 7 families'],
+                ['One tile shape and one drawing style, with colour by family: red for telecoms, cyan for bills, green for transport, blue for finance, orange for fun, teal for giving, purple for tax.'])
+
+# LinkAja's home screen: the before/after scroll-reveal and the icon set; the routing chat is a Stageshow demo (design/stageshow), placed below.
+LA_HOME = ba_unit() + ba_wall()
 LA_ROUTING = ss_stage('linkaja-routing')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
@@ -1312,6 +1390,7 @@ def one_type(html):
 
 
 css = one_type(css)
+css += '\n/* the icon sprite (ba_wall) */\n.ba-ic { background-image: url(' + BA_SPRITE + '); }\n'
 css += '\n/* Stageshow demo placeholders (ss_mount) */\n' + '\n'.join(SS_RULES) + '\n'
 # the LinkAja chats play their conversation once and hold it, so there is time to read it, instead of clearing it every 14s;
 # linkaja-intent-routing.html starts them when the phones come into view (without JavaScript they play on load and hold)

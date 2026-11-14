@@ -1,7 +1,7 @@
 # Stageshow demos
 
 Product mock-ups from the portfolio, redrawn with the [Stageshow](https://benji.org/stageshow) kit (MIT, by Benji Taylor) as looping
-React demos. Five are live on the site (see `design/AUDIT.md`, "Stageshow demos in the site"); the rest were dropped or are on hold.
+React demos. Four are live on the site (a fifth, the LinkAja home, is now a before/after built from posters) (see `design/AUDIT.md`, "Stageshow demos in the site"); the rest were dropped or are on hold.
 
 ```
 kit/                  the Stageshow kit, vendored from the skill (kit/LICENSE)
