@@ -786,14 +786,23 @@ assert sum(len(v) for _, v in BA_FAMILIES) == 53
 BA_SPRITE = 'data:image/webp;base64,' + base64.b64encode(open(os.path.join(HERE, '..', 'images', 'linkaja-icons.webp'), 'rb').read()).decode()
 
 
+# each family's colour, sampled from its tiles, shown as a swatch beside its name; above the families, the eight glyphs of the
+# pre-revamp home screen (bare Lucide glyphs in mixed weights and colours, redrawn: design/images/linkaja-old-icons.json)
+BA_COLOURS = ['#e02020', '#00a0e0', '#50b030', '#2060e0', '#f09000', '#30b0b0', '#7040e0']
+BA_OLD = json.load(open(os.path.join(HERE, '..', 'images', 'linkaja-old-icons.json'), encoding='utf-8'))
+
+
 def ba_wall():
-    i, out = 0, []
-    for fam, names in BA_FAMILIES:
+    old = ''.join('<li class="ba-oi" role="img" aria-label="%s">%s</li>' % (_html.escape(n), svg) for n, svg in BA_OLD)
+    out = ['<div class="ba-grp">Before</div>', '<div class="ba-fam ba-old"><h4>Home screen icons</h4><ul>%s</ul></div>' % old,
+           '<div class="ba-grp ba-grp-a">After: colour by family</div>']
+    i = 0
+    for (fam, names), col in zip(BA_FAMILIES, BA_COLOURS):
         tiles = ''
         for n in names:
             tiles += '<li class="ba-ic" role="img" aria-label="%s" style="--c:%d;--r:%d"></li>' % (n, i % 8, i // 8)
             i += 1
-        out.append('<div class="ba-fam"><h4>%s</h4><ul>%s</ul></div>' % (fam, tiles))
+        out.append('<div class="ba-fam" style="--f:%s"><h4><i aria-hidden="true"></i>%s</h4><ul>%s</ul></div>' % (col, fam, tiles))
     return unit('The icon set', board('<div class="ba-wall">' + ''.join(out) + '</div>'), ['53 services, one system'])
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow); the icon set follows the home screen.

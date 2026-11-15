@@ -1002,6 +1002,9 @@ What stays, after the live home screen demo:
 - **The icon set**: the app's 53 service icons in its seven groups, cut from a screenshot of the app's Product LinkAja list into one 8-column sprite
   (`design/images/linkaja-icons.webp`, 51KB, 96px tiles, in list order; the sprite rule is added in `build_hifi.py`, `ba_wall`). Family names only,
   no counts or captions (owner: "too detailed"). Some tiles carry third-party marks (Telkomsel, My Pertamina, BAZNAS) because the app's list does.
+- **Colour by family, against the old glyphs** (owner: "emphasize color coded icons in comparison to the old ones"): a "Before" row of the
+  pre-revamp home screen's eight bare glyphs (redrawn Lucide glyphs in mixed weights and colours, on the app's light ground; SVG kept in
+  `design/images/linkaja-old-icons.json`), then "After: colour by family", each family with a swatch and a left rule in its colour (sampled from its tiles, `BA_COLOURS`).
 - **Its reveal** (`iconWall` in `hifi_shell.html`), like the app: when the wall comes into view (IntersectionObserver, since it sits in a drawer),
   the families appear one after another and their tiles pop in (`back.out`). Without JS or with reduced motion everything is simply shown.
 
