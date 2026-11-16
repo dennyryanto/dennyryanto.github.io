@@ -199,6 +199,12 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 /* the icon set */
 .ba-wall { display: grid; }
 .ba-fam { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 10px 24px; align-items: center; padding: 18px 0; border-top: 1px solid var(--rule); }
+/* what the revamp changed: five short points under the home screen demo */
+.la-pts { margin: 24px 0 0; padding: 0; list-style: none; counter-reset: lp; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px var(--gut); }
+.la-pts li { counter-increment: lp; display: grid; align-content: start; gap: 4px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.la-pts li::before { content: counter(lp); font: 600 13px/1 var(--display); color: var(--lime); font-variant-numeric: tabular-nums; }
+.la-pts b { font: 600 16px/1.35 var(--display); color: var(--fg); }
+.la-pts span { font: 400 14px/1.5 var(--display); color: var(--fg-2); text-wrap: pretty; }
 .ba-grp { padding: 0 0 10px 14px; font: 500 13px/1.3 var(--display); color: var(--fg-3); }
 .ba-grp-a { padding-top: 28px; margin-top: 4px; border-top: 1px solid var(--rule); color: var(--lime); }
 .ba-old { border-top: 0; padding-top: 0; padding-left: 14px; }

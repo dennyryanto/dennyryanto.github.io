@@ -806,7 +806,23 @@ def ba_wall():
     return unit('The icon set', board('<div class="ba-wall">' + ''.join(out) + '</div>'), ['53 services, one system'])
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow); the icon set follows the home screen.
-LA_HOME = ss_stage('linkaja-home') + ba_wall()
+# what the revamp changed, in five short points under the home screen demo (owner: short sentences, no before/after narrative)
+LA_POINTS = [
+    ('Three balances, one glance', 'Saldo, bonus and Easycash sit side by side as cards you can tap.'),
+    ('Actions you can see', 'Solid red tiles replace thin outlines on red.'),
+    ('One icon system', 'Every service on the same tile, coloured by family.'),
+    ('Nothing in the way', 'No payment-method prompt between your balance and your services.'),
+    ('QRIS, front and centre', 'The pay button carries the national QR mark.'),
+]
+LA_POINTS_HTML = '<ol class="la-pts">' + ''.join('<li><b>%s</b><span>%s</span></li>' % p for p in LA_POINTS) + '</ol>'
+
+
+def la_home():
+    m = ss_meta('linkaja-home')
+    return stage('<div class="ss-box">' + ss_mount('linkaja-home') + '</div>', (m['head'], m['note']), caps=[_html.escape(m['lead'])], after=LA_POINTS_HTML)
+
+
+LA_HOME = la_home() + ba_wall()
 LA_ROUTING = ss_stage('linkaja-routing')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
