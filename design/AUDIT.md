@@ -1007,7 +1007,7 @@ What stays, after the live home screen demo:
   `design/images/linkaja-old-icons.json`), then "After: colour by family", each family with a swatch and a left rule in its colour (sampled from its tiles, `BA_COLOURS`).
 - **Five short points under the home demo** (`LA_POINTS`, `la_home` in `build_hifi.py`; owner: "bring back the short points"): what the revamp
   changed, one short sentence each, no before/after comparison.
-- The old glyphs share **one red-to-blue gradient** (owner: the old home screen icons had only that one gradient, so they could not be told apart by colour).
+- The old glyphs are **filled**, all in **one red-to-blue gradient** with white details (owner: the old home screen icons had only that one gradient, so they could not be told apart by colour).
 - **Its reveal** (`iconWall` in `hifi_shell.html`), like the app: when the wall comes into view (IntersectionObserver, since it sits in a drawer),
   the families appear one after another and their tiles pop in (`back.out`). Without JS or with reduced motion everything is simply shown.
 
