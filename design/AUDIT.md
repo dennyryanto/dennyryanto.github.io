@@ -991,6 +991,29 @@ approved showing the real name; the balance was then changed from Rp9.701 to Rp2
 - Rebuild: `python3 design/stageshow/build_posters.py`, then `build_hifi.py` and `build_site.py` as in the technical notes. The page
   captures come from `grab-sections.js` and `grab-clients-cockpit.js` writing into `<workdir>/hifi/` (not the workdir root).
 
+## LinkAja home: before/after tried and dropped; the icon set stays (2026-11-15)
+
+A before/after for the home screen was built and reviewed on the hi-fi artifact, then removed at the owner's request ("remove the before and
+after narrative"). Tried, in order: a left-to-right wipe over the two screens with five reasons (the wipe had nothing to do with the active reason
+and lagged); a vertical reveal walking down the screen; two phones side by side with stepped highlights, then with a magnifying lens and one-line
+reasons. The code is in the git history (PR #48's earlier commits) if it comes back; the redrawn pre-revamp screen (`linkaja-home-before`) was deleted with it.
+
+What stays, after the live home screen demo:
+- **The icon set**: the app's 53 service icons in its seven groups, cut from a screenshot of the app's Product LinkAja list into one 8-column sprite
+  (`design/images/linkaja-icons.webp`, 51KB, 96px tiles, in list order; the sprite rule is added in `build_hifi.py`, `ba_wall`). Family names only,
+  no counts or captions (owner: "too detailed"). Some tiles carry third-party marks (Telkomsel, My Pertamina, BAZNAS) because the app's list does.
+- **Colour by family, against the old glyphs** (owner: "emphasize color coded icons in comparison to the old ones"): a "Before" row of the
+  pre-revamp home screen's eight bare glyphs (redrawn Lucide glyphs in mixed weights and colours, on the app's light ground; SVG kept in
+  `design/images/linkaja-old-icons.json`), then "After: colour by family", each family with a swatch and a left rule in its colour (sampled from its tiles, `BA_COLOURS`).
+- **The old screen as a shadow** (owner): the redrawn pre-revamp screen (`stageshow/components/linkaja-home-before`, restored, poster only, its service icons
+  now filled in the one red-to-blue gradient) sits tilted behind the live phone, dimmed and clipped to the phone, with a "Before" chip (`la_home`, `.la-ghost`).
+  The live demo's stage ground is transparent inside `.la-home` so the shadow shows beside it. Hidden where the board is narrower than 620px.
+- **Five short points under the home demo** (`LA_POINTS`, `la_home` in `build_hifi.py`; owner: "bring back the short points", then "narrate them as what changed"):
+  under a "What changed" heading, each told as the change it made in one short sentence.
+- The old glyphs are **filled**, all in **one red-to-blue gradient** with white details (owner: the old home screen icons had only that one gradient, so they could not be told apart by colour).
+- **Its reveal** (`iconWall` in `hifi_shell.html`), like the app: when the wall comes into view (IntersectionObserver, since it sits in a drawer),
+  the families appear one after another and their tiles pop in (`back.out`). Without JS or with reduced motion everything is simply shown.
+
 ## Komunal in the live app's type and colours (2026-11-06)
 
 The Komunal design system board and the shipped-flow demo were redrawn from four screenshots of the live DepositoBPR app (Beranda,

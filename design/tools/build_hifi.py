@@ -767,8 +767,66 @@ shots_html = unit(*head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MY
                   '</div></div>', head_parts('SELF-SERVICE SCREENS THAT ABSORB THE VOLUME', 'MYPAYLATER · SHIPPED FLOW')[1])
 
 
-# LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow), placed below.
-LA_HOME = ss_stage('linkaja-home')
+
+# ---------- LinkAja icon set ----------
+# The 53 service icons of the live app, after the home screen demo: cut from a screenshot of the app's list into one sprite
+# sheet; the families appear one after another and their tiles pop in (iconWall in hifi_shell.html).
+# the icon set, as the live app lists it (Product LinkAja): cut from a screenshot of that list into one sprite sheet, 8 tiles per row, in list order
+BA_FAMILIES = [
+    ('Telekomunikasi', ['Pulsa/Data', 'Pascabayar', 'eSIM', 'Hemat Lengkap by Telkomsel', 'Pulsa &amp; E-SIM Internasional']),
+    ('Beli/Bayar Tagihan', ['PDAM', 'Listrik', 'Kartu Kredit', 'Multifinance', 'Voucher &amp; E-Wallet', 'Pegadaian', 'TV Kabel &amp; Internet', 'Asuransi', 'GAS', 'BPJS',
+                            'Telepon', 'Properti', 'Kartu Uang Elektronik', 'Pendidikan', 'Rekening Virtual']),
+    ('Transportasi', ['Kapal', 'Parkir', 'My Pertamina', 'Kereta', 'Taksi', 'Bus', 'Pesawat', 'Kendaraan Online']),
+    ('Keuangan', ['Beli Asuransi', 'Pinjaman Easycash', 'Rekening Online', 'Reksadana']),
+    ('Aktivitas Seru', ['Voucher Games', 'Streaming', 'Travel dan Hiburan']),
+    ('Dana Sosial', ['Infaq', 'Zakat', 'Wakaf', 'Masjid', 'Gereja', 'Donasi Lainnya', 'Kalkulator Zakat', 'BAZNAS']),
+    ('Pajak', ['Pajak', 'Bayar KUA', 'Bayar Paspor', 'Bayar SIM', 'Bayar Denda Tilang', 'Bayar Beacukai', 'Bayar PPH', 'Bayar PPN', 'E-Samsat', 'Layanan Perpajakan']),
+]
+assert sum(len(v) for _, v in BA_FAMILIES) == 53
+BA_SPRITE = 'data:image/webp;base64,' + base64.b64encode(open(os.path.join(HERE, '..', 'images', 'linkaja-icons.webp'), 'rb').read()).decode()
+
+
+# each family's colour, sampled from its tiles, shown as a swatch beside its name; above the families, the eight glyphs of the
+# pre-revamp home screen (bare Lucide glyphs in mixed weights and colours, redrawn: design/images/linkaja-old-icons.json)
+BA_COLOURS = ['#e02020', '#00a0e0', '#50b030', '#2060e0', '#f09000', '#30b0b0', '#7040e0']
+BA_OLD = json.load(open(os.path.join(HERE, '..', 'images', 'linkaja-old-icons.json'), encoding='utf-8'))
+
+
+def ba_wall():
+    old = ''.join('<li class="ba-oi" role="img" aria-label="%s">%s</li>' % (_html.escape(n), svg) for n, svg in BA_OLD)
+    out = ['<div class="ba-grp">Before</div>', '<div class="ba-fam ba-old"><h4>Home screen icons</h4><ul>%s</ul></div>' % old,
+           '<div class="ba-grp ba-grp-a">After: colour by family</div>']
+    i = 0
+    for (fam, names), col in zip(BA_FAMILIES, BA_COLOURS):
+        tiles = ''
+        for n in names:
+            tiles += '<li class="ba-ic" role="img" aria-label="%s" style="--c:%d;--r:%d"></li>' % (n, i % 8, i // 8)
+            i += 1
+        out.append('<div class="ba-fam" style="--f:%s"><h4><i aria-hidden="true"></i>%s</h4><ul>%s</ul></div>' % (col, fam, tiles))
+    return unit('The icon set', board('<div class="ba-wall">' + ''.join(out) + '</div>'), ['53 services, one system'])
+
+# LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow); the icon set follows the home screen.
+# what the revamp changed, in five short points under the home screen demo, each told as the change it made (owner)
+LA_POINTS = [
+    ('Three balances, one glance', 'One balance line on red became three equal cards you can tap: Saldo, bonus and Easycash.'),
+    ('Actions you can see', 'Thin white outlines on red became solid red tiles on white.'),
+    ('One icon system', 'Glyphs in a single gradient became tiles coloured by family.'),
+    ('Nothing in the way', 'The payment-method prompt between the balance and the services is gone.'),
+    ('QRIS, front and centre', 'A generic QR glyph on the pay button became the national QRIS mark.'),
+]
+LA_POINTS_HTML = ('<div class="la-what"><h4>What changed</h4><ol class="la-pts">' + ''.join('<li><b>%s</b><span>%s</span></li>' % p for p in LA_POINTS) + '</ol></div>')
+
+
+def la_home():
+    # the live home demo, with the pre-revamp screen (redrawn, linkaja-home-before) as a shadow tilted behind it
+    m = ss_meta('linkaja-home')
+    f = os.path.join(SS, 'site', 'posters', 'linkaja-home-before-compact.webp')
+    ghost = ('<figure class="la-ghost" aria-hidden="true"><img alt="" width="358" height="736" src="data:image/webp;base64,%s"><figcaption>Before</figcaption></figure>'
+             % base64.b64encode(open(f, 'rb').read()).decode())
+    return stage('<div class="ss-box la-home">' + ghost + ss_mount('linkaja-home') + '</div>', (m['head'], m['note']), caps=[_html.escape(m['lead'])], after=LA_POINTS_HTML)
+
+
+LA_HOME = la_home() + ba_wall()
 LA_ROUTING = ss_stage('linkaja-routing')
 
 drawer = ('<div class="mk-drawer" id="d-linkaja"><div class="mk-drawer-inner mk-shut"><div class="mk-drawer-body">'
@@ -1312,6 +1370,7 @@ def one_type(html):
 
 
 css = one_type(css)
+css += '\n/* the icon sprite (ba_wall) */\n.ba-ic { background-image: url(' + BA_SPRITE + '); }\n'
 css += '\n/* Stageshow demo placeholders (ss_mount) */\n' + '\n'.join(SS_RULES) + '\n'
 # the LinkAja chats play their conversation once and hold it, so there is time to read it, instead of clearing it every 14s;
 # linkaja-intent-routing.html starts them when the phones come into view (without JavaScript they play on load and hold)
