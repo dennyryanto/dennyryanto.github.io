@@ -1,0 +1,120 @@
+/* The home screen before the revamp, redrawn. Same stage, frame and size as linkaja-home; positions in points (412 wide). */
+.lb {
+  & .ss-stage {
+    overflow: hidden;
+    background: var(--lh-ground, #1a1b1f);
+    --ss-accent: oklch(0.9 0.2 122);
+    --lb-red: #d4262e;
+    --lb-ink: #23262f;
+    --lb-font: 'Switzer', system-ui, -apple-system, sans-serif;
+  }
+  .lb-phone { position: absolute; top: 24px; left: 30px; }
+  & .ss-stage[data-layout='compact'] .lb-phone { top: 16px; left: 16px; }
+
+  .lb-app {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #f3f4f7;
+    font-family: var(--lb-font);
+    color: var(--lb-ink);
+    letter-spacing: 0;
+  }
+  .lb-app > * { position: absolute; }
+
+  .lb-sb {
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 2px 20px 0;
+    background: #fff;
+    color: #3a3d46;
+    font: 600 14px/1 var(--lb-font);
+  }
+  .lb-sb__g { display: flex; align-items: center; gap: 5px; }
+  .lb-batt { font: 600 11px/1 var(--lb-font); }
+
+  .lb-head {
+    top: 52px; left: 0; right: 0;
+    height: 56px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 16px;
+    background: #fff;
+  }
+  .lb-avatar { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #e3e5ea; color: #8a8f9b; }
+  .lb-name { flex: 1; font: 600 15px/1 var(--lb-font); }
+  .lb-hi { display: flex; gap: 14px; color: #4a4e59; }
+
+  .lb-card {
+    top: 108px; left: 0; right: 0;
+    height: 166px;
+    padding: 18px 16px 0;
+    background: linear-gradient(160deg, #e0262d, #c81f27);
+    color: #fff;
+  }
+  .lb-logo { position: absolute; top: 16px; right: 16px; display: flex; flex-direction: column; font: italic 800 9px/1 var(--lb-font); text-align: right; }
+  .lb-bal { font: 700 26px/1 var(--lb-font); }
+  .lb-bonus { display: flex; align-items: center; gap: 3px; margin-top: 8px; font: 500 12px/1 var(--lb-font); opacity: 0.95; }
+  .lb-acts { position: absolute; left: 0; right: 0; top: 82px; display: flex; }
+  .lb-act { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 7px; font: 500 12px/1 var(--lb-font); }
+  .lb-act__ic { display: grid; place-items: center; width: 30px; height: 30px; border: 1.2px solid rgba(255, 255, 255, 0.9); border-radius: 7px; font: 600 12px/1 var(--lb-font); }
+
+  .lb-pay {
+    top: 252px; left: 14px; right: 14px;
+    height: 58px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 14px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(30, 35, 60, 0.12);
+    color: #555a66;
+  }
+  .lb-pay__t { flex: 1; display: grid; gap: 4px; }
+  .lb-pay__t b { font: 600 13px/1 var(--lb-font); color: var(--lb-ink); }
+  .lb-pay__t span { font: 400 11px/1 var(--lb-font); color: #7a7f8b; }
+
+  .lb-grid {
+    top: 340px; left: 8px; right: 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px 0;
+  }
+  .lb-svc { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .lb-svc__ic { position: relative; display: grid; place-items: center; width: 40px; height: 36px; }
+  .lb-svc__ic svg { display: block; }
+  .lb-svc__l { display: grid; justify-items: center; min-height: 26px; font: 400 11.5px/1.2 var(--lb-font); color: #4a4e59; white-space: nowrap; }
+  .lb-new { position: absolute; top: -9px; right: -10px; padding: 2px 4px; border-radius: 4px; background: #d4262e; color: #fff; font: 700 9px/1 var(--lb-font); }
+
+  .lb-ban {
+    top: 590px; left: 14px; right: 14px;
+    height: 140px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(110deg, #fff 0 56%, #e8f6f0 56%);
+    box-shadow: inset 0 0 0 1px #e1e4ea;
+  }
+  .lb-ban__pill { position: absolute; left: 14px; top: 14px; padding: 3px 8px; border-radius: 999px; background: #0d8f6a; color: #fff; font: 700 10px/1 var(--lb-font); }
+  .lb-ban__h { position: absolute; left: 14px; top: 56px; font: 800 12px/1.3 var(--lb-font); color: #0d6b52; }
+  .lb-ban__ph { position: absolute; right: 22px; top: 16px; width: 66px; height: 108px; border-radius: 10px; background: linear-gradient(160deg, #1d9a76, #e8232b); }
+  .lb-dots { top: 744px; left: 0; right: 0; display: flex; justify-content: center; gap: 5px; }
+  .lb-dot { width: 6px; height: 6px; border-radius: 50%; background: #cfd3da; }
+  .lb-dot[data-on] { background: var(--lb-red); }
+
+  .lb-tabs {
+    left: 0; right: 0; bottom: 0;
+    height: 88px;
+    display: flex; padding: 12px 6px 0;
+    background: #fff;
+    box-shadow: 0 -1px 0 #e7e9f0;
+  }
+  .lb-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; color: #6b7280; font: 400 11.5px/1 var(--lb-font); }
+  .lb-tab[data-on] { color: var(--lb-red); }
+  .lb-tab__gap { display: block; width: 22px; height: 22px; }
+  .lb-tab--pay { gap: 6px; }
+  .lb-fab {
+    bottom: 56px; left: 50%; translate: -50% 0;
+    display: grid; place-items: center;
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--lb-red);
+    box-shadow: 0 4px 10px -3px rgba(212, 38, 46, 0.7);
+  }
+  .lb-fab__q { width: 26px; height: 26px; border: 2px solid #fff; border-radius: 6px; box-shadow: inset 0 0 0 5px var(--lb-red), inset 0 0 0 7px #fff; }
+}

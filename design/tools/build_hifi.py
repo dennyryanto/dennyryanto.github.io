@@ -806,20 +806,24 @@ def ba_wall():
     return unit('The icon set', board('<div class="ba-wall">' + ''.join(out) + '</div>'), ['53 services, one system'])
 
 # LinkAja's home screen as it ships today and the routing chat are Stageshow demos (design/stageshow); the icon set follows the home screen.
-# what the revamp changed, in five short points under the home screen demo (owner: short sentences, no before/after narrative)
+# what the revamp changed, in five short points under the home screen demo, each told as the change it made (owner)
 LA_POINTS = [
-    ('Three balances, one glance', 'Saldo, bonus and Easycash sit side by side as cards you can tap.'),
-    ('Actions you can see', 'Solid red tiles replace thin outlines on red.'),
-    ('One icon system', 'Every service on the same tile, coloured by family.'),
-    ('Nothing in the way', 'No payment-method prompt between your balance and your services.'),
-    ('QRIS, front and centre', 'The pay button carries the national QR mark.'),
+    ('Three balances, one glance', 'One balance line on red became three equal cards you can tap: Saldo, bonus and Easycash.'),
+    ('Actions you can see', 'Thin white outlines on red became solid red tiles on white.'),
+    ('One icon system', 'Glyphs in a single gradient became tiles coloured by family.'),
+    ('Nothing in the way', 'The payment-method prompt between the balance and the services is gone.'),
+    ('QRIS, front and centre', 'A generic QR glyph on the pay button became the national QRIS mark.'),
 ]
-LA_POINTS_HTML = '<ol class="la-pts">' + ''.join('<li><b>%s</b><span>%s</span></li>' % p for p in LA_POINTS) + '</ol>'
+LA_POINTS_HTML = ('<div class="la-what"><h4>What changed</h4><ol class="la-pts">' + ''.join('<li><b>%s</b><span>%s</span></li>' % p for p in LA_POINTS) + '</ol></div>')
 
 
 def la_home():
+    # the live home demo, with the pre-revamp screen (redrawn, linkaja-home-before) as a shadow tilted behind it
     m = ss_meta('linkaja-home')
-    return stage('<div class="ss-box">' + ss_mount('linkaja-home') + '</div>', (m['head'], m['note']), caps=[_html.escape(m['lead'])], after=LA_POINTS_HTML)
+    f = os.path.join(SS, 'site', 'posters', 'linkaja-home-before-compact.webp')
+    ghost = ('<figure class="la-ghost" aria-hidden="true"><img alt="" width="358" height="736" src="data:image/webp;base64,%s"><figcaption>Before</figcaption></figure>'
+             % base64.b64encode(open(f, 'rb').read()).decode())
+    return stage('<div class="ss-box la-home">' + ghost + ss_mount('linkaja-home') + '</div>', (m['head'], m['note']), caps=[_html.escape(m['lead'])], after=LA_POINTS_HTML)
 
 
 LA_HOME = la_home() + ba_wall()

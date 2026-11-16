@@ -199,8 +199,18 @@ a.mk-idx:hover .mk-dest-co, a.mk-idx:active .mk-dest-co { text-decoration-color:
 /* the icon set */
 .ba-wall { display: grid; }
 .ba-fam { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 10px 24px; align-items: center; padding: 18px 0; border-top: 1px solid var(--rule); }
+/* the home demo: the pre-revamp screen as a shadow, tilted behind the live phone (only where the board has room beside it) */
+.la-home { position: relative; --lh-ground: transparent; }
+.la-home .ss-poster { background: transparent; }
+.la-home > .ss-mount { position: relative; z-index: 1; }
+.la-ghost { position: absolute; z-index: 0; top: 3%; left: 50%; width: min(100%, 358px); margin: 0; transform: translateX(-96%) rotate(-6deg) scale(.9); transform-origin: 50% 100%; opacity: .42; filter: saturate(.55) brightness(.75); pointer-events: none; }
+.la-ghost img { display: block; width: 100%; height: auto; clip-path: inset(2.2% 4.5% 3.1% 4.5% round 11% / 5.3%); }
+.la-ghost figcaption { position: absolute; top: 2%; left: 10%; padding: 4px 9px; border-radius: 999px; background: rgba(26, 27, 31, .9); box-shadow: inset 0 0 0 1px var(--rule); font: 500 13px/1 var(--display); color: var(--fg); }
+@container (max-width: 620px) { .la-ghost { display: none; } }
+.la-what { margin-top: 24px; display: grid; gap: 4px; }
+.la-what h4 { margin: 0; font: 600 13px/1.4 var(--display); color: var(--fg-3); }
 /* what the revamp changed: five short points under the home screen demo */
-.la-pts { margin: 24px 0 0; padding: 0; list-style: none; counter-reset: lp; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px var(--gut); }
+.la-pts { margin: 8px 0 0; padding: 0; list-style: none; counter-reset: lp; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px var(--gut); }
 .la-pts li { counter-increment: lp; display: grid; align-content: start; gap: 4px; padding-top: 12px; border-top: 1px solid var(--rule); }
 .la-pts li::before { content: counter(lp); font: 600 13px/1 var(--display); color: var(--lime); font-variant-numeric: tabular-nums; }
 .la-pts b { font: 600 16px/1.35 var(--display); color: var(--fg); }
